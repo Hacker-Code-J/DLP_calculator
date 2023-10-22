@@ -1,23 +1,25 @@
-# Large Integer Arithmetic Library and Discrete Logarithm Calculator
+# 🌐 Large Integer Arithmetic Library & Discrete Logarithm Calculator
+
+[![Version Badge](https://img.shields.io/badge/version-1.0.0-blue)]() [![License Badge](https://img.shields.io/badge/license-MIT-green)]()
 
 This project provides a comprehensive large integer arithmetic library, with a focus on cryptographic calculations, particularly in solving discrete logarithm problems using Pollard's Rho and the Baby-step/Giant-step algorithms.
 
-## Table of Contents
+## 📌 Table of Contents
 
-1. [Features](#features)
-2. [Getting Started](#getting-started)
-3. [Usage](#usage)
-   - [Large Integer Arithmetic](#large-integer-arithmetic)
-   - [Discrete Logarithm Calculator](#discrete-logarithm-calculator)
-4. [Contribute](#contribute)
-5. [License](#license)
+- [🚀 Features](#features)
+- [🛠 Getting Started](#getting-started)
+- [💡 Usage](#usage)
+  - [📊 Large Integer Arithmetic](#large-integer-arithmetic)
+  - [🔑 Discrete Logarithm Calculator](#discrete-logarithm-calculator)
+- [🤝 Contribute](#contribute)
+- [📜 License](#license)
 
-## Features
+## 🚀 Features
 
-- **Large Integer Arithmetic**: A robust library that supports addition, subtraction, multiplication, division, and modular arithmetic operations for integers larger than machine limits.
-- **Discrete Logarithm Solutions**: Efficient implementations of Pollard's Rho and Baby-step/Giant-step algorithms for solving discrete logarithms.
+- **💼 Large Integer Arithmetic**: A robust library that supports addition, subtraction, multiplication, division, and modular arithmetic operations for integers larger than machine limits.
+- **🔒 Discrete Logarithm Solutions**: Efficient implementations of Pollard's Rho and Baby-step/Giant-step algorithms for solving discrete logarithms.
 
-## Getting Started
+## 🛠 Getting Started
 
 ### Prerequisites
 
@@ -32,9 +34,9 @@ cd large-int-library-and-disc-log-calc
 make
 ```
 
-## Usage
+## 💡 Usage
 
-### Large Integer Arithmetic
+### 📊 Large Integer Arithmetic
 
 ```cpp
 #include "BigInteger.h"
@@ -46,7 +48,7 @@ BigInteger b("98765432109876543210");
 BigInteger sum = a + b;
 ```
 
-### Discrete Logarithm Calculator
+### 🔑 Discrete Logarithm Calculator
 
 ```cpp
 #include "DiscreteLogarithmCalculator.h"
@@ -58,10 +60,10 @@ int x = DiscreteLogarithmCalculator::pollardsRho(base, target, modulus);
 int x = DiscreteLogarithmCalculator::babyStepGiantStep(base, target, modulus);
 ```
 
-## Contribute
+## 🤝 Contribute
 
 Contributions are always welcome! Please read the [contribution guidelines](CONTRIBUTING.md) first.
 
-## License
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
