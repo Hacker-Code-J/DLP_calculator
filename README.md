@@ -26,17 +26,17 @@ This project provides a comprehensive large integer arithmetic library, with a f
 
 ### Installation
 
-\```bash
-git clone https://github.com/YourGitHubUsername/large-int-library-and-disc-log-calc.git
+```bash
+git clone https://github.com/Hacker-Code-J/2023_Fall_AAP.git
 cd large-int-library-and-disc-log-calc
 make
-\```
+```
 
 ## Usage
 
 ### Large Integer Arithmetic
 
-\```cpp
+```cpp
 #include "BigInteger.h"
 
 // Usage example
@@ -44,11 +44,11 @@ BigInteger a("12345678901234567890");
 BigInteger b("98765432109876543210");
 
 BigInteger sum = a + b;
-\```
+```
 
 ### Discrete Logarithm Calculator
 
-\```cpp
+```cpp
 #include "DiscreteLogarithmCalculator.h"
 
 // Using Pollard's Rho
@@ -56,7 +56,7 @@ int x = DiscreteLogarithmCalculator::pollardsRho(base, target, modulus);
 
 // Using Baby-step/Giant-step
 int x = DiscreteLogarithmCalculator::babyStepGiantStep(base, target, modulus);
-\```
+```
 
 ## Contribute
 
