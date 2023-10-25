@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -O2
-OBJS = setup.o BigInteger.o main.o
+OBJS = setup.o BigInteger.o  operation.o main.o
 
 # Targets
 a.out: $(OBJS)
@@ -10,6 +10,9 @@ setup.o: setup.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 BigInteger.o: BigInteger.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+operation.o: operation.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 main.o: main.c

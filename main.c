@@ -24,18 +24,62 @@
 #include "BigInteger.h"
 
 int main() {
-    srand((unsigned int)time(NULL));\
+    srand((unsigned int)time(NULL));
+    clock_t start, end;
 
     BINT* a = NULL;
-    init_bint(&a, 10);
+    BINT* b = NULL;
+    BINT* c = NULL;
 
-    printf("bool: %ld\n", 8*sizeof(bool));
-    printf("int: %ld\n", 8*sizeof(int));
-    printf("WORD: %ld\n", 8*sizeof(WORD));
-    printf("BINT: %ld\n", 8*sizeof(BINT));
-    printf("BINT-val: %ld\n", 8*sizeof(a->val));
+    int n = 0x00;
+    int m = 0x00;
+    int max;
+    int a_sgn, b_sgn;
+    
+    //0: '+', 1: '-', 2: '*'
+    int opt;
 
-    delete_bint(&a);
+    for(int i=0; i<7; i++) {
+        //opt = rand() % 0x02;
+        opt = 0;
+        
+        a_sgn = rand() % 0x02;
+        b_sgn = rand() % 0x02;
+        
+        n = rand() % 0x3; n++;
+        m = rand() % 0x3; m++;
+        max = MAX(n, m);
+
+        printf("\n****************************\n[Test %d]\n****************************\n", i+1);
+        printf("n m: %d %d\n", n,m);
+        rand_bint(&a, a_sgn, n);
+        rand_bint(&b, b_sgn, m);
+        init_bint(&c, max);
+        
+        custom_printHex_xy(a,b,max);
+
+        start = clock();
+        if(opt == 0) {
+            ADD_xyz(a,b,c);
+        } else if(opt == 1) {
+            SUB_xyz(a,b,c);
+        } else {
+            //mult_xyc(a->val,b->val,c->val);
+        }
+        end = clock();
+
+        printf("\nResult:\n\n");
+        a->sign = a_sgn;
+        b->sign = b_sgn;
+        custom_printHex(a,b,c,opt);
+
+        delete_bint(&a);
+        delete_bint(&b);
+        delete_bint(&c);
+
+        double time_taken = ((double) end - start) / CLOCKS_PER_SEC;
+        printf("\nTime: %f.\n", time_taken);
+    }
 
     return 0;
 }
