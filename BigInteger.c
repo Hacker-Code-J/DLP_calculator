@@ -8,9 +8,9 @@
 
 WORD arrOne[1] = {1};
 
-const BINT BINT_ZERO = {true, 0, NULL};
-const BINT BINT_ONE = {true, 1, arrOne};
-const BINT BINT_NEG_ONE = {false, 1, arrOne};
+const BINT BINT_ZERO = {false, 0, NULL};
+const BINT BINT_ONE = {false, 1, arrOne};
+const BINT BINT_NEG_ONE = {true, 1, arrOne};
 
 /**
  * 
@@ -30,7 +30,7 @@ BINT* init_bint(BINT** bint_ptr, int wordlen) {
         exit(1);
     }
     // Initialize structure members
-    (*bint_ptr)->sign = true;
+    (*bint_ptr)->sign = false;
     (*bint_ptr)->wordlen = wordlen;
     return *bint_ptr;
 }

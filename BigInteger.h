@@ -7,7 +7,6 @@
 #define _BIGINTEGER_H
 
 #define WORD u32        // base used to represent each digit in the big integer
-#define NO_BASE_DIGITS  // n
 
 /**
  * Data structure for representing an Integer
@@ -15,7 +14,7 @@
  * +---------------------+
  * |   BINT(128-bit)     |
  * +---------------------+
- * |    sign (4byte)     | --> NEGATIVE or NON_NEGATIVE
+ * |    sign (1byte)     | --> NEGATIVE (True) or NON_NEGATIVE (False)
  * +---------------------+
  * |   wordlen (4byte)   | --> n-word BINT
  * +---------------------+
@@ -24,7 +23,7 @@
  *                                       +---------+---------+---+---------+
 */
 typedef struct {
-    bool sign;      // the sign of the number (true if 0 or positive, false if negative)
+    bool sign;      // the sign of the number (false if 0 or positive, true if negative)
     u32 wordlen;    //
     WORD* val;      // threshold between performing long and karatsuba multiplication
 } BINT;
