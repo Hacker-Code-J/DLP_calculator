@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "setup.h"
 
@@ -48,6 +49,12 @@ BINT* init_bint(BINT** bint_ptr, int wordlen);
  * 
 */
 void delete_bint(BINT** bint_ptr);
+
+/**
+ * File I/O
+*/
+bool store_bint(const char* filename, BINT* b);
+BINT* load_bint(const char* filename);
 
 /*********************************************************************/
 
@@ -138,40 +145,44 @@ char bigint_compare(BINT i1, BINT i2);
  * option - 0: '+' | 1: '-' | 2: '*'
  *
 def hex_to_int(hex_str, sign):
-    # Convert hex string to integer value
     val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)
-    
-    # If sign is negative ([1]), return negative of the value
     return -val if sign == "[1]" else val
 
 def int_to_hex(val):
-    # Extract the sign and value
     sign = "[0]" if val >= 0 else "[1]"
     abs_val = abs(val)
     
-    hex_str = hex(abs_val)[2:]  # Convert to hex and remove '0x' prefix
-    # Insert spaces every 8 characters for the format you provided
+    hex_str = hex(abs_val)[2:]
     hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])
     
     return f"{sign} 0x {hex_str}"
 
-def check_correctness(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_sum_hex):
+def check_operation(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_hex, operation):
     x_int = hex_to_int(x_hex, x_sign)
     y_int = hex_to_int(y_hex, y_sign)
     
-    sum_int = x_int + y_int
-    sum_hex = int_to_hex(sum_int)
+    if operation == "add":
+        result_int = x_int + y_int
+    elif operation == "sub":
+        result_int = x_int - y_int
+    elif operation == "mul":
+        result_int = x_int * y_int
+    else:
+        raise ValueError(f"Invalid operation: {operation}")
     
-    return sum_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_sum_hex).replace(' ', '').lower()
+    result_hex = int_to_hex(result_int)
+    
+    return result_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_hex).replace(' ', '').lower()
 
-# Sample sets of values. You can extend this.
+# Sample sets of values for addition, subtraction, and multiplication.
 values = [
-    ("[0]", "0x 00000000 3659e17f e9e44af4", "[0]", "0x 4a9f22e4 623b83af 7dea0427", "[0]", "0x 4a9f22e4 9895652f 67ce4f1b"),
-    # Add more sets as required.
+    ("[0]", "0x 00000000 3659e17f e9e44af4", "[0]", "0x 4a9f22e4 623b83af 7dea0427", "[0]", "0x 4a9f22e4 9895652f 67ce4f1b", "add"),
+    ("[0]", "0x 4a9f22e4 9895652f 67ce4f1b", "[0]", "0x 4a9f22e4 623b83af 7dea0427", "[0]", "0x 00000000 3659e17f e9e44af4", "sub"),
+    ("[0]", "0x 00000000 00000000 00000002", "[0]", "0x 00000000 00000000 00000003", "[0]", "0x 00000000 00000000 00000006", "mul"),
 ]
 
-for idx, (x_sign, x, y_sign, y, expected_sign, expected) in enumerate(values):
-    is_correct = check_correctness(x_sign, x, y_sign, y, expected_sign, expected)
+for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values):
+    is_correct = check_operation(x_sign, x, y_sign, y, expected_sign, expected, op)
     print(is_correct)
  *
 */

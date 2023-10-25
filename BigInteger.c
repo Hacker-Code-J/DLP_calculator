@@ -3,8 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
 
 WORD arrOne[1] = {1};
 
@@ -49,27 +47,86 @@ void delete_bint(BINT** bint_ptr) {
 /**
  * 
 */
+bool store_bint(const char* filename, BINT* b) {
+    if(!filename || !b) return false;
+
+    FILE* f = fopen(filename, "wb");
+    if(!f) return false;
+
+    fwrite(&b->sign, sizeof(b->sign), 1, f);
+    fwrite(&b->wordlen, sizeof(b->wordlen), 1, f);
+    fwrite(b->val, sizeof(WORD), b->wordlen, f);
+
+    fclose(f);
+    return true;
+}
+
+BINT* load_bint(const char* filename) {
+    if(!filename) return NULL;
+
+    FILE* f = fopen(filename, "rb");
+    if(!f) return NULL;
+
+    BINT* b = NULL;
+
+    // Read sign and wordlen first
+    bool tmp_sign;
+    u32 tmp_wordlen;
+
+    if (fread(&tmp_sign, sizeof(tmp_sign), 1, f) != 1 ||
+        fread(&tmp_wordlen, sizeof(tmp_wordlen), 1, f) != 1) {
+        fclose(f);
+        return NULL;
+    }
+
+    // Now, use init_bint with the read wordlen
+    init_bint(&b, tmp_wordlen);
+
+    if (!b || !b->val) {
+        fclose(f);
+        return NULL;
+    }
+
+    // Assign the read values to the BINT structure
+    b->sign = tmp_sign;
+    b->wordlen = tmp_wordlen;
+
+    // Read the val array
+    if (fread(b->val, sizeof(WORD), b->wordlen, f) != b->wordlen) {
+        delete_bint(&b);
+        fclose(f);
+        return NULL;
+    }
+
+    fclose(f);
+    return b;
+}
+
+
+/**
+ * 
+*/
 void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop) {
-    char opr;
+    char* opr;
     int n = MAX(X->wordlen, Y->wordlen);
 
     switch (opt)
     {
     case 0:
-        opr = '+';
+        opr = "add";
         break;
     case 1:
-        opr = '-';
+        opr = "sub";
         break;
     case 2:
-        opr = '*';
+        opr = "mul";
         break;
     default:
-        opr = '+';
+        opr = NULL;
         break;
     }
     
-    printf("def hex_to_int(hex_str):\n");
+    printf("def hex_to_int(hex_str, sign):\n");
     printf("    val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)\n");
     printf("    return -val if sign == \"[1]\" else val\n\n");
 
@@ -80,12 +137,21 @@ void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop) {
     printf("    hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])\n");
     printf("    return f\"{sign} 0x {hex_str}\"\n\n");
 
-    printf("def check_correctness(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_sum_hex):\n");
+    printf("def check_operation(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_hex, operation):\n");
     printf("    x_int = hex_to_int(x_hex, x_sign)\n");
-    printf("    y_int = hex_to_int(y_hex, y_sign)\n");
-    printf("    sum_int = x_int + y_int\n");
-    printf("    sum_hex = int_to_hex(sum_int)\n");
-    printf("    return sum_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_sum_hex).replace(' ', '').lower()\n\n");
+    printf("    y_int = hex_to_int(y_hex, y_sign)\n\n");
+
+    printf("    if operation == \"add\":\n");
+    printf("        result_int = x_int + y_int\n");
+    printf("    elif operation == \"sub\":\n");
+    printf("        result_int = x_int - y_int\n");
+    printf("    elif operation == \"mul\":\n");
+    printf("        result_int = x_int * y_int\n");
+    printf("    else:\n");
+    printf("        raise ValueError(f\"Invalid operation: {operation}\")\n\n");
+
+    printf("    result_hex = int_to_hex(result_int)\n");
+    printf("    return result_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_hex).replace(' ', '').lower()\n\n");
 
     printf("values = [\n");
     printf("    (\"[%d]\", ", X->sign);
@@ -106,11 +172,11 @@ void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop) {
         printf(" %08x", 0);
     for (int i=Z->wordlen-1; i>=0; i--)
         printf(" %08x", Z->val[i]);
-    printf("\"),\n");
+    printf("\", \"%03s\"),\n", opr);
     printf("]\n\n");
 
-    printf("for idx, (x_sign, x, y_sign, y, expected_sign, expected) in enumerate(values):\n");
-    printf("    is_correct = check_correctness(x_sign, x, y_sign, y, expected_sign, expected)\n");
+    printf("for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values):\n");
+    printf("    is_correct = check_operation(x_sign, x, y_sign, y, expected_sign, expected, op)\n");
     printf("    print(is_correct)\n");
 }
 
