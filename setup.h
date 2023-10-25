@@ -1,5 +1,5 @@
-#ifndef _SETUP_H
-#define _SETUP_H
+#ifndef SETUP_H
+#define SETUP_H
 
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -25,4 +25,4 @@ typedef unsigned long u64;
  */
 #define MIN(x1, x2) (x1 < x2 ? x1 : x2)
 
-#endif // _SETUP_H
+#endif // SETUP_H

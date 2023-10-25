@@ -3,8 +3,8 @@
 
 #include "setup.h"
 
-#ifndef _BIGINTEGER_H
-#define _BIGINTEGER_H
+#ifndef BIGINTEGER_H
+#define BIGINTEGER_H
 
 #define WORD u32        // base used to represent each digit in the big integer
 
@@ -28,6 +28,10 @@ typedef struct {
     WORD* val;      // threshold between performing long and karatsuba multiplication
 } BINT;
 
+/**
+ * Define a structure for a 3D BINT vector with three coordinates: x, y, and z
+*/
+
 extern const BINT BINT_ZERO;    //zero integer
 extern const BINT BINT_ONE;     //one integer
 extern const BINT BINT_NEG_ONE; //negative one integer
@@ -44,6 +48,8 @@ BINT* init_bint(BINT** bint_ptr, int wordlen);
  * 
 */
 void delete_bint(BINT** bint_ptr);
+
+/*********************************************************************/
 
 /**
  * convert string to a big integer by parsing each digit
@@ -126,6 +132,51 @@ char *bigint_toString(BINT i);
  */
 char bigint_compare(BINT i1, BINT i2);
 
+/*********************************************************************/
+
+/**
+ * option - 0: '+' | 1: '-' | 2: '*'
+ *
+def hex_to_int(hex_str, sign):
+    # Convert hex string to integer value
+    val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)
+    
+    # If sign is negative ([1]), return negative of the value
+    return -val if sign == "[1]" else val
+
+def int_to_hex(val):
+    # Extract the sign and value
+    sign = "[0]" if val >= 0 else "[1]"
+    abs_val = abs(val)
+    
+    hex_str = hex(abs_val)[2:]  # Convert to hex and remove '0x' prefix
+    # Insert spaces every 8 characters for the format you provided
+    hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])
+    
+    return f"{sign} 0x {hex_str}"
+
+def check_correctness(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_sum_hex):
+    x_int = hex_to_int(x_hex, x_sign)
+    y_int = hex_to_int(y_hex, y_sign)
+    
+    sum_int = x_int + y_int
+    sum_hex = int_to_hex(sum_int)
+    
+    return sum_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_sum_hex).replace(' ', '').lower()
+
+# Sample sets of values. You can extend this.
+values = [
+    ("[0]", "0x 00000000 3659e17f e9e44af4", "[0]", "0x 4a9f22e4 623b83af 7dea0427", "[0]", "0x 4a9f22e4 9895652f 67ce4f1b"),
+    # Add more sets as required.
+]
+
+for idx, (x_sign, x, y_sign, y, expected_sign, expected) in enumerate(values):
+    is_correct = check_correctness(x_sign, x, y_sign, y, expected_sign, expected)
+    print(is_correct)
+ *
+*/
+void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop);
+
 /**
  * 
 */
@@ -146,14 +197,6 @@ void custom_printHex_xy(BINT* X, BINT* Y, int n);
 * @:option - 0: '+' | 1: '-' | 2: '*'
 **********************************************************************/
 void custom_printHex(BINT* X, BINT* Y, BINT* Z,  int option);
-
-/**********************************************************************
-* Sage:
-* print(int("####", 16) + int("####", 16) == int("####", 16))
-*
-* @:option - 0: '+' | 1: '-' | 2: '*'
-**********************************************************************/
-void printSage(BINT* X, BINT* Y, BINT* Z,  int option, int loop);
 
 void refine_BINT(BINT* X);
 
@@ -184,4 +227,4 @@ void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift
 void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
 
 
-#endif // _BIGINTEGER_H
+#endif // BIGINTEGER_H

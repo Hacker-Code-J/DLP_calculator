@@ -46,16 +46,63 @@ void delete_bint(BINT** bint_ptr) {
     }
 }
 
-/******************************************************************/
+/**
+ * 
+*/
+void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop) {
+    char opr;
 
-void custom_printHex(BINT* X, BINT* Y, BINT* Z,  int option) {
+    switch (opt)
+    {
+    case 0:
+        opr = '+';
+        break;
+    case 1:
+        opr = '-';
+        break;
+    case 2:
+        opr = '*';
+        break;
+    default:
+        opr = '+';
+        break;
+    }
+    
+    printf("def hex_to_int(hex_str):\n");
+    printf("    val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)\n");
+    printf("    return -val if sign == \"[1]\" else val\n\n");
+
+    printf("def int_to_hex(val):\n");
+    printf("    sign = \"[0]\" if val >= 0 else \"[1]\"\n");
+    printf("    abs_val = abs(val)\n");
+    printf("    hex_str = hex(abs_val)[2:]\n");
+    printf("    hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])\n");
+    printf("    return f\"{sign} 0x {hex_str}\"\n\n");
+
+    printf("def check_correctness(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_sum_hex):\n");
+    printf("    x_int = hex_to_int(x_hex, x_sign)\n");
+    printf("    y_int = hex_to_int(y_hex, y_sign)\n");
+    printf("    sum_int = x_int + y_int\n");
+    printf("    sum_hex = int_to_hex(sum_int)\n");
+    printf("    return sum_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_sum_hex).replace(' ', '').lower()\n");
+}
+
+/******************************************************************/
+void printHex(BINT* X) {
+    printf("[%d] 0x ",X->sign);
+    for (int i=X->wordlen-1; i>=0; i--)
+        printf("%08x ", X->val[i]);
+    printf("\n");
+}
+
+void custom_printHex(BINT* X, BINT* Y, BINT* Z,  int opt) {
     //option 0 = addition
     //option 1 = subtraction
     //option 2 = multiplication
 
     char opr;
 
-    switch (option)
+    switch (opt)
     {
     case 0:
         opr = '+';

@@ -4,8 +4,8 @@
 #include "setup.h"
 #include "BigInteger.h"
 
-#ifndef _OPERATION_H
-#define _OPERATION_H
+#ifndef OPERATION_H
+#define OPERATION_H
 // Function prototypes for BINT arithmetic operations.
 
 /************************************
@@ -48,4 +48,4 @@ void mult_xyc(WORD x, WORD y , WORD* C);
 ************************************/
 void mul_xy(BINT* X, BINT *Y, BINT** Z);
 
-#endif // _OPERATION_H
+#endif // OPERATION_H
