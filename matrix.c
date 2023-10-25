@@ -14,7 +14,7 @@ void matrix_set(Matrix* mat, int row, int col, BINT value) {
     mat->data[row * mat->cols + col] = value;
 }
 
-BINT* matrix_get(const Matrix* mat, int row, int col) {
+BINT matrix_get(const Matrix* mat, int row, int col) {
     return mat->data[row * mat->cols + col];
 }
 

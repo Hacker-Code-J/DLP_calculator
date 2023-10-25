@@ -51,6 +51,7 @@ void delete_bint(BINT** bint_ptr) {
 */
 void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop) {
     char opr;
+    int n = MAX(X->wordlen, Y->wordlen);
 
     switch (opt)
     {
@@ -84,7 +85,33 @@ void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop) {
     printf("    y_int = hex_to_int(y_hex, y_sign)\n");
     printf("    sum_int = x_int + y_int\n");
     printf("    sum_hex = int_to_hex(sum_int)\n");
-    printf("    return sum_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_sum_hex).replace(' ', '').lower()\n");
+    printf("    return sum_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_sum_hex).replace(' ', '').lower()\n\n");
+
+    printf("values = [\n");
+    printf("    (\"[%d]\", ", X->sign);
+    printf("\"0x");
+    for(int i=0; i<(n-X->wordlen); i++)
+        printf(" %08x", 0);
+    for (int i=X->wordlen-1; i>=0; i--)
+        printf(" %08x", X->val[i]);
+    printf("\", ");
+    printf("\"[%d]\", \"0x", Y->sign);
+    for(int i=0; i<(n-Y->wordlen); i++)
+        printf(" %08x", 0);
+    for (int i=Y->wordlen-1; i>=0; i--)
+        printf(" %08x", Y->val[i]);
+    printf("\", ");
+    printf("\"[%d]\", \"0x", Z->sign);
+    for(int i=0; i<n-Z->wordlen; i++)
+        printf(" %08x", 0);
+    for (int i=Z->wordlen-1; i>=0; i--)
+        printf(" %08x", Z->val[i]);
+    printf("\"),\n");
+    printf("]\n\n");
+
+    printf("for idx, (x_sign, x, y_sign, y, expected_sign, expected) in enumerate(values):\n");
+    printf("    is_correct = check_correctness(x_sign, x, y_sign, y, expected_sign, expected)\n");
+    printf("    print(is_correct)\n");
 }
 
 /******************************************************************/
