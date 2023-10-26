@@ -54,7 +54,9 @@ void delete_bint(BINT** bint_ptr);
  * File I/O
 */
 bool store_bint(const char* filename, BINT* b);
+bool multi_store_bints(const char* filename, BINT** bint_array, int num_bints);
 BINT* load_bint(const char* filename);
+BINT** multi_load_bints(const char* filename, int* num_bints);
 
 /*********************************************************************/
 

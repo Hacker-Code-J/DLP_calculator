@@ -27,102 +27,52 @@
 int main() {
     srand((unsigned int)time(NULL));
 
-    clock_t start, end;
+    // clock_t start, end;
 
-    BINT* my_bint = NULL;
+    // Suppose you've created multiple BINTs:
+    bool rand_sgn1 = rand() % 0x02;
+    bool rand_sgn2 = rand() % 0x02;
+    int n = rand() % 0x05  + 1;
+    int m = rand() % 0x05  + 1;
+    int max = MAX(n, m);
 
-    // Initialize a BINT structure with a wordlen of 5 (for demonstration purposes)
-    init_bint(&my_bint, 5);
+    BINT* bint1 = NULL;
+    BINT* bint2 = NULL;
+    BINT* bint3 = NULL;
+    rand_bint(&bint1, rand_sgn1, n);
+    rand_bint(&bint2, rand_sgn2, m);
+    init_bint(&bint3, max);
 
-    // Example: populate the BINT structure
-    my_bint->sign = false;  // set as positive
-    my_bint->val[0] = 123;
-    my_bint->val[1] = 456;
-    my_bint->val[2] = 789;
-    my_bint->val[3] = 111;
-    my_bint->val[4] = 222;
+    ADD_xyz(bint1,bint2,bint3);
+    bint1->sign = rand_sgn1;
+    bint2->sign = rand_sgn2;
+    //... populate the BINT structures ...
 
-    // Store the BINT to a file
-    if (store_bint("bint_data.bin", my_bint)) {
-        printf("Data successfully stored to file.\n");
-    } else {
-        fprintf(stderr, "Failed to store data to file.\n");
-    }
+    // Saving multiple BINTs:
+    BINT* bint_array[] = {bint1, bint2, bint3};
+    multi_store_bints("multi_bint_data.bin", bint_array, 3);
 
-    // Cleanup the memory of the original BINT structure
-    delete_bint(&my_bint);
+    // Cleanup
+    delete_bint(&bint1);
+    delete_bint(&bint2);
+    delete_bint(&bint3);
 
-    // Now, let's load the BINT from the file we saved
-    BINT* loaded_bint = load_bint("bint_data.bin");
-    if (loaded_bint) {
-        printf("Data successfully loaded from file.\n");
-        printf("Sign: %d\n", loaded_bint->sign);
-        printf("Word Length: %u\n", loaded_bint->wordlen);
-        for (u32 i = 0; i < loaded_bint->wordlen; i++) {
-            printf("Word[%u]: %u\n", i, loaded_bint->val[i]);
+    // Loading multiple BINTs:
+    int num_bints;
+    BINT** loaded_bints = multi_load_bints("multi_bint_data.bin", &num_bints);
+    if (loaded_bints) {
+        for (int i = 0; i < num_bints; i++) {
+            BINT* b = loaded_bints[i];
+            printf("Data successfully loaded from file.\n");
+            printf("Sign: %d\n", b->sign);
+            printf("Word Length: %u\n", b->wordlen);
+            for (u32 i = 0; i < b->wordlen; i++) {
+                printf("Word[%u]: %08x\n", i, b->val[i]);
+            }
+            delete_bint(&b);
         }
-
-        // Cleanup memory of the loaded BINT structure
-        delete_bint(&loaded_bint);
-    } else {
-        fprintf(stderr, "Failed to load data from file.\n");
+        free(loaded_bints); // free the array after deleting all its BINT pointers
     }
-
-    // BINT* a = NULL;
-    // BINT* b = NULL;
-    // BINT* c = NULL;
-
-    // int n = 0x00;
-    // int m = 0x00;
-    // int max;
-    // int a_sgn, b_sgn;
-    
-    // //0: '+', 1: '-', 2: '*'
-    // int opt;
-
-    // for(int i=0; i<1; i++) {
-    //     //opt = rand() % 0x02;
-    //     opt = 0;
-        
-    //     a_sgn = rand() % 0x02;
-    //     b_sgn = rand() % 0x02;
-        
-    //     n = rand() % 0x3; n++;
-    //     m = rand() % 0x3; m++;
-    //     max = MAX(n, m);
-
-    //     //printf("\n****************************\n[Test %d]\n****************************\n", i+1);
-    //     //printf("n m: %d %d\n", n,m);
-    //     rand_bint(&a, a_sgn, n);
-    //     rand_bint(&b, b_sgn, m);
-    //     init_bint(&c, max);
-        
-    //     //custom_printHex_xy(a,b,max);
-
-    //     start = clock();
-    //     if(opt == 0) {
-    //         ADD_xyz(a,b,c);
-    //     } else if(opt == 1) {
-    //         SUB_xyz(a,b,c);
-    //     } else {
-    //         //mult_xyc(a->val,b->val,c->val);
-    //     }
-    //     end = clock();
-
-    //     //printf("\nResult:\n\n");
-    //     a->sign = a_sgn;
-    //     b->sign = b_sgn;
-    //     //custom_printHex(a,b,c,opt);
-
-    //     printSage(a,b,c,opt,i);
-
-    //     delete_bint(&a);
-    //     delete_bint(&b);
-    //     delete_bint(&c);
-
-    //     double time_taken = ((double) end - start) / CLOCKS_PER_SEC;
-    //     //printf("\nTime: %f.\n", time_taken);
-    // }
 
     return 0;
 }

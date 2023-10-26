@@ -61,6 +61,25 @@ bool store_bint(const char* filename, BINT* b) {
     return true;
 }
 
+bool multi_store_bints(const char* filename, BINT** bint_array, int num_bints) {
+    if(!filename || !bint_array || num_bints <= 0) return false;
+
+    FILE* f = fopen(filename, "wb");
+    if(!f) return false;
+
+    fwrite(&num_bints, sizeof(int), 1, f); // Write number of BINTs
+
+    for (int i = 0; i < num_bints; i++) {
+        BINT* b = bint_array[i];
+        fwrite(&b->sign, sizeof(b->sign), 1, f);
+        fwrite(&b->wordlen, sizeof(b->wordlen), 1, f);
+        fwrite(b->val, sizeof(WORD), b->wordlen, f);
+    }
+
+    fclose(f);
+    return true;
+}
+
 BINT* load_bint(const char* filename) {
     if(!filename) return NULL;
 
@@ -101,6 +120,67 @@ BINT* load_bint(const char* filename) {
     fclose(f);
     return b;
 }
+
+BINT** multi_load_bints(const char* filename, int* num_bints) {
+    if(!filename) return NULL;
+
+    FILE* f = fopen(filename, "rb");
+    if(!f) return NULL;
+
+    int tmp_num_bints;
+    if (fread(&tmp_num_bints, sizeof(int), 1, f) != 1) {
+        fclose(f);
+        return NULL;
+    }
+
+    BINT** bint_array = (BINT**)malloc(tmp_num_bints * sizeof(BINT*));
+    if (!bint_array) {
+        fclose(f);
+        return NULL;
+    }
+
+    for (int i = 0; i < tmp_num_bints; i++) {
+        bool tmp_sign;
+        u32 tmp_wordlen;
+
+        if (fread(&tmp_sign, sizeof(tmp_sign), 1, f) != 1 ||
+            fread(&tmp_wordlen, sizeof(tmp_wordlen), 1, f) != 1) {
+            for (int j = 0; j < i; j++) {
+                delete_bint(&bint_array[j]);
+            }
+            free(bint_array);
+            fclose(f);
+            return NULL;
+        }
+
+        BINT* b = NULL;
+        init_bint(&b, tmp_wordlen);
+        if (!b || !b->val) {
+            for (int j = 0; j < i; j++) {
+                delete_bint(&bint_array[j]);
+            }
+            free(bint_array);
+            fclose(f);
+            return NULL;
+        }
+        b->sign = tmp_sign;
+        if (fread(b->val, sizeof(WORD), b->wordlen, f) != b->wordlen) {
+            delete_bint(&b);
+            for (int j = 0; j < i; j++) {
+                delete_bint(&bint_array[j]);
+            }
+            free(bint_array);
+            fclose(f);
+            return NULL;
+        }
+        bint_array[i] = b;
+    }
+
+    fclose(f);
+    *num_bints = tmp_num_bints; // update the number of loaded BINTs
+    return bint_array;
+}
+
 
 
 /**

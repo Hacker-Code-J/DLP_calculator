@@ -8,7 +8,8 @@
         "array": "c",
         "string": "c",
         "string_view": "c",
-        "setup.h": "c"
+        "setup.h": "c",
+        "operation.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
