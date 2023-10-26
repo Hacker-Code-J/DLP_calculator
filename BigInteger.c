@@ -4,43 +4,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-WORD arrOne[1] = {1};
+WORD arrOne[1] = {0x01};
 
 const BINT BINT_ZERO = {false, 0, NULL};
 const BINT BINT_ONE = {false, 1, arrOne};
 const BINT BINT_NEG_ONE = {true, 1, arrOne};
 
-/**
- * 
-*/
-BINT* init_bint(BINT** bint_ptr, int wordlen) {
+BINT* init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
     // Allocate memory for BINT structure
-    *bint_ptr = (BINT*)malloc(sizeof(BINT));
-    if(!*bint_ptr) {
+    *pptrBint = (BINT*)malloc(sizeof(BINT));
+    if(!(*pptrBint)) {
         fprintf(stderr, "Error: Unable to allocate memory for BINT.\n");
         exit(1);
     }
     // Allocate memory for val (array of WORD)
-    (*bint_ptr)->val = (WORD*)calloc(wordlen,sizeof(WORD));
-    if (!(*bint_ptr)->val) {
-        free(*bint_ptr); // freeing the already allocated BINT memory before exiting
+    (*pptrBint)->val = (WORD*)calloc(wordlen,sizeof(WORD));
+    if (!(*pptrBint)->val) {
+        free(*pptrBint); // freeing the already allocated BINT memory before exiting
         fprintf(stderr, "Error: Unable to allocate memory for BINT val.\n");
         exit(1);
     }
     // Initialize structure members
-    (*bint_ptr)->sign = false;
-    (*bint_ptr)->wordlen = wordlen;
-    return *bint_ptr;
+    (*pptrBint)->sign = false;
+    (*pptrBint)->wordlen = wordlen;
+    return *pptrBint;
 }
 
-/**
- * 
-*/
-void delete_bint(BINT** bint_ptr) {
-    if (bint_ptr && *bint_ptr) {
-        free((*bint_ptr)->val); // Free the allocated memory for val
-        free(*bint_ptr); // Free the allocated memory for BINT structure
-        *bint_ptr = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
+void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
+    if (pptrBint && *pptrBint) {
+        free((*pptrBint)->val); // Free the allocated memory for val
+        free(*pptrBint); // Free the allocated memory for BINT structure
+        *pptrBint = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
     }
 }
 

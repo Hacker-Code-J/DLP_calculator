@@ -159,7 +159,7 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z) {
     }
 }
 
-void mult_xyc(WORD x, WORD y , WORD* C){
+void mul_xyc(WORD x, WORD y , WORD* C){
     WORD A0,A1,B0,B1,T0,T1,C0,C1,T;
     int w = sizeof(WORD)*8;//비트 단위 계산을 바이트 값을 비트값으로 변형;
     WORD back_half_mask = (1<<(w/2))-1;//WORD에 따라 마스크값이 바뀔수 있게계산처리로 마스크값을 계산한다
@@ -181,9 +181,37 @@ void mult_xyc(WORD x, WORD y , WORD* C){
     C[1] = C1;
 }
 
-void mul_xy(BINT* X, BINT *Y, BINT** Z) {
-    int w = sizeof(WORD)*8;
-    BINT* x0, x1, y0, y1;
-    init_bint(&x1, X->wordlen/2);
-    MUL_Shift(X, x1, w/2);
-}
+// void mul_xyc(WORD X, WORD Y, WORD* C) {
+//     int half_w = sizeof(WORD)*4;
+//     /**
+//      * if WORD = u32, then
+//      * (1<<(w/2))-1 = 0x00000001 << 16(=2^4) - 1
+//      *              = 0x00010000 - 1
+//      *              = 0x0000ffff
+//     */
+//     WORD MASK_R = (1 << half_w) - 1;
+//     WORD MASK_L = MASK_R << half_w;
+
+//     WORD X0 = X & MASK_R;
+//     WORD X1 = X & MASK_L;
+//     WORD Y0 = Y & MASK_R;
+//     WORD Y1 = Y & MASK_L;
+    
+//     WORD T0 = X0 * Y1;
+//     WORD T1 = X1 * Y0;
+
+//     T0 = T0 + T1;
+//     T1 = T0 < T1;
+
+//     WORD C0 = X0 * Y0;
+//     WORD C1 = X1 * Y1;
+
+//     WORD T = C0;
+//     C0 += (T0 << half_w);
+//     C1 += (T1 << half_w) + (T0 >> half_w) + (C0 < T);
+    
+//     half_w *= 2;
+
+//     *C = C0;
+//     *(C+1) = C1;
+// }

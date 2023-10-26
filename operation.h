@@ -6,6 +6,7 @@
 
 #ifndef OPERATION_H
 #define OPERATION_H
+
 // Function prototypes for BINT arithmetic operations.
 
 /************************************
@@ -34,18 +35,19 @@ void sub_xyz(BINT* X, BINT* Y, BINT* Z);
 void SUB_xyz(BINT* X, BINT* Y, BINT* Z);
 
 //Author: Moon Ye-chan
-void mult_xyc(WORD x, WORD y , WORD* C);
+// void mult_xyc(WORD x, WORD y , WORD* C);
 
-//Author: Ji Yong-Hyeon
-/************************************
-* W = 2^w  
-* X, Y in [0,W-1] and Z in [0, W^2-1]
-* X = X_1 || X_0
-* Y = Y_1 || Y_0
-* X_0, X_1, Y_0, Y_1 in [0,W/2-1]
-* XY = (X_1Y_1)W + X_0Y_0 + (X_1Y_0+X_0Y_1)W^{1/2}
-*    = X_1Y_1<<w + X_0Y_0 + (X_1Y_0+X_0Y_1)<<w/2
-************************************/
-void mul_xy(BINT* X, BINT *Y, BINT** Z);
+/** Author: Ji Yong-Hyeon
+ * W = 2^w  
+ * X, Y in [0,W-1] and Z in [0, W^2-1]
+ * 
+ * X = X_1 || X_0
+ * Y = Y_1 || Y_0
+ * X_0, X_1, Y_0, Y_1 in [0,W/2-1]
+ * XY = (X_1Y_1)W + X_0Y_0 + (X_1Y_0+X_0Y_1)W^{1/2}
+ *    = X_1Y_1<<w + X_0Y_0 + (X_1Y_0+X_0Y_1)<<w/2
+ *
+*/
+void mul_xyc(WORD X, WORD Y, WORD* C);
 
 #endif // OPERATION_H

@@ -24,40 +24,49 @@
 #include "BigInteger.h"
 #include "operation.h"
 
-BINTQueue* queue;
-
 int main() {
     srand((unsigned int)time(NULL));
 
     // clock_t start, end;
     int t = 2;
 
-    queue = createQueue();
+    WORD a = 0xffffffff;
+    WORD b = 0x0000ffff;
+    WORD c[2] = { 0x00, };
 
-    BINT* bint1 = NULL;
-    BINT* bint2 = NULL;
-    BINT* bint3 = NULL;
+    mul_xyc(a,b,c);
 
-    while(t != 0) {
-        bool rand_sgn1 = rand() % 0x02;
-        bool rand_sgn2 = rand() % 0x02;
-        int n = rand() % 0x05  + 1;
-        int m = rand() % 0x05  + 1;
-        int max = MAX(n, m);
-        rand_bint(&bint1, rand_sgn1, n);
-        rand_bint(&bint2, rand_sgn2, m);
-        bint3 = init_bint(&bint3, max);
+    printf("%08x %08x", c[1], c[0]);
 
-        ADD_xyz(bint1,bint2,bint3);
-        bint1->sign = rand_sgn1;
-        bint2->sign = rand_sgn2;
+    // while(t != 0) {
+    //     BINT* bint1 = NULL; 
+    //     BINT* bint2 = NULL;
+    //     BINT* bint3 = NULL;
+    //     bool rand_sgn1 = rand() % 0x02;
+    //     bool rand_sgn2 = rand() % 0x02;
+    //     // int n = rand() % 0x02  + 1;
+    //     // int m = rand() % 0x02  + 1;
+    //     int n = 1;
+    //     int m = 1;
+    //     int max = MAX(n, m);
+    //     rand_bint(&bint1, rand_sgn1, n);
+    //     rand_bint(&bint2, rand_sgn2, m);
+    //     bint3 = init_bint(&bint3, max*max);
 
-        custom_printHex(bint1,bint2,bint3,0);
+    //     // MUL_Shift(bint1, bint3, 4*sizeof(WORD));
 
-        delete_bint(&bint1);
-        delete_bint(&bint2);
-        delete_bint(&bint3);
-        t--;
-    }
+    //     // ADD_xyz(bint1,bint2,bint3);
+        
+        
+    //     bint1->sign = rand_sgn1;
+    //     bint2->sign = rand_sgn2;
+
+    //     custom_printHex(bint1,bint2,bint3,0);
+
+    //     delete_bint(&bint1);
+    //     delete_bint(&bint2);
+    //     delete_bint(&bint3);
+    //     t--;
+    // }
 
 }
