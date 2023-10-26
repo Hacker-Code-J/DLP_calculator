@@ -181,9 +181,9 @@ void mult_xyc(WORD x, WORD y , WORD* C){
     C[1] = C1;
 }
 
-// void mul_xy(BINT* X, BINT *Y, BINT** Z) {
-//     int w = sizeof(WORD)*8;
-//     BINT* x0, x1, y0, y1;
-//     init_bint(&x1, X->wordlen/2);
-//     MUL_Shift(X, x1, w/2);
-// }
+void mul_xy(BINT* X, BINT *Y, BINT** Z) {
+    int w = sizeof(WORD)*8;
+    BINT* x0, x1, y0, y1;
+    init_bint(&x1, X->wordlen/2);
+    MUL_Shift(X, x1, w/2);
+}

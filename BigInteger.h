@@ -12,16 +12,24 @@
 /**
  * Data structure for representing an Integer
  * Every integer in the array signifies a digit in base 2^w, where w = 8 * sizeof(WORD)
- * +---------------------+
- * |   BINT(128-bit)     |
- * +---------------------+
- * |    sign (1byte)     | --> NEGATIVE (True) or NON_NEGATIVE (False)
- * +---------------------+
- * |   wordlen (4byte)   | --> n-word BINT
- * +---------------------+
- * |    val (64byte)     | --> [addr] -->+---------+---------+---+---------+
- * +---------------------+               | WORD[0] | WORD[1] |...| WORD[n] |
- *                                       +---------+---------+---+---------+
+ * 
+ * BINT bint;
+ * BINT* ptrBint = &bint;
+ * BINT** pptrBint = &ptrBint;
+ * +---------------+
+ * |   pptrBint    |
+ * |---------------|
+ * |  [address]----|-----> +-----------+
+ * +---------------+       |  ptrBint  |
+ *                         |-----------|
+ *                         | [address]-|-----> +----------------------+
+ *                         +-----------+       |        bint          |
+ *                                             |----------------------|
+ *                                             | sign:    false(+)    |
+ *                                             | wordlen: n           |
+ *                                             | val:     [address]---|----> +---------+---------+---+-----------+
+ *                                             +----------------------+      | WORD[0] | WORD[1] |...| WORD[n-1] |
+ *                                                                           +---------+---------+---+-----------+                                   
 */
 typedef struct {
     bool sign;      // the sign of the number (false if 0 or positive, true if negative)
@@ -29,15 +37,34 @@ typedef struct {
     WORD* val;      // threshold between performing long and karatsuba multiplication
 } BINT;
 
-/**
- * Define a structure for a 3D BINT vector with three coordinates: x, y, and z
-*/
-
 extern const BINT BINT_ZERO;    //zero integer
 extern const BINT BINT_ONE;     //one integer
 extern const BINT BINT_NEG_ONE; //negative one integer
 
 /**
+ * BINT* ptrBint;
+ * BINT* init_bint(&ptrBint, k);
+ * 
+ * Before calling 'init_bint':
+ * +-----------+
+ * |  ptrBint  |
+ * |-----------|
+ * |  [null]   |
+ * +-----------+
+ *
+ * Initializing other members of the structure:
+ * +-----------+
+ * |  ptrBint  |
+ * |-----------|
+ * | [address]-|-----> +----------------------+
+ * +-----------+       |     initialized      |
+ *                     |----------------------|
+ *                     | sign:    false       |
+ *                     | wordlen: k           |
+ *                     | val:     [address]---|----> +---------+---------+---+-----------+
+ *                     +----------------------+      | WORD[0] | WORD[1] |...| WORD[k-1] |
+ *                                                   +---------+---------+---+-----------+ 
+ * 
  * allocate memory for the integer
  * @param bint_ptr the point of BINT
  * @param wordlen the initial size of the array
@@ -46,9 +73,54 @@ extern const BINT BINT_NEG_ONE; //negative one integer
 BINT* init_bint(BINT** bint_ptr, int wordlen);
 
 /**
+ * BINT* ptrBint;
+ * BINT* delete_bint(&ptrBint);
  * 
+ * Before calling 'delete_bint':
+ * +-----------+
+ * |  ptrBint  |
+ * |-----------|
+ * | [address]-|-----> +---------------------+
+ * +-----------+       |     initialized     |
+ *                     |---------------------|
+ *                              ...
+ * Inside 'delete_bint':
+ * - Step1:
+ * +-----------+
+ * |  ptrBint  |
+ * |-----------|
+ * | [address]-|-----> +---------------------+
+ * +-----------+       |   partially free    |
+ *                     |---------------------|
+ *                     | sign:    false      |
+ *                     | wordlen: wordlen    |
+ *                     | val:     [freed]    |
+ *                     +---------------------+
+ * - Step2:
+ * +-----------+
+ * |  ptrBint  |
+ * |-----------|
+ * |  [null]   |
+ * +-----------+
 */
 void delete_bint(BINT** bint_ptr);
+
+typedef struct Node {
+    BINT data;
+    struct Node* next;
+} Node;
+
+typedef struct {
+    Node* front;
+    Node* rear;
+} BINTQueue;
+
+BINTQueue* createQueue();
+void enqueue(BINTQueue* q, BINT data);
+BINT dequeue(BINTQueue* q);
+BINT peek(BINTQueue* q);
+bool isempty(BINTQueue* q);
+void freeQueue(BINTQueue* q);
 
 /**
  * File I/O
@@ -188,7 +260,7 @@ for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values
     print(is_correct)
  *
 */
-void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop);
+// void printSage(BINTQueue* queue,  int opt, int loop);
 
 /**
  * 

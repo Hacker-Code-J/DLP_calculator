@@ -47,6 +47,70 @@ void delete_bint(BINT** bint_ptr) {
 /**
  * 
 */
+BINTQueue* createQueue() {
+    BINTQueue* q = (BINTQueue*)malloc(sizeof(BINTQueue));
+    if (!q) return NULL;  // Memory allocation failure
+
+    q->front = NULL;
+    q->rear = NULL;
+
+    return q;
+}
+
+void enqueue(BINTQueue* q, BINT data) {
+    if (!q) return;
+
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (!newNode) return;  // Memory allocation failure
+
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (!q->rear) {
+        q->front = newNode;
+        q->rear = newNode;
+    } else {
+        q->rear->next = newNode;
+        q->rear = newNode;
+    }
+}
+
+BINT dequeue(BINTQueue* q) {
+    if (!q || !q->front) return BINT_ZERO;
+
+    Node* tempNode = q->front;
+    BINT data = tempNode->data;
+
+    q->front = q->front->next;
+
+    if (!q->front) {
+        q->rear = NULL;  // If the last node was dequeued, rear should also be NULL
+    }
+
+    free(tempNode);
+
+    return data;
+}
+
+BINT peek(BINTQueue* q) {
+    if (!q || !q->front) return BINT_ZERO;
+    return q->front->data;
+}
+
+bool isempty(BINTQueue* q) {
+    return (q == NULL || q->front == NULL);
+}
+
+void freeQueue(BINTQueue* q) {
+    while (!isempty(q)) {
+        dequeue(q);
+    }
+    free(q);
+}
+
+/**
+ * 
+*/
 bool store_bint(const char* filename, BINT* b) {
     if(!filename || !b) return false;
 
@@ -186,79 +250,85 @@ BINT** multi_load_bints(const char* filename, int* num_bints) {
 /**
  * 
 */
-void printSage(BINT* X, BINT* Y, BINT* Z,  int opt, int loop) {
-    char* opr;
-    int n = MAX(X->wordlen, Y->wordlen);
+// void printSage(BINTQueue* queue,  int opt, int loop) {
+//     char* opr;
 
-    switch (opt)
-    {
-    case 0:
-        opr = "add";
-        break;
-    case 1:
-        opr = "sub";
-        break;
-    case 2:
-        opr = "mul";
-        break;
-    default:
-        opr = NULL;
-        break;
-    }
+//     switch (opt)
+//     {
+//     case 0:
+//         opr = "add";
+//         break;
+//     case 1:
+//         opr = "sub";
+//         break;
+//     case 2:
+//         opr = "mul";
+//         break;
+//     default:
+//         opr = NULL;
+//         break;
+//     }
     
-    printf("def hex_to_int(hex_str, sign):\n");
-    printf("    val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)\n");
-    printf("    return -val if sign == \"[1]\" else val\n\n");
+//     printf("def hex_to_int(hex_str, sign):\n");
+//     printf("    val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)\n");
+//     printf("    return -val if sign == \"[1]\" else val\n\n");
 
-    printf("def int_to_hex(val):\n");
-    printf("    sign = \"[0]\" if val >= 0 else \"[1]\"\n");
-    printf("    abs_val = abs(val)\n");
-    printf("    hex_str = hex(abs_val)[2:]\n");
-    printf("    hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])\n");
-    printf("    return f\"{sign} 0x {hex_str}\"\n\n");
+//     printf("def int_to_hex(val):\n");
+//     printf("    sign = \"[0]\" if val >= 0 else \"[1]\"\n");
+//     printf("    abs_val = abs(val)\n");
+//     printf("    hex_str = hex(abs_val)[2:]\n");
+//     printf("    hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])\n");
+//     printf("    return f\"{sign} 0x {hex_str}\"\n\n");
 
-    printf("def check_operation(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_hex, operation):\n");
-    printf("    x_int = hex_to_int(x_hex, x_sign)\n");
-    printf("    y_int = hex_to_int(y_hex, y_sign)\n\n");
+//     printf("def check_operation(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_hex, operation):\n");
+//     printf("    x_int = hex_to_int(x_hex, x_sign)\n");
+//     printf("    y_int = hex_to_int(y_hex, y_sign)\n\n");
 
-    printf("    if operation == \"add\":\n");
-    printf("        result_int = x_int + y_int\n");
-    printf("    elif operation == \"sub\":\n");
-    printf("        result_int = x_int - y_int\n");
-    printf("    elif operation == \"mul\":\n");
-    printf("        result_int = x_int * y_int\n");
-    printf("    else:\n");
-    printf("        raise ValueError(f\"Invalid operation: {operation}\")\n\n");
+//     printf("    if operation == \"add\":\n");
+//     printf("        result_int = x_int + y_int\n");
+//     printf("    elif operation == \"sub\":\n");
+//     printf("        result_int = x_int - y_int\n");
+//     printf("    elif operation == \"mul\":\n");
+//     printf("        result_int = x_int * y_int\n");
+//     printf("    else:\n");
+//     printf("        raise ValueError(f\"Invalid operation: {operation}\")\n\n");
 
-    printf("    result_hex = int_to_hex(result_int)\n");
-    printf("    return result_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_hex).replace(' ', '').lower()\n\n");
+//     printf("    result_hex = int_to_hex(result_int)\n");
+//     printf("    return result_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_hex).replace(' ', '').lower()\n\n");
 
-    printf("values = [\n");
-    printf("    (\"[%d]\", ", X->sign);
-    printf("\"0x");
-    for(int i=0; i<(n-X->wordlen); i++)
-        printf(" %08x", 0);
-    for (int i=X->wordlen-1; i>=0; i--)
-        printf(" %08x", X->val[i]);
-    printf("\", ");
-    printf("\"[%d]\", \"0x", Y->sign);
-    for(int i=0; i<(n-Y->wordlen); i++)
-        printf(" %08x", 0);
-    for (int i=Y->wordlen-1; i>=0; i--)
-        printf(" %08x", Y->val[i]);
-    printf("\", ");
-    printf("\"[%d]\", \"0x", Z->sign);
-    for(int i=0; i<n-Z->wordlen; i++)
-        printf(" %08x", 0);
-    for (int i=Z->wordlen-1; i>=0; i--)
-        printf(" %08x", Z->val[i]);
-    printf("\", \"%03s\"),\n", opr);
-    printf("]\n\n");
+//     printf("values = [\n");
+//     while(loop != 0) {
+//         BINT X = dequeue(queue);
+//         BINT Y = dequeue(queue);
+//         BINT Z = dequeue(queue);
+//         int n = MAX(X.wordlen, Y.wordlen);
+//         printf("    (\"[%d]\", ", X.sign);
+//         printf("\"0x");
+//         for(int i=0; i<(n-X.wordlen); i++)
+//             printf(" %08x", 0);
+//         for (int i=X.wordlen-1; i>=0; i--)
+//             printf(" %08x", X.val[i]);
+//         printf("\", ");
+//         printf("\"[%d]\", \"0x", Y.sign);
+//         for(int i=0; i<(n-Y.wordlen); i++)
+//             printf(" %08x", 0);
+//         for (int i=Y.wordlen-1; i>=0; i--)
+//             printf(" %08x", Y.val[i]);
+//         printf("\", ");
+//         printf("\"[%d]\", \"0x", Z.sign);
+//         for(int i=0; i<n-Z.wordlen; i++)
+//             printf(" %08x", 0);
+//         for (int i=Z.wordlen-1; i>=0; i--)
+//             printf(" %08x", Z.val[i]);
+//         printf("\", \"%03s\"),\n", opr);
+//         loop--;
+//     }
+//     printf("]\n\n");
 
-    printf("for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values):\n");
-    printf("    is_correct = check_operation(x_sign, x, y_sign, y, expected_sign, expected, op)\n");
-    printf("    print(is_correct)\n");
-}
+//     printf("for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values):\n");
+//     printf("    is_correct = check_operation(x_sign, x, y_sign, y, expected_sign, expected, op)\n");
+//     printf("    print(is_correct)\n");
+// }
 
 /******************************************************************/
 void printHex(BINT* X) {

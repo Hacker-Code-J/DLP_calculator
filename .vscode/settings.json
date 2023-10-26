@@ -9,7 +9,8 @@
         "string": "c",
         "string_view": "c",
         "setup.h": "c",
-        "operation.h": "c"
+        "operation.h": "c",
+        "bint_fifo.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
