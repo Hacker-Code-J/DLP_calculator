@@ -29,7 +29,7 @@ This project provides a comprehensive large integer arithmetic library, with a f
 ### Installation
 
 ```bash
-git clone https://github.com/Hacker-Code-J/2023_Fall_AAP.git
+git clone https://github.com/Hacker-Code-J/DLP_calculator.git
 cd large-int-library-and-disc-log-calc
 make
 ```
