@@ -4,11 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-WORD arrOne[1] = {0x01};
+// WORD arrOne[1] = {0x01};
 
-const BINT BINT_ZERO = {false, 0, NULL};
-const BINT BINT_ONE = {false, 1, arrOne};
-const BINT BINT_NEG_ONE = {true, 1, arrOne};
+// const BINT BINT_ZERO = {false, 0, NULL};
+// const BINT BINT_ONE = {false, 1, arrOne};
+// const BINT BINT_NEG_ONE = {true, 1, arrOne};
 
 BINT* init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
     // Allocate memory for BINT structure
@@ -37,6 +37,9 @@ void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
         *pptrBint = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
     }
 }
+
+
+
 
 /**
  * 

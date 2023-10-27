@@ -7,7 +7,18 @@
 #ifndef BIGINTEGER_H
 #define BIGINTEGER_H
 
-#define WORD u32        // base used to represent each digit in the big integer
+#define WORD_BITLEN 32
+
+// Supports operations in 8-bit, 16-bit, 32-bit, and 64-bit units.
+#if WORD_BITLEN == 8
+typedef u8 WORD;
+#elif WORD_BITLEN == 16
+typedef u16 WORD;
+#elif WORD_BITLEN == 64
+typedef u64 WORD:
+#else
+typedef u32 WORD;
+#endif
 
 /**
  * Data structure for representing an Integer
@@ -37,9 +48,9 @@ typedef struct {
     WORD* val;      // threshold between performing long and karatsuba multiplication
 } BINT;
 
-extern const BINT BINT_ZERO;    //zero integer
-extern const BINT BINT_ONE;     //one integer
-extern const BINT BINT_NEG_ONE; //negative one integer
+// extern const BINT BINT_ZERO;    //zero integer
+// extern const BINT BINT_ONE;     //one integer
+// extern const BINT BINT_NEG_ONE; //negative one integer
 
 /**
  * BINT* ptrBint;
@@ -104,6 +115,12 @@ BINT* init_bint(BINT** pptrBint, int wordlen);
  * +-----------+
 */
 void delete_bint(BINT** pptrBint);
+
+/**
+ * 
+*/
+void SET_BINT_ZERO(BINT** pptrBint);
+void SET_BINT_ONE(BINT** pptrBint);
 
 typedef struct Node {
     BINT data;

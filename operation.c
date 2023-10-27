@@ -5,6 +5,12 @@
 #include "BigInteger.h"
 #include "operation.h"
 
+WORD One[1] = {0x01};
+
+const BINT BINT_ZERO = {false, 0, NULL};
+const BINT BINT_ONE = {false, 1, One};
+const BINT BINT_NEG_ONE = {true, 1, One};
+
 void add_xyk(WORD x, WORD y, WORD k, WORD* res, WORD* carry) {
     /****************
     *carry = 0;
@@ -181,8 +187,12 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z) {
 //     C[1] = C1;
 // }
 
+// void mul_xyz2(WORD valX, WORD valY, BINT** pptrZ) {
+//     BINT
+// }
+
 void mul_xyz(WORD X, WORD Y, WORD* ptrZ) {
-    int half_w = sizeof(WORD)*4; // half_w = sizeof(WORD) * 8 / 2
+    int half_w = WORD_BITLEN / 2; // if W=2^w=2^32 then half_w = 16 = 2^4
     /**
      * if WORD = u32, then
      * (1<<(w/2))-1 = 0x00000001 << 16(=2^4) - 1
@@ -191,6 +201,7 @@ void mul_xyz(WORD X, WORD Y, WORD* ptrZ) {
     */
     WORD MASK = (1 << half_w) - 1;
 
+    // X = X1 || X0
     WORD X0 = X & MASK;
     WORD X1 = X >> half_w;
     WORD Y0 = Y & MASK;
@@ -205,17 +216,15 @@ void mul_xyz(WORD X, WORD Y, WORD* ptrZ) {
     T0 = T0 + T1;
     T1 = T0 < T1;
 
-    WORD C0 = X0 * Y0;
-    WORD C1 = X1 * Y1;
+    WORD Z0 = X0 * Y0;
+    WORD Z1 = X1 * Y1;
 
-    WORD T = C0;
-    C0 += (T0 << half_w);
-    C1 += (T1 << half_w) + (T0 >> half_w) + (C0 < T);
-    
-    half_w *= 2;
+    WORD T = Z0;
+    Z0 += (T0 << half_w);
+    Z1 += (T1 << half_w) + (T0 >> half_w) + (Z0 < T);
 
-    *ptrZ = C0;
-    *(ptrZ+1) = C1;
+    *ptrZ = Z0;
+    *(ptrZ+1) = Z1;
 }
 
 // void mul_core_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ) {
