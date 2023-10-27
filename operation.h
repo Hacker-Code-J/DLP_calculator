@@ -49,5 +49,6 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z);
  *
 */
 void mul_xyc(WORD X, WORD Y, WORD* C);
+void mul_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ);
 
 #endif // OPERATION_H

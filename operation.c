@@ -159,59 +159,76 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z) {
     }
 }
 
-void mul_xyc(WORD x, WORD y , WORD* C){
-    WORD A0,A1,B0,B1,T0,T1,C0,C1,T;
-    int w = sizeof(WORD)*8;//비트 단위 계산을 바이트 값을 비트값으로 변형;
-    WORD back_half_mask = (1<<(w/2))-1;//WORD에 따라 마스크값이 바뀔수 있게계산처리로 마스크값을 계산한다
+// void mul_xyc(WORD x, WORD y , WORD* C){
+//     WORD A0,A1,B0,B1,T0,T1,C0,C1,T;
+//     int w = sizeof(WORD)*8;//비트 단위 계산을 바이트 값을 비트값으로 변형;
+//     WORD back_half_mask = (1<<(w/2))-1;//WORD에 따라 마스크값이 바뀔수 있게계산처리로 마스크값을 계산한다
 
-    A1 = x >> (w/2);//비트 쉬프트로 앞에 절반 남기기
-    A0 = x&back_half_mask;//뒤에 절반 남기기 and 연산자로 
-    B1 = y >> (w/2);
-    B0 = y&back_half_mask;
-    T1 = A1*B0;
-    T0 = A0*B1;
-    T0 = (T1+T0);//지금은 32비트 기준으로 만들고 있고 c언어 자체 연산이 mod32기준이라 마스크처리없이 가능하지만 추가로 32비트가 아닌 다른WORD길이를 사용할 경우 처리가 필요 
+//     A1 = x >> (w/2);//비트 쉬프트로 앞에 절반 남기기
+//     A0 = x&back_half_mask;//뒤에 절반 남기기 and 연산자로 
+//     B1 = y >> (w/2);
+//     B0 = y&back_half_mask;
+//     T1 = A1*B0;
+//     T0 = A0*B1;
+//     T0 = (T1+T0);//지금은 32비트 기준으로 만들고 있고 c언어 자체 연산이 mod32기준이라 마스크처리없이 가능하지만 추가로 32비트가 아닌 다른WORD길이를 사용할 경우 처리가 필요 
+//     T1 = T0 < T1;
+//     C1 = A1*B1;
+//     C0 = A0*B0;
+//     T = C0;
+//     C0 = (C0 + (T0<<(w/2)));//지금은 32비트 기준으로 만들고 있고 c언어 자체 연산이 mod32기준이라 마스크처리없이 가능하지만 추가로 32비트가 아닌 다른WORD길이를 사용할 경우 처리가 필요 
+//     C1 = C1 + (T1<<(w/2)) + (T0>>(w/2)) + (C0<T);
+//     C[0]=C0;
+//     C[1] = C1;
+// }
+
+void mul_xyc(WORD X, WORD Y, WORD* C) {
+    int half_w = sizeof(WORD)*4; // half_w = sizeof(WORD) * 8 / 2
+    /**
+     * if WORD = u32, then
+     * (1<<(w/2))-1 = 0x00000001 << 16(=2^4) - 1
+     *              = 0x00010000 - 1
+     *              = 0x0000ffff
+    */
+    WORD MASK = (1 << half_w) - 1;
+
+    WORD X0 = X & MASK;
+    WORD X1 = X >> half_w;
+    WORD Y0 = Y & MASK;
+    WORD Y1 = Y >> half_w;
+    
+    // printf("X = %08x || %08x\n", X1, X0);
+    // printf("Y = %08x || %08x\n", Y1, Y0);
+
+    WORD T0 = X0 * Y1;
+    WORD T1 = X1 * Y0;
+
+    T0 = T0 + T1;
     T1 = T0 < T1;
-    C1 = A1*B1;
-    C0 = A0*B0;
-    T = C0;
-    C0 = (C0 + (T0<<(w/2)));//지금은 32비트 기준으로 만들고 있고 c언어 자체 연산이 mod32기준이라 마스크처리없이 가능하지만 추가로 32비트가 아닌 다른WORD길이를 사용할 경우 처리가 필요 
-    C1 = C1 + (T1<<(w/2)) + (T0>>(w/2)) + (C0<T);
-    C[0]=C0;
-    C[1] = C1;
+
+    WORD C0 = X0 * Y0;
+    WORD C1 = X1 * Y1;
+
+    WORD T = C0;
+    C0 += (T0 << half_w);
+    C1 += (T1 << half_w) + (T0 >> half_w) + (C0 < T);
+    
+    half_w *= 2;
+
+    *C = C0;
+    *(C+1) = C1;
 }
 
-// void mul_xyc(WORD X, WORD Y, WORD* C) {
-//     int half_w = sizeof(WORD)*4;
-//     /**
-//      * if WORD = u32, then
-//      * (1<<(w/2))-1 = 0x00000001 << 16(=2^4) - 1
-//      *              = 0x00010000 - 1
-//      *              = 0x0000ffff
-//     */
-//     WORD MASK_R = (1 << half_w) - 1;
-//     WORD MASK_L = MASK_R << half_w;
+// void mul_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ) {
+//     WORD w = sizeof(WORD)*8;
+//     BINT* ptrRes = NULL;
+//     BINT* ptrTmp = NULL;
+//     int n = ptrX->wordlen;
+//     int m = ptrY->wordlen;
 
-//     WORD X0 = X & MASK_R;
-//     WORD X1 = X & MASK_L;
-//     WORD Y0 = Y & MASK_R;
-//     WORD Y1 = Y & MASK_L;
-    
-//     WORD T0 = X0 * Y1;
-//     WORD T1 = X1 * Y0;
-
-//     T0 = T0 + T1;
-//     T1 = T0 < T1;
-
-//     WORD C0 = X0 * Y0;
-//     WORD C1 = X1 * Y1;
-
-//     WORD T = C0;
-//     C0 += (T0 << half_w);
-//     C1 += (T1 << half_w) + (T0 >> half_w) + (C0 < T);
-    
-//     half_w *= 2;
-
-//     *C = C0;
-//     *(C+1) = C1;
+//     for(int i = 0; i < n; i++) {
+//         for(int j = 0; j < m; j++) {
+//             ptrTmp->val = ptrX->val[i] * ptrY->val[j];
+//             p
+//         }
+//     }
 // }

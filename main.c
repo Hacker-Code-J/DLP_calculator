@@ -34,9 +34,9 @@ int main() {
     WORD b = 0x0000ffff;
     WORD c[2] = { 0x00, };
 
+    // printf("a: %08x\n b: %08x\n", a, b);
     mul_xyc(a,b,c);
-
-    printf("%08x %08x", c[1], c[0]);
+    printf("%08x %08x\n", c[1], c[0]);
 
     // while(t != 0) {
     //     BINT* bint1 = NULL; 
