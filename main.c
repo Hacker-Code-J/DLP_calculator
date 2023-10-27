@@ -35,7 +35,7 @@ int main() {
     WORD c[2] = { 0x00, };
 
     // printf("a: %08x\n b: %08x\n", a, b);
-    mul_xyc(a,b,c);
+    mul_xyz(a,b,c);
     printf("%08x %08x\n", c[1], c[0]);
 
     // while(t != 0) {

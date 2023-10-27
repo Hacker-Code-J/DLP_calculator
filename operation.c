@@ -181,7 +181,7 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z) {
 //     C[1] = C1;
 // }
 
-void mul_xyc(WORD X, WORD Y, WORD* C) {
+void mul_xyz(WORD X, WORD Y, WORD* ptrZ) {
     int half_w = sizeof(WORD)*4; // half_w = sizeof(WORD) * 8 / 2
     /**
      * if WORD = u32, then
@@ -214,11 +214,11 @@ void mul_xyc(WORD X, WORD Y, WORD* C) {
     
     half_w *= 2;
 
-    *C = C0;
-    *(C+1) = C1;
+    *ptrZ = C0;
+    *(ptrZ+1) = C1;
 }
 
-// void mul_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ) {
+// void mul_core_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ) {
 //     WORD w = sizeof(WORD)*8;
 //     BINT* ptrRes = NULL;
 //     BINT* ptrTmp = NULL;
