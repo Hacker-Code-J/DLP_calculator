@@ -28,15 +28,40 @@ int main() {
     srand((unsigned int)time(NULL));
 
     // clock_t start, end;
-    int t = 2;
+    int t = 10000;
 
-    WORD a = 0xffffffff;
-    WORD b = 0x0000ffff;
-    WORD c[2] = { 0x00, };
+    
 
     // printf("a: %08x\n b: %08x\n", a, b);
-    mul_xyz(a,b,c);
-    printf("%08x %08x\n", c[1], c[0]);
+    // mul_xyz(a,b,c);
+    // printf("%08x %08x\n", c[1], c[0]);
+
+    while(t != 0) {
+        BINT* bint1 = NULL; 
+        BINT* bint2 = NULL;
+        BINT* bint3 = NULL;
+        // int n = rand() % 0x02  + 1;
+        // int m = rand() % 0x02  + 1;
+        int n = 1;
+        int m = 1;
+        int max = MAX(n, m);
+        rand_bint(&bint1, false, n);
+        rand_bint(&bint2, false, m);
+        bint3 = init_bint(&bint3, 2*max);
+
+        mul_xyz(bint1->val[0], bint2->val[0], &bint3);
+        
+        // print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
+        printf("print(int(hex(");
+        printHex2(bint1);printf("*");printHex2(bint2);
+        printf("), 16)  == int(\"");
+        printHex2(bint3);printf("\", 16))\n");
+
+        delete_bint(&bint1);
+        delete_bint(&bint2);
+        delete_bint(&bint3);
+        t--;
+    }
 
     // while(t != 0) {
     //     BINT* bint1 = NULL; 

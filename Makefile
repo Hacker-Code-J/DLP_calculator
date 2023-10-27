@@ -19,6 +19,6 @@ main.o: main.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.o a.out *.bin
+	rm -f *.o a.out *.bin *.sage
 
 .PHONY: clean

@@ -187,44 +187,38 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z) {
 //     C[1] = C1;
 // }
 
-// void mul_xyz2(WORD valX, WORD valY, BINT** pptrZ) {
-//     BINT
-// }
+void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
+    int half_w = WORD_BITLEN / 2; // if w=32, half_w = 16 = 2^4
 
-void mul_xyz(WORD X, WORD Y, WORD* ptrZ) {
-    int half_w = WORD_BITLEN / 2; // if W=2^w=2^32 then half_w = 16 = 2^4
-    /**
-     * if WORD = u32, then
-     * (1<<(w/2))-1 = 0x00000001 << 16(=2^4) - 1
-     *              = 0x00010000 - 1
-     *              = 0x0000ffff
-    */
-    WORD MASK = (1 << half_w) - 1;
+	// Ensure the pointer to BINT and the inner WORD* val pointer are valid
+	if (!pptrZ || !*pptrZ || !(*pptrZ)->val) {
+		// Handle this error appropriately
+		return;
+	}
 
-    // X = X1 || X0
-    WORD X0 = X & MASK;
-    WORD X1 = X >> half_w;
-    WORD Y0 = Y & MASK;
-    WORD Y1 = Y >> half_w;
-    
-    // printf("X = %08x || %08x\n", X1, X0);
-    // printf("Y = %08x || %08x\n", Y1, Y0);
+	WORD* ptrZ = (*pptrZ)->val;
 
-    WORD T0 = X0 * Y1;
-    WORD T1 = X1 * Y0;
-
-    T0 = T0 + T1;
-    T1 = T0 < T1;
-
-    WORD Z0 = X0 * Y0;
-    WORD Z1 = X1 * Y1;
-
-    WORD T = Z0;
-    Z0 += (T0 << half_w);
-    Z1 += (T1 << half_w) + (T0 >> half_w) + (Z0 < T);
-
-    *ptrZ = Z0;
-    *(ptrZ+1) = Z1;
+	WORD MASK = (1 << half_w) - 1;
+	
+	WORD X0 = valX & MASK;
+	WORD X1 = valX >> half_w;
+	WORD Y0 = valY & MASK;
+	WORD Y1 = valY >> half_w;
+	
+	WORD T0 = X0 * Y1;
+	WORD T1 = X1 * Y0;
+	T0 = T0 + T1;
+	T1 = T0 < T1;
+	
+	WORD Z0 = X0 * Y0;
+	WORD Z1 = X1 * Y1;
+	
+	WORD T = Z0;
+	Z0 += (T0 << half_w);
+	Z1 += (T1 << half_w) + (T0 >> half_w) + (Z0 < T);
+	
+	ptrZ[0] = Z0;
+	ptrZ[1] = Z1;
 }
 
 // void mul_core_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ) {

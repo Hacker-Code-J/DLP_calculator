@@ -198,6 +198,8 @@ for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values
  * 
 */
 void printHex(BINT* X);
+void printHex2(BINT* X);
+
 
 /**********************************************************************
 * x: [sgn] 0x ######## ######## 

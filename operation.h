@@ -54,8 +54,7 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z);
  *    = (X_1Y_1 << w) + (X_0Y_0) + ((X_1Y_0+X_0Y_1) << w/2 )
  *
 */
-void mul_xyz2(WORD valX, WORD valY, BINT** pptrZ);
-void mul_xyz(WORD X, WORD Y, WORD* ptrZ); 
+void mul_xyz(WORD valX, WORD valY, BINT** pptrZ);
 void mul_core_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ);
 
 #endif // OPERATION_H

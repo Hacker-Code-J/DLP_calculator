@@ -38,72 +38,76 @@ void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
     }
 }
 
+#define SET_DATA(PB, V, WL, S) if(*(PB)) delete_bint(PB); *(PB)=calloc(1,sizeof(BINT));\
+    (*PB)->val=calloc(1,sizeof(WORD)); *(*PB)->val=(V); (*PB)->wordlen=(WL); (*PB)->sign=(S)
 
+void SET_BINT_ZERO(BINT** pptrBint) { SET_DATA(pptrBint, 0x00, 1, false); }
+void SET_BINT_ONE(BINT** pptrBint) { SET_DATA(pptrBint, 0x01, 1, false); }
 
 
 /**
  * 
 */
-BINTQueue* createQueue() {
-    BINTQueue* q = (BINTQueue*)malloc(sizeof(BINTQueue));
-    if (!q) return NULL;  // Memory allocation failure
+// BINTQueue* createQueue() {
+//     BINTQueue* q = (BINTQueue*)malloc(sizeof(BINTQueue));
+//     if (!q) return NULL;  // Memory allocation failure
 
-    q->front = NULL;
-    q->rear = NULL;
+//     q->front = NULL;
+//     q->rear = NULL;
 
-    return q;
-}
+//     return q;
+// }
 
-void enqueue(BINTQueue* q, BINT data) {
-    if (!q) return;
+// void enqueue(BINTQueue* q, BINT data) {
+//     if (!q) return;
 
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (!newNode) return;  // Memory allocation failure
+//     Node* newNode = (Node*)malloc(sizeof(Node));
+//     if (!newNode) return;  // Memory allocation failure
 
-    newNode->data = data;
-    newNode->next = NULL;
+//     newNode->data = data;
+//     newNode->next = NULL;
 
-    if (!q->rear) {
-        q->front = newNode;
-        q->rear = newNode;
-    } else {
-        q->rear->next = newNode;
-        q->rear = newNode;
-    }
-}
+//     if (!q->rear) {
+//         q->front = newNode;
+//         q->rear = newNode;
+//     } else {
+//         q->rear->next = newNode;
+//         q->rear = newNode;
+//     }
+// }
 
-BINT dequeue(BINTQueue* q) {
-    if (!q || !q->front) return BINT_ZERO;
+// BINT dequeue(BINTQueue* q) {
+//     if (!q || !q->front) return BINT_ZERO;
 
-    Node* tempNode = q->front;
-    BINT data = tempNode->data;
+//     Node* tempNode = q->front;
+//     BINT data = tempNode->data;
 
-    q->front = q->front->next;
+//     q->front = q->front->next;
 
-    if (!q->front) {
-        q->rear = NULL;  // If the last node was dequeued, rear should also be NULL
-    }
+//     if (!q->front) {
+//         q->rear = NULL;  // If the last node was dequeued, rear should also be NULL
+//     }
 
-    free(tempNode);
+//     free(tempNode);
 
-    return data;
-}
+//     return data;
+// }
 
-BINT peek(BINTQueue* q) {
-    if (!q || !q->front) return BINT_ZERO;
-    return q->front->data;
-}
+// BINT peek(BINTQueue* q) {
+//     if (!q || !q->front) return BINT_ZERO;
+//     return q->front->data;
+// }
 
-bool isempty(BINTQueue* q) {
-    return (q == NULL || q->front == NULL);
-}
+// bool isempty(BINTQueue* q) {
+//     return (q == NULL || q->front == NULL);
+// }
 
-void freeQueue(BINTQueue* q) {
-    while (!isempty(q)) {
-        dequeue(q);
-    }
-    free(q);
-}
+// void freeQueue(BINTQueue* q) {
+//     while (!isempty(q)) {
+//         dequeue(q);
+//     }
+//     free(q);
+// }
 
 /**
  * 
@@ -333,6 +337,16 @@ void printHex(BINT* X) {
     for (int i=X->wordlen-1; i>=0; i--)
         printf("%08x ", X->val[i]);
     printf("\n");
+}
+
+void printHex2(BINT* X) {
+    //printf("[%d] 0x ",X->sign);
+    printf("0x");
+    for (int i=X->wordlen-1; i>=0; i--) {
+        
+        printf("%08x", X->val[i]);
+    }
+    //printf("\n");
 }
 
 void custom_printHex(BINT* X, BINT* Y, BINT* Z,  int opt) {
