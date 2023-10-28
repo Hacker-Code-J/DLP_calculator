@@ -188,50 +188,119 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z) {
 // }
 
 void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
-    int half_w = WORD_BITLEN / 2; // if w=32, half_w = 16 = 2^4
-
-	// Ensure the pointer to BINT and the inner WORD* val pointer are valid
+    // Ensure the pointer to BINT and the inner WORD* val pointer are valid
 	if (!pptrZ || !*pptrZ || !(*pptrZ)->val) {
 		// Handle this error appropriately
 		return;
 	}
 
-	WORD* ptrZ = (*pptrZ)->val;
-
-	WORD MASK = (1 << half_w) - 1;
+    const int half_w = WORD_BITLEN / 2; // if w=32, half_w = 16 = 2^4
+	const WORD MASK = (1 << half_w) - 1;
 	
+    // Split the WORDs into halves
 	WORD X0 = valX & MASK;
 	WORD X1 = valX >> half_w;
 	WORD Y0 = valY & MASK;
 	WORD Y1 = valY >> half_w;
 	
+    // Cross multiplication
 	WORD T0 = X0 * Y1;
 	WORD T1 = X1 * Y0;
 	T0 = T0 + T1;
-	T1 = T0 < T1;
+	T1 = T0 < T1; // overflow
 	
+    // Direct multiplication
 	WORD Z0 = X0 * Y0;
 	WORD Z1 = X1 * Y1;
 	
+    // Adjust for overflows
 	WORD T = Z0;
 	Z0 += (T0 << half_w);
 	Z1 += (T1 << half_w) + (T0 >> half_w) + (Z0 < T);
 	
-	ptrZ[0] = Z0;
-	ptrZ[1] = Z1;
+    // Set results
+	(*pptrZ)->val[0] = Z0;
+	(*pptrZ)->val[1] = Z1;
 }
 
-// void mul_core_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ) {
-//     WORD w = sizeof(WORD)*8;
-//     BINT* ptrRes = NULL;
-//     BINT* ptrTmp = NULL;
-//     int n = ptrX->wordlen;
-//     int m = ptrY->wordlen;
+// void mul_core_TxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
+//     delete_bint(pptrZ);
+//     SET_BINT_ZERO(pptrZ);
 
-//     for(int i = 0; i < n; i++) {
-//         for(int j = 0; j < m; j++) {
-//             ptrTmp->val = ptrX->val[i] * ptrY->val[j];
-//             p
+//     BINT* ptrTmp = NULL;
+//     BINT* ptrMUL = NULL;
+//     for(int i = 0; i < ptrX->wordlen; i++) {
+//         for(int j = 0; j < ptrY->wordlen; j++) {
+            
 //         }
 //     }
 // }
+
+
+void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
+    makeEven(&ptrX); makeEven(&ptrY);
+    *pptrZ = init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
+    
+    int idx1 = ptrX->wordlen;
+    int idx2 = ptrY->wordlen / 2; 
+
+    BINT* ptrTmp = NULL;
+    for(int i = 0; i < idx1; i++) {
+        BINT* ptrT0 = init_bint(&ptrT0, ptrX->wordlen);
+        BINT* ptrT1 = init_bint(&ptrT1, ptrX->wordlen+1);
+        BINT* ptrTmp0 = init_bint(&ptrTmp0, 2);
+        BINT* ptrTmp1 = init_bint(&ptrTmp1, 2);;
+
+        for(int j = 0; j < idx2; j++) {
+            mul_xyz(ptrX->val[2*j], ptrY->val[i], &ptrTmp0);
+            ptrT0->val[0] = ptrTmp->val[0];
+            ptrT0->val[1] = ptrTmp->val[1];
+        }
+        delete_bint(&ptrT0);
+        delete_bint(&ptrT1);
+        delete_bint(&ptrTmp0);
+        delete_bint(&ptrTmp1);
+    }
+}
+
+// BINT* MUL_Core_ImpTxtBk(BINT* X, BINT* Y, int p, int q) {
+
+//         for (int k = 0; k < p; k++) {
+//             // Concatenate operation
+//             WORD product0 = X->val[2 * k] * Y->val[j];
+//             WORD product1 = X->val[2 * k + 1] * Y->val[j];
+
+//             // Shift and add for T0 (concatenate)
+//             T0 = leftShiftBINT(T0, w); // w is word size in bits
+//             BINT tmp0; // Temporary BINT to hold the product
+//             tmp0.sign = false;
+//             tmp0.wordlen = 1;
+//             tmp0.val = &product0;
+//             T0 = ADD_core(T0, &tmp0);
+
+//             // Shift and add for T1 (concatenate)
+//             T1 = leftShiftBINT(T1, w);
+//             BINT tmp1;
+//             tmp1.sign = false;
+//             tmp1.wordlen = 1;
+//             tmp1.val = &product1;
+//             T1 = ADD_core(T1, &tmp1);
+//         }
+
+//         BINT* T = ADD_core(T0, T1);
+//         T = leftShiftBINT(T, w * j);
+//         Z = ADD_core(Z, T);
+
+//         // Free up memory allocated for temporary values
+//         free(T0->val);
+//         free(T0);
+//         free(T1->val);
+//         free(T1);
+//         free(T->val);
+//         free(T);
+//     }
+
+//     return Z;
+// }
+
+

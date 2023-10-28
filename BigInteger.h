@@ -12,8 +12,6 @@
 // Supports operations in 8-bit, 16-bit, 32-bit, and 64-bit units.
 #if WORD_BITLEN == 8
 typedef u8 WORD;
-#elif WORD_BITLEN == 16
-typedef u16 WORD;
 #elif WORD_BITLEN == 64
 typedef u64 WORD:
 #else
@@ -44,7 +42,7 @@ typedef u32 WORD;
 */
 typedef struct {
     bool sign;      // the sign of the number (false if 0 or positive, true if negative)
-    u32 wordlen;    //
+    int wordlen;    //
     WORD* val;      // threshold between performing long and karatsuba multiplication
 } BINT;
 
@@ -121,6 +119,10 @@ void delete_bint(BINT** pptrBint);
 */
 void SET_BINT_ZERO(BINT** pptrBint);
 void SET_BINT_ONE(BINT** pptrBint);
+
+void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src);
+
+void makeEven(BINT** pptrBint);
 
 typedef struct Node {
     BINT data;
@@ -241,9 +243,14 @@ int Get_bitlen(BINT* x);
 int Get_sign(BINT* x);
 void Flip_sign(BINT* x);
 
-//Author: Kim Ye-chan
-void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
-void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
+// //Author: Kim Ye-chan
+// void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
+// void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
 
+/** SHIFT
+ * 
+*/
+void shift_MUL(BINT** pptrBint, int N);
+void shift_DIV(BINT** pptrBint, int N);
 
 #endif // BIGINTEGER_H

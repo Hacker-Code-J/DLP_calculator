@@ -41,9 +41,9 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z);
 // Author: Moon Ye-chan
 // void mult_xyc(WORD x, WORD y , WORD* C);
 
-/**
- * W = 2^w  
- * X, Y in [0,W) and Z in [0, W^2)
+/** Single-Word Multiplication
+ * Input: X, Y in [0,W)
+ * Output: Z = XY in [0,W^2)
  * 
  * X = X_1 || X_0
  * Y = Y_1 || Y_0
@@ -52,9 +52,22 @@ void SUB_xyz(BINT* X, BINT* Y, BINT* Z);
  * 
  * XY = (X_1Y_1)W + X_0Y_0 + (X_1Y_0+X_0Y_1)W^{1/2}
  *    = (X_1Y_1 << w) + (X_0Y_0) + ((X_1Y_0+X_0Y_1) << w/2 )
- *
+ * 
 */
 void mul_xyz(WORD valX, WORD valY, BINT** pptrZ);
-void mul_core_xyz(BINT* ptrX, BINT* ptrY, BINT* ptrZ);
+
+/** Textbook Multiplication
+ * Input: X is n-word integer, x_{n-1} || ... || x_0 with x_i in [0,W)
+ *        Y is m-word integer, y_{m-1} || ... || x_0 with y_i in [0,W)
+ * Output: Z = XY in [0,W^{n+m})
+*/
+void mul_core_TxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+
+/** Improved Textbook Multiplication
+ * Input: X is n-word integer s.t. n=2p
+ *        Y is m-word integer s.t. n=2q
+ * Output: Z = XY in [0,W^{n+m}) = [0,W^{2(p+q)})
+*/
+void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 
 #endif // OPERATION_H

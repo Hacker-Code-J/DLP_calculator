@@ -28,7 +28,7 @@ int main() {
     srand((unsigned int)time(NULL));
 
     // clock_t start, end;
-    int t = 10000;
+    int t = 10;
 
     
 
@@ -50,7 +50,7 @@ int main() {
         bint3 = init_bint(&bint3, 2*max);
 
         mul_xyz(bint1->val[0], bint2->val[0], &bint3);
-        
+
         // print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
         printf("print(int(hex(");
         printHex2(bint1);printf("*");printHex2(bint2);
