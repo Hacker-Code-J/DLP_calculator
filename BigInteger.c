@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // WORD arrOne[1] = {0x01};
 
@@ -72,6 +73,45 @@ void makeEven(BINT** pptrBint) {
 
         // Fill the new WORD with 0
         (*pptrBint)->val[(*pptrBint)->wordlen - 1] = 0;
+    }
+}
+
+// Function to convert a hex char to its 4-bit binary equivalent
+void hexCharToBinary(char hex, char* output) {
+    switch (hex) {
+        case '0': strcpy(output, "0000"); break;
+        case '1': strcpy(output, "0001"); break;
+        case '2': strcpy(output, "0010"); break;
+        case '3': strcpy(output, "0011"); break;
+        case '4': strcpy(output, "0100"); break;
+        case '5': strcpy(output, "0101"); break;
+        case '6': strcpy(output, "0110"); break;
+        case '7': strcpy(output, "0111"); break;
+        case '8': strcpy(output, "1000"); break;
+        case '9': strcpy(output, "1001"); break;
+        case 'A': case 'a': strcpy(output, "1010"); break;
+        case 'B': case 'b': strcpy(output, "1011"); break;
+        case 'C': case 'c': strcpy(output, "1100"); break;
+        case 'D': case 'd': strcpy(output, "1101"); break;
+        case 'E': case 'e': strcpy(output, "1110"); break;
+        case 'F': case 'f': strcpy(output, "1111"); break;
+        default: strcpy(output, "????"); break;  // Error handling
+    }
+}
+
+void hexToBinary(const char *hex, char *binaryOutput) {
+    // Ensure the output buffer is clear
+    binaryOutput[0] = '\0';
+
+    char buffer[6];  // Temporary buffer to store 4-bit binary + space + null terminator
+    for (int i = 0; i < strlen(hex); i++) {
+        hexCharToBinary(hex[i], buffer);
+        strcat(binaryOutput, buffer);
+        
+        // If not the last iteration, append space for separation
+        if (i < strlen(hex) - 1) {
+            strcat(binaryOutput, " ");
+        }
     }
 }
 
@@ -547,81 +587,81 @@ int Get_sign(BINT* x){
 */
 
 
-// //Author: Kim Ye-chan
-// void MUL_Shift(BINT* X, BINT* result , int N) {
-//     int q = N / 32;
-//     int r = N % 32;
+//Author: Kim Ye-chan
+void MUL_Shift(BINT* X, BINT* result , int N) {
+    int q = N / 32;
+    int r = N % 32;
 
-//     if (r == 0) {
-//         for (int i = X->wordlen-1; i>=0; i--) {
-//             result->val[i+q] = X->val[i];
+    if (r == 0) {
+        for (int i = X->wordlen-1; i>=0; i--) {
+            result->val[i+q] = X->val[i];
             
-//         }
-//         for(int i=0; i<q; i++){
-//             result->val[i] = 0;
+        }
+        for(int i=0; i<q; i++){
+            result->val[i] = 0;
             
-//         }
+        }
         
-//     } 
-//     else {
-//         // r이 0이 아닌 경우 처리
+    } 
+    else {
+        // r이 0이 아닌 경우 처리
 
-//         for (int i = X->wordlen; i>=0; i--) {
-//             if(i==X->wordlen){
-//                 result->val[i] = (X->val[i-1] >> (32-r));                
-//                 continue; 
-//             }
-//             else if(i < X->wordlen && i > 0){
-//                 result->val[i] = (X->val[i-1] >> (32-r)) | (X->val[i] << r);
-//                 continue;
-//             }
+        for (int i = X->wordlen; i>=0; i--) {
+            if(i==X->wordlen){
+                result->val[i] = (X->val[i-1] >> (32-r));                
+                continue; 
+            }
+            else if(i < X->wordlen && i > 0){
+                result->val[i] = (X->val[i-1] >> (32-r)) | (X->val[i] << r);
+                continue;
+            }
 
-//             else if(i == 0){
-//                 result->val[i] = (X->val[i] << r);
+            else if(i == 0){
+                result->val[i] = (X->val[i] << r);
                 
-//             }
-//         }
-//         if (q > 0) {
-//             for (int i = result->wordlen-1; i>=0; i--) {
-//                 result->val[i+q] = result->val[i];
-//             }
-//             for(int i=0; i<q; i++){
-//                 result->val[i] = 0;
-//             }
-//         }         
-//     }
-//     for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
-//     printf("%08x ", result->val[i]);
-//     }
+            }
+        }
+        if (q > 0) {
+            for (int i = result->wordlen-1; i>=0; i--) {
+                result->val[i+q] = result->val[i];
+            }
+            for(int i=0; i<q; i++){
+                result->val[i] = 0;
+            }
+        }         
+    }
+    // for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
+    // printf("%08x ", result->val[i]);
+    // }
 
 
-// } 
+} 
 
-// void DIV_Shift(BINT* X, BINT* result, int N) {
-//     int q = N / 32;
-//     int r = N % 32;
+void DIV_Shift(BINT* X, BINT* result, int N) {
+    int q = N / 32;
+    int r = N % 32;
 
-//     if (r == 0) {
-//         for (int i = 0; i < X->wordlen - q; i++) {
-//             result->val[i] = X->val[i + q];
-//         }
+    if (r == 0) {
+        for (int i = 0; i < X->wordlen - q; i++) {
+            result->val[i] = X->val[i + q];
+        }
 
-//     } else {
-//         for (int i = 0; i < X->wordlen; i++) {
-//             if (i < X->wordlen - 1) {
-//                 result->val[i] = (X->val[i + 1] << (32 - r)) | (X->val[i] >> r);
-//             } else {
-//                 result->val[i] = X->val[i] >> r;
-//             }
-//         }
-//         for (int i = 0; i < result->wordlen - q; i++) {
-//             result->val[i] = result->val[i + q];
-//         }
-//     }
-//     for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
-//     printf("%08x ", result->val[i]);
-//     }
-// }
+    } else {
+        for (int i = 0; i < X->wordlen; i++) {
+            if (i < X->wordlen - 1) {
+                result->val[i] = (X->val[i + 1] << (32 - r)) | (X->val[i] >> r);
+            } else {
+                result->val[i] = X->val[i] >> r;
+            }
+        }
+        for (int i = 0; i < result->wordlen - q; i++) {
+            result->val[i] = result->val[i + q];
+        }
+    }
+    for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
+    printf("%08x ", result->val[i]);
+    }
+}
 
 void shift_MUL(BINT** pptrBint, int N) {
     const int q = N / WORD_BITLEN;

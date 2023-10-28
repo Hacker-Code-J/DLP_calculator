@@ -124,6 +124,9 @@ void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src);
 
 void makeEven(BINT** pptrBint);
 
+void hexCharToBinary(char hex, char* output);
+void hexToBinary(const char* hex, char* binaryOutput);
+
 typedef struct Node {
     BINT data;
     struct Node* next;
@@ -243,9 +246,9 @@ int Get_bitlen(BINT* x);
 int Get_sign(BINT* x);
 void Flip_sign(BINT* x);
 
-// //Author: Kim Ye-chan
-// void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
-// void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
+//Author: Kim Ye-chan
+void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
+void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
 
 /** SHIFT
  * 

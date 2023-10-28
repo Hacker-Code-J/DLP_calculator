@@ -28,9 +28,7 @@ int main() {
     srand((unsigned int)time(NULL));
 
     // clock_t start, end;
-    int t = 10;
-
-    
+    int t = 3;
 
     // printf("a: %08x\n b: %08x\n", a, b);
     // mul_xyz(a,b,c);
@@ -42,56 +40,36 @@ int main() {
         BINT* bint3 = NULL;
         // int n = rand() % 0x02  + 1;
         // int m = rand() % 0x02  + 1;
-        int n = 1;
+        int n = 3;
         int m = 1;
         int max = MAX(n, m);
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
         bint3 = init_bint(&bint3, 2*max);
-
-        mul_xyz(bint1->val[0], bint2->val[0], &bint3);
+        // add_xyz(bint1, bint1, bint2);
+        mul_xyz(bint1->val[0], bint1->val[0], &bint3);
+        // mul_core_ImpTxtBk_xyz(bint1, bint2, &bint3);
 
         // print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
-        printf("print(int(hex(");
-        printHex2(bint1);printf("*");printHex2(bint2);
-        printf("), 16)  == int(\"");
-        printHex2(bint3);printf("\", 16))\n");
+        // printf("print(int(hex(");
+        // printHex2(bint1);printf("*");printHex2(bint2);
+        // printf("), 16) == int(\"");
+        // printHex2(bint3);printf("\", 16))\n");
+
+        printHex(bint1);printf("\n");
+        MUL_Shift(bint1, bint2, 32);
+        printHex(bint2);printf("\n");
+
+        // const char *hexData = "1A3F";  // Sample data
+        // char binaryOutput[5 * strlen(hexData) + 1];  // Max potential output size (4 bits for each hex + null terminator)
+
+        // hexToBinary(hexData, binaryOutput);
+        // printf("Hex: %s\nBinary: %s\n", hexData, binaryOutput);
 
         delete_bint(&bint1);
         delete_bint(&bint2);
         delete_bint(&bint3);
         t--;
     }
-
-    // while(t != 0) {
-    //     BINT* bint1 = NULL; 
-    //     BINT* bint2 = NULL;
-    //     BINT* bint3 = NULL;
-    //     bool rand_sgn1 = rand() % 0x02;
-    //     bool rand_sgn2 = rand() % 0x02;
-    //     // int n = rand() % 0x02  + 1;
-    //     // int m = rand() % 0x02  + 1;
-    //     int n = 1;
-    //     int m = 1;
-    //     int max = MAX(n, m);
-    //     rand_bint(&bint1, rand_sgn1, n);
-    //     rand_bint(&bint2, rand_sgn2, m);
-    //     bint3 = init_bint(&bint3, max*max);
-
-    //     // MUL_Shift(bint1, bint3, 4*sizeof(WORD));
-
-    //     // ADD_xyz(bint1,bint2,bint3);
-        
-        
-    //     bint1->sign = rand_sgn1;
-    //     bint2->sign = rand_sgn2;
-
-    //     custom_printHex(bint1,bint2,bint3,0);
-
-    //     delete_bint(&bint1);
-    //     delete_bint(&bint2);
-    //     delete_bint(&bint3);
-    //     t--;
-    // }
 
 }
