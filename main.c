@@ -57,8 +57,9 @@ int main() {
         // printHex2(bint3);printf("\", 16))\n");
 
         printHex(bint1);printf("\n");
-        MUL_Shift(bint1, bint2, 32);
         printHex(bint2);printf("\n");
+        mul_core_ImpTxtBk_xyz(bint1, bint2, &bint3);
+        printHex(bint3);printf("\n");
 
         // const char *hexData = "1A3F";  // Sample data
         // char binaryOutput[5 * strlen(hexData) + 1];  // Max potential output size (4 bits for each hex + null terminator)

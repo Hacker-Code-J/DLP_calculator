@@ -246,14 +246,14 @@ int Get_bitlen(BINT* x);
 int Get_sign(BINT* x);
 void Flip_sign(BINT* x);
 
-//Author: Kim Ye-chan
-void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
-void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
+// //Author: Kim Ye-chan
+// void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
+// void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
 
 /** SHIFT
  * 
 */
-void shift_MUL(BINT** pptrBint, int N);
-void shift_DIV(BINT** pptrBint, int N);
+void left_shift(BINT** pptrX, int num_bits);
+void right_shift(BINT** pptrX, int num_bits);
 
 #endif // BIGINTEGER_H

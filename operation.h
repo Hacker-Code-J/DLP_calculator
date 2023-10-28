@@ -21,6 +21,7 @@ void add_xyk(WORD x, WORD y, WORD k, WORD* res, WORD* carry);
 
 // Z = X + Y with wordlen(X) >= wordlen(Y)
 void add_xyz(BINT* X, BINT* Y, BINT* Z);
+void add_core_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 
 
 // Integrate ADD

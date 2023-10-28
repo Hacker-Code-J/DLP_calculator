@@ -62,6 +62,38 @@ void add_xyz(BINT* X, BINT* Y, BINT* Z) {
     //return Z;
 }
 
+void add_core_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
+    BINT* ptrZ = *pptrZ;
+    
+    int n = ptrX->wordlen;
+    int m = ptrY->wordlen;
+
+    WORD k = 0;
+    WORD res, carry;
+
+    // Loop until the shorter of the two numbers ends
+    int i;
+    for (i = 0; i < m; i++) {
+        add_xyk(ptrX->val[i], ptrY->val[i], k, &res, &carry);
+        ptrZ->val[i] = res;
+        k = carry;
+    }
+    // Continue adding any remaining X values with the carry, since Y is shorter
+    for (; i < n; i++) {
+        add_xyk(ptrX->val[i], 0, k, &res, &carry); // just adding X values since Y is shorter
+        ptrZ->val[i] = res;
+        k = carry;
+    }
+
+    if(k) ptrZ->val[n] = k;
+
+    // Set the sign and word length of Z
+    ptrZ->wordlen = (k == 0) ? n : n+1;
+
+    refine_BINT(ptrZ);
+    //return Z;
+}
+
 void ADD_xyz(BINT* X, BINT* Y, BINT* Z) {
     if(X->sign==false && Y->sign==false) {
         if(compare_xy(X,Y) != -1)
@@ -251,26 +283,25 @@ void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
         BINT* ptrT1 = init_bint(&ptrT1, ptrX->wordlen+1);
         BINT* ptrTmp0 = init_bint(&ptrTmp0, 2);
         BINT* ptrTmp1 = init_bint(&ptrTmp1, 2);
-
         for(int j = 0; j < idx2; j++) {
             mul_xyz(ptrX->val[2*j], ptrY->val[i], &ptrTmp0);
             ptrT0->val[0] = ptrTmp->val[0];
             ptrT0->val[1] = ptrTmp->val[1];
-            shift_MUL(&ptrT0, 2*WORD_BITLEN);
+            left_shift(&ptrT0, 2*WORD_BITLEN);
 
             mul_xyz(ptrX->val[2*j+1], ptrY->val[i], &ptrTmp1);
             ptrT1->val[0] = ptrTmp->val[0];
             ptrT1->val[1] = ptrTmp->val[1];
-            shift_MUL(&ptrT1,2*WORD_BITLEN);
+            left_shift(&ptrT1, 2*WORD_BITLEN);
 
             if(j == idx2 - 1) {
-                shift_MUL(&ptrT1, WORD_BITLEN);
+                left_shift(&ptrT1, WORD_BITLEN);
                 ptrT1->val[0] = BINT_ZERO.val[0];
             }
         }
-        add_xyz(ptrT1, ptrT0, ptrTmp);
-        shift_MUL(&ptrTmp, i*WORD_BITLEN);
-        add_xyz(*pptrZ, ptrTmp, *pptrZ);
+        add_core_xyz(ptrT1, ptrT0, &ptrTmp);
+        left_shift(&ptrTmp, i*WORD_BITLEN);
+        add_core_xyz(*pptrZ, ptrTmp, pptrZ);
 
         delete_bint(&ptrTmp);
         delete_bint(&ptrT0);

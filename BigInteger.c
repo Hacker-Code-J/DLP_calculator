@@ -586,134 +586,154 @@ int Get_sign(BINT* x){
  * 
 */
 
+// //Author: Kim Ye-chan
+// void MUL_Shift(BINT* X, BINT* result , int N) {
+//     int q = N / 32;
+//     int r = N % 32;
 
-//Author: Kim Ye-chan
-void MUL_Shift(BINT* X, BINT* result , int N) {
-    int q = N / 32;
-    int r = N % 32;
-
-    if (r == 0) {
-        for (int i = X->wordlen-1; i>=0; i--) {
-            result->val[i+q] = X->val[i];
+//     if (r == 0) {
+//         for (int i = X->wordlen-1; i>=0; i--) {
+//             result->val[i+q] = X->val[i];
             
-        }
-        for(int i=0; i<q; i++){
-            result->val[i] = 0;
+//         }
+//         for(int i=0; i<q; i++){
+//             result->val[i] = 0;
             
-        }
+//         }
         
-    } 
-    else {
-        // r이 0이 아닌 경우 처리
+//     } 
+//     else {
+//         // r이 0이 아닌 경우 처리
 
-        for (int i = X->wordlen; i>=0; i--) {
-            if(i==X->wordlen){
-                result->val[i] = (X->val[i-1] >> (32-r));                
-                continue; 
-            }
-            else if(i < X->wordlen && i > 0){
-                result->val[i] = (X->val[i-1] >> (32-r)) | (X->val[i] << r);
-                continue;
-            }
+//         for (int i = X->wordlen; i>=0; i--) {
+//             if(i==X->wordlen){
+//                 result->val[i] = (X->val[i-1] >> (32-r));                
+//                 continue; 
+//             }
+//             else if(i < X->wordlen && i > 0){
+//                 result->val[i] = (X->val[i-1] >> (32-r)) | (X->val[i] << r);
+//                 continue;
+//             }
 
-            else if(i == 0){
-                result->val[i] = (X->val[i] << r);
+//             else if(i == 0){
+//                 result->val[i] = (X->val[i] << r);
                 
-            }
-        }
-        if (q > 0) {
-            for (int i = result->wordlen-1; i>=0; i--) {
-                result->val[i+q] = result->val[i];
-            }
-            for(int i=0; i<q; i++){
-                result->val[i] = 0;
-            }
-        }         
+//             }
+//         }
+//         if (q > 0) {
+//             for (int i = result->wordlen-1; i>=0; i--) {
+//                 result->val[i+q] = result->val[i];
+//             }
+//             for(int i=0; i<q; i++){
+//                 result->val[i] = 0;
+//             }
+//         }         
+//     }
+//     // for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
+//     // printf("%08x ", result->val[i]);
+//     // }
+
+
+// } 
+
+// void DIV_Shift(BINT* X, BINT* result, int N) {
+//     int q = N / 32;
+//     int r = N % 32;
+
+//     if (r == 0) {
+//         for (int i = 0; i < X->wordlen - q; i++) {
+//             result->val[i] = X->val[i + q];
+//         }
+
+//     } else {
+//         for (int i = 0; i < X->wordlen; i++) {
+//             if (i < X->wordlen - 1) {
+//                 result->val[i] = (X->val[i + 1] << (32 - r)) | (X->val[i] >> r);
+//             } else {
+//                 result->val[i] = X->val[i] >> r;
+//             }
+//         }
+//         for (int i = 0; i < result->wordlen - q; i++) {
+//             result->val[i] = result->val[i + q];
+//         }
+//     }
+//     for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
+//     printf("%08x ", result->val[i]);
+//     }
+// }
+
+void left_shift(BINT** pptrX, int num_bits) {
+    if (!pptrX || !*pptrX) return;
+
+    BINT* ptrX = *pptrX;
+
+    // WORD_BITLEN = sizeof(WORD) * 8
+    int word_shift = num_bits / WORD_BITLEN;  // Number of whole WORDs to shift
+    int bit_shift = num_bits % WORD_BITLEN;   // Number of bits within a WORD to shift
+
+    // Allocating new memory for the shifted value
+    WORD* new_val = (WORD*)calloc(ptrX->wordlen + word_shift + 1, sizeof(WORD)); // +1 for potential overflow
+
+    if (!new_val) {
+        // Memory allocation failed
+        exit(1);
     }
-    // for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
-    // printf("%08x ", result->val[i]);
-    // }
 
-
-} 
-
-void DIV_Shift(BINT* X, BINT* result, int N) {
-    int q = N / 32;
-    int r = N % 32;
-
-    if (r == 0) {
-        for (int i = 0; i < X->wordlen - q; i++) {
-            result->val[i] = X->val[i + q];
-        }
-
-    } else {
-        for (int i = 0; i < X->wordlen; i++) {
-            if (i < X->wordlen - 1) {
-                result->val[i] = (X->val[i + 1] << (32 - r)) | (X->val[i] >> r);
-            } else {
-                result->val[i] = X->val[i] >> r;
-            }
-        }
-        for (int i = 0; i < result->wordlen - q; i++) {
-            result->val[i] = result->val[i + q];
+    // Handle the shift within a WORD
+    for (int i = 0; i < ptrX->wordlen; i++) {
+        new_val[i + word_shift] |= ptrX->val[i] << bit_shift;
+        if (i + word_shift + 1 < ptrX->wordlen + word_shift + 1) {
+            new_val[i + word_shift + 1] |= ptrX->val[i] >> (WORD_BITLEN - bit_shift);
         }
     }
-    for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
-    printf("%08x ", result->val[i]);
-    }
+
+    // Free old memory and assign new memory to the BINT
+    free(ptrX->val);
+    ptrX->val = new_val;
+    ptrX->wordlen = ptrX->wordlen + word_shift + 1; // Update wordlen
 }
 
-void shift_MUL(BINT** pptrBint, int N) {
-    const int q = N / WORD_BITLEN;
-    const int r = N % WORD_BITLEN;
+// NOTE: Still, be careful with memory management. You'll need to eventually free the val in BINT.
 
-    if(r == 0) {
-#if WORD_BITLEN == 8
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, (*pptrBint)->wordlen + q);
-#elif WORD_BITLEN == 64
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, 8 * ((*pptrBint)->wordlen + q));
-#else
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, 4 * ((*pptrBint)->wordlen + q));
-#endif    
-        (*pptrBint)->wordlen += q;
-        for (int i = ((*pptrBint)->wordlen) - q - 1; i >= 0; i--)
-            (*pptrBint)->val[1+q] = (*pptrBint)->val[i];
-        for (int i = 0; i < q; i++)
-            (*pptrBint)->val[i] = 0x00;
+void right_shift(BINT** pptrX, int num_bits) {
+    if (!pptrX || !*pptrX) return;
 
-    } else {
-#if WORD_BITLEN == 8
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, (*pptrBint)->wordlen + q + 1);
-#elif WORD_BITLEN == 64
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, 8 * ((*pptrBint)->wordlen + q + 1));
-#else
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, 4 * ((*pptrBint)->wordlen + q + 1));
-#endif
-        (*pptrBint)->wordlen += (q + 1);
-        for (int i = (*pptrBint)->wordlen-2; i > q-1; i--)
-            (*pptrBint)->val[i] = (*pptrBint)->val[i-q];
-        for (int i = 0; i < q; i++)
-            (*pptrBint)->val[i] = 0x00;
-        
-        (*pptrBint)->val[(*pptrBint)->wordlen - 1] = (*pptrBint)->val[(*pptrBint)->wordlen - 2] >> (WORD_BITLEN - r);
-        for(int i = (*pptrBint)->wordlen-2; i > q; i--)
-            (*pptrBint)->val[i] = ((*pptrBint)->val[i] << q) | ((*pptrBint)->val[i-1] >> (WORD_BITLEN-r));
-        (*pptrBint)->val[q] = (*pptrBint)->val[q] << r;
-        
-        if ((*pptrBint)->val[(*pptrBint)->wordlen -1] == 0x00) {
-#if WORD_BITLEN == 8
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, (*pptrBint)->wordlen);
-    (*pptrBint)->wordlen -= 1;
-#elif WORD_BITLEN == 64
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, 8 * ((*pptrBint)->wordlen));
-    (*pptrBint)->wordlen -= 1;
-#else
-    (*pptrBint)->val = (WORD*)realloc((*pptrBint)->val, 4 * ((*pptrBint)->wordlen ));
-    (*pptrBint)->wordlen -= 1;
-#endif
+    BINT* ptrX = *pptrX;
+
+    int word_shift = num_bits / WORD_BITLEN;  // Number of whole WORDs to shift
+    int bit_shift = num_bits % WORD_BITLEN;   // Number of bits within a WORD to shift
+
+    // If the right shift is greater than the total length of our BINT, set it to zero
+    if (word_shift >= ptrX->wordlen) {
+        free(ptrX->val);
+        ptrX->val = (WORD*)calloc(1, sizeof(WORD)); // Allocate memory for a single WORD set to 0
+        if (!ptrX->val) {
+            // Memory allocation failed
+            exit(1);
+        }
+        ptrX->wordlen = 1;
+        return;
+    }
+
+    // Allocate new memory for the shifted value
+    int new_wordlen = ptrX->wordlen - word_shift;
+    WORD* new_val = (WORD*)calloc(new_wordlen, sizeof(WORD));
+
+    if (!new_val) {
+        // Memory allocation failed
+        exit(1);
+    }
+
+    // Handle the shift within a WORD
+    for (int i = 0; i < new_wordlen; i++) {
+        new_val[i] = ptrX->val[i + word_shift] >> bit_shift;
+        if (i + word_shift + 1 < ptrX->wordlen) {
+            new_val[i] |= ptrX->val[i + word_shift + 1] << (WORD_BITLEN - bit_shift);
         }
     }
-}
-void shift_DIV(BINT** pptrBint, int shift) {
 
+    // Free old memory and assign new memory to the BINT
+    free(ptrX->val);
+    ptrX->val = new_val;
+    ptrX->wordlen = new_wordlen;
 }
