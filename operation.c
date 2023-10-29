@@ -47,6 +47,16 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     int n = ptrX->wordlen;
     int m = ptrY->wordlen;
 
+    // Ensure ptrZ has enough allocated space
+    if (ptrZ->wordlen < MAX(n, m) + 1) {
+        ptrZ->val = (WORD*)realloc(ptrZ->val, (MAX(n, m) + 1) * sizeof(WORD));
+        if (!ptrZ->val) {
+            fprintf(stderr, "Error: Memory reallocation failed in 'add_core_xyz'\n");
+            exit(1);
+        }
+        ptrZ->wordlen = MAX(n, m) + 1;
+    }
+
     WORD k = 0;
     WORD res = 0;
     WORD carry = 0;
@@ -454,60 +464,74 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
+    int n = ptrX->wordlen;
+    int m = ptrX->wordlen;
 
     makeEven(ptrX); makeEven(ptrY);
+    matchSize(ptrX, ptrY);
 
     delete_bint(pptrZ);
-    *pptrZ = init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
+    *pptrZ = init_bint(pptrZ, n+m);
         if (!*pptrZ) {
             fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
             exit(1);
         }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
 
-    int n = ptrX->wordlen;
-    int m = ptrY->wordlen;
     int p = n/2;
     int q = m/2;
 
-    BINT* ptrT = init_bint(&ptrT, ptrX->wordlen + ptrY->wordlen);
+    BINT* ptrT = init_bint(&ptrT, n+m);
     BINT* ptrT0 = init_bint(&ptrT0, 2*p);
-    BINT* ptrT1 = init_bint(&ptrT1, 2*p+1);
+    BINT* ptrT1 = init_bint(&ptrT1, 2*p);
     BINT* ptrTmp0 = init_bint(&ptrTmp0, 2*p);
-    BINT* ptrTmp1 = init_bint(&ptrTmp1, 2*p+1);
+    BINT* ptrTmp1 = init_bint(&ptrTmp1, 2*p);
 
     for(int j = 0; j < 2 * q; j++) {
         for(int k = 0; k < p; k++) {
+            reset_bint(ptrTmp0); reset_bint(ptrTmp1);
             mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrTmp0);
             mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrTmp1);
-            // printf("\nTmp1:");printHex2(ptrTmp1);printf("\n");
+            // printf("\nx[%d]*y[%d]=Tmp0: ",2*k,j);printHex2(ptrTmp0);printf("\n");
+            // printf("x[%d]*y[%d]=Tmp1: ",2*k+1,j);printHex2(ptrTmp1);printf("\n");
             if (!k) {
                 copy_BINT(&ptrT0, &ptrTmp0);
                 copy_BINT(&ptrT1, &ptrTmp1);
-                // printf("--T0:");printHex2(ptrT0);printf("\n");
-                // printf("--T1:");printHex2(ptrT1);printf("\n");
+                // printf("--T0: ");printHex2(ptrT0);printf("\n");
+                // printf("--T1: ");printHex2(ptrT1);printf("\n");
             } else {
-                left_shift_word(&ptrT0, 2);
-                refine_BINT_word(ptrT0, 2);
+                left_shift_word(&ptrTmp0, 2);
+                refine_BINT_word(ptrTmp0, 2);
                 OR_BINT(ptrTmp0, ptrT0, &ptrT0);
 
-                left_shift_word(&ptrT1, 2);
-                refine_BINT_word(ptrT1, 2);
+                left_shift_word(&ptrTmp1, 2);
+                refine_BINT_word(ptrTmp1, 2);
                 OR_BINT(ptrTmp1, ptrT1, &ptrT1);
-                // printf("--T0:");printHex2(ptrT0);printf("\n");
-                // printf("--T1:");printHex2(ptrT1);printf("\n");
+                // printf("--T0: ");printHex2(ptrT0);printf("\n");
+                // printf("--T1: ");printHex2(ptrT1);printf("\n");
             }
         }
         left_shift_word(&ptrT1, 1);
-        refine_BINT_word(ptrT1, 1);
+        
+        // printf("\nResult:-------------------------------------------------\n");
+        // printf("--T0: ");printHex2(ptrT0);printf("\n");
+        // printf("--T1: ");printHex2(ptrT1);printf("\n\n");
 
         add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+        // printf("\n\nprint(int(hex(");
+        // printHex2(ptrT1);printf(" + ");printHex2(ptrT0);
+        // printf("), 16) == int(\"");
+        // printHex2(ptrT);printf("\", 16))\n\n");
+        
         left_shift_word(&ptrT, j);
-        add_core_xyz(&ptrT, pptrZ, pptrZ);
+        // printHex2(ptrT);
 
-        // printf("\nResult:\n");
-        // printf("--T0:");printHex2(ptrT0);printf("\n");
-        // printf("--T1:");printHex2(ptrT1);printf("\n");
+        // printf("\n\nprint(int(hex(");
+        // printHex2(ptrT);printf(" + ");printHex2(*pptrZ);
+        // printf("), 16) == int(\"");
+        add_core_xyz(&ptrT, pptrZ, pptrZ);
+        // printHex2(*pptrZ);printf("\", 16))\n\n");
+
     }
 
 

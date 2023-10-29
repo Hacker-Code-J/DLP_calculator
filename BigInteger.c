@@ -69,7 +69,6 @@ void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     (*pptrBint_dst)->sign = (*pptrBint_src)->sign;
 }
 
-
 void makeEven(BINT* ptrBint) {
     // Check if wordlen is odd
     if ((ptrBint)->wordlen % 2 == 1) {
@@ -85,6 +84,47 @@ void makeEven(BINT* ptrBint) {
         // Fill the new WORD with 0
         (ptrBint)->val[(ptrBint)->wordlen - 1] = 0;
     }
+}
+
+void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
+    int max_wordlen = (ptrBint1->wordlen > ptrBint2->wordlen) ? ptrBint1->wordlen : ptrBint2->wordlen;
+
+    // Resize ptrBint1 if its wordlen is smaller than max_wordlen
+    if(ptrBint1->wordlen < max_wordlen) {
+        ptrBint1->val = realloc(ptrBint1->val, max_wordlen * sizeof(WORD));
+        if (!ptrBint1->val) {
+            // Handle memory allocation failure, exit or return an error
+            exit(1); 
+        }
+
+        // Initialize the newly allocated WORDs with 0
+        for(int i = ptrBint1->wordlen; i < max_wordlen; i++) {
+            ptrBint1->val[i] = 0;
+        }
+
+        ptrBint1->wordlen = max_wordlen;
+    }
+
+    // Resize ptrBint2 if its wordlen is smaller than max_wordlen
+    if(ptrBint2->wordlen < max_wordlen) {
+        ptrBint2->val = realloc(ptrBint2->val, max_wordlen * sizeof(WORD));
+        if (!ptrBint2->val) {
+            // Handle memory allocation failure, exit or return an error
+            exit(1); 
+        }
+
+        // Initialize the newly allocated WORDs with 0
+        for(int i = ptrBint2->wordlen; i < max_wordlen; i++) {
+            ptrBint2->val[i] = 0;
+        }
+
+        ptrBint2->wordlen = max_wordlen;
+    }
+}
+
+void reset_bint(BINT* ptrBint) {
+    for (int i = 0; i < ptrBint->wordlen; i++)
+        ptrBint->val[i] = 0;
 }
 
 // Function to convert a hex char to its 4-bit binary equivalent

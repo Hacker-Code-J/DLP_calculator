@@ -128,8 +128,14 @@ void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src);
 
 void makeEven(BINT* ptrBint);
 
+void matchSize(BINT* ptrBint1, BINT* ptrBint2);
+
+void reset_bint(BINT* ptrBint);
+
 void hexCharToBinary(char hex, char* output);
 void hexToBinary(const char* hex, char* binaryOutput);
+
+
 
 typedef struct Node {
     BINT data;
