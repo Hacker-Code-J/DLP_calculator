@@ -43,8 +43,8 @@ int main() {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
         // int n = rand() % 0x4  + 1;
         // int m = rand() % 0x4  + 1;
-        int n = 3;
-        int m = 3;
+        int n = 4;
+        int m = 4;
         // int max = MAX(n, m);
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);

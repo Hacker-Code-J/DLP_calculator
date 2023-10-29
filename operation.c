@@ -481,22 +481,34 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     for(int j = 0; j < 2 * q; j++) {
         for(int k = 0; k < p; k++) {
             mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrT0);
-            printf("--T0:");printHex2(ptrT0);printf("\n");
+            mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrT1);
+            printf("--T1:");printHex2(ptrT1);printf("\n");
             if (!k) {
                 copy_BINT(&ptrTmp0, &ptrT0);
+                copy_BINT(&ptrTmp1, &ptrT1);
                 printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
+                printf("Tmp1:");printHex2(ptrTmp1);printf("\n");
             } else {
                 left_shift_word(&ptrTmp0, 2);
                 refine_BINT_word(ptrTmp0, 2);
                 OR_BINT(ptrT0, ptrTmp0, &ptrTmp0);
+
+                left_shift_word(&ptrTmp1, 2);
+                refine_BINT_word(ptrTmp1, 2);
+                OR_BINT(ptrT1, ptrTmp1, &ptrTmp1);
                 printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
+                printf("Tmp1:");printHex2(ptrTmp1);printf("\n");
             }
-            // printf("print(int(hex(");
-            // printf("0x%08x", ptrX->val[2*k]);printf("*");printf("0x%08x", ptrY->val[j]);
-            // printf("), 16) == int(\"");
-            // printHex2(ptrT0);printf("\", 16))\n");
         }
+        left_shift_word(&ptrTmp1, 1);
+        refine_BINT_word(ptrTmp1, 1);
     }
+
+
+    // printf("print(int(hex(");
+    // printf("0x%08x", ptrX->val[2*k]);printf("*");printf("0x%08x", ptrY->val[j]);
+    // printf("), 16) == int(\"");
+    // printHex2(ptrT0);printf("\", 16))\n");
     // Cleanup
     delete_bint(&ptrT0);
     delete_bint(&ptrT1);
