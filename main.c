@@ -31,25 +31,17 @@ int main() {
     double cpu_time_used;
     int t = 1000;
 
-    // printf("a: %08x\n b: %08x\n", a, b);
-    // mul_xyz(a,b,c);
-    // printf("%08x %08x\n", c[1], c[0]);
-
     BINT* bint1 = NULL; 
     BINT* bint2 = NULL;
     BINT* bint3 = NULL;
 
-    // // Python
-    // printf("def compute_results():\n");
-    // printf("    results = [\n");
-
     int idx = 0;
     while(idx < t) {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
-        int n = rand() % 0x4  + 1;
-        int m = rand() % 0x4  + 1;
-        // int n = 4;
-        // int m = 4;
+        // int n = rand() % 0x6  + 1;
+        // int m = rand() % 0x6  + 1;
+        int n = 4;
+        int m = 4;
         // int max = MAX(n, m);
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
@@ -87,7 +79,7 @@ int main() {
          * print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
         */
         printf("print(int(hex(");
-        printHex2(bint1);printf("*");printHex2(bint2);
+        printHex2(bint1);printf(" * ");printHex2(bint2);
         printf("), 16) == int(\"");
         printHex2(bint3);printf("\", 16))\n");
 
@@ -98,12 +90,4 @@ int main() {
         // printf("%.8f\n", cpu_time_used);
         idx++;
     }
-
-    // // Python
-    // printf("    ]\n");
-    // printf("    return results\n");
-    // printf("\nif __name__ == \"__main__\":\n");
-    // printf("    results = compute_results()\n");
-    // printf("    for r in results:\n");
-    // printf("        print(r)\n");
 }
