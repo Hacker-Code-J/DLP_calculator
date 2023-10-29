@@ -26,6 +26,8 @@ void add_core_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 
 // Integrate ADD
 void ADD_xyz(BINT* X, BINT* Y, BINT* Z);
+void ADD(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+
 
 /************************************ 
 * W := 2^{sizeof(WORD)*8}

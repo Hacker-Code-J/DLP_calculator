@@ -58,7 +58,7 @@ void add_xyz(BINT* X, BINT* Y, BINT* Z) {
     // Set the sign and word length of Z
     Z->wordlen = (k == 0) ? n : n+1;
 
-    refine_BINT(Z);
+    // refine_BINT(Z);
     //return Z;
 }
 
@@ -94,33 +94,55 @@ void add_core_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     //return Z;
 }
 
-void ADD_xyz(BINT* X, BINT* Y, BINT* Z) {
-    if(X->sign==false && Y->sign==false) {
-        if(compare_xy(X,Y) != -1)
-            add_xyz(X,Y,Z);
-        else
-            add_xyz(Y,X,Z);
-    } else if(X->sign==false && Y->sign==true) {
-        if(compare_xy(X,Y) != -1)
-            sub_xyz(X,Y,Z);
-        else {
-            Z->sign = true;
-            sub_xyz(Y,X,Z);
+// void ADD_xyz(BINT* X, BINT* Y, BINT* Z) {
+//     if(X->sign==false && Y->sign==false) {
+//         if(compare_xy(X,Y) != -1)
+//             add_xyz(X,Y,Z);
+//         else
+//             add_xyz(Y,X,Z);
+//     } else if(X->sign==false && Y->sign==true) {
+//         if(compare_xy(X,Y) != -1)
+//             sub_xyz(X,Y,Z);
+//         else {
+//             Z->sign = true;
+//             sub_xyz(Y,X,Z);
+//         }
+//     } else if(X->sign==true && Y->sign==false) {
+//         if(compare_xy(X,Y) != -1) {
+//             Z->sign = true;
+//             sub_xyz(X,Y,Z);
+//         } else
+//             sub_xyz(Y,X,Z);
+//     } else {
+//         if(compare_xy(X,Y) != -1){
+//             Z->sign = true;
+//             add_xyz(X,Y,Z);
+//         } else {
+//             Z->sign = true;
+//             add_xyz(Y,X,Z);
+//         }
+//     }
+// }
+
+void ADD(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
+    bool sameSign = (ptrX->sign == ptrY->sign);
+
+    // Determine order based on magnitude, irrespective of sign.
+    bool xGeqy = (compare_xy(ptrX, ptrY) != -1);
+    
+    // If signs are same, then addition is straightforward.
+    if (sameSign) {
+        if (ptrX->sign) { // If both are negative
+            (*pptrZ)->sign = true;
         }
-    } else if(X->sign==true && Y->sign==false) {
-        if(compare_xy(X,Y) != -1) {
-            Z->sign = true;
-            sub_xyz(X,Y,Z);
-        } else
-            sub_xyz(Y,X,Z);
-    } else {
-        if(compare_xy(X,Y) != -1){
-            Z->sign = true;
-            add_xyz(X,Y,Z);
+        add_core_xyz(xGeqy ? ptrX : ptrY, xGeqy ? ptrY : ptrX, pptrZ);
+    } else { // If signs are different, then subtraction is needed.
+        if (ptrX->sign) {
+            (*pptrZ)->sign = !xGeqy; // X negative and Y positive
         } else {
-            Z->sign = true;
-            add_xyz(Y,X,Z);
+            (*pptrZ)->sign = xGeqy; // X positive and Y negative
         }
+        sub_xyz(xGeqy ? ptrX : ptrY, xGeqy ? ptrY : ptrX, *pptrZ);
     }
 }
 
@@ -269,86 +291,75 @@ void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
 // }
 
 
-void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
-    makeEven(&ptrX); makeEven(&ptrY);
-    *pptrZ = init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
-    SET_BINT_ZERO(pptrZ);
+// void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
+//     makeEven(&ptrX); makeEven(&ptrY);
+//     *pptrZ = init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
+//     SET_BINT_ZERO(pptrZ);
 
-    int idx1 = ptrX->wordlen;
-    int idx2 = ptrY->wordlen / 2; 
+//     int idx1 = ptrX->wordlen;
+//     int idx2 = ptrY->wordlen / 2; 
 
-    for(int i = 0; i < idx1; i++) {
-        BINT* ptrTmp = init_bint(&ptrTmp, ptrX->wordlen+1);
-        BINT* ptrT0 = init_bint(&ptrT0, ptrX->wordlen);
-        BINT* ptrT1 = init_bint(&ptrT1, ptrX->wordlen+1);
-        BINT* ptrTmp0 = init_bint(&ptrTmp0, 2);
-        BINT* ptrTmp1 = init_bint(&ptrTmp1, 2);
-        for(int j = 0; j < idx2; j++) {
-            mul_xyz(ptrX->val[2*j], ptrY->val[i], &ptrTmp0);
-            ptrT0->val[0] = ptrTmp->val[0];
-            ptrT0->val[1] = ptrTmp->val[1];
-            left_shift(&ptrT0, 2*WORD_BITLEN);
+//     for(int i = 0; i < idx1; i++) {
+//         BINT* ptrTmp = init_bint(&ptrTmp, ptrX->wordlen+1);
+//         BINT* ptrT0 = init_bint(&ptrT0, ptrX->wordlen);
+//         BINT* ptrT1 = init_bint(&ptrT1, ptrX->wordlen+1);
+//         BINT* ptrTmp0 = init_bint(&ptrTmp0, 2);
+//         BINT* ptrTmp1 = init_bint(&ptrTmp1, 2);
+//         for(int j = 0; j < idx2; j++) {
+//             mul_xyz(ptrX->val[2*j], ptrY->val[i], &ptrTmp0);
+//             ptrT0->val[0] = ptrTmp->val[0];
+//             ptrT0->val[1] = ptrTmp->val[1];
+//             left_shift(&ptrT0, 2*WORD_BITLEN);
 
-            mul_xyz(ptrX->val[2*j+1], ptrY->val[i], &ptrTmp1);
-            ptrT1->val[0] = ptrTmp->val[0];
-            ptrT1->val[1] = ptrTmp->val[1];
-            left_shift(&ptrT1, 2*WORD_BITLEN);
+//             mul_xyz(ptrX->val[2*j+1], ptrY->val[i], &ptrTmp1);
+//             ptrT1->val[0] = ptrTmp->val[0];
+//             ptrT1->val[1] = ptrTmp->val[1];
+//             left_shift(&ptrT1, 2*WORD_BITLEN);
 
-            if(j == idx2 - 1) {
-                left_shift(&ptrT1, WORD_BITLEN);
-                ptrT1->val[0] = BINT_ZERO.val[0];
-            }
-        }
-        add_core_xyz(ptrT1, ptrT0, &ptrTmp);
-        left_shift(&ptrTmp, i*WORD_BITLEN);
-        add_core_xyz(*pptrZ, ptrTmp, pptrZ);
-
-        delete_bint(&ptrTmp);
-        delete_bint(&ptrT0);
-        delete_bint(&ptrT1);
-        delete_bint(&ptrTmp0);
-        delete_bint(&ptrTmp1);
-    }
-}
-
-// BINT* MUL_Core_ImpTxtBk(BINT* X, BINT* Y, int p, int q) {
-
-//         for (int k = 0; k < p; k++) {
-//             // Concatenate operation
-//             WORD product0 = X->val[2 * k] * Y->val[j];
-//             WORD product1 = X->val[2 * k + 1] * Y->val[j];
-
-//             // Shift and add for T0 (concatenate)
-//             T0 = leftShiftBINT(T0, w); // w is word size in bits
-//             BINT tmp0; // Temporary BINT to hold the product
-//             tmp0.sign = false;
-//             tmp0.wordlen = 1;
-//             tmp0.val = &product0;
-//             T0 = ADD_core(T0, &tmp0);
-
-//             // Shift and add for T1 (concatenate)
-//             T1 = leftShiftBINT(T1, w);
-//             BINT tmp1;
-//             tmp1.sign = false;
-//             tmp1.wordlen = 1;
-//             tmp1.val = &product1;
-//             T1 = ADD_core(T1, &tmp1);
+//             if(j == idx2 - 1) {
+//                 left_shift(&ptrT1, WORD_BITLEN);
+//                 ptrT1->val[0] = BINT_ZERO.val[0];
+//             }
 //         }
+//         add_core_xyz(ptrT1, ptrT0, &ptrTmp);
+//         left_shift(&ptrTmp, i*WORD_BITLEN);
+//         add_core_xyz(*pptrZ, ptrTmp, pptrZ);
 
-//         BINT* T = ADD_core(T0, T1);
-//         T = leftShiftBINT(T, w * j);
-//         Z = ADD_core(Z, T);
-
-//         // Free up memory allocated for temporary values
-//         free(T0->val);
-//         free(T0);
-//         free(T1->val);
-//         free(T1);
-//         free(T->val);
-//         free(T);
+//         delete_bint(&ptrTmp);
+//         delete_bint(&ptrT0);
+//         delete_bint(&ptrT1);
+//         delete_bint(&ptrTmp0);
+//         delete_bint(&ptrTmp1);
 //     }
-
-//     return Z;
 // }
 
+void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
+    makeEven(&ptrX); makeEven(&ptrY);
+    init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
+    SET_BINT_ZERO(pptrZ);
+
+    init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
+    (*pptrZ)->sign = ptrX->sign ^ ptrY->sign; // Result is negative if signs of input numbers are different
+
+    for (int j = 0; j < ptrY->wordlen; j++) {
+        BINT* T = NULL;
+        init_bint(&T, ptrX->wordlen + 1); // +1 for potential overflow
+
+        for (int k = 0; k < ptrX->wordlen; k++) {
+            WORD prod = ptrX->val[k] * ptrY->val[j];
+            T->val[k] = prod; // This will automatically split between lower and upper parts of prod
+
+            left_shift(&T, k * WORD_BITLEN);
+            
+            BINT* newZ = NULL;
+            ADD(*pptrZ, T, &newZ);
+            // add_core_xyz(*pptrZ, T, &newZ);
+
+            delete_bint(pptrZ);
+            *pptrZ = newZ;
+        }
+
+        delete_bint(&T);
+    }
+}
 
