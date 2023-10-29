@@ -7,13 +7,12 @@
 #ifndef OPERATION_H
 #define OPERATION_H
 
-extern const BINT BINT_ZERO;    //zero integer
-extern const BINT BINT_ONE;     //one integer
-extern const BINT BINT_NEG_ONE; //negative one integer
+// extern const BINT* BINT_ZERO;    //zero integer
+// extern const BINT* BINT_ONE;     //one integer
+// extern const BINT* BINT_NEG_ONE; //negative one integer
 
 void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
-
 
 // Function prototypes for BINT arithmetic operations.
 

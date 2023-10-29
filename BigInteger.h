@@ -132,6 +132,9 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2);
 
 void reset_bint(BINT* ptrBint);
 
+bool isZero(const BINT* bint);
+bool isOne(const BINT* bint);
+
 void hexCharToBinary(char hex, char* output);
 void hexToBinary(const char* hex, char* binaryOutput);
 

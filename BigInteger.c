@@ -87,8 +87,8 @@ void makeEven(BINT* ptrBint) {
 }
 
 void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
-    int max_wordlen = (ptrBint1->wordlen > ptrBint2->wordlen) ? ptrBint1->wordlen : ptrBint2->wordlen;
-
+    int max_wordlen = MAX(ptrBint1->wordlen, ptrBint2->wordlen);
+    
     // Resize ptrBint1 if its wordlen is smaller than max_wordlen
     if(ptrBint1->wordlen < max_wordlen) {
         ptrBint1->val = realloc(ptrBint1->val, max_wordlen * sizeof(WORD));
@@ -125,6 +125,27 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
 void reset_bint(BINT* ptrBint) {
     for (int i = 0; i < ptrBint->wordlen; i++)
         ptrBint->val[i] = 0;
+}
+
+bool isZero(const BINT* bint) {
+    if (bint->wordlen == 0) return true;
+
+    for (int i = 0; i < bint->wordlen; ++i) {
+        if (bint->val[i] != 0) return false;
+    }
+    
+    return true;
+}
+bool isOne(const BINT* bint) {
+    if (bint->wordlen < 1) return false; // Can't be 1 if there are no words.
+    if (bint->val[0] != 1) return false; // First word must be 1.
+    if (bint->sign) return false; // Sign must be positive.
+
+    for (int i = 1; i < bint->wordlen; ++i) {
+        if (bint->val[i] != 0) return false; // Every other word must be 0.
+    }
+    
+    return true;
 }
 
 // Function to convert a hex char to its 4-bit binary equivalent

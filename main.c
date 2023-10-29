@@ -38,10 +38,8 @@ int main() {
     int idx = 0;
     while(idx < t) {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
-        // int n = rand() % 0xa  + 1;
-        // int m = rand() % 0xa  + 1;
-        int n = 4;
-        int m = 4;
+        int n = rand() % 0xa  + 1;
+        int m = rand() % 0x9  + 1;
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
         // custom_printHex_xy(bint1, bint2, n+m);
@@ -81,7 +79,6 @@ int main() {
         printHex2(bint1);printf(" * ");printHex2(bint2);
         printf("), 16) == int(\"");
         printHex2(bint3);printf("\", 16))\n");
-
 
         delete_bint(&bint1);
         delete_bint(&bint2);
