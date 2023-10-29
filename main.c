@@ -34,16 +34,17 @@ int main() {
     // mul_xyz(a,b,c);
     // printf("%08x %08x\n", c[1], c[0]);
 
+    BINT* bint1 = NULL; 
+    BINT* bint2 = NULL;
+    BINT* bint3 = NULL;
+
     int idx = 0;
     while(idx < t) {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
-        BINT* bint1 = NULL; 
-        BINT* bint2 = NULL;
-        BINT* bint3 = NULL;
         // int n = rand() % 0x4  + 1;
         // int m = rand() % 0x4  + 1;
-        int n = 4;
-        int m = 4;
+        int n = 3;
+        int m = 3;
         // int max = MAX(n, m);
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
@@ -83,7 +84,7 @@ int main() {
         delete_bint(&bint1);
         delete_bint(&bint2);
         delete_bint(&bint3);
+
         idx++;
     }
-
 }

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <memory.h>
 
 // WORD arrOne[1] = {0x01};
 
@@ -810,17 +811,64 @@ void right_shift(BINT** pptrX, int num_bits) {
     ptrX->wordlen = new_wordlen;
 }
 
+// void left_shift_word(BINT** pptrX, int shift_amount) {
+//     if (!pptrX || !*pptrX) {
+//         fprintf(stderr, "Error: Invalid pointer in 'left_shift_word'\n");
+//         return;
+//     }
+//     BINT* ptrX = *pptrX;
+//     if(shift_amount < 0)
+//         fprintf(stderr, "Error: shift_amount is negative!\n");
+
+//     int new_len = ptrX->wordlen + shift_amount;
+//     for(int i = new_len - 1; i >= shift_amount; i--) {
+//         ptrX->val[i] = ptrX->val[i - shift_amount];
+//     }
+//     for(int i = 0; i < shift_amount; i++) {
+//         ptrX->val[i] = 0x00;
+//     }
+//     ptrX->wordlen = new_len;
+// }
+
 void left_shift_word(BINT** pptrX, int shift_amount) {
+    // if (!pptrX || !*pptrX) {
+    //     fprintf(stderr, "Error: Invalid pointer in 'left_shift_word'\n");
+    //     return;
+    // }
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "left_shift_word");
+
     BINT* ptrX = *pptrX;
-    if(shift_amount < 0)
-        fprintf(stderr, "Error: shift_amount is negative!\n");
+
+    if (shift_amount < 0) {
+        fprintf(stderr, "Error: shift_amount is negative in 'left_shift_word'\n");
+        return;
+    }
 
     int new_len = ptrX->wordlen + shift_amount;
-    for(int i = new_len - 1; i >= shift_amount; i--) {
+
+    // Reallocate memory for the new word length
+    WORD* new_val = (WORD*)realloc(ptrX->val, new_len * sizeof(int));
+    if (!new_val) {
+        fprintf(stderr, "Error: Memory reallocation failed in 'left_shift_word'\n");
+        exit(1);
+    }
+    ptrX->val = new_val; // Assign the possibly new address to ptrX->val
+
+    // Shift the existing values
+    for (int i = new_len - 1; i >= shift_amount; i--) {
         ptrX->val[i] = ptrX->val[i - shift_amount];
     }
-    for(int i = 0; i < shift_amount; i++) {
+
+    // Set the newly shifted-in part to zero
+    for (int i = 0; i < shift_amount; i++) {
         ptrX->val[i] = 0x00;
     }
+
     ptrX->wordlen = new_len;
+
+    // // Efficiently set the shifted part to zero and update the word length
+    // memset(ptrX->val, 0x00, shift_amount * sizeof(WORD)); // Setting initial shift_amount elements to zero
+    // memmove(ptrX->val + shift_amount, ptrX->val, (new_len - shift_amount) * sizeof(WORD)); // Shifting the values to their new positions
+
+    // ptrX->wordlen = new_len;
 }

@@ -473,65 +473,35 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     int p = n/2;
     int q = m/2;
 
-    // BINT* ptrT0 = NULL;
-    // BINT* ptrT1 = NULL;
-    // BINT* ptrTmp0 = NULL;
-    // BINT* ptrTmp1 = NULL;
+    BINT* ptrT0 = init_bint(&ptrT0, 2*p);
+    BINT* ptrT1 = init_bint(&ptrT1, 2*p+1);
+    BINT* ptrTmp0 = init_bint(&ptrTmp0, 2*p);
+    BINT* ptrTmp1 = init_bint(&ptrTmp1, 2*p+1);
 
     for(int j = 0; j < 2 * q; j++) {
-        BINT* ptrT0 = init_bint(&ptrT0, 2*p);
-        BINT* ptrT1 = init_bint(&ptrT1, 2*p+1);
-        BINT* ptrTmp0 = init_bint(&ptrTmp0, 2*p);
-        BINT* ptrTmp1 = init_bint(&ptrTmp1, 2*p+1);
-        
         for(int k = 0; k < p; k++) {
             mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrT0);
-            if(!k) copy_BINT(&ptrTmp0, &ptrT0);
             printf("--T0:");printHex2(ptrT0);printf("\n");
-            if(k) {
+            if (!k) {
+                copy_BINT(&ptrTmp0, &ptrT0);
+                printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
+            } else {
                 left_shift_word(&ptrTmp0, 2);
                 refine_BINT_word(ptrTmp0, 2);
                 OR_BINT(ptrT0, ptrTmp0, &ptrTmp0);
+                printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
             }
-            printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
+            // printf("print(int(hex(");
+            // printf("0x%08x", ptrX->val[2*k]);printf("*");printf("0x%08x", ptrY->val[j]);
+            // printf("), 16) == int(\"");
+            // printHex2(ptrT0);printf("\", 16))\n");
         }
-
-        delete_bint(&ptrT0);
-        delete_bint(&ptrT1);
-        delete_bint(&ptrTmp0);
-        delete_bint(&ptrTmp1);
     }
-
-    // for(int j = 0; j < 2 * q; j++) {
-
-    //     BINT* ptrT0 = init_bint(&ptrT0, 2*p);
-    //     BINT* ptrT1 = init_bint(&ptrT0, 2*p+1);
-    //     BINT* ptrTmp0 = init_bint(&ptrT0, 2*p);
-    //     BINT* ptrTmp1 = init_bint(&ptrT0, 2*p+1);
-        
-
-    //     for(int k = 0; k < p; k++) {
-    //         mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrT0);
-    //         if(!k) copy_BINT(&ptrTmp0, &ptrT0);
-    //         // ptrT0->val[k] = ptrX->val[2*k] * ptrY->val[j];
-    //         // ptrT1->val[k] = ptrX->val[2*k + 1] * ptrY->val[j];
-    //         if(k) {
-    //             left_shift_word(ptrTmp0, 2);
-    //             refine_BINT_word(ptrTmp0, 2);
-    //             OR_BINT(ptrT0, ptrTmp0, ptrTmp0);
-    //         }
-    //         printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
-    //         // printf("print(int(hex(");
-    //         // printf("0x%08x", ptrX->val[2*k]);printf("*");printf("0x%08x", ptrY->val[j]);
-    //         // printf("), 16) == int(\"");
-    //         // printHex2(ptrT0);printf("\", 16))\n");
-    //     }
-    //     delete_bint(&ptrTmp0);
-    //     delete_bint(&ptrTmp1);
-    //     delete_bint(&ptrT0);
-    //     delete_bint(&ptrT1);
-    // }
-
+    // Cleanup
+    delete_bint(&ptrT0);
+    delete_bint(&ptrT1);
+    delete_bint(&ptrTmp0);
+    delete_bint(&ptrTmp1);
 }
 
 
