@@ -27,8 +27,9 @@
 int main() {
     srand((unsigned int)time(NULL));
 
-    // clock_t start, end;
-    int t = 1;
+    clock_t start, end;
+    double cpu_time_used;
+    int t = 1000;
 
     // printf("a: %08x\n b: %08x\n", a, b);
     // mul_xyz(a,b,c);
@@ -38,17 +39,21 @@ int main() {
     BINT* bint2 = NULL;
     BINT* bint3 = NULL;
 
+    // // Python
+    // printf("def compute_results():\n");
+    // printf("    results = [\n");
+
     int idx = 0;
     while(idx < t) {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
-        // int n = rand() % 0x4  + 1;
-        // int m = rand() % 0x4  + 1;
-        int n = 4;
-        int m = 4;
+        int n = rand() % 0x4  + 1;
+        int m = rand() % 0x4  + 1;
+        // int n = 4;
+        // int m = 4;
         // int max = MAX(n, m);
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
-        custom_printHex_xy(bint1, bint2, n+m);
+        // custom_printHex_xy(bint1, bint2, n+m);
         // SET_BINT_CUSTOM_ZERO(&bint2, 3);
         // bint3 = init_bint(&bint3, max);
         // bint3 = init_bint(&bint3, n+m);
@@ -57,7 +62,12 @@ int main() {
         // printHex(bint2);printf("\n");
         // mul_xyz(bint1->val[0], bint2->val[0], &bint3);
         // ADD(&bint1, &bint2, &bint3);
+
+        start = clock();
         MUL_Core_ImpTxtBk(&bint1, &bint2, &bint3);
+        end = clock();
+        cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
         // mul_core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
         // mul_core_TxtBk_xyz(&bint1, &bint2, &bint3);
         // makeEven(&bint1); makeEven(&bint2);
@@ -76,15 +86,24 @@ int main() {
         /** SAGE
          * print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
         */
-        // printf("print(int(hex(");
-        // printHex2(bint1);printf("*");printHex2(bint2);
-        // printf("), 16) == int(\"");
-        // printHex2(bint3);printf("\", 16))\n");
+        printf("print(int(hex(");
+        printHex2(bint1);printf("*");printHex2(bint2);
+        printf("), 16) == int(\"");
+        printHex2(bint3);printf("\", 16))\n");
+
 
         delete_bint(&bint1);
         delete_bint(&bint2);
         delete_bint(&bint3);
-
+        // printf("%.8f\n", cpu_time_used);
         idx++;
     }
+
+    // // Python
+    // printf("    ]\n");
+    // printf("    return results\n");
+    // printf("\nif __name__ == \"__main__\":\n");
+    // printf("    results = compute_results()\n");
+    // printf("    for r in results:\n");
+    // printf("        print(r)\n");
 }

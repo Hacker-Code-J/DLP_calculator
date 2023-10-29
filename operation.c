@@ -454,25 +454,23 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
-    BINT* ptrZ = *pptrZ;
 
     makeEven(ptrX); makeEven(ptrY);
 
-    if (!*pptrZ) {
-        *pptrZ = init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
+    delete_bint(pptrZ);
+    *pptrZ = init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
         if (!*pptrZ) {
             fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
             exit(1);
         }
-    }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
-
 
     int n = ptrX->wordlen;
     int m = ptrY->wordlen;
     int p = n/2;
     int q = m/2;
 
+    BINT* ptrT = init_bint(&ptrT, ptrX->wordlen + ptrY->wordlen);
     BINT* ptrT0 = init_bint(&ptrT0, 2*p);
     BINT* ptrT1 = init_bint(&ptrT1, 2*p+1);
     BINT* ptrTmp0 = init_bint(&ptrTmp0, 2*p);
@@ -480,28 +478,36 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     for(int j = 0; j < 2 * q; j++) {
         for(int k = 0; k < p; k++) {
-            mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrT0);
-            mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrT1);
-            printf("--T1:");printHex2(ptrT1);printf("\n");
+            mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrTmp0);
+            mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrTmp1);
+            // printf("\nTmp1:");printHex2(ptrTmp1);printf("\n");
             if (!k) {
-                copy_BINT(&ptrTmp0, &ptrT0);
-                copy_BINT(&ptrTmp1, &ptrT1);
-                printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
-                printf("Tmp1:");printHex2(ptrTmp1);printf("\n");
+                copy_BINT(&ptrT0, &ptrTmp0);
+                copy_BINT(&ptrT1, &ptrTmp1);
+                // printf("--T0:");printHex2(ptrT0);printf("\n");
+                // printf("--T1:");printHex2(ptrT1);printf("\n");
             } else {
-                left_shift_word(&ptrTmp0, 2);
-                refine_BINT_word(ptrTmp0, 2);
-                OR_BINT(ptrT0, ptrTmp0, &ptrTmp0);
+                left_shift_word(&ptrT0, 2);
+                refine_BINT_word(ptrT0, 2);
+                OR_BINT(ptrTmp0, ptrT0, &ptrT0);
 
-                left_shift_word(&ptrTmp1, 2);
-                refine_BINT_word(ptrTmp1, 2);
-                OR_BINT(ptrT1, ptrTmp1, &ptrTmp1);
-                printf("Tmp0:");printHex2(ptrTmp0);printf("\n");
-                printf("Tmp1:");printHex2(ptrTmp1);printf("\n");
+                left_shift_word(&ptrT1, 2);
+                refine_BINT_word(ptrT1, 2);
+                OR_BINT(ptrTmp1, ptrT1, &ptrT1);
+                // printf("--T0:");printHex2(ptrT0);printf("\n");
+                // printf("--T1:");printHex2(ptrT1);printf("\n");
             }
         }
-        left_shift_word(&ptrTmp1, 1);
-        refine_BINT_word(ptrTmp1, 1);
+        left_shift_word(&ptrT1, 1);
+        refine_BINT_word(ptrT1, 1);
+
+        add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+        left_shift_word(&ptrT, j);
+        add_core_xyz(&ptrT, pptrZ, pptrZ);
+
+        // printf("\nResult:\n");
+        // printf("--T0:");printHex2(ptrT0);printf("\n");
+        // printf("--T1:");printHex2(ptrT1);printf("\n");
     }
 
 
@@ -510,10 +516,12 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     // printf("), 16) == int(\"");
     // printHex2(ptrT0);printf("\", 16))\n");
     // Cleanup
+    delete_bint(&ptrT);
     delete_bint(&ptrT0);
     delete_bint(&ptrT1);
     delete_bint(&ptrTmp0);
     delete_bint(&ptrTmp1);
+    
 }
 
 
