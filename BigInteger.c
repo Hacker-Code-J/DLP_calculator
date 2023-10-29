@@ -39,13 +39,23 @@ void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
     }
 }
 
-#define SET_DATA(PB, V, WL, S) if(*(PB)) delete_bint(PB); *(PB)=calloc(1,sizeof(BINT));\
-    (*PB)->val=calloc(1,sizeof(WORD)); *(*PB)->val=(V); (*PB)->wordlen=(WL); (*PB)->sign=(S)
+#define SET_WORD_DATA(PB, V, WL, S) if(*(PB)) delete_bint(PB); *(PB)=(BINT*)malloc(sizeof(BINT));\
+    (*PB)->val=(WORD*)calloc(1,sizeof(WORD)); *(*PB)->val=(V); (*PB)->wordlen=(WL); (*PB)->sign=(S)
 
-void SET_BINT_ZERO(BINT** pptrBint) { SET_DATA(pptrBint, 0x00, 1, false); }
-void SET_BINT_ONE(BINT** pptrBint) { SET_DATA(pptrBint, 0x01, 1, false); }
+void SET_BINT_ZERO(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x00, 1, false); }
+void SET_BINT_ONE(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x01, 1, false); }
+
+void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words) {
+    delete_bint(pptrBint);
+    *pptrBint = (BINT*)malloc(sizeof(BINT));
+    (*pptrBint)->val = (WORD*)calloc(num_words,sizeof(WORD));
+    (*pptrBint)->wordlen = num_words;
+    (*pptrBint)->sign = false;
+}
 
 void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
+    CHECK_PTR_AND_DEREF(pptrBint_src, "pptrBint_src", "copy_BINT");
+
     if(*pptrBint_dst != NULL)
         delete_bint(pptrBint_dst);
 
@@ -59,20 +69,20 @@ void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
 }
 
 
-void makeEven(BINT** pptrBint) {
+void makeEven(BINT* ptrBint) {
     // Check if wordlen is odd
-    if ((*pptrBint)->wordlen % 2 == 1) {
-        (*pptrBint)->wordlen++; // Increment wordlen to make it even
+    if ((ptrBint)->wordlen % 2 == 1) {
+        (ptrBint)->wordlen++; // Increment wordlen to make it even
 
         // Reallocate memory for val
-        (*pptrBint)->val = realloc((*pptrBint)->val, (*pptrBint)->wordlen * sizeof(WORD));
-        if (!(*pptrBint)->val) {
+        (ptrBint)->val = realloc((ptrBint)->val, (ptrBint)->wordlen * sizeof(WORD));
+        if (!(ptrBint)->val) {
             // Handle memory allocation failure, exit or return an error
             exit(1); 
         }
 
         // Fill the new WORD with 0
-        (*pptrBint)->val[(*pptrBint)->wordlen - 1] = 0;
+        (ptrBint)->val[(ptrBint)->wordlen - 1] = 0;
     }
 }
 
@@ -104,12 +114,12 @@ void hexToBinary(const char *hex, char *binaryOutput) {
     binaryOutput[0] = '\0';
 
     char buffer[6];  // Temporary buffer to store 4-bit binary + space + null terminator
-    for (int i = 0; i < strlen(hex); i++) {
+    for (int i = 0; i < (int)strlen(hex); i++) {
         hexCharToBinary(hex[i], buffer);
         strcat(binaryOutput, buffer);
         
         // If not the last iteration, append space for separation
-        if (i < strlen(hex) - 1) {
+        if (i < (int)strlen(hex) - 1) {
             strcat(binaryOutput, " ");
         }
     }
@@ -511,6 +521,20 @@ void refine_BINT(BINT* X) {
         X->sign = false;
 }
 
+
+void refine_BINT_word(BINT* ptrX, int num_words) {
+    if(ptrX == NULL) return;
+
+    int new_wordlen = ptrX->wordlen - num_words;
+    if(ptrX->wordlen != new_wordlen) {
+        ptrX->wordlen = new_wordlen;
+        ptrX->val = (WORD*)realloc(ptrX->val, sizeof(WORD)*new_wordlen);
+    }
+
+    if((ptrX->wordlen == 1) && (ptrX->val[0] == 0))
+        ptrX->sign = false;
+}
+
 //Generate Random BINT
 
 void rand_array(WORD* dst, int wordlen) {
@@ -551,17 +575,63 @@ void assgin_x2y(BINT* X, BINT** Y) {
 // X>Y return 1
 // X<Y return -1
 // X=Y return 0
-int compare_xy(BINT* X, BINT* Y) {
-    if (X->wordlen > Y->wordlen) return 1;
-    if (X->wordlen < Y->wordlen) return -1;
 
-    for (int i = X->wordlen - 1; i >= 0; i--) {
-        if (X->val[i] > Y->val[i]) return 1;
-        if (X->val[i] < Y->val[i]) return -1;
+bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
+    // if (!pptrX || !*pptrX || !pptrY || !*pptrY) {
+    //     fprintf(stderr, "Error: One of the pointers is NULL in 'compare_abs_bint'\n");
+    //     exit(1); // or another appropriate value or action
+    // }
+    exit_on_null_error(pptrX, "pptrX", "compare_abs_bint");
+    exit_on_null_error(*pptrX, "*pptrX", "compare_abs_bint");
+    exit_on_null_error(pptrY, "pptrY", "compare_abs_bint");
+    exit_on_null_error(*pptrY, "*pptrY", "compare_abs_bint");
+
+    BINT* ptrX = *pptrX;
+    BINT* ptrY = *pptrY;
+    int n = ptrX->wordlen;
+    int m = ptrX->wordlen;
+    WORD* X = ptrX->val;
+    WORD* Y = ptrY->val;
+
+    // Compare word lengths
+    if(n > m) return 1;
+    if(n < m) return 0;
+
+    // Word-by-word comparison
+    for(int i = ptrX->wordlen - 1; i >= 0; i--) {
+        if(X[i] > Y[i]) return 1;
+        if(X[i] < Y[i]) return 0;
+    }
+    // If you've reached this point, the numbers are equal
+    return 1;
+}
+
+int compare_bint(const BINT* a, const BINT* b) {
+    // Return values:
+    // -1 if a < b
+    //  0 if a == b
+    //  1 if a > b
+
+    // Compare signs
+    if(!a->sign && b->sign) return 1; // a is positive, b is negative
+    if(a->sign && !b->sign) return -1; // a is negative, b is positive
+
+    // At this point, either both numbers are positive or both are negative
+
+    // Compare word lengths
+    if(a->wordlen > b->wordlen) return a->sign ? -1 : 1; // if both are negative, reverse the result
+    if(a->wordlen < b->wordlen) return a->sign ? 1 : -1;
+
+    // Word-by-word comparison
+    for(int i = a->wordlen - 1; i >= 0; i--) {
+        if(a->val[i] > b->val[i]) return a->sign ? -1 : 1;
+        if(a->val[i] < b->val[i]) return a->sign ? 1 : -1;
     }
 
+    // If you've reached this point, the numbers are equal
     return 0;
 }
+
 
 //Author: Moon Ye-chan
 int Get_bitlen(BINT* x){
@@ -663,7 +733,9 @@ int Get_sign(BINT* x){
 // }
 
 void left_shift(BINT** pptrX, int num_bits) {
-    if (!pptrX || !*pptrX) return;
+    // if (!pptrX || !*pptrX) return;
+    exit_on_null_error(pptrX, "pptrX", "left_shift");
+    exit_on_null_error(*pptrX, "*pptrX", "left_shift");
 
     BINT* ptrX = *pptrX;
 
@@ -736,4 +808,19 @@ void right_shift(BINT** pptrX, int num_bits) {
     free(ptrX->val);
     ptrX->val = new_val;
     ptrX->wordlen = new_wordlen;
+}
+
+void left_shift_word(BINT** pptrX, int shift_amount) {
+    BINT* ptrX = *pptrX;
+    if(shift_amount < 0)
+        fprintf(stderr, "Error: shift_amount is negative!\n");
+
+    int new_len = ptrX->wordlen + shift_amount;
+    for(int i = new_len - 1; i >= shift_amount; i--) {
+        ptrX->val[i] = ptrX->val[i - shift_amount];
+    }
+    for(int i = 0; i < shift_amount; i++) {
+        ptrX->val[i] = 0x00;
+    }
+    ptrX->wordlen = new_len;
 }

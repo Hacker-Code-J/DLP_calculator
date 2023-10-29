@@ -119,10 +119,14 @@ void delete_bint(BINT** pptrBint);
 */
 void SET_BINT_ZERO(BINT** pptrBint);
 void SET_BINT_ONE(BINT** pptrBint);
+void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words);
 
+/**
+ * 
+*/
 void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src);
 
-void makeEven(BINT** pptrBint);
+void makeEven(BINT* ptrBint);
 
 void hexCharToBinary(char hex, char* output);
 void hexToBinary(const char* hex, char* binaryOutput);
@@ -223,6 +227,7 @@ void custom_printHex_xy(BINT* X, BINT* Y, int n);
 void custom_printHex(BINT* X, BINT* Y, BINT* Z,  int option);
 
 void refine_BINT(BINT* X);
+void refine_BINT_word(BINT* ptrX, int num_words);
 
 //Generate Random BINT
 
@@ -236,10 +241,11 @@ void array_copy_x2y(WORD* X, WORD* Y, int wordlen);
 void assgin_x2y(BINT* X, BINT** Y);
 
 //Compare
-// X>Y return 1
-// X<Y return -1
-// X=Y return 0
-int compare_xy(BINT* X, BINT* Y);
+// Return values:
+//  0 if X == Y
+//  1 if X >= Y
+bool compare_abs_bint(BINT** pptrX, BINT** pptrY);
+int compare_bint(const BINT* a, const BINT* b);
 
 //Author: Moon Ye-chan
 int Get_bitlen(BINT* x);
@@ -255,5 +261,7 @@ void Flip_sign(BINT* x);
 */
 void left_shift(BINT** pptrX, int num_bits);
 void right_shift(BINT** pptrX, int num_bits);
+
+void left_shift_word(BINT** pptrX, int shift_amount);
 
 #endif // BIGINTEGER_H

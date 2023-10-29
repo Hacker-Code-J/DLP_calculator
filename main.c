@@ -28,7 +28,7 @@ int main() {
     srand((unsigned int)time(NULL));
 
     // clock_t start, end;
-    int t = 10;
+    int t = 1;
 
     // printf("a: %08x\n b: %08x\n", a, b);
     // mul_xyz(a,b,c);
@@ -36,28 +36,33 @@ int main() {
 
     int idx = 0;
     while(idx < t) {
-        printf("\n-----[Test %d]-----\n\n", idx+1);
+        // printf("\n-----[Test %d]-----\n\n", idx+1);
         BINT* bint1 = NULL; 
         BINT* bint2 = NULL;
         BINT* bint3 = NULL;
         // int n = rand() % 0x4  + 1;
         // int m = rand() % 0x4  + 1;
-        int n = 1;
-        int m = 3;
-        int max = MAX(n, m);
+        int n = 4;
+        int m = 4;
+        // int max = MAX(n, m);
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
-        bint3 = init_bint(&bint3, n+m);
-        
+        custom_printHex_xy(bint1, bint2, n+m);
+        // SET_BINT_CUSTOM_ZERO(&bint2, 3);
+        // bint3 = init_bint(&bint3, max);
+        // bint3 = init_bint(&bint3, n+m);
 
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
-        // ADD(bint1, bint2, &bint3);
-        mul_core_ImpTxtBk_xyz(bint1, bint2, &bint3);
+        // mul_xyz(bint1->val[0], bint2->val[0], &bint3);
+        // ADD(&bint1, &bint2, &bint3);
+        MUL_Core_ImpTxtBk(&bint1, &bint2, &bint3);
+        // mul_core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
+        // mul_core_TxtBk_xyz(&bint1, &bint2, &bint3);
         // makeEven(&bint1); makeEven(&bint2);
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
-        custom_printHex(bint1, bint2, bint3, 2);
+        // custom_printHex(bint1, bint2, bint3, 2);
         // printHex(bint3);printf("\n");
         // printHex(bint3);printf("\n");
 
@@ -71,13 +76,13 @@ int main() {
          * print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
         */
         // printf("print(int(hex(");
-        // printHex2(bint1);printf("+");printHex2(bint2);
+        // printHex2(bint1);printf("*");printHex2(bint2);
         // printf("), 16) == int(\"");
         // printHex2(bint3);printf("\", 16))\n");
 
-        // delete_bint(&bint1);
-        // delete_bint(&bint2);
-        // delete_bint(&bint3);
+        delete_bint(&bint1);
+        delete_bint(&bint2);
+        delete_bint(&bint3);
         idx++;
     }
 

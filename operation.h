@@ -11,22 +11,28 @@ extern const BINT BINT_ZERO;    //zero integer
 extern const BINT BINT_ONE;     //one integer
 extern const BINT BINT_NEG_ONE; //negative one integer
 
+void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+
+
 // Function prototypes for BINT arithmetic operations.
 
-/************************************
-* W := 2^{sizeof(WORD)*8}
-* x + y + k = carry * W + res
-************************************/
-void add_xyk(WORD x, WORD y, WORD k, WORD* res, WORD* carry);
+/** Add with Carry
+ * Input: Single-Word X, Y in [0,W) and carry k in {0,1}
+ * Output: Q in {0,1} and R in [0,W) s.t. X + Y + k = Q * W + R
+ * 
+ * W = 2^w
+*/
+void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR);
 
 // Z = X + Y with wordlen(X) >= wordlen(Y)
 void add_xyz(BINT* X, BINT* Y, BINT* Z);
-void add_core_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 
 // Integrate ADD
-void ADD_xyz(BINT* X, BINT* Y, BINT* Z);
-void ADD(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+void ADD_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 
 /************************************ 
@@ -64,13 +70,16 @@ void mul_xyz(WORD valX, WORD valY, BINT** pptrZ);
  *        Y is m-word integer, y_{m-1} || ... || x_0 with y_i in [0,W)
  * Output: Z = XY in [0,W^{n+m})
 */
-void mul_core_TxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /** Improved Textbook Multiplication
  * Input: X is n-word integer s.t. n=2p
  *        Y is m-word integer s.t. n=2q
  * Output: Z = XY in [0,W^{n+m}) = [0,W^{2(p+q)})
 */
-void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+// void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+void mul_core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 #endif // OPERATION_H
