@@ -29,7 +29,7 @@ int main() {
 
     clock_t start, end;
     double cpu_time_used;
-    int t = 100;
+    int t = 10;
 
     BINT* bint1 = NULL; 
     BINT* bint2 = NULL;
@@ -48,10 +48,10 @@ int main() {
     int idx = 0;
     while(idx < t) {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
-        int n = rand() % 0x60  + 1; //
-        int m = rand() % 0x60  + 1; //
-        // int n = 10;
-        // int m = 14;
+        // int n = rand() % 0x60  + 1; //
+        // int m = rand() % 0x60  + 1; //
+        int n = 0x60;
+        int m = 0x60;
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
         // custom_printHex_xy(bint1, bint2, n+m);
