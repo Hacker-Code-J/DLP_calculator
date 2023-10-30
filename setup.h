@@ -8,6 +8,7 @@ typedef unsigned long u64;
 
 #define false 0
 #define true !false
+#define FLAG 5
 
 /**
  * Determine the greater value between two inputs.

@@ -22,6 +22,6 @@ clean:
 	rm -f *.o a.out *.bin *.sage
 
 clean-test:
-	rm -f test.py test.txt
+	rm -f test.py *.txt
 
 .PHONY: clean

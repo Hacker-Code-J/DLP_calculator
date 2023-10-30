@@ -559,44 +559,8 @@ void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
 	(*pptrZ)->val[0] = Z0;
 	(*pptrZ)->val[1] = Z1;
 }
-void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_TxtBk_xyz");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_TxtBk_xyz");
 
-    BINT* ptrX = *pptrX;
-    BINT* ptrY = *pptrY;
-
-    if (!*pptrZ) {
-        *pptrZ = init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
-        if (!*pptrZ) {
-            fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
-            exit(1);
-        }
-    }
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_TxtBk_xyz");
-
-
-    if(ptrX->sign != ptrY->sign)
-        (*pptrZ)->sign = true;
-
-    BINT* ptrTmp = NULL;
-    BINT* ptrWordMUl = NULL;
-
-    for(int i = 0; i < ptrX->wordlen; i++) {
-        for(int j = 0; j < ptrY->wordlen; j++) {
-            mul_xyz(ptrX->val[i], ptrX->val[j], &ptrWordMUl);
-            left_shift(&ptrWordMUl, (i+j) * WORD_BITLEN);
-            add_core_xyz(pptrZ, &ptrWordMUl, &ptrTmp);
-            // ADD(pptrZ, &ptrWordMUl, &ptrTmp);
-            copy_BINT(pptrZ, &ptrTmp);
-        }
-    }
-    delete_bint(&ptrTmp);
-    delete_bint(&ptrWordMUl);
-    refine_BINT(*pptrZ);
-}
-
-void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk");
 
@@ -611,10 +575,10 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     delete_bint(pptrZ);
     *pptrZ = init_bint(pptrZ, n+m);
-        if (!*pptrZ) {
-            fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
-            exit(1);
-        }
+    if (!*pptrZ) {
+        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
+        exit(1);
+    }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
     BINT* ptrZ = *pptrZ;
 
@@ -688,5 +652,94 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrT1);
     delete_bint(&ptrTmp0);
     delete_bint(&ptrTmp1);
+}
+void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk");
+
+    BINT* ptrX = *pptrX;
+    BINT* ptrY = *pptrY;
     
+    int n = ptrX->wordlen;
+    int m = ptrX->wordlen;
+
+    matchSize(ptrX, ptrY);
+    makeEven(ptrX); makeEven(ptrY);
+
+    delete_bint(pptrZ);
+    *pptrZ = init_bint(pptrZ, n+m);
+    if (!*pptrZ) {
+        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
+        exit(1);
+    }
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
+    BINT* ptrZ = *pptrZ;
+
+    int p = ptrX->wordlen / 2;
+    int q = ptrY->wordlen / 2;
+
+    BINT* ptrT = init_bint(&ptrT, n+m);
+    BINT* ptrT0 = init_bint(&ptrT0, 2*p);
+    BINT* ptrT1 = init_bint(&ptrT1, 2*p);
+    BINT* ptrTmp0 = init_bint(&ptrTmp0, 2*p);
+    BINT* ptrTmp1 = init_bint(&ptrTmp1, 2*p);
+
+    for(int j = 0; j < 2 * q; j++) {
+        for(int k = 0; k < p; k++) {
+            reset_bint(ptrTmp0);
+            reset_bint(ptrTmp1);
+            mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrTmp0);
+            mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrTmp1);
+            if (!k) {
+                copy_BINT(&ptrT0, &ptrTmp0);
+                copy_BINT(&ptrT1, &ptrTmp1);
+            } else {
+                left_shift_word(&ptrTmp0, 2*k);
+                refine_BINT_word(ptrTmp0, 2*k);
+                OR_BINT(ptrTmp0, ptrT0, &ptrT0);
+
+                left_shift_word(&ptrTmp1, 2*k);
+                refine_BINT_word(ptrTmp1, 2*k);
+                OR_BINT(ptrTmp1, ptrT1, &ptrT1);
+            }
+        }
+        left_shift_word(&ptrT1, 1);
+        if (ptrT1->wordlen > ptrT0->wordlen)
+            add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+        else
+            add_core_xyz(&ptrT0, &ptrT1, &ptrT);
+        left_shift_word(&ptrT, j);
+        if (ptrZ->wordlen > ptrT->wordlen) // wordlen Z >= wordlen T
+            add_core_xyz(pptrZ, &ptrT, pptrZ);
+        else 
+            add_core_xyz(&ptrT, pptrZ, pptrZ);
+    }
+    delete_bint(&ptrT);
+    delete_bint(&ptrT0);
+    delete_bint(&ptrT1);
+    delete_bint(&ptrTmp0);
+    delete_bint(&ptrTmp1);
+}
+
+void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk");
+
+    BINT* ptrX = *pptrX;
+    BINT* ptrY = *pptrY;
+    
+    int n = ptrX->wordlen;
+    int m = ptrX->wordlen;
+
+    matchSize(ptrX, ptrY);
+    makeEven(ptrX); makeEven(ptrY);
+
+    delete_bint(pptrZ);
+    *pptrZ = init_bint(pptrZ, n+m);
+    if (!*pptrZ) {
+        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
+        exit(1);
+    }
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
+    BINT* ptrZ = *pptrZ;
 }

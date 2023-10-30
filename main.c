@@ -29,7 +29,7 @@ int main() {
 
     clock_t start, end;
     double cpu_time_used;
-    int t = 10;
+    int t = 10000;
 
     BINT* bint1 = NULL; 
     BINT* bint2 = NULL;
@@ -50,8 +50,8 @@ int main() {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
         // int n = rand() % 0x60  + 1; //
         // int m = rand() % 0x60  + 1; //
-        int n = 0x60;
-        int m = 0x60;
+        int n = 0x20;
+        int m = 0x20;
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
         // custom_printHex_xy(bint1, bint2, n+m);
@@ -65,7 +65,7 @@ int main() {
         // ADD(&bint1, &bint2, &bint3);
 
         start = clock();
-        MUL_Core_ImpTxtBk(&bint1, &bint2, &bint3);
+        MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
         end = clock();
         cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
@@ -87,15 +87,15 @@ int main() {
         /** SAGE
          * print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
         */
-        printf("print(int(hex(");
-        printHex2(bint1);printf(" * ");printHex2(bint2);
-        printf("), 16) == int(\"");
-        printHex2(bint3);printf("\", 16))\n");
+        // printf("print(int(hex(");
+        // printHex2(bint1);printf(" * ");printHex2(bint2);
+        // printf("), 16) == int(\"");
+        // printHex2(bint3);printf("\", 16))\n");
 
         delete_bint(&bint1);
         delete_bint(&bint2);
         delete_bint(&bint3);
-        // printf("%.8f\n", cpu_time_used);
+        printf("%.8f\n", cpu_time_used);
         idx++;
     }
 }

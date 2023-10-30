@@ -121,8 +121,10 @@ void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  * Output: Z = XY in [0,W^{n+m}) = [0,W^{2(p+q)})
 */
 // void mul_core_ImpTxtBk_xyz(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
-void mul_core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
-void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 #endif // OPERATION_H
