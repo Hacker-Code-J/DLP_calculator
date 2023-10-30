@@ -7,12 +7,33 @@
 #ifndef OPERATION_H
 #define OPERATION_H
 
-// extern const BINT* BINT_ZERO;    //zero integer
-// extern const BINT* BINT_ONE;     //one integer
-// extern const BINT* BINT_NEG_ONE; //negative one integer
-
+/**
+ * Computes the bitwise NOT of the given BINT and stores the result in another BINT.
+ * @param pptrbint_dst  Double Pointer to the destination BINT pointer where the result will be stored.
+ * @param pptrbint_src  Dobule Pointer to the source BINT 
+ */
+void NOT_BINT(BINT** ptrbint_dst, BINT** pptrBint_src);
+/**
+ * Computes the bitwise AND of two given BINTs and stores the result in another BINT.
+ * @param ptrX   Pointer to the first source BINT.
+ * @param ptrY   Pointer to the second source BINT.
+ * @param pptrZ  Pointer to the destination BINT pointer where the result will be stored.
+ */
 void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+/**
+ * Computes the bitwise OR of two given BINTs and stores the result in another BINT.
+ * @param ptrX   Pointer to the first source BINT.
+ * @param ptrY   Pointer to the second source BINT.
+ * @param pptrZ  Pointer to the destination BINT pointer where the result will be stored.
+ */
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+/**
+ * Computes the bitwise XOR of two given BINTs and stores the result in another BINT.
+ * @param ptrX   Pointer to the first source BINT.
+ * @param ptrY   Pointer to the second source BINT.
+ * @param pptrZ  Pointer to the destination BINT pointer where the result will be stored.
+ */
+void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 
 // Function prototypes for BINT arithmetic operations.
 
@@ -22,15 +43,37 @@ void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
  * 
  * W = 2^w
 */
+/**
+ * Adds two WORD values along with a carry and stores the result and carry-over.
+ * @param x      First WORD value.
+ * @param y      Second WORD value.
+ * @param k      Initial carry value.
+ * @param ptrQ   Pointer where the resulting carry will be stored.
+ * @param ptrR   Pointer where the result will be stored.
+ */
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR);
 
 // Z = X + Y with wordlen(X) >= wordlen(Y)
 void add_xyz(BINT* X, BINT* Y, BINT* Z);
+
+/**
+ * Core logic to add two BINT values. wordlen(X) >= wordlen(Y)
+ * @param pptrX  Pointer to the first source BINT pointer.
+ * @param pptrY  Pointer to the second source BINT pointer.
+ * @param pptrZ  Pointer to the destination BINT pointer where the result will be stored.
+ */
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 
 // Integrate ADD
 void ADD_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+/**
+ * Adds two BINT values and stores the result in another BINT.
+ * @param pptrX  Pointer to the first source BINT pointer.
+ * @param pptrY  Pointer to the second source BINT pointer.
+ * @param pptrZ  Pointer to the destination BINT pointer where the result will be stored.
+ */
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 
@@ -42,9 +85,10 @@ void sub_xby(WORD x, WORD b, WORD y, WORD* res, WORD* borrow);
 
 // Z = X - Y with X >= Y >= 0.
 void sub_xyz(BINT* X, BINT* Y, BINT* Z);
+void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 // Integrate SUB
-void SUB_xyz(BINT* X, BINT* Y, BINT* Z);
+void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 // Author: Moon Ye-chan
 // void mult_xyc(WORD x, WORD y , WORD* C);

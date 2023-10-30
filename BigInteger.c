@@ -6,12 +6,6 @@
 #include <string.h>
 #include <memory.h>
 
-// WORD arrOne[1] = {0x01};
-
-// const BINT BINT_ZERO = {false, 0, NULL};
-// const BINT BINT_ONE = {false, 1, arrOne};
-// const BINT BINT_NEG_ONE = {true, 1, arrOne};
-
 BINT* init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
     // Allocate memory for BINT structure
     *pptrBint = (BINT*)malloc(sizeof(BINT));
@@ -69,6 +63,40 @@ void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     (*pptrBint_dst)->sign = (*pptrBint_src)->sign;
 }
 
+void swapBINT(BINT** pptrbint1, BINT** pptrbint2) {
+    BINT* ptrbint1 = *pptrbint1;
+    BINT* ptrbint2 = *pptrbint2;
+
+    if(ptrbint1 != ptrbint2) { // If they aren't the same pointer
+        ptrbint1->sign ^= ptrbint2->sign;
+        ptrbint2->sign ^= ptrbint1->sign;
+        ptrbint1->sign ^= ptrbint2->sign;
+
+        ptrbint1->wordlen ^= ptrbint2->wordlen;
+        ptrbint2->wordlen ^= ptrbint1->wordlen;
+        ptrbint1->wordlen ^= ptrbint2->wordlen;
+
+        WORD* tmpVal = ptrbint1->val;
+        ptrbint1->val = ptrbint2->val;
+        ptrbint2->val = tmpVal;
+    }
+
+    // // Swapping the signs
+    // bool tempSign = ptrbint1->sign;
+    // ptrbint1->sign = ptrbint1->sign;
+    // ptrbint2->sign = tempSign;
+
+    // // Swapping the word lengths
+    // int tempWordlen = ptrbint1->wordlen;
+    // ptrbint1->wordlen = ptrbint2->wordlen;
+    // ptrbint2->wordlen = tempWordlen;
+
+    // // Swapping the pointers
+    // WORD* tempVal = ptrbint1->val;
+    // ptrbint1->val = ptrbint2->val;
+    // ptrbint2->val = tempVal;
+}
+
 void makeEven(BINT* ptrBint) {
     // Check if wordlen is odd
     if ((ptrBint)->wordlen % 2 == 1) {
@@ -88,7 +116,7 @@ void makeEven(BINT* ptrBint) {
 
 void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
     int max_wordlen = MAX(ptrBint1->wordlen, ptrBint2->wordlen);
-    
+
     // Resize ptrBint1 if its wordlen is smaller than max_wordlen
     if(ptrBint1->wordlen < max_wordlen) {
         ptrBint1->val = realloc(ptrBint1->val, max_wordlen * sizeof(WORD));
@@ -127,22 +155,22 @@ void reset_bint(BINT* ptrBint) {
         ptrBint->val[i] = 0;
 }
 
-bool isZero(const BINT* bint) {
-    if (bint->wordlen == 0) return true;
+bool isZero(BINT* ptrbint) {
+    if (ptrbint->wordlen == 0) return true;
 
-    for (int i = 0; i < bint->wordlen; ++i) {
-        if (bint->val[i] != 0) return false;
+    for (int i = 0; i < ptrbint->wordlen; ++i) {
+        if (ptrbint->val[i] != 0) return false;
     }
     
     return true;
 }
-bool isOne(const BINT* bint) {
-    if (bint->wordlen < 1) return false; // Can't be 1 if there are no words.
-    if (bint->val[0] != 1) return false; // First word must be 1.
-    if (bint->sign) return false; // Sign must be positive.
+bool isOne(BINT* ptrbint) {
+    if (ptrbint->wordlen < 1) return false; // Can't be 1 if there are no words.
+    if (ptrbint->val[0] != 1) return false; // First word must be 1.
+    if (ptrbint->sign) return false; // Sign must be positive.
 
-    for (int i = 1; i < bint->wordlen; ++i) {
-        if (bint->val[i] != 0) return false; // Every other word must be 0.
+    for (int i = 1; i < ptrbint->wordlen; ++i) {
+        if (ptrbint->val[i] != 0) return false; // Every other word must be 0.
     }
     
     return true;

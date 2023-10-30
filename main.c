@@ -29,19 +29,29 @@ int main() {
 
     clock_t start, end;
     double cpu_time_used;
-    int t = 10000;
+    int t = 100;
 
     BINT* bint1 = NULL; 
     BINT* bint2 = NULL;
     BINT* bint3 = NULL;
+    
+    /**
+     * if WORD_BITLEN = 32,
+     * 0x020 -> ( 2 * 16 =  32) -> (32 *  32 =  1024-bit)
+     * 0x040 -> ( 4 * 16 =  64) -> (32 *  64 =  2048-bit)
+     * 0x060 -> ( 6 * 16 =  96) -> (32 *  96 =  3072-bit)
+     * 0x0f0 -> (15 * 16 = 240) -> (32 * 240 =  7680-bit)
+     * 
+     * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
+    */
 
     int idx = 0;
     while(idx < t) {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
-        // int n = rand() % 0xa  + 9;
-        // int m = rand() % 0x9  + 1;
-        int n = 10;
-        int m = 10;
+        int n = rand() % 0x60  + 1; //
+        int m = rand() % 0x60  + 1; //
+        // int n = 10;
+        // int m = 14;
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
         // custom_printHex_xy(bint1, bint2, n+m);

@@ -1,3 +1,22 @@
+/*****************************************************************************************************************
+ * BINT bint;
+ * BINT* ptrBint = &bint;
+ * BINT** pptrBint = &ptrBint;
+ * +---------------+
+ * |   pptrBint    |
+ * |---------------|
+ * |  [address]----|-----> +-----------+
+ * +---------------+       |  ptrBint  |
+ *                         |-----------|
+ *                         | [address]-|-----> +----------------------+
+ *                         +-----------+       |        bint          |
+ *                                             |----------------------|
+ *                                             | sign:    false(+)    |
+ *                                             | wordlen: n           |
+ *                                             | val:     [address]---|----> +---------+---------+---+-----------+
+ *                                             +----------------------+      | WORD[0] | WORD[1] |...| WORD[n-1] |
+ *                                                                           +---------+---------+---+-----------+
+*****************************************************************************************************************/
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -19,202 +38,148 @@ typedef u32 WORD;
 #endif
 
 /**
- * Data structure for representing an Integer
- * Every integer in the array signifies a digit in base 2^w, where w = 8 * sizeof(WORD)
- * 
- * BINT bint;
- * BINT* ptrBint = &bint;
- * BINT** pptrBint = &ptrBint;
- * +---------------+
- * |   pptrBint    |
- * |---------------|
- * |  [address]----|-----> +-----------+
- * +---------------+       |  ptrBint  |
- *                         |-----------|
- *                         | [address]-|-----> +----------------------+
- *                         +-----------+       |        bint          |
- *                                             |----------------------|
- *                                             | sign:    false(+)    |
- *                                             | wordlen: n           |
- *                                             | val:     [address]---|----> +---------+---------+---+-----------+
- *                                             +----------------------+      | WORD[0] | WORD[1] |...| WORD[n-1] |
- *                                                                           +---------+---------+---+-----------+                                   
-*/
+ * Represents a large integer in binary format.
+ */
 typedef struct {
-    bool sign;      // the sign of the number (false if 0 or positive, true if negative)
-    int wordlen;    //
-    WORD* val;      // threshold between performing long and karatsuba multiplication
+    bool sign;      // The sign of the number: false if 0 or positive, true if negative.
+    int wordlen;    // The number of WORDs representing the value of the BINT.
+    WORD* val;      // Pointer to the array of WORDs representing the value.
 } BINT;
 
-// extern const BINT BINT_ZERO;    //zero integer
-// extern const BINT BINT_ONE;     //one integer
-// extern const BINT BINT_NEG_ONE; //negative one integer
-
 /**
- * BINT* ptrBint;
- * BINT* init_bint(&ptrBint, k);
- * 
- * Before calling 'init_bint':
- * +-----------+
- * |  ptrBint  |
- * |-----------|
- * |  [null]   |
- * +-----------+
- *
- * Initializing other members of the structure:
- * +-----------+
- * |  ptrBint  |
- * |-----------|
- * | [address]-|-----> +----------------------+
- * +-----------+       |     initialized      |
- *                     |----------------------|
- *                     | sign:    false       |
- *                     | wordlen: k           |
- *                     | val:     [address]---|----> +---------+---------+---+-----------+
- *                     +----------------------+      | WORD[0] | WORD[1] |...| WORD[k-1] |
- *                                                   +---------+---------+---+-----------+ 
- * 
  * allocate memory for the integer
- * @param bint_ptr the point of BINT
- * @param wordlen the initial size of the array
+ * @param bint_ptr  the point of BINT
+ * @param wordlen   the initial size of the array
  * @return the integer pointer
  */
 BINT* init_bint(BINT** pptrBint, int wordlen);
 
 /**
- * BINT* ptrBint;
- * BINT* delete_bint(&ptrBint);
- * 
- * Before calling 'delete_bint':
- * +-----------+
- * |  ptrBint  |
- * |-----------|
- * | [address]-|-----> +---------------------+
- * +-----------+       |     initialized     |
- *                     |---------------------|
- *                              ...
- * Inside 'delete_bint':
- * - Step1:
- * +-----------+
- * |  ptrBint  |
- * |-----------|
- * | [address]-|-----> +---------------------+
- * +-----------+       |   partially free    |
- *                     |---------------------|
- *                     | sign:    false      |
- *                     | wordlen: wordlen    |
- *                     | val:     [freed]    |
- *                     +---------------------+
- * - Step2:
- * +-----------+
- * |  ptrBint  |
- * |-----------|
- * |  [null]   |
- * +-----------+
-*/
+ * Deletes the binary integer object pointed by the given pointer, and sets the pointer to NULL.
+ * @param pptrBint Double pointer to the binary integer to be deleted.
+ */
 void delete_bint(BINT** pptrBint);
 
 /**
- * 
-*/
+ * Sets the value of the binary integer object to zero.
+ * @param pptrBint Double pointer to the binary integer whose value is to be set.
+ */
 void SET_BINT_ZERO(BINT** pptrBint);
+/**
+ * Sets the value of the binary integer object to one.
+ * @param pptrBint Double pointer to the binary integer whose value is to be set.
+ */
 void SET_BINT_ONE(BINT** pptrBint);
+/**
+ * Initializes the binary integer object with custom zero value based on the number of words.
+ * @param pptrBint  Double pointer to the binary integer to be initialized.
+ * @param num_words Number of words for custom zero initialization.
+ */
 void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words);
 
 /**
- * 
-*/
+ * Copies the value from the source binary integer object to the destination binary integer object.
+ * @param pptrBint_dst Double pointer to the destination binary integer object.
+ * @param pptrBint_src Double pointer to the source binary integer object.
+ */
 void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src);
 
+void swapBINT(BINT** ptrbint1, BINT** ptrbint2);
+
+/**
+ * Modifies the binary integer to be an even number, if it isn't already.
+ * @param ptrBint Pointer to the binary integer to be modified.
+ */
 void makeEven(BINT* ptrBint);
 
+/**
+ * Adjusts the sizes of two binary integer objects to be the same, typically by padding the smaller one.
+ * @param ptrBint1 Pointer to the first binary integer object.
+ * @param ptrBint2 Pointer to the second binary integer object.
+ */
 void matchSize(BINT* ptrBint1, BINT* ptrBint2);
 
+/**
+ * Resets the provided BINT structure, setting its value to zero and cleaning any resources.
+ * @param ptrBint Pointer to the BINT that is to be reset.
+ */
 void reset_bint(BINT* ptrBint);
 
-bool isZero(const BINT* bint);
-bool isOne(const BINT* bint);
+/**
+ * Determines if the binary integer object is one.
+ * @param bint Constant pointer to the binary integer object.
+ * @return true if the binary integer is one, false otherwise.
+ */
+bool isZero(BINT* ptrbint);
+/**
+ * Determines if the binary integer object is one.
+ * @param bint Constant pointer to the binary integer object.
+ * @return true if the binary integer is one, false otherwise.
+ */
+bool isOne(BINT* ptrbint);
 
+/**
+ * Converts a hex character to its binary representation.
+ * @param hex        The hex character to be converted.
+ * @param output     Pointer to the output char array to store the binary representation.
+ */
 void hexCharToBinary(char hex, char* output);
+/**
+ * Converts a hex string to its binary representation.
+ * @param hex           Pointer to the hex string to be converted.
+ * @param binaryOutput  Pointer to the output char array to store the binary representation.
+ */
 void hexToBinary(const char* hex, char* binaryOutput);
 
-
-
-typedef struct Node {
-    BINT data;
-    struct Node* next;
-} Node;
-
-typedef struct {
-    Node* front;
-    Node* rear;
-} BINTQueue;
-
-BINTQueue* createQueue();
-void enqueue(BINTQueue* q, BINT data);
-BINT dequeue(BINTQueue* q);
-BINT peek(BINTQueue* q);
-bool isempty(BINTQueue* q);
-void freeQueue(BINTQueue* q);
-
 /**
- * File I/O
-*/
+ * Stores a BINT structure to a file.
+ * @param filename The name of the file where the BINT should be stored.
+ * @param b        Pointer to the BINT to be stored.
+ * @return True if the operation was successful, false otherwise.
+ */
 bool store_bint(const char* filename, BINT* b);
+/**
+ * Stores multiple BINT structures to a file.
+ * @param filename  The name of the file where the BINTs should be stored.
+ * @param bint_array Pointer to an array of BINT pointers to be stored.
+ * @param num_bints The number of BINT structures in the array.
+ * @return True if the operation was successful, false otherwise.
+ */
 bool multi_store_bints(const char* filename, BINT** bint_array, int num_bints);
+/**
+ * Loads a BINT structure from a file.
+ * @param filename The name of the file from which the BINT should be loaded.
+ * @return A pointer to the loaded BINT structure or NULL if there was an error.
+ */
 BINT* load_bint(const char* filename);
+/**
+ * Loads multiple BINT structures from a file.
+ * @param filename  The name of the file from which the BINTs should be loaded.
+ * @param num_bints Pointer to an integer where the number of loaded BINTs will be stored.
+ * @return A pointer to an array of BINT pointers containing the loaded BINTs or NULL if there was an error.
+ */
 BINT** multi_load_bints(const char* filename, int* num_bints);
 
-/**
- * option - 0: '+' | 1: '-' | 2: '*'
- *
-def hex_to_int(hex_str, sign):
-    val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)
-    return -val if sign == "[1]" else val
 
-def int_to_hex(val):
-    sign = "[0]" if val >= 0 else "[1]"
-    abs_val = abs(val)
-    
-    hex_str = hex(abs_val)[2:]
-    hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])
-    
-    return f"{sign} 0x {hex_str}"
+// typedef struct Node {
+//     BINT data;
+//     struct Node* next;
+// } Node;
 
-def check_operation(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_hex, operation):
-    x_int = hex_to_int(x_hex, x_sign)
-    y_int = hex_to_int(y_hex, y_sign)
-    
-    if operation == "add":
-        result_int = x_int + y_int
-    elif operation == "sub":
-        result_int = x_int - y_int
-    elif operation == "mul":
-        result_int = x_int * y_int
-    else:
-        raise ValueError(f"Invalid operation: {operation}")
-    
-    result_hex = int_to_hex(result_int)
-    
-    return result_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_hex).replace(' ', '').lower()
+// typedef struct {
+//     Node* front;
+//     Node* rear;
+// } BINTQueue;
 
-# Sample sets of values for addition, subtraction, and multiplication.
-values = [
-    ("[0]", "0x 00000000 3659e17f e9e44af4", "[0]", "0x 4a9f22e4 623b83af 7dea0427", "[0]", "0x 4a9f22e4 9895652f 67ce4f1b", "add"),
-    ("[0]", "0x 4a9f22e4 9895652f 67ce4f1b", "[0]", "0x 4a9f22e4 623b83af 7dea0427", "[0]", "0x 00000000 3659e17f e9e44af4", "sub"),
-    ("[0]", "0x 00000000 00000000 00000002", "[0]", "0x 00000000 00000000 00000003", "[0]", "0x 00000000 00000000 00000006", "mul"),
-]
+// BINTQueue* createQueue();
+// void enqueue(BINTQueue* q, BINT data);
+// BINT dequeue(BINTQueue* q);
+// BINT peek(BINTQueue* q);
+// bool isempty(BINTQueue* q);
+// void freeQueue(BINTQueue* q);
 
-for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values):
-    is_correct = check_operation(x_sign, x, y_sign, y, expected_sign, expected, op)
-    print(is_correct)
- *
-*/
-// void printSage(BINTQueue* queue,  int opt, int loop);
+///////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * 
-*/
 void printHex(BINT* X);
 void printHex2(BINT* X);
 
@@ -251,8 +216,8 @@ void assgin_x2y(BINT* X, BINT** Y);
 
 //Compare
 // Return values:
-//  0 if X == Y
 //  1 if X >= Y
+//  0 if X < Y
 bool compare_abs_bint(BINT** pptrX, BINT** pptrY);
 int compare_bint(const BINT* a, const BINT* b);
 

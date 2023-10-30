@@ -5,12 +5,16 @@
 #include "BigInteger.h"
 #include "operation.h"
 
-// WORD One[1] = {0x01};
+void NOT_BINT(BINT** pptrbint_dst, BINT** pptrbint_src) {
+    BINT* ptrbint_dst = *pptrbint_dst;
+    BINT* ptrbint_src = *pptrbint_src;
+    for (int i = 0; i < ptrbint_src->wordlen; i++) {
+        ptrbint_dst->val[i] = ~(ptrbint_src->val[i]);
+    }
+    ptrbint_dst->wordlen = ptrbint_src->wordlen; // The result size will be the same as the input
+    // (*pptrZ)->sign = !(ptrX->sign);    // Negative if input is positive and vice versa
+}
 
-// const BINT* BINT_ZERO = {false, 0, NULL};
-// const BINT* BINT_ONE = {false, 1, One};
-
-// AND operation
 void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     int min_len = ptrX->wordlen < ptrY->wordlen ? ptrX->wordlen : ptrY->wordlen;
     for (int i = 0; i < min_len; i++) {
@@ -20,7 +24,6 @@ void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
 
-// OR operation
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     int min_len = ptrX->wordlen < ptrY->wordlen ? ptrX->wordlen : ptrY->wordlen;
     for (int i = 0; i < min_len; i++) {
@@ -30,6 +33,16 @@ void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
 
+void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
+    int min_len = ptrX->wordlen < ptrY->wordlen ? ptrX->wordlen : ptrY->wordlen;
+    for (int i = 0; i < min_len; i++) {
+        (*pptrZ)->val[i] = ptrX->val[i] ^ ptrY->val[i];
+    }
+    (*pptrZ)->wordlen = min_len; 
+    // Resulting sign depends on the signs of operands. You can decide on a rule, 
+    // but for now, let's say it's negative if either of the operands is negative.
+    // (*pptrZ)->sign = ptrX->sign || ptrY->sign; 
+}
 
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
     if (WORD_BITLEN == 8 || WORD_BITLEN == 32) {
@@ -72,11 +85,20 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     
     int n = ptrX->wordlen;
     int m = ptrY->wordlen;
+
+    if(n < m) {
+        printf("\nwordlen X = %d, wordlen Y = %d\n",ptrX->wordlen, ptrY->wordlen);
+        fprintf(stderr, "Error: wordlen(X) < wordlen(Y) is not vaild in 'add_core_xyz'\n");
+        exit(1);
+    }
+
     int max_len = MAX(n, m);
 
     // Ensure ptrZ has enough allocated space
     if (ptrZ->wordlen < max_len + 1) {
-        ptrZ->val = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
+        WORD* tmp = NULL;
+        tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
+        ptrZ->val = tmp;
         if (!ptrZ->val) {
             fprintf(stderr, "Error: Memory reallocation failed in 'add_core_xyz'\n");
             exit(1);
@@ -231,78 +253,118 @@ void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 //     }
 // }
 
-// void sub_xby(WORD x, WORD b, WORD y, WORD* res, WORD* borrow) {
-//     /****************
-//     *brrow = 0;
-//     *res = x-borrow;
-//     if(x < b)
-//         *borrow = 1;
-//     if(*res < y)
-//         *borrow += 1;
-//     *res = *res - y;
-//     ****************/
-//     //Optimize
-//     *res = x-b;
-//     *borrow = (x < b);
-//     *borrow += (*res < y);
-//     *res -= y;
+void sub_xby(WORD x, WORD b, WORD y, WORD* res, WORD* borrow) {
+    /****************
+    *brrow = 0;
+    *res = x-borrow;
+    if(x < b)
+        *borrow = 1;
+    if(*res < y)
+        *borrow += 1;
+    *res = *res - y;
+    ****************/
+    //Optimize
+    *res = x-b;
+    *borrow = (x < b);
+    *borrow += (*res < y);
+    *res -= y;
     
-//     //printf("%08x - %d - %08x = -%08x * W + %08x\n", x, b, y, *borrow, *res);
-// }
+    //printf("%08x - %d - %08x = -%08x * W + %08x\n", x, b, y, *borrow, *res);
+}
 
-// void sub_xyz(BINT* X, BINT* Y, BINT* Z) {//X>=Y>0
-//     int n = X->wordlen;
-//     int m = Y->wordlen;
+void sub_xyz(BINT* X, BINT* Y, BINT* Z) {//X>=Y>0
+    int n = X->wordlen;
+    int m = Y->wordlen;
 
-//     WORD* tmp;
-//     tmp = (WORD*)realloc(Y->val,n*sizeof(WORD));
-//     Y->val = tmp;
+    WORD* tmp;
+    tmp = (WORD*)realloc(Y->val,n*sizeof(WORD));
+    Y->val = tmp;
 
-//     for(int i=m; i<n; i++)
-//         Y->val[i] = 0;
+    for(int i=m; i<n; i++)
+        Y->val[i] = 0;
 
-//     WORD b = 0;
-//     WORD res, borrow;
+    WORD b = 0;
+    WORD res, borrow;
 
-//     //
-//     for(int i=0; i<n; i++) {
-//         sub_xby(X->val[i], b, Y->val[i], &res, &borrow);
-//         Z->val[i] = res;
-//     }
+    //
+    for(int i=0; i<n; i++) {
+        sub_xby(X->val[i], b, Y->val[i], &res, &borrow);
+        Z->val[i] = res;
+    }
     
-//     //refine_BINT(Z);
-// }
+    //refine_BINT(Z);
+}
 
-// void SUB_xyz(BINT* X, BINT* Y, BINT* Z) {
-//     if(X->sign==false && Y->sign==false) {
-//         if(compare_xy(X,Y) != -1)
-//             sub_xyz(X,Y,Z);
-//         else {
-//             Z->sign = true;
-//             sub_xyz(Y,X,Z);
-//         }
-//     } else if(X->sign==false && Y->sign==true) {
-//         if(compare_xy(X,Y) != -1)
-//             add_xyz(X,Y,Z);
-//         else
-//             add_xyz(Y,X,Z);
-//     } else if(X->sign==true && Y->sign==false) {
-//         if(compare_xy(X,Y) != -1) {
-//             Z->sign = true;
-//             add_xyz(X,Y,Z);
-//         } else {
-//             Z->sign = true;
-//             add_xyz(Y,X,Z);
-//         }
-//     } else {
-//         if(compare_xy(X,Y) != -1){
-//             Z->sign = true;
-//             sub_xyz(X,Y,Z);
-//         } else {
-//             sub_xyz(Y,X,Z);
-//         }
-//     }
-// }
+void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {//X>=Y>0
+    BINT* ptrX = *pptrX;
+    BINT* ptrY = *pptrY;
+    BINT* ptrZ = *pptrZ;
+    
+    int n = ptrX->wordlen;
+    int m = ptrY->wordlen;
+
+    if(ptrY->sign == true) {
+        fprintf(stderr, "Error: 'ptrY->sign' is negative 'sub_core_xyz'\n");
+        exit(1);
+    }
+    if(n < m) {
+        printf("\nwordlen X = %d, wordlen Y = %d\n",ptrX->wordlen, ptrY->wordlen);
+        fprintf(stderr, "Error: wordlen(X) < wordlen(Y) is not vaild in 'sub_core_xyz'\n");
+        exit(1);
+    }
+
+    WORD* tmp;
+    tmp = (WORD*)realloc(ptrY->val,n*sizeof(WORD));
+    ptrY->val = tmp;
+
+    for(int i=m; i<n; i++)
+        ptrY->val[i] = 0;
+
+    WORD b = 0;
+    WORD res, borrow;
+
+    //
+    for(int i=0; i<n; i++) {
+        sub_xby(ptrX->val[i], b, ptrY->val[i], &res, &borrow);
+        ptrZ->val[i] = res;
+    }
+    
+    //refine_BINT(Z);
+}
+
+void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    BINT* ptrX = *pptrX;
+    BINT* ptrY = *pptrY;
+    BINT* ptrZ = *pptrZ;
+    if(ptrX->sign==false && ptrY->sign==false) {
+        if(compare_abs_bint(pptrX,pptrY))
+            sub_core_xyz(pptrX,pptrY,pptrZ);
+        else {
+            ptrZ->sign = true;
+            sub_core_xyz(pptrY,pptrX,pptrZ);
+        }
+    } else if(ptrX->sign==false && ptrY->sign==true) {
+        if(compare_abs_bint(pptrX,pptrY))
+            add_core_xyz(pptrX,pptrY,pptrZ);
+        else
+            add_core_xyz(pptrY,pptrX,pptrZ);
+    } else if(ptrX->sign==true && ptrY->sign==false) {
+        if(compare_abs_bint(pptrX,pptrY)) {
+            ptrZ->sign = true;
+            add_core_xyz(pptrX,pptrY,pptrZ);
+        } else {
+            ptrZ->sign = true;
+            add_core_xyz(pptrY,pptrX,pptrZ);
+        }
+    } else {
+        if(compare_abs_bint(pptrX,pptrY)){
+            ptrZ->sign = true;
+            sub_core_xyz(pptrX,pptrY,pptrZ);
+        } else {
+            sub_core_xyz(pptrY,pptrX,pptrZ);
+        }
+    }
+}
 
 // void mul_xyc(WORD x, WORD y , WORD* C){
 //     WORD A0,A1,B0,B1,T0,T1,C0,C1,T;
@@ -554,6 +616,7 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
             exit(1);
         }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
+    BINT* ptrZ = *pptrZ;
 
     int p = ptrX->wordlen / 2;
     int q = ptrY->wordlen / 2;
@@ -596,7 +659,11 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         // printf("--T0: ");printHex2(ptrT0);printf("\n");
         // printf("--T1: ");printHex2(ptrT1);printf("\n\n");
 
-        add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+        if (ptrT1->wordlen > ptrT0->wordlen)
+            add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+        else
+            add_core_xyz(&ptrT0, &ptrT1, &ptrT);
+
         // printf("\n\nprint(int(hex(");
         // printHex2(ptrT1);printf(" + ");printHex2(ptrT0);
         // printf("), 16) == int(\"");
@@ -608,7 +675,10 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         // printf("\n\nprint(int(hex(");
         // printHex2(ptrT);printf(" + ");printHex2(*pptrZ);
         // printf("), 16) == int(\"");
-        add_core_xyz(&ptrT, pptrZ, pptrZ);
+        if (ptrZ->wordlen > ptrT->wordlen) // wordlen Z >= wordlen T
+            add_core_xyz(pptrZ, &ptrT, pptrZ);
+        else 
+            add_core_xyz(&ptrT, pptrZ, pptrZ);
         // printHex2(*pptrZ);printf("\", 16))\n\n");
 
     }
