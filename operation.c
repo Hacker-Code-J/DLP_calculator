@@ -571,8 +571,6 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
            
             mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrTmp0);
             mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrTmp1);
-            if(isZero(ptrTmp0) && isZero(ptrTmp1))
-                goto point;
             // printf("\nx[%d]*y[%d]=Tmp0: ",2*k,j);printHex2(ptrTmp0);printf("\n");
             // printf("x[%d]*y[%d]=Tmp1: ",2*k+1,j);printHex2(ptrTmp1);printf("\n");
             if (!k) {
@@ -614,7 +612,6 @@ void MUL_Core_ImpTxtBk(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         // printHex2(*pptrZ);printf("\", 16))\n\n");
 
     }
-point:
     // Cleanup
     delete_bint(&ptrT);
     delete_bint(&ptrT0);

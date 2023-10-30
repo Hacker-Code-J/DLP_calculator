@@ -38,8 +38,10 @@ int main() {
     int idx = 0;
     while(idx < t) {
         // printf("\n-----[Test %d]-----\n\n", idx+1);
-        int n = rand() % 0xa  + 1;
-        int m = rand() % 0x9  + 1;
+        // int n = rand() % 0xa  + 9;
+        // int m = rand() % 0x9  + 1;
+        int n = 10;
+        int m = 10;
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
         // custom_printHex_xy(bint1, bint2, n+m);
