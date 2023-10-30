@@ -2,7 +2,7 @@
 
 [![Version Badge](https://img.shields.io/badge/version-1.0.0-blue)]() [![License Badge](https://img.shields.io/badge/license-MIT-green)]()
 
-💼 This repository provides implementations of **Big Integer** operations and **Discrete Logarithm Problem (DLP)** calculators.
+This repository provides implementations of **Big Integer** operations and **Discrete Logarithm Problem** calculators.
 
 - big_int_dlp_library/
     - docs/
