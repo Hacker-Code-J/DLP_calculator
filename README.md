@@ -1,69 +1,103 @@
-# 🌐 Large Integer Arithmetic Library & Discrete Logarithm Calculator
+# 🌐 Big Integer Arithmetic Library & Discrete Logarithm Calculator
 
 [![Version Badge](https://img.shields.io/badge/version-1.0.0-blue)]() [![License Badge](https://img.shields.io/badge/license-MIT-green)]()
 
-This project provides a comprehensive large integer arithmetic library, with a focus on cryptographic calculations, particularly in solving discrete logarithm problems using Pollard's Rho and the Baby-step/Giant-step algorithms.
+💼 This repository provides implementations of **Big Integer** operations and **Discrete Logarithm Problem (DLP)** calculators.
+
+- big_int_dlp_library/
+    - docs/
+        - installation.md
+        - usage.md
+        - ...
+    - src/
+        - c/
+            - bigint/
+                - bigint.h
+                - bigint.c
+            - dlp/
+                - dlp.h
+                - dlp.c
+        - python/
+            - bigint/
+                - __init__.py
+                - bigint.py
+            - dlp/
+                - __init__.py
+                - dlp.py
+    - tests/
+        - c/
+            - bigint/
+                - test_bigint.c
+            - dlp/
+                - test_dlp.c
+        - python/
+            - bigint/
+                - test_bigint.py
+            - dlp/
+                - test_dlp.py
+    - examples/
+        - c/
+            - example_bigint.c
+            - example_dlp.c
+        - python/
+            - example_bigint.py
+            - example_dlp.py
+    - scripts/
+        - build.sh
+        - test.sh
+    - README.md
+    - LICENSE
+    - .gitignore
+    - setup.py (for the Python package)
+    - Makefile (for the C code compilation)
+
 
 ## 📌 Table of Contents
 
-- [🚀 Features](#features)
-- [🛠 Getting Started](#getting-started)
+- [🛠 Installation](#installation)
 - [💡 Usage](#usage)
-  - [📊 Large Integer Arithmetic](#large-integer-arithmetic)
-  - [🔑 Discrete Logarithm Calculator](#discrete-logarithm-calculator)
-- [🤝 Contribute](#contribute)
+- [📖 Docs](#docs)
+- [🤝 Contributing](#contributing)
 - [📜 License](#license)
 
-## 🚀 Features
+## 🛠 Installation
 
-- **💼 Large Integer Arithmetic**: A robust library that supports addition, subtraction, multiplication, division, and modular arithmetic operations for integers larger than machine limits.
-- **🔒 Discrete Logarithm Solutions**: Efficient implementations of Pollard's Rho and Baby-step/Giant-step algorithms for solving discrete logarithms.
-
-## 🛠 Getting Started
-
-### Prerequisites
-
-- GCC or any other standard C++ compiler
-- [Optional] Any testing framework for running the tests
-
-### Installation
+### C
+- **Clone and Build**:
 
 ```bash
-git clone https://github.com/Hacker-Code-J/DLP_calculator.git
-cd large-int-library-and-disc-log-calc
+git clone https://github.com/yourusername/big_int_dlp_library.git
+cd big_int_dlp_library
 make
 ```
-
-## 💡 Usage
-
-### 📊 Large Integer Arithmetic
-
-```cpp
-#include "BigInteger.h"
-
-// Usage example
-BigInteger a("12345678901234567890");
-BigInteger b("98765432109876543210");
-
-BigInteger sum = a + b;
+### Python
+- **Install via pip**:
+```python
+pip install ./path/to/repo
+```
+### 💡 Usage
+## C
+- **Big Integer**:
+```bash
+./bigint
+```
+- **DLP**:
+```bash
+./dlp
 ```
 
-### 🔑 Discrete Logarithm Calculator
-
-```cpp
-#include "DiscreteLogarithmCalculator.h"
-
-// Using Pollard's Rho
-int x = DiscreteLogarithmCalculator::pollardsRho(base, target, modulus);
-
-// Using Baby-step/Giant-step
-int x = DiscreteLogarithmCalculator::babyStepGiantStep(base, target, modulus);
+### Python
+1. **Install via pip**:
+```python
+from big_int_dlp_library.python import bigint, dlp
 ```
 
-## 🤝 Contribute
+### Docs
+📁 Dive deeper with the docs/ directory.
 
-Contributions are always welcome! Please read the [contribution guidelines](CONTRIBUTING.md) first.
+### 🤝 Contributing
+🖋 Want to contribute? Awesome! Please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 📜 License
+### 📜 License
+🔐 This project is under a license. Kindly check the [LICENSE.md](LICENSE.md).
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
