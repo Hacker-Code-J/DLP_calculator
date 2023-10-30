@@ -29,7 +29,7 @@ int main() {
 
     clock_t start, end;
     double cpu_time_used;
-    int t = 10000;
+    int t = 1;
 
     BINT* bint1 = NULL; 
     BINT* bint2 = NULL;
@@ -44,40 +44,34 @@ int main() {
      * 
      * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
     */
-
     int idx = 0;
     while(idx < t) {
-        // printf("\n-----[Test %d]-----\n\n", idx+1);
-        // int n = rand() % 0x60  + 1; //
-        // int m = rand() % 0x60  + 1; //
-        int n = 0x20;
-        int m = 0x20;
+        // int n = rand() % 0x60  + 1;
+        // int m = rand() % 0x60  + 1;
+        int n = 0x5;
+        int m = 0x5;
+        
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
-        // custom_printHex_xy(bint1, bint2, n+m);
-        // SET_BINT_CUSTOM_ZERO(&bint2, 3);
-        // bint3 = init_bint(&bint3, max);
-        // bint3 = init_bint(&bint3, n+m);
+        // printf("Test[%d]---------------------------------------------------\n", idx+1);
+        custom_printHex_xy(bint1, bint2, n+m);
 
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
-        // mul_xyz(bint1->val[0], bint2->val[0], &bint3);
-        // ADD(&bint1, &bint2, &bint3);
-
+        
         start = clock();
-        MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
+        // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
+        // mul_core_Krtsb_test(&bint1, &bint2, &bint3);
+        SUB(&bint1, &bint2, &bint3);
         end = clock();
         cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
-        // mul_core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
-        // mul_core_TxtBk_xyz(&bint1, &bint2, &bint3);
-        // makeEven(&bint1); makeEven(&bint2);
+        custom_printHex(bint1, bint2, bint3, 2);
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
-        // custom_printHex(bint1, bint2, bint3, 2);
-        // printHex(bint3);printf("\n");
-        // printHex(bint3);printf("\n");
 
+        // printHex(bint3);printf("\n");
+        
         // const char *hexData = "1A3F";  // Sample data
         // char binaryOutput[5 * strlen(hexData) + 1];  // Max potential output size (4 bits for each hex + null terminator)
 
@@ -86,16 +80,22 @@ int main() {
 
         /** SAGE
          * print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
-        */
+        */ 
         // printf("print(int(hex(");
         // printHex2(bint1);printf(" * ");printHex2(bint2);
         // printf("), 16) == int(\"");
         // printHex2(bint3);printf("\", 16))\n");
 
+        printf("print(int(hex(abs(");
+        printHex2(bint1);printf(" - ");printHex2(bint2);
+        printf(")), 16) == int(\"");
+        printHex2(bint3);printf("\", 16))\n");
+
+
         delete_bint(&bint1);
         delete_bint(&bint2);
         delete_bint(&bint3);
-        printf("%.8f\n", cpu_time_used);
+        // printf("%.8f\n", cpu_time_used);
         idx++;
     }
 }

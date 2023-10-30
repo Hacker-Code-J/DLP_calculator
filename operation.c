@@ -96,7 +96,10 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     // Ensure ptrZ has enough allocated space
     if (ptrZ->wordlen < max_len + 1) {
-        WORD* tmp = NULL;
+        // WORD* tmp = NULL;
+        // tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
+        // ptrZ->val = tmp;
+        WORD* tmp = ptrZ->val;
         tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
         ptrZ->val = tmp;
         if (!ptrZ->val) {
@@ -295,6 +298,78 @@ void sub_xyz(BINT* X, BINT* Y, BINT* Z) {//X>=Y>0
     //refine_BINT(Z);
 }
 
+void sub_borrow(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
+    if (WORD_BITLEN == 8 || WORD_BITLEN == 32) {
+        u64 result = (u64)x - (u64)y - (u64)k;
+        *ptrR = (WORD)result;
+        *ptrQ = (x < y + k) ? 1 : 0;
+        printf("\n\nx:0x%08x\ny:0x%08x\nb:0x%x\nborrow: 0x%x\nresult: 0x%x\n\n", x,y,k,*ptrQ, *ptrR);
+    } else if (WORD_BITLEN == 64) {
+        const WORD HALF_MASK = (1ULL << 32) - 1;
+        const u64 LOW_X = x & HALF_MASK;
+        const u64 HIGH_X = x >> 32;
+        const u64 LOW_Y = y & HALF_MASK;
+        const u64 HIGH_Y = y >> 32;
+
+        // Subtract the lower halves
+        u64 low_result = LOW_X - LOW_Y - (k & HALF_MASK);
+
+        // Check if there was a borrow from the lower half
+        u64 low_borrow = (LOW_X < LOW_Y + (k & HALF_MASK)) ? 1 : 0;
+
+        // Subtract the upper halves, including any borrow from the lower half
+        u64 high_result = HIGH_X - HIGH_Y - (k >> 32) - low_borrow;
+
+        // Check if there was a borrow from the higher half
+        *ptrQ = (HIGH_X < HIGH_Y + (k >> 32) + low_borrow) ? 1 : 0;
+
+        // Return results
+        *ptrR = (high_result << 32) | (low_result & HALF_MASK);
+    } else {
+        fprintf(stderr, "Unsupported WORD size in 'sub_borrow'\n");
+        exit(1);
+    }
+    // if (WORD_BITLEN == 8 || WORD_BITLEN == 32) {
+    //     u64 result = (u64)x - (u64)y - (u64)k;
+    //     *ptrR = (WORD)result;
+    //     *ptrQ = (result < 0) ? 1 : 0;  // Borrow is 1 if result is negative
+    // } else if (WORD_BITLEN == 64) {
+    //     const WORD HALF_MASK = (1ULL << 32) - 1;
+    //     const u64 LOW_X = x & HALF_MASK;
+    //     const u64 HIGH_X = x >> 32;
+    //     const u64 LOW_Y = y & HALF_MASK;
+    //     const u64 HIGH_Y = y >> 32;
+
+    //     // Subtract the lower halves
+    //     u64 low_result = LOW_X - LOW_Y - (k & HALF_MASK);
+
+    //     // Check if there was a borrow from the lower half
+    //     u64 low_borrow = (low_result < 0) ? 1 : 0;
+
+    //     // Adjust result if it's negative
+    //     if (low_result < 0) {
+    //         low_result += (1ULL << 32);
+    //     }
+
+    //     // Subtract the upper halves
+    //     u64 high_result = HIGH_X - HIGH_Y - (k >> 32) - low_borrow;
+
+    //     // Check if there was a borrow from the higher half
+    //     *ptrQ = (high_result < 0) ? 1 : 0;
+
+    //     // Adjust high result if it's negative
+    //     if (high_result < 0) {
+    //         high_result += (1ULL << 32);
+    //     }
+
+    //     // Return results
+    //     *ptrR = (high_result << 32) | (low_result & HALF_MASK);
+    // } else {
+    //     fprintf(stderr, "Unsupported WORD size in 'sub_borrow'\n");
+    //     exit(1);
+    // }
+}
+
 void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {//X>=Y>0
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
@@ -313,19 +388,21 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {//X>=Y>0
         exit(1);
     }
 
-    WORD* tmp;
-    tmp = (WORD*)realloc(ptrY->val,n*sizeof(WORD));
-    ptrY->val = tmp;
+    // WORD* tmp;
+    // tmp = (WORD*)realloc(ptrY->val,n*sizeof(WORD));
+    // ptrY->val = tmp;
 
-    for(int i=m; i<n; i++)
-        ptrY->val[i] = 0;
+    // for(int i=m; i<n; i++)
+    //     ptrY->val[i] = 0;
 
     WORD b = 0;
-    WORD res, borrow;
+    WORD res = 0;
+    WORD borrow = 0;
 
     //
-    for(int i=0; i<n; i++) {
-        sub_xby(ptrX->val[i], b, ptrY->val[i], &res, &borrow);
+    for(int i=0; i<MAX(n,m); i++) {
+        // sub_xby(ptrX->val[i], b, ptrY->val[i], &res, &borrow);
+        sub_borrow(ptrX->val[i], ptrY->val[i], b, &borrow, &res);
         ptrZ->val[i] = res;
     }
     
@@ -333,9 +410,20 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {//X>=Y>0
 }
 
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "SUB");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "SUB");
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
+
+    delete_bint(pptrZ);
+    *pptrZ = init_bint(pptrZ, MAX(ptrX->wordlen, ptrY->wordlen));
+    if (!*pptrZ) {
+        fprintf(stderr, "Error: Memory allocation failed in 'MUL_Core_ImpTxtBk_xyz'\n");
+        exit(1);
+    }
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
     BINT* ptrZ = *pptrZ;
+
     if(ptrX->sign==false && ptrY->sign==false) {
         if(compare_abs_bint(pptrX,pptrY))
             sub_core_xyz(pptrX,pptrY,pptrZ);
@@ -561,8 +649,8 @@ void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
 }
 
 void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_ImpTxtBk_test");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_ImpTxtBk_test");
 
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
@@ -576,10 +664,10 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(pptrZ);
     *pptrZ = init_bint(pptrZ, n+m);
     if (!*pptrZ) {
-        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
+        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_ImpTxtBk_test'\n");
         exit(1);
     }
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_ImpTxtBk_test");
     BINT* ptrZ = *pptrZ;
 
     int p = ptrX->wordlen / 2;
@@ -601,8 +689,8 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
             // printf("\nx[%d]*y[%d]=Tmp0: ",2*k,j);printHex2(ptrTmp0);printf("\n");
             // printf("x[%d]*y[%d]=Tmp1: ",2*k+1,j);printHex2(ptrTmp1);printf("\n");
             if (!k) {
-                copy_BINT(&ptrT0, &ptrTmp0);
-                copy_BINT(&ptrT1, &ptrTmp1);
+                copyBINT(&ptrT0, &ptrTmp0);
+                copyBINT(&ptrT1, &ptrTmp1);
                 // printf("--T0: ");printHex2(ptrT0);printf("\n");
                 // printf("--T1: ");printHex2(ptrT1);printf("\n");
             } else {
@@ -654,8 +742,8 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrTmp1);
 }
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk_xyz");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk_xyz");
 
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
@@ -669,20 +757,18 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(pptrZ);
     *pptrZ = init_bint(pptrZ, n+m);
     if (!*pptrZ) {
-        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
+        fprintf(stderr, "Error: Memory allocation failed in 'MUL_Core_ImpTxtBk_xyz'\n");
         exit(1);
     }
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk_xyz");
     BINT* ptrZ = *pptrZ;
 
     int p = ptrX->wordlen / 2;
     int q = ptrY->wordlen / 2;
 
     BINT* ptrT = init_bint(&ptrT, n+m);
-    BINT* ptrT0 = init_bint(&ptrT0, 2*p);
-    BINT* ptrT1 = init_bint(&ptrT1, 2*p);
-    BINT* ptrTmp0 = init_bint(&ptrTmp0, 2*p);
-    BINT* ptrTmp1 = init_bint(&ptrTmp1, 2*p);
+    BINT* ptrT0 = init_bint(&ptrT0, 2*p); BINT* ptrT1 = init_bint(&ptrT1, 2*p);
+    BINT* ptrTmp0 = init_bint(&ptrTmp0, 2*p); BINT* ptrTmp1 = init_bint(&ptrTmp1, 2*p);
 
     for(int j = 0; j < 2 * q; j++) {
         for(int k = 0; k < p; k++) {
@@ -691,8 +777,8 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
             mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrTmp0);
             mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrTmp1);
             if (!k) {
-                copy_BINT(&ptrT0, &ptrTmp0);
-                copy_BINT(&ptrT1, &ptrTmp1);
+                copyBINT(&ptrT0, &ptrTmp0);
+                copyBINT(&ptrT1, &ptrTmp1);
             } else {
                 left_shift_word(&ptrTmp0, 2*k);
                 refine_BINT_word(ptrTmp0, 2*k);
@@ -722,8 +808,8 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 }
 
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_Krtsb_test");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_Krtsb_test");
 
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
@@ -731,15 +817,60 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     int n = ptrX->wordlen;
     int m = ptrX->wordlen;
 
-    matchSize(ptrX, ptrY);
-    makeEven(ptrX); makeEven(ptrY);
-
     delete_bint(pptrZ);
     *pptrZ = init_bint(pptrZ, n+m);
     if (!*pptrZ) {
-        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
+        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_Krtsb_test'\n");
         exit(1);
     }
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk");
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_Krtsb_test");
     BINT* ptrZ = *pptrZ;
+
+    if (FLAG >= MIN(n,m)) {
+        mul_core_ImpTxtBk_test(pptrX,pptrY,pptrZ);
+        return;  // This will immediately terminate the function.
+    }
+
+    int l = MAX(n,m+1) >> 1;
+
+    BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
+    BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
+    BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
+    // BINT* ptrR = NULL;
+    // BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
+
+    copyBINT(&ptrX1, pptrX);
+    // printf("X1: ");printHex2(ptrX1);printf("\n");
+    right_shift_word(&ptrX1, l);
+    // printf("X1: ");printHex2(ptrX1);printf("\n");
+
+    copyBINT(&ptrX0, pptrX);
+    // printf("X0: ");printHex2(ptrX0);printf("\n");
+    reduction(&ptrX0, l * WORD_BITLEN);
+    // printf("X0: ");printHex2(ptrX0);printf("\n");
+
+    copyBINT(&ptrY1, pptrY);
+    right_shift_word(&ptrY1, l);
+    copyBINT(&ptrY0, pptrY);
+    reduction(&ptrY0, l * WORD_BITLEN);
+
+    mul_core_Krtsb_test(&ptrX1, &ptrY1, &ptrT1);
+    // printf("T1: ");printHex2(ptrT1);printf("\n");
+
+    mul_core_Krtsb_test(&ptrX0, &ptrY0, &ptrT0);
+    // printf("T0: ");printHex2(ptrT0);printf("\n");
+
+    left_shift_word(&ptrT1, 2*l);
+    // printf("shiftT1: ");printHex2(ptrT1);printf("\n");
+
+    OR_BINT(ptrT1,ptrT0, pptrZ);
+
+
+
+    delete_bint(&ptrX0);
+    delete_bint(&ptrX1);
+    delete_bint(&ptrY0);
+    delete_bint(&ptrY1);
+    delete_bint(&ptrT0);
+    delete_bint(&ptrT1);
 }

@@ -82,7 +82,7 @@ void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words);
  * @param pptrBint_dst Double pointer to the destination binary integer object.
  * @param pptrBint_src Double pointer to the source binary integer object.
  */
-void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src);
+void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src);
 
 void swapBINT(BINT** ptrbint1, BINT** ptrbint2);
 
@@ -226,16 +226,21 @@ int Get_bitlen(BINT* x);
 int Get_sign(BINT* x);
 void Flip_sign(BINT* x);
 
+int BIT_LENGTH(BINT** pptrBint);
+
 // //Author: Kim Ye-chan
 // void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
 // void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
 
-/** SHIFT
+/** SHIFT and Reduction
  * 
 */
-void left_shift(BINT** pptrX, int num_bits);
+void left_shift(BINT** pptrbint, int num_bits);
 void right_shift(BINT** pptrX, int num_bits);
 
 void left_shift_word(BINT** pptrX, int shift_amount);
+void right_shift_word(BINT** pptrBint, int shift_amount);
+
+void reduction(BINT** pptrBint, int pwOf2);
 
 #endif // BIGINTEGER_H

@@ -48,19 +48,22 @@ void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words) {
     (*pptrBint)->sign = false;
 }
 
-void copy_BINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
+void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     CHECK_PTR_AND_DEREF(pptrBint_src, "pptrBint_src", "copy_BINT");
-
-    if(*pptrBint_dst != NULL)
+    BINT* ptrBint_dst = *pptrBint_dst;
+    BINT* ptrBint_src = *pptrBint_src;
+    
+    if(ptrBint_dst != NULL)
         delete_bint(pptrBint_dst);
 
-    *pptrBint_dst = (BINT*)calloc(1, sizeof(BINT));
-    (*pptrBint_dst)->val = (WORD*)calloc((*pptrBint_src)->wordlen, sizeof(WORD));
-    for(int i = 0; i < (*pptrBint_src)->wordlen; i++)
-        (*pptrBint_dst)->val[i] = (*pptrBint_src)->val[i];
+    ptrBint_dst = init_bint(pptrBint_dst, ptrBint_src->wordlen);
+    // ptrBint_dst = (BINT*)calloc(1, sizeof(BINT));
+    // (*pptrBint_dst)->val = (WORD*)calloc((*pptrBint_src)->wordlen, sizeof(WORD));
+    for(int i = 0; i < (ptrBint_src)->wordlen; i++)
+        (ptrBint_dst)->val[i] = (*pptrBint_src)->val[i];
     
-    (*pptrBint_dst)->wordlen = (*pptrBint_src)->wordlen;
-    (*pptrBint_dst)->sign = (*pptrBint_src)->sign;
+    (ptrBint_dst)->wordlen = (ptrBint_src)->wordlen;
+    (ptrBint_dst)->sign = (ptrBint_src)->sign;
 }
 
 void swapBINT(BINT** pptrbint1, BINT** pptrbint2) {
@@ -742,9 +745,11 @@ int Get_sign(BINT* x){
 //     }//음수면 양수로 부호 바꾸기
 // }
 
-/**
- * 
-*/
+
+int BIT_LENGTH(BINT** pptrBint) {
+    BINT* ptrBint = *pptrBint;
+    return ptrBint->wordlen * WORD_BITLEN;
+}
 
 // //Author: Kim Ye-chan
 // void MUL_Shift(BINT* X, BINT* result , int N) {
@@ -822,19 +827,19 @@ int Get_sign(BINT* x){
 //     }
 // }
 
-void left_shift(BINT** pptrX, int num_bits) {
-    // if (!pptrX || !*pptrX) return;
-    exit_on_null_error(pptrX, "pptrX", "left_shift");
-    exit_on_null_error(*pptrX, "*pptrX", "left_shift");
+void left_shift(BINT** pptrbint, int num_bits) {
+    // if (!pptrbint || !*pptrbint) return;
+    exit_on_null_error(pptrbint, "pptrbint", "left_shift");
+    exit_on_null_error(*pptrbint, "*pptrbint", "left_shift");
 
-    BINT* ptrX = *pptrX;
+    BINT* ptrbint = *pptrbint;
 
     // WORD_BITLEN = sizeof(WORD) * 8
     int word_shift = num_bits / WORD_BITLEN;  // Number of whole WORDs to shift
     int bit_shift = num_bits % WORD_BITLEN;   // Number of bits within a WORD to shift
 
     // Allocating new memory for the shifted value
-    WORD* new_val = (WORD*)calloc(ptrX->wordlen + word_shift + 1, sizeof(WORD)); // +1 for potential overflow
+    WORD* new_val = (WORD*)calloc(ptrbint->wordlen + word_shift + 1, sizeof(WORD)); // +1 for potential overflow
 
     if (!new_val) {
         // Memory allocation failed
@@ -842,82 +847,20 @@ void left_shift(BINT** pptrX, int num_bits) {
     }
 
     // Handle the shift within a WORD
-    for (int i = 0; i < ptrX->wordlen; i++) {
-        new_val[i + word_shift] |= ptrX->val[i] << bit_shift;
-        if (i + word_shift + 1 < ptrX->wordlen + word_shift + 1) {
-            new_val[i + word_shift + 1] |= ptrX->val[i] >> (WORD_BITLEN - bit_shift);
+    for (int i = 0; i < ptrbint->wordlen; i++) {
+        new_val[i + word_shift] |= ptrbint->val[i] << bit_shift;
+        if (i + word_shift + 1 < ptrbint->wordlen + word_shift + 1) {
+            new_val[i + word_shift + 1] |= ptrbint->val[i] >> (WORD_BITLEN - bit_shift);
         }
     }
 
     // Free old memory and assign new memory to the BINT
-    free(ptrX->val);
-    ptrX->val = new_val;
-    ptrX->wordlen = ptrX->wordlen + word_shift + 1; // Update wordlen
+    free(ptrbint->val);
+    ptrbint->val = new_val;
+    ptrbint->wordlen = ptrbint->wordlen + word_shift + 1; // Update wordlen
 }
 
 // NOTE: Still, be careful with memory management. You'll need to eventually free the val in BINT.
-
-void right_shift(BINT** pptrX, int num_bits) {
-    if (!pptrX || !*pptrX) return;
-
-    BINT* ptrX = *pptrX;
-
-    int word_shift = num_bits / WORD_BITLEN;  // Number of whole WORDs to shift
-    int bit_shift = num_bits % WORD_BITLEN;   // Number of bits within a WORD to shift
-
-    // If the right shift is greater than the total length of our BINT, set it to zero
-    if (word_shift >= ptrX->wordlen) {
-        free(ptrX->val);
-        ptrX->val = (WORD*)calloc(1, sizeof(WORD)); // Allocate memory for a single WORD set to 0
-        if (!ptrX->val) {
-            // Memory allocation failed
-            exit(1);
-        }
-        ptrX->wordlen = 1;
-        return;
-    }
-
-    // Allocate new memory for the shifted value
-    int new_wordlen = ptrX->wordlen - word_shift;
-    WORD* new_val = (WORD*)calloc(new_wordlen, sizeof(WORD));
-
-    if (!new_val) {
-        // Memory allocation failed
-        exit(1);
-    }
-
-    // Handle the shift within a WORD
-    for (int i = 0; i < new_wordlen; i++) {
-        new_val[i] = ptrX->val[i + word_shift] >> bit_shift;
-        if (i + word_shift + 1 < ptrX->wordlen) {
-            new_val[i] |= ptrX->val[i + word_shift + 1] << (WORD_BITLEN - bit_shift);
-        }
-    }
-
-    // Free old memory and assign new memory to the BINT
-    free(ptrX->val);
-    ptrX->val = new_val;
-    ptrX->wordlen = new_wordlen;
-}
-
-// void left_shift_word(BINT** pptrX, int shift_amount) {
-//     if (!pptrX || !*pptrX) {
-//         fprintf(stderr, "Error: Invalid pointer in 'left_shift_word'\n");
-//         return;
-//     }
-//     BINT* ptrX = *pptrX;
-//     if(shift_amount < 0)
-//         fprintf(stderr, "Error: shift_amount is negative!\n");
-
-//     int new_len = ptrX->wordlen + shift_amount;
-//     for(int i = new_len - 1; i >= shift_amount; i--) {
-//         ptrX->val[i] = ptrX->val[i - shift_amount];
-//     }
-//     for(int i = 0; i < shift_amount; i++) {
-//         ptrX->val[i] = 0x00;
-//     }
-//     ptrX->wordlen = new_len;
-// }
 
 void left_shift_word(BINT** pptrX, int shift_amount) {
     // if (!pptrX || !*pptrX) {
@@ -960,4 +903,133 @@ void left_shift_word(BINT** pptrX, int shift_amount) {
     // memmove(ptrX->val + shift_amount, ptrX->val, (new_len - shift_amount) * sizeof(WORD)); // Shifting the values to their new positions
 
     // ptrX->wordlen = new_len;
+}
+
+
+void right_shift(BINT** pptrX, int num_bits) {
+    // if (!pptrX || !*pptrX) return;
+    exit_on_null_error(pptrX, "pptrX", "right_shift");
+    exit_on_null_error(*pptrX, "*pptrX", "right_shift");
+
+    BINT* ptrX = *pptrX;
+
+    int word_shift = num_bits / WORD_BITLEN;  // Number of whole WORDs to shift
+    int bit_shift = num_bits % WORD_BITLEN;   // Number of bits within a WORD to shift
+
+    // If the right shift is greater than the total length of our BINT, set it to zero
+    if (word_shift >= ptrX->wordlen) {
+        free(ptrX->val);
+        ptrX->val = (WORD*)calloc(1, sizeof(WORD)); // Allocate memory for a single WORD set to 0
+        if (!ptrX->val) {
+            // Memory allocation failed
+            exit(1);
+        }
+        ptrX->wordlen = 1;
+        return;
+    }
+
+    // Allocate new memory for the shifted value
+    int new_wordlen = ptrX->wordlen - word_shift;
+    WORD* new_val = (WORD*)calloc(new_wordlen, sizeof(WORD));
+
+    if (!new_val) {
+        // Memory allocation failed
+        exit(1);
+    }
+
+    // Handle the shift within a WORD
+    for (int i = 0; i < new_wordlen; i++) {
+        new_val[i] = ptrX->val[i + word_shift] >> bit_shift;
+        if (i + word_shift + 1 < ptrX->wordlen) {
+            new_val[i] |= ptrX->val[i + word_shift + 1] << (WORD_BITLEN - bit_shift);
+        }
+    }
+
+    // Free old memory and assign new memory to the BINT
+    free(ptrX->val);
+    ptrX->val = new_val;
+    ptrX->wordlen = new_wordlen;
+}
+
+void right_shift_word(BINT** pptrBint, int shift_amount) {
+    CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "right_shift_word");
+
+    BINT* ptrBint = *pptrBint;
+
+    if (shift_amount < 0) {
+        fprintf(stderr, "Error: shift_amount is negative in 'right_shift_word'\n");
+        return;
+    }
+
+    // if (shift_amount >= ptrX->wordlen) {
+    //     fprintf(stderr, "Error: shift_amount exceeds or equals word length in 'right_shift_word'\n");
+    //     return;
+    // }
+
+    int new_len = ptrBint->wordlen - shift_amount;
+
+    // Shift the existing values
+    for (int i = 0; i < new_len; i++) {
+        ptrBint->val[i] = ptrBint->val[i + shift_amount];
+    }
+    for (int i = new_len; i < ptrBint->wordlen; i++) {
+        ptrBint->val[i] = 0x00;
+    }
+
+    // // Reallocate memory for the new word length
+    // WORD* new_val = (WORD*)realloc(ptrBint->val, new_len * sizeof(WORD));
+    // if (!new_val) {
+    //     fprintf(stderr, "Error: Memory reallocation failed in 'right_shift_word'\n");
+    //     exit(1);
+    // }
+    // ptrBint->val = new_val; // Assign the new address to ptrX->val
+
+    ptrBint->wordlen = new_len;
+
+    // Alternatively, for efficiency:
+    // memmove(ptrX->val, ptrX->val + shift_amount, new_len * sizeof(WORD)); // Shifting the values to their new positions
+    // ptrX->val = (WORD*)realloc(ptrX->val, new_len * sizeof(WORD)); // Adjust memory allocation
+    // ptrX->wordlen = new_len;
+}
+
+void reduction(BINT** pptrBint, int pwOf2) {
+    BINT* ptrBint = *pptrBint;
+    if (pwOf2 > BIT_LENGTH(pptrBint) ) return; // Trivial Case
+
+    if (pwOf2 % WORD_BITLEN == 0 && pwOf2 < BIT_LENGTH(pptrBint)) {
+#if WORD_BITLEN == 8
+    WORD* tmp = ptrBint->val;
+    tmp = (WORD*)realloc(tmp, pwOf2 / WORD_BITLEN);
+    ptrBint->val = tmp;
+#elif WORD_BITLEN == 64
+    WORD* tmp = ptrBint->val;
+    tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN));
+    ptrBint->val = tmp;
+#else
+    WORD* tmp = ptrBint->val;
+    tmp = (WORD*)realloc(tmp, 4 * (pwOf2 / WORD_BITLEN));
+    ptrBint->val = tmp;
+#endif
+    ptrBint->wordlen = pwOf2 / WORD_BITLEN;
+    return;
+    }
+
+    ptrBint->val[pwOf2 / WORD_BITLEN] = ptrBint->val[pwOf2 / WORD_BITLEN] && (0xFF >> (pwOf2 % WORD_BITLEN));
+
+#if WORD_BITLEN == 8
+    WORD* tmp = ptrBint->val;
+    tmp = (WORD*)realloc(tmp, (pwOf2 / WORD_BITLEN) + 1);
+    ptrBint->val = tmp;
+#elif WORD_BITLEN == 64
+    WORD* tmp = ptrBint->val;
+    tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN) + 1);
+    ptrBint->val = tmp;
+#else
+    WORD* tmp = ptrBint->val;
+    tmp = (WORD*)realloc(tmp, 4 * (pwOf2 / WORD_BITLEN) + 1);
+    ptrBint->val = tmp;
+#endif
+
+    ptrBint->wordlen = (pwOf2 / WORD_BITLEN) + 1;
+    return;
 }
