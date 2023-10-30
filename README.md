@@ -92,12 +92,11 @@ pip install ./path/to/repo
 from big_int_dlp_library.python import bigint, dlp
 ```
 
-### Docs
-📁 Dive deeper with the docs/ directory.
+## 📖 Docs
+📁 Dive deeper with the [docs/](docs/) directory.
 
-### 🤝 Contributing
-🖋 Want to contribute? Awesome! Please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+## 🤝 Contributing
+🖋 Want to contribute? Awesome! Please refer to `CONTRIBUTING.md`.
 
-### 📜 License
-🔐 This project is under a license. Kindly check the [LICENSE.md](LICENSE.md).
-
+## 📜 License
+🔐 This project is under a license. Kindly check the [LICENSE](LICENSE) file.
