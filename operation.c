@@ -45,149 +45,78 @@ void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
 }
 
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
-    if (WORD_BITLEN == 8 || WORD_BITLEN == 32) {
-        u64 result = (u64)x + (u64)y + (u64)k;
-        *ptrR = (WORD)result;
-        *ptrQ = result >> WORD_BITLEN;
-    } else if (WORD_BITLEN == 64) {
-        const WORD HALF_MASK = (1ULL << 32) - 1;
-        const u64 LOW_X = x & HALF_MASK;
-        const u64 HIGH_X = x >> 32;
-        const u64 LOW_Y = y & HALF_MASK;
-        const u64 HIGH_Y = y >> 32;
+    WORD tmp = x + y;
+    *ptrQ = 0x00;
+    tmp += k;
+    *ptrR = tmp;
+    if((x+y) < x)
+        *ptrQ = 1;
+    if((x + y + k) < k)
+        *ptrQ += 1;
+    // if (WORD_BITLEN == 8 || WORD_BITLEN == 32) {
+    //     u64 result = (u64)x + (u64)y + (u64)k;
+    //     *ptrR = (WORD)result;
+    //     *ptrQ = result >> WORD_BITLEN;
+    // } else if (WORD_BITLEN == 64) {
+    //     const WORD HALF_MASK = (1ULL << 32) - 1;
+    //     const u64 LOW_X = x & HALF_MASK;
+    //     const u64 HIGH_X = x >> 32;
+    //     const u64 LOW_Y = y & HALF_MASK;
+    //     const u64 HIGH_Y = y >> 32;
 
-        // Add the lower halves
-        u64 low_result = LOW_X + LOW_Y + (k & HALF_MASK);
+    //     // Add the lower halves
+    //     u64 low_result = LOW_X + LOW_Y + (k & HALF_MASK);
 
-        // Check if there was a carry from the lower half
-        u64 low_carry = (low_result > HALF_MASK) ? 1 : 0;
+    //     // Check if there was a carry from the lower half
+    //     u64 low_carry = (low_result > HALF_MASK) ? 1 : 0;
 
-        // Add the upper halves
-        u64 high_result = HIGH_X + HIGH_Y + (k >> 32) + low_carry;
+    //     // Add the upper halves
+    //     u64 high_result = HIGH_X + HIGH_Y + (k >> 32) + low_carry;
 
-        // Return results
-        *ptrR = (high_result << 32) | (low_result & HALF_MASK);
-        *ptrQ = (high_result >> 32);  // Carry from the higher half
-    } else {
-        fprintf(stderr, "Unsupported WORD size in 'add_carry'\n");
-        exit(1);
-    }
-    // *ptrR = x + y;
-	// *ptrQ = (*ptrR < x);
-	// *ptrR += k;
-	// *ptrQ += (*ptrR < (x+y));
+    //     // Return results
+    //     *ptrR = (high_result << 32) | (low_result & HALF_MASK);
+    //     *ptrQ = (high_result >> 32);  // Carry from the higher half
+    // } else {
+    //     fprintf(stderr, "Unsupported WORD size in 'add_carry'\n");
+    //     exit(1);
+    // }
 }
-
-// void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-//     BINT* ptrX = *pptrX;
-//     BINT* ptrY = *pptrY;
-//     BINT* ptrZ = *pptrZ;
-    
-//     int n = ptrX->wordlen;
-//     int m = ptrY->wordlen;
-
-//     if(n < m) {
-//         printf("\nwordlen X = %d, wordlen Y = %d\n",ptrX->wordlen, ptrY->wordlen);
-//         fprintf(stderr, "Error: wordlen(X) < wordlen(Y) is not vaild in 'add_core_xyz'\n");
-//         exit(1);
-//     }
-
-//     int max_len = MAX(n, m);
-
-//     // Ensure ptrZ has enough allocated space
-//     if (ptrZ->wordlen < max_len + 1) {
-//         // WORD* tmp = NULL;
-//         // tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
-//         // ptrZ->val = tmp;
-//         WORD* tmp = ptrZ->val;
-//         tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
-//         ptrZ->val = tmp;
-//         if (!ptrZ->val) {
-//             fprintf(stderr, "Error: Memory reallocation failed in 'add_core_xyz'\n");
-//             exit(1);
-//         }
-//         ptrZ->wordlen = max_len + 1;
-//     }
-
-//     WORD k = 0;
-//     WORD res = 0;
-//     WORD carry = 0;
-
-//     int i;
-//     for (i = 0; i < MIN(n, m); i++) {
-//         add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
-//         ptrZ->val[i] = res;
-//         k = carry;
-//     }
-
-//     // Continue with remaining values of the longer number and the carry
-//     while (i < max_len) {
-//         WORD val = (i < n) ? ptrX->val[i] : 0;
-//         res = val + k;
-//         carry = (res < k);
-//         ptrZ->val[i] = res;
-//         k = carry;
-//         i++;
-//     }
-
-//     if(k) {
-//         ptrZ->val[max_len] = k;
-//         ptrZ->wordlen = max_len+1;
-//     } else {
-//         ptrZ->wordlen = max_len;
-//     }
-
-//     refine_BINT(ptrZ);
-// }
-
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    BINT* ptrX = *pptrX;
-    BINT* ptrY = *pptrY;
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "add_core_xyz");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "add_core_xyz");
+    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
+    int n = ptrX->wordlen; int m = ptrY->wordlen;
+
     BINT* ptrZ = *pptrZ;
+    ptrZ = init_bint(pptrZ, n+1);
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
+
+    WORD res = 0x00;
+    WORD carry = 0x00;
+    WORD k = 0x00;
     
-    int n = ptrX->wordlen;
-    int m = ptrY->wordlen;
-
-    // Ensure ptrZ has enough allocated space
-    if (ptrZ->wordlen < MAX(n, m) + 1) {
-        ptrZ->val = (WORD*)realloc(ptrZ->val, (MAX(n, m) + 1) * sizeof(WORD));
-        if (!ptrZ->val) {
-            fprintf(stderr, "Error: Memory reallocation failed in 'add_core_xyz'\n");
-            exit(1);
-        }
-        ptrZ->wordlen = MAX(n, m) + 1;
-    }
-
-    WORD k = 0;
-    WORD res = 0;
-    WORD carry = 0;
-
-    // Loop until the shorter of the two numbers ends
     int i;
     for (i = 0; i < m; i++) {
+        // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);
         add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
         ptrZ->val[i] = res;
+        // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
         k = carry;
     }
-    // Continue adding any remaining X values with the carry, since Y is shorter
-    for (; i < n; i++) {
-        res = ptrX->val[i] + k;
-        carry = (res < k);
+    for (i = m; i < n; i++) {
+        // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);    
+        add_carry(ptrX->val[i],0, k, &carry, &res);
+        // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res, i, ptrZ->val[i]);
         ptrZ->val[i] = res;
         k = carry;
     }
-
     if(k) {
         ptrZ->val[n] = k;
-        ptrZ->wordlen = n+1;
     } else {
         ptrZ->wordlen = n;
     }
-
     refine_BINT(ptrZ);
-    //return Z;
 }
-
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "ADD");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "ADD");
@@ -819,11 +748,8 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_Krtsb_test");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_Krtsb_test");
 
-    BINT* ptrX = *pptrX;
-    BINT* ptrY = *pptrY;
-    
-    int n = ptrX->wordlen;
-    int m = ptrX->wordlen;
+    int n = (*pptrX)->wordlen;
+    int m = (*pptrX)->wordlen;
 
     delete_bint(pptrZ);
     *pptrZ = init_bint(pptrZ, n+m);

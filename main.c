@@ -7,7 +7,7 @@
  * 
  * Author(s): Ji Yong-Hyeon, Kim Ye-chan, Moon Ye-chan, Yoo Geun-oh
  * Date Created: 2023-09-21
- * Last Modified: 2023-10-25
+ * Last Modified: 2023-11-01
  *
  * Note: This library aims to provide a robust and efficient solution for
  *       performing arithmetic on large integers beyond the limitations of
@@ -30,9 +30,9 @@ int main() {
     clock_t start1, end1;
     clock_t start2, end2;
     double cpu_time_used1, cpu_time_used2;
-    int t = 1;
+    int t = 10000;
 
-    BINT* bint1 = NULL; 
+    BINT* bint1 = NULL;
     BINT* bint2 = NULL;
     BINT* bint3 = NULL;
     
@@ -47,36 +47,37 @@ int main() {
     */
     int idx = 0;
     while(idx < t) {
-        // int n = rand() % 0x8  + 1;
-        // int m = rand() % 0x8  + 1;
-        // int n = 0x4;
-        // int m = 0x4;
-        // rand_bint(&bint1, false, n);
-        // rand_bint(&bint2, false, m);
+        int n = (rand() % 0x60) + 0x40;
+        int m = (rand() % 0x60) + 0x40;
+        // int n = 0x6;
+        // int m = 0x6;
+        rand_bint(&bint1, false, n);
+        rand_bint(&bint2, false, m);
         
-        const char* testBint1 = "0x8d074b9a5a3f9b9367a80d5908fcaff0";
-        const char* testBint2 = "0x34a26e448f9902c01744599a6d787773";
-        strToBINT(&bint1, testBint1);
-        strToBINT(&bint2, testBint2);
-        int n = bint1->wordlen;
-        int m = bint2->wordlen;
+        // const char* testBint1 = "0x4ef991ed877d467f04ee592b821a7fee3420a47e34d268413735e7d0eada0a617114a708795826d9";
+        // const char* testBint2 = "0x881433cea8fafb0dac027cbe7aff78fbfb89a2d007885019543075d6fba36eba6c38d39b";
+        // strToBINT(&bint1, testBint1);
+        // strToBINT(&bint2, testBint2);
+        // int n = bint1->wordlen;
+        // int m = bint2->wordlen;
 
+        if (bint1->wordlen < bint2->wordlen) swapBINT(&bint1,&bint2);
         // printf("Test[%d]---------------------------------------------------\n", idx+1);
-        custom_printHex_xy(bint1, bint2, n+m);
+        // printf("n m : %d %d\n", n, m);
+        // custom_printHex_xy(bint1, bint2, n+m);
 
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
         
         start1 = clock();
-        // add_core_xyz(&bint1,&bint2,&bint3);
+        add_core_xyz(&bint1,&bint2,&bint3);
         // mul_core_ImpTxtBk_test(&bint1, &bint2, &bint3);
         // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
-        mul_core_Krtsb_test(&bint1, &bint2, &bint3);
+        // mul_core_Krtsb_test(&bint1, &bint2, &bint3);
         // MUL_Core_Krtsb_xyz(&bint1, &bint2, &bint3);
         // SUB(&bint1, &bint2, &bint3);
         end1 = clock();
         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
-
 
         // start2 = clock();
         // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
@@ -95,22 +96,37 @@ int main() {
         // hexToBinary(hexData, binaryOutput);
         // printf("Hex: %s\nBinary: %s\n", hexData, binaryOutput);
 
-        /** SAGE (or Python)
-         * print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
+        /** SAGE (ADD)
+         * print(int(hex(0x00 + 0x00), 16) == int("0x00", 16))
         */ 
         printf("print(int(hex(");
-        printHex2(bint1);printf(" * ");printHex2(bint2);
+        printHex2(bint1);printf(" + ");printHex2(bint2);
         printf("), 16) == int(\"");
         printHex2(bint3);printf("\", 16))\n");
 
-        /** SAGE (or Python) abs ver.
-         * print(int(hex(abs(0xd20de5d5 - 0x0e6e8e5d)), 16) == int("0xc39f5778", 16))
+        /** SAGE (SUB)
+         * print(int(hex(0x00 - 0x00), 16) == int("0x00", 16))
+        */ 
+        // printf("print(int(hex(");
+        // printHex2(bint1);printf(" - ");printHex2(bint2);
+        // printf("), 16) == int(\"");
+        // printHex2(bint3);printf("\", 16))\n");
+        
+        /** SAGE (SUB) abs ver.
+         * print(int(hex(abs(0x00 - 0x00)), 16) == int("0x00", 16))
         */
         // printf("print(int(hex(abs(");
         // printHex2(bint1);printf(" - ");printHex2(bint2);
         // printf(")), 16) == int(\"");
         // printHex2(bint3);printf("\", 16))\n");
 
+        /** SAGE (MUL)
+         * print(int(hex(0x00 * 0x00), 16) == int("0x00", 16))
+        */ 
+        // printf("print(int(hex(");
+        // printHex2(bint1);printf(" * ");printHex2(bint2);
+        // printf("), 16) == int(\"");
+        // printHex2(bint3);printf("\", 16))\n");
 
         delete_bint(&bint1);
         delete_bint(&bint2);

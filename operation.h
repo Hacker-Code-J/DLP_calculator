@@ -34,14 +34,9 @@ void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 
 // Function prototypes for BINT arithmetic operations.
 
-/** Add with Carry
- * Input: Single-Word X, Y in [0,W) and carry k in {0,1}
- * Output: Q in {0,1} and R in [0,W) s.t. X + Y + k = Q * W + R
- * 
- * W = 2^w
-*/
 /**
  * Adds two WORD values along with a carry and stores the result and carry-over.
+ * x + y + k = Q * 2^w + R
  * @param x      First WORD value.
  * @param y      Second WORD value.
  * @param k      Initial carry value.
@@ -49,9 +44,6 @@ void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
  * @param ptrR   Pointer where the result will be stored.
  */
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR);
-
-// Z = X + Y with wordlen(X) >= wordlen(Y)
-void add_xyz(BINT* X, BINT* Y, BINT* Z);
 
 /**
  * Core logic to add two BINT values. wordlen(X) >= wordlen(Y)
