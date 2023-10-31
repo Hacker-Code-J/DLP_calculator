@@ -17,11 +17,9 @@
  *                                             +----------------------+      | WORD[0] | WORD[1] |...| WORD[n-1] |
  *                                                                           +---------+---------+---+-----------+
 *****************************************************************************************************************/
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdint.h>
-
 #include "setup.h"
+
+#include <stdbool.h>
 
 #ifndef BIGINTEGER_H
 #define BIGINTEGER_H
@@ -117,6 +115,9 @@ bool isZero(BINT* ptrbint);
  * @return true if the binary integer is one, false otherwise.
  */
 bool isOne(BINT* ptrbint);
+
+WORD hexSubstringToWord(const char* str, int start, int length);
+void strToBINT(BINT** pptrBint, const char* hexString);
 
 /**
  * Converts a hex character to its binary representation.

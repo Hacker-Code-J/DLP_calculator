@@ -22,6 +22,15 @@ clean:
 	rm -f *.o a.out *.bin *.sage
 
 clean-test:
-	rm -f test.py *.txt
+	rm -f test.py test.txt
+
+test:
+	./a.out > test.py
+	python3 test.py > test.txt
+
+chart:
+	./a.out > test.py
+	python3 test.py > test.txt
+	python3 sr_chart.py
 
 .PHONY: clean

@@ -1,6 +1,3 @@
-#include <stdarg.h>
-#include <stdbool.h>
-
 #include "setup.h"
 #include "BigInteger.h"
 

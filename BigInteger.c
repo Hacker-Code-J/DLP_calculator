@@ -2,6 +2,7 @@
 #include "BigInteger.h"
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <memory.h>
@@ -181,6 +182,45 @@ bool isOne(BINT* ptrbint) {
     }
     
     return true;
+}
+
+// Function to convert a substring of a hex string to a WORD.
+WORD hexSubstringToWord(const char* str, int start, int length) {
+    WORD result = 0;
+    for (int i = 0; i < length; ++i) {
+        result <<= 4;  // Shift left by 4 bits to make space for the next hex digit.
+        char c = str[start + i];
+        if (c >= '0' && c <= '9') {
+            result += c - '0';
+        } else if (c >= 'a' && c <= 'f') {
+            result += 10 + c - 'a';
+        } else if (c >= 'A' && c <= 'F') {
+            result += 10 + c - 'A';
+        } // No need for else; assuming valid input for this example.
+    }
+    return result;
+}
+
+void strToBINT(BINT** pptrBint, const char* hexString) {
+    BINT* ptrBint = *pptrBint;
+    // Check the string starts with "0x" or "0X".
+    if (hexString[0] != '0' || (hexString[1] != 'x' && hexString[1] != 'X')) {
+        // Handle error.
+        printf("Invalid hex string format.\n");
+        return;
+    }
+
+    int hexLength = strlen(hexString) - 2; // Minus the "0x".
+    ptrBint = init_bint(pptrBint, (hexLength + 7) / 8); // Each WORD has 8 hex characters.
+
+    // Convert each chunk of 8 hex digits to a WORD and store in val.
+    int hexStart = 2 + hexLength - 8; // Start from the end, skipping the "0x".
+    for (int i = 0; i < ptrBint->wordlen; ++i) {
+        int chunkSize = (hexLength >= 8) ? 8 : hexLength;
+        ptrBint->val[i] = hexSubstringToWord(hexString, hexStart, chunkSize);
+        hexStart -= chunkSize;
+        hexLength -= chunkSize;
+    }
 }
 
 // Function to convert a hex char to its 4-bit binary equivalent

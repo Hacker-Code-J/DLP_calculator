@@ -78,68 +78,6 @@ void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
 	// *ptrQ += (*ptrR < (x+y));
 }
 
-void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    BINT* ptrX = *pptrX;
-    BINT* ptrY = *pptrY;
-    BINT* ptrZ = *pptrZ;
-    
-    int n = ptrX->wordlen;
-    int m = ptrY->wordlen;
-
-    if(n < m) {
-        printf("\nwordlen X = %d, wordlen Y = %d\n",ptrX->wordlen, ptrY->wordlen);
-        fprintf(stderr, "Error: wordlen(X) < wordlen(Y) is not vaild in 'add_core_xyz'\n");
-        exit(1);
-    }
-
-    int max_len = MAX(n, m);
-
-    // Ensure ptrZ has enough allocated space
-    if (ptrZ->wordlen < max_len + 1) {
-        // WORD* tmp = NULL;
-        // tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
-        // ptrZ->val = tmp;
-        WORD* tmp = ptrZ->val;
-        tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
-        ptrZ->val = tmp;
-        if (!ptrZ->val) {
-            fprintf(stderr, "Error: Memory reallocation failed in 'add_core_xyz'\n");
-            exit(1);
-        }
-        ptrZ->wordlen = max_len + 1;
-    }
-
-    WORD k = 0;
-    WORD res = 0;
-    WORD carry = 0;
-
-    int i;
-    for (i = 0; i < MIN(n, m); i++) {
-        add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
-        ptrZ->val[i] = res;
-        k = carry;
-    }
-
-    // Continue with remaining values of the longer number and the carry
-    while (i < max_len) {
-        WORD val = (i < n) ? ptrX->val[i] : 0;
-        res = val + k;
-        carry = (res < k);
-        ptrZ->val[i] = res;
-        k = carry;
-        i++;
-    }
-
-    if(k) {
-        ptrZ->val[max_len] = k;
-        ptrZ->wordlen = max_len+1;
-    } else {
-        ptrZ->wordlen = max_len;
-    }
-
-    refine_BINT(ptrZ);
-}
-
 // void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 //     BINT* ptrX = *pptrX;
 //     BINT* ptrY = *pptrY;
@@ -148,45 +86,107 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 //     int n = ptrX->wordlen;
 //     int m = ptrY->wordlen;
 
+//     if(n < m) {
+//         printf("\nwordlen X = %d, wordlen Y = %d\n",ptrX->wordlen, ptrY->wordlen);
+//         fprintf(stderr, "Error: wordlen(X) < wordlen(Y) is not vaild in 'add_core_xyz'\n");
+//         exit(1);
+//     }
+
+//     int max_len = MAX(n, m);
+
 //     // Ensure ptrZ has enough allocated space
-//     if (ptrZ->wordlen < MAX(n, m) + 1) {
-//         ptrZ->val = (WORD*)realloc(ptrZ->val, (MAX(n, m) + 1) * sizeof(WORD));
+//     if (ptrZ->wordlen < max_len + 1) {
+//         // WORD* tmp = NULL;
+//         // tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
+//         // ptrZ->val = tmp;
+//         WORD* tmp = ptrZ->val;
+//         tmp = (WORD*)realloc(ptrZ->val, (max_len + 1) * sizeof(WORD));
+//         ptrZ->val = tmp;
 //         if (!ptrZ->val) {
 //             fprintf(stderr, "Error: Memory reallocation failed in 'add_core_xyz'\n");
 //             exit(1);
 //         }
-//         ptrZ->wordlen = MAX(n, m) + 1;
+//         ptrZ->wordlen = max_len + 1;
 //     }
 
 //     WORD k = 0;
 //     WORD res = 0;
 //     WORD carry = 0;
 
-//     // Loop until the shorter of the two numbers ends
 //     int i;
-//     for (i = 0; i < m; i++) {
+//     for (i = 0; i < MIN(n, m); i++) {
 //         add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
 //         ptrZ->val[i] = res;
 //         k = carry;
 //     }
-//     // Continue adding any remaining X values with the carry, since Y is shorter
-//     for (; i < n; i++) {
-//         res = ptrX->val[i] + k;
+
+//     // Continue with remaining values of the longer number and the carry
+//     while (i < max_len) {
+//         WORD val = (i < n) ? ptrX->val[i] : 0;
+//         res = val + k;
 //         carry = (res < k);
 //         ptrZ->val[i] = res;
 //         k = carry;
+//         i++;
 //     }
 
 //     if(k) {
-//         ptrZ->val[n] = k;
-//         ptrZ->wordlen = n+1;
+//         ptrZ->val[max_len] = k;
+//         ptrZ->wordlen = max_len+1;
 //     } else {
-//         ptrZ->wordlen = n;
+//         ptrZ->wordlen = max_len;
 //     }
 
 //     refine_BINT(ptrZ);
-//     //return Z;
 // }
+
+void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    BINT* ptrX = *pptrX;
+    BINT* ptrY = *pptrY;
+    BINT* ptrZ = *pptrZ;
+    
+    int n = ptrX->wordlen;
+    int m = ptrY->wordlen;
+
+    // Ensure ptrZ has enough allocated space
+    if (ptrZ->wordlen < MAX(n, m) + 1) {
+        ptrZ->val = (WORD*)realloc(ptrZ->val, (MAX(n, m) + 1) * sizeof(WORD));
+        if (!ptrZ->val) {
+            fprintf(stderr, "Error: Memory reallocation failed in 'add_core_xyz'\n");
+            exit(1);
+        }
+        ptrZ->wordlen = MAX(n, m) + 1;
+    }
+
+    WORD k = 0;
+    WORD res = 0;
+    WORD carry = 0;
+
+    // Loop until the shorter of the two numbers ends
+    int i;
+    for (i = 0; i < m; i++) {
+        add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
+        ptrZ->val[i] = res;
+        k = carry;
+    }
+    // Continue adding any remaining X values with the carry, since Y is shorter
+    for (; i < n; i++) {
+        res = ptrX->val[i] + k;
+        carry = (res < k);
+        ptrZ->val[i] = res;
+        k = carry;
+    }
+
+    if(k) {
+        ptrZ->val[n] = k;
+        ptrZ->wordlen = n+1;
+    } else {
+        ptrZ->wordlen = n;
+    }
+
+    refine_BINT(ptrZ);
+    //return Z;
+}
 
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "ADD");
@@ -839,13 +839,14 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         return;  // This will immediately terminate the function.
     }
 
-    int l = MAX(n,m+1) >> 1;
+    int l = (MAX(n,m) + 1) >> 1;
+    printf("l= MAX(%d, %d) + 1 >> 1 : %d\n\n", n, m, l);
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
     BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
     BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
     BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
-    BINT* ptrS = NULL;
+    BINT* ptrS = NULL; BINT* ptrR = NULL; 
 
     copyBINT(&ptrX1, pptrX);
     // printf("X1: ");printHex2(ptrX1);printf("\n");
@@ -874,9 +875,10 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     printf("*W^{2l}: ");printHex2(ptrT1);printf("\n");
 
     matchSize(ptrT0, ptrT1);
-    OR_BINT(ptrT0,ptrT1,pptrZ);
+    ptrR = init_bint(&ptrR, 2 * (n+m+l));
+    OR_BINT(ptrT0,ptrT1,&ptrR);
     refine_BINT(ptrT0);
-    printf("X1Y1||X0Y0: ");printHex2(ptrZ);printf("\n");
+    printf("X1Y1||X0Y0: ");printHex2(ptrR);printf("\n");
 
     SUB(&ptrX0, &ptrX1, &ptrS1);
     printf("X0: ");printHex2(ptrX0);printf(", X1 ");printHex2(ptrX1);printf("\n");
@@ -905,14 +907,14 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     printf("*W^l: ");printHex2(ptrS);printf("\n");
 
     printf("X1Y1||X0Y0: ");printHex2(ptrZ);printf(", [(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0]w^l: ");printHex2(ptrS);printf("\n");
-    add_core_xyz(pptrZ, &ptrS, pptrZ);
+    add_core_xyz(&ptrR, &ptrS, pptrZ);
     printf("*Result: ");printHex2(ptrZ);printf("\n");
 
     delete_bint(&ptrX0); delete_bint(&ptrX1);
     delete_bint(&ptrY0); delete_bint(&ptrY1);
     delete_bint(&ptrT0); delete_bint(&ptrT1);
     delete_bint(&ptrS0); delete_bint(&ptrS1);
-    delete_bint(&ptrS);
+    delete_bint(&ptrS); delete_bint(&ptrR); 
 }
 
 
@@ -970,7 +972,7 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     right_shift_word(&ptrT1, 2*l);
     add_core_xyz(&ptrS,&ptrT1,&ptrS);
     add_core_xyz(&ptrS,&ptrT0,&ptrS);
-    left_shift_word(&ptrS, l);
+    left_shift_word(&ptrS, 2*l);
     add_core_xyz(pptrZ, &ptrS, pptrZ);
 
     delete_bint(&ptrX0); delete_bint(&ptrX1);

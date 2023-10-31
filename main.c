@@ -27,9 +27,10 @@
 int main() {
     srand((unsigned int)time(NULL));
 
-    clock_t start, end;
-    double cpu_time_used;
-    int t = 10000;
+    clock_t start1, end1;
+    clock_t start2, end2;
+    double cpu_time_used1, cpu_time_used2;
+    int t = 1;
 
     BINT* bint1 = NULL; 
     BINT* bint2 = NULL;
@@ -46,27 +47,41 @@ int main() {
     */
     int idx = 0;
     while(idx < t) {
-        int n = rand() % 0x10  + 1;
-        int m = rand() % 0x10  + 1;
+        // int n = rand() % 0x8  + 1;
+        // int m = rand() % 0x8  + 1;
         // int n = 0x4;
         // int m = 0x4;
+        // rand_bint(&bint1, false, n);
+        // rand_bint(&bint2, false, m);
         
-        rand_bint(&bint1, false, n);
-        rand_bint(&bint2, false, m);
+        const char* testBint1 = "0x8d074b9a5a3f9b9367a80d5908fcaff0";
+        const char* testBint2 = "0x34a26e448f9902c01744599a6d787773";
+        strToBINT(&bint1, testBint1);
+        strToBINT(&bint2, testBint2);
+        int n = bint1->wordlen;
+        int m = bint2->wordlen;
+
         // printf("Test[%d]---------------------------------------------------\n", idx+1);
-        // custom_printHex_xy(bint1, bint2, n+m);
+        custom_printHex_xy(bint1, bint2, n+m);
 
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
         
-        start = clock();
+        start1 = clock();
+        // add_core_xyz(&bint1,&bint2,&bint3);
         // mul_core_ImpTxtBk_test(&bint1, &bint2, &bint3);
-        MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
-        // mul_core_Krtsb_test(&bint1, &bint2, &bint3);
+        // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
+        mul_core_Krtsb_test(&bint1, &bint2, &bint3);
         // MUL_Core_Krtsb_xyz(&bint1, &bint2, &bint3);
         // SUB(&bint1, &bint2, &bint3);
-        end = clock();
-        cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+        end1 = clock();
+        cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
+
+
+        // start2 = clock();
+        // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
+        // end2 = clock();
+        // cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
 
         // custom_printHex(bint1, bint2, bint3, 2);
         // printHex(bint1);printf("\n");
@@ -100,6 +115,7 @@ int main() {
         delete_bint(&bint1);
         delete_bint(&bint2);
         delete_bint(&bint3);
+        // printf("%.8f\n", cpu_time_used);
         // printf("%.8f\n", cpu_time_used);
         idx++;
     }
