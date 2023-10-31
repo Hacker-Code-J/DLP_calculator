@@ -68,9 +68,10 @@ This repository provides implementations of **Big Integer** operations and **Dis
 - **Clone and Build**:
 
 ```bash
-git clone https://github.com/yourusername/big_int_dlp_library.git
-cd big_int_dlp_library
-make
+git clone https://github.com/Hacker-Code-J/DLP_calculator.git
+cd DLP_calculator
+make test
+make chart
 ```
 ### Python
 - **Install via pip**:
