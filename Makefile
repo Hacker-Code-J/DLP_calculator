@@ -19,7 +19,7 @@ main.o: main.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.o a.out *.bin *.sage
+	rm -f *.o a.out *.bin *.sage *.txt
 
 clean-test:
 	rm -f test.py test.txt

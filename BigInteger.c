@@ -8,6 +8,9 @@
 #include <memory.h>
 
 BINT* init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
+    if(pptrBint)
+        delete_bint(pptrBint);
+
     // Allocate memory for BINT structure
     *pptrBint = (BINT*)malloc(sizeof(BINT));
     if(!(*pptrBint)) {
@@ -342,7 +345,6 @@ bool store_bint(const char* filename, BINT* b) {
     fclose(f);
     return true;
 }
-
 bool multi_store_bints(const char* filename, BINT** bint_array, int num_bints) {
     if(!filename || !bint_array || num_bints <= 0) return false;
 
@@ -361,7 +363,6 @@ bool multi_store_bints(const char* filename, BINT** bint_array, int num_bints) {
     fclose(f);
     return true;
 }
-
 BINT* load_bint(const char* filename) {
     if(!filename) return NULL;
 
@@ -402,7 +403,6 @@ BINT* load_bint(const char* filename) {
     fclose(f);
     return b;
 }
-
 BINT** multi_load_bints(const char* filename, int* num_bints) {
     if(!filename) return NULL;
 
@@ -463,90 +463,6 @@ BINT** multi_load_bints(const char* filename, int* num_bints) {
     return bint_array;
 }
 
-
-
-/**
- * 
-*/
-// void printSage(BINTQueue* queue,  int opt, int loop) {
-//     char* opr;
-
-//     switch (opt)
-//     {
-//     case 0:
-//         opr = "add";
-//         break;
-//     case 1:
-//         opr = "sub";
-//         break;
-//     case 2:
-//         opr = "mul";
-//         break;
-//     default:
-//         opr = NULL;
-//         break;
-//     }
-    
-//     printf("def hex_to_int(hex_str, sign):\n");
-//     printf("    val = Integer(hex_str.replace(' ', '').replace('0x', ''), 16)\n");
-//     printf("    return -val if sign == \"[1]\" else val\n\n");
-
-//     printf("def int_to_hex(val):\n");
-//     printf("    sign = \"[0]\" if val >= 0 else \"[1]\"\n");
-//     printf("    abs_val = abs(val)\n");
-//     printf("    hex_str = hex(abs_val)[2:]\n");
-//     printf("    hex_str = ' '.join([hex_str[i:i+8] for i in range(0, len(hex_str), 8)])\n");
-//     printf("    return f\"{sign} 0x {hex_str}\"\n\n");
-
-//     printf("def check_operation(x_sign, x_hex, y_sign, y_hex, expected_sign, expected_hex, operation):\n");
-//     printf("    x_int = hex_to_int(x_hex, x_sign)\n");
-//     printf("    y_int = hex_to_int(y_hex, y_sign)\n\n");
-
-//     printf("    if operation == \"add\":\n");
-//     printf("        result_int = x_int + y_int\n");
-//     printf("    elif operation == \"sub\":\n");
-//     printf("        result_int = x_int - y_int\n");
-//     printf("    elif operation == \"mul\":\n");
-//     printf("        result_int = x_int * y_int\n");
-//     printf("    else:\n");
-//     printf("        raise ValueError(f\"Invalid operation: {operation}\")\n\n");
-
-//     printf("    result_hex = int_to_hex(result_int)\n");
-//     printf("    return result_hex.replace(' ', '').lower() == (expected_sign + ' ' + expected_hex).replace(' ', '').lower()\n\n");
-
-//     printf("values = [\n");
-//     while(loop != 0) {
-//         BINT X = dequeue(queue);
-//         BINT Y = dequeue(queue);
-//         BINT Z = dequeue(queue);
-//         int n = MAX(X.wordlen, Y.wordlen);
-//         printf("    (\"[%d]\", ", X.sign);
-//         printf("\"0x");
-//         for(int i=0; i<(n-X.wordlen); i++)
-//             printf(" %08x", 0);
-//         for (int i=X.wordlen-1; i>=0; i--)
-//             printf(" %08x", X.val[i]);
-//         printf("\", ");
-//         printf("\"[%d]\", \"0x", Y.sign);
-//         for(int i=0; i<(n-Y.wordlen); i++)
-//             printf(" %08x", 0);
-//         for (int i=Y.wordlen-1; i>=0; i--)
-//             printf(" %08x", Y.val[i]);
-//         printf("\", ");
-//         printf("\"[%d]\", \"0x", Z.sign);
-//         for(int i=0; i<n-Z.wordlen; i++)
-//             printf(" %08x", 0);
-//         for (int i=Z.wordlen-1; i>=0; i--)
-//             printf(" %08x", Z.val[i]);
-//         printf("\", \"%03s\"),\n", opr);
-//         loop--;
-//     }
-//     printf("]\n\n");
-
-//     printf("for idx, (x_sign, x, y_sign, y, expected_sign, expected, op) in enumerate(values):\n");
-//     printf("    is_correct = check_operation(x_sign, x, y_sign, y, expected_sign, expected, op)\n");
-//     printf("    print(is_correct)\n");
-// }
 
 /******************************************************************/
 void printHex(BINT* X) {
@@ -710,38 +626,46 @@ void assgin_x2y(BINT* X, BINT** Y) {
 }
 
 
-//Compare
-// X>Y return 1
-// X<Y return -1
-// X=Y return 0
-
+/**
+ * @brief Compare the absolute values of two BINT numbers.
+ *
+ * This function performs a comparison of the absolute values of two given BINT numbers.
+ * If the absolute value of the number pointed by pptrX is greater than or equal to 
+ * the number pointed by pptrY, it returns true (1); otherwise, it returns false (0).
+ *
+ * Error checks are performed at the beginning to ensure valid pointers are passed.
+ * The comparison starts by looking at the word lengths of the numbers, 
+ * and if they're equal, it then performs a word-by-word comparison.
+ *
+ * @param pptrX Double pointer to the first BINT number.
+ * @param pptrY Double pointer to the second BINT number.
+ * 
+ * @return Returns true (1) if abs(*pptrX) >= abs(*pptrY), otherwise false (0).
+ */
 bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
-    // if (!pptrX || !*pptrX || !pptrY || !*pptrY) {
-    //     fprintf(stderr, "Error: One of the pointers is NULL in 'compare_abs_bint'\n");
-    //     exit(1); // or another appropriate value or action
-    // }
+    // Ensure the provided pointers are valid
     exit_on_null_error(pptrX, "pptrX", "compare_abs_bint");
     exit_on_null_error(*pptrX, "*pptrX", "compare_abs_bint");
     exit_on_null_error(pptrY, "pptrY", "compare_abs_bint");
     exit_on_null_error(*pptrY, "*pptrY", "compare_abs_bint");
 
-    BINT* ptrX = *pptrX;
-    BINT* ptrY = *pptrY;
-    int n = ptrX->wordlen;
-    int m = ptrX->wordlen;
-    WORD* X = ptrX->val;
-    WORD* Y = ptrY->val;
+    // Dereference the double pointers to obtain actual BINT pointers
+    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
+    // Extract word lengths for both numbers
+    int n = ptrX->wordlen; int m = ptrX->wordlen;
+    // Extract word arrays for both numbers
+    WORD* X = ptrX->val; WORD* Y = ptrY->val;
 
-    // Compare word lengths
+    // Compare the word lengths of the two numbers
     if(n > m) return 1;
     if(n < m) return 0;
 
-    // Word-by-word comparison
+    // Perform a word-by-word comparison starting from the most significant word
     for(int i = ptrX->wordlen - 1; i >= 0; i--) {
         if(X[i] > Y[i]) return 1;
         if(X[i] < Y[i]) return 0;
     }
-    // If you've reached this point, the numbers are equal
+    // Numbers are equal in value
     return 1;
 }
 
@@ -791,6 +715,13 @@ int Get_sign(BINT* x){
 //     }//음수면 양수로 부호 바꾸기
 // }
 
+void FLIP_SIGN(BINT** pptrBint) {
+    BINT* ptrBint = *pptrBint;
+    if(ptrBint->sign)
+        ptrBint->sign = false;
+    if(!(ptrBint->sign))
+        ptrBint->sign = true;
+}
 
 int BIT_LENGTH(BINT** pptrBint) {
     BINT* ptrBint = *pptrBint;

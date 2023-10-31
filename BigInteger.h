@@ -233,6 +233,8 @@ int BIT_LENGTH(BINT** pptrBint);
 // void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
 // void MUL_Shift(BINT* bigint, BINT* result , int N); // MUL shift
 
+void FLIP_SIGN(BINT** pptrBint);
+
 /** SHIFT and Reduction
  * 
 */

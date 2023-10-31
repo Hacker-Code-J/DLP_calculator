@@ -47,12 +47,12 @@ int main() {
     */
     int idx = 0;
     while(idx < t) {
-        int n = (rand() % 0x60) + 0x40;
-        int m = (rand() % 0x60) + 0x40;
+        int n = (rand() % 0x20) + 0x10;
+        // int m = (rand() % 0x20) + 0x10;
         // int n = 0x6;
         // int m = 0x6;
         rand_bint(&bint1, false, n);
-        rand_bint(&bint2, false, m);
+        rand_bint(&bint2, false, n);
         
         // const char* testBint1 = "0x4ef991ed877d467f04ee592b821a7fee3420a47e34d268413735e7d0eada0a617114a708795826d9";
         // const char* testBint2 = "0x881433cea8fafb0dac027cbe7aff78fbfb89a2d007885019543075d6fba36eba6c38d39b";
@@ -70,12 +70,12 @@ int main() {
         // printHex(bint2);printf("\n");
         
         start1 = clock();
-        add_core_xyz(&bint1,&bint2,&bint3);
+        // add_core_xyz(&bint1,&bint2,&bint3);
+        sub_core_xyz(&bint1,&bint2,&bint3);
         // mul_core_ImpTxtBk_test(&bint1, &bint2, &bint3);
         // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
         // mul_core_Krtsb_test(&bint1, &bint2, &bint3);
         // MUL_Core_Krtsb_xyz(&bint1, &bint2, &bint3);
-        // SUB(&bint1, &bint2, &bint3);
         end1 = clock();
         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
 
@@ -84,12 +84,10 @@ int main() {
         // end2 = clock();
         // cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
 
+        // custom_printHex(bint1, bint2, bint3, 0);
+        // custom_printHex(bint1, bint2, bint3, 1);
         // custom_printHex(bint1, bint2, bint3, 2);
-        // printHex(bint1);printf("\n");
-        // printHex(bint2);printf("\n");
 
-        // printHex(bint3);printf("\n");
-        
         // const char *hexData = "1A3F";  // Sample data
         // char binaryOutput[5 * strlen(hexData) + 1];  // Max potential output size (4 bits for each hex + null terminator)
 
@@ -99,10 +97,10 @@ int main() {
         /** SAGE (ADD)
          * print(int(hex(0x00 + 0x00), 16) == int("0x00", 16))
         */ 
-        printf("print(int(hex(");
-        printHex2(bint1);printf(" + ");printHex2(bint2);
-        printf("), 16) == int(\"");
-        printHex2(bint3);printf("\", 16))\n");
+        // printf("print(int(hex(");
+        // printHex2(bint1);printf(" + ");printHex2(bint2);
+        // printf("), 16) == int(\"");
+        // printHex2(bint3);printf("\", 16))\n");
 
         /** SAGE (SUB)
          * print(int(hex(0x00 - 0x00), 16) == int("0x00", 16))
@@ -112,13 +110,17 @@ int main() {
         // printf("), 16) == int(\"");
         // printHex2(bint3);printf("\", 16))\n");
         
-        /** SAGE (SUB) abs ver.
+        /** SAGE (SUB) abs ver (sub core test).
          * print(int(hex(abs(0x00 - 0x00)), 16) == int("0x00", 16))
         */
-        // printf("print(int(hex(abs(");
-        // printHex2(bint1);printf(" - ");printHex2(bint2);
-        // printf(")), 16) == int(\"");
-        // printHex2(bint3);printf("\", 16))\n");
+        printf("print(int(hex(abs(");
+        if(bint1->sign) printf("-");
+        printHex2(bint1);printf(" - ");
+        if(bint2->sign) printf("-");
+        printHex2(bint2);
+        printf(")), 16) == int(\"");
+        if(bint3->sign) printf("-");
+        printHex2(bint3);printf("\", 16))\n");
 
         /** SAGE (MUL)
          * print(int(hex(0x00 * 0x00), 16) == int("0x00", 16))
