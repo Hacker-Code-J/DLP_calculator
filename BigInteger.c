@@ -122,7 +122,9 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
 
     // Resize ptrBint1 if its wordlen is smaller than max_wordlen
     if(ptrBint1->wordlen < max_wordlen) {
-        ptrBint1->val = realloc(ptrBint1->val, max_wordlen * sizeof(WORD));
+        WORD* tmp = ptrBint1->val;
+        tmp = (WORD*)realloc(tmp, max_wordlen * sizeof(WORD));
+        ptrBint1->val = tmp;
         if (!ptrBint1->val) {
             // Handle memory allocation failure, exit or return an error
             exit(1); 
@@ -138,7 +140,9 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
 
     // Resize ptrBint2 if its wordlen is smaller than max_wordlen
     if(ptrBint2->wordlen < max_wordlen) {
-        ptrBint2->val = realloc(ptrBint2->val, max_wordlen * sizeof(WORD));
+        WORD* tmp = ptrBint2->val;
+        tmp = (WORD*)realloc(tmp, max_wordlen * sizeof(WORD));
+        ptrBint2->val = tmp;
         if (!ptrBint2->val) {
             // Handle memory allocation failure, exit or return an error
             exit(1); 
@@ -607,7 +611,9 @@ void refine_BINT(BINT* X) {
     }
     if(X->wordlen != new_wordlen) {
         X->wordlen = new_wordlen;
-        X->val = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
+        WORD* tmp = X->val;
+        tmp = (WORD*)realloc(tmp, sizeof(WORD)*new_wordlen);
+        X->val = tmp;
     }
 
     if((X->wordlen == 1) && (X->val[0] == 0))

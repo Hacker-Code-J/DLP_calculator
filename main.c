@@ -29,7 +29,7 @@ int main() {
 
     clock_t start, end;
     double cpu_time_used;
-    int t = 1;
+    int t = 10000;
 
     BINT* bint1 = NULL; 
     BINT* bint2 = NULL;
@@ -46,27 +46,29 @@ int main() {
     */
     int idx = 0;
     while(idx < t) {
-        // int n = rand() % 0x60  + 1;
-        // int m = rand() % 0x60  + 1;
-        int n = 0x5;
-        int m = 0x5;
+        // int n = rand() % 0x20  + 1;
+        // int m = rand() % 0x20  + 1;
+        int n = 0x4;
+        int m = 0x4;
         
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
         // printf("Test[%d]---------------------------------------------------\n", idx+1);
-        custom_printHex_xy(bint1, bint2, n+m);
+        // custom_printHex_xy(bint1, bint2, n+m);
 
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
         
         start = clock();
+        // mul_core_ImpTxtBk_test(&bint1, &bint2, &bint3);
         // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
-        // mul_core_Krtsb_test(&bint1, &bint2, &bint3);
-        SUB(&bint1, &bint2, &bint3);
+        mul_core_Krtsb_test(&bint1, &bint2, &bint3);
+        // MUL_Core_Krtsb_xyz(&bint1, &bint2, &bint3);
+        // SUB(&bint1, &bint2, &bint3);
         end = clock();
         cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
-        custom_printHex(bint1, bint2, bint3, 2);
+        // custom_printHex(bint1, bint2, bint3, 2);
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
 
@@ -78,18 +80,21 @@ int main() {
         // hexToBinary(hexData, binaryOutput);
         // printf("Hex: %s\nBinary: %s\n", hexData, binaryOutput);
 
-        /** SAGE
+        /** SAGE (or Python)
          * print(int(hex(0x06dbb859 * 0xa38fb144), 16) == int("0x0461bfdc618980a4", 16))
         */ 
-        // printf("print(int(hex(");
-        // printHex2(bint1);printf(" * ");printHex2(bint2);
-        // printf("), 16) == int(\"");
-        // printHex2(bint3);printf("\", 16))\n");
-
-        printf("print(int(hex(abs(");
-        printHex2(bint1);printf(" - ");printHex2(bint2);
-        printf(")), 16) == int(\"");
+        printf("print(int(hex(");
+        printHex2(bint1);printf(" * ");printHex2(bint2);
+        printf("), 16) == int(\"");
         printHex2(bint3);printf("\", 16))\n");
+
+        /** SAGE (or Python) abs ver.
+         * print(int(hex(abs(0xd20de5d5 - 0x0e6e8e5d)), 16) == int("0xc39f5778", 16))
+        */
+        // printf("print(int(hex(abs(");
+        // printHex2(bint1);printf(" - ");printHex2(bint2);
+        // printf(")), 16) == int(\"");
+        // printHex2(bint3);printf("\", 16))\n");
 
 
         delete_bint(&bint1);
