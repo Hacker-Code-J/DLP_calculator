@@ -46,10 +46,10 @@ int main() {
     */
     int idx = 0;
     while(idx < t) {
-        // int n = rand() % 0x20  + 1;
-        // int m = rand() % 0x20  + 1;
-        int n = 0x4;
-        int m = 0x4;
+        int n = rand() % 0x10  + 1;
+        int m = rand() % 0x10  + 1;
+        // int n = 0x4;
+        // int m = 0x4;
         
         rand_bint(&bint1, false, n);
         rand_bint(&bint2, false, m);
@@ -61,8 +61,8 @@ int main() {
         
         start = clock();
         // mul_core_ImpTxtBk_test(&bint1, &bint2, &bint3);
-        // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
-        mul_core_Krtsb_test(&bint1, &bint2, &bint3);
+        MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
+        // mul_core_Krtsb_test(&bint1, &bint2, &bint3);
         // MUL_Core_Krtsb_xyz(&bint1, &bint2, &bint3);
         // SUB(&bint1, &bint2, &bint3);
         end = clock();

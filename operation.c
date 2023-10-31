@@ -917,8 +917,8 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
 
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_Krtsb_test");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_Krtsb_test");
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
 
     BINT* ptrX = *pptrX;
     BINT* ptrY = *pptrY;
@@ -929,14 +929,14 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(pptrZ);
     *pptrZ = init_bint(pptrZ, n+m);
     if (!*pptrZ) {
-        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_Krtsb_test'\n");
+        fprintf(stderr, "Error: Memory allocation failed in 'MUL_Core_Krtsb_xyz'\n");
         exit(1);
     }
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_Krtsb_test");
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     BINT* ptrZ = *pptrZ;
 
     if (FLAG >= MIN(n,m)) {
-        mul_core_ImpTxtBk_test(pptrX,pptrY,pptrZ);
+        MUL_Core_ImpTxtBk_xyz(pptrX,pptrY,pptrZ);
         return;  // This will immediately terminate the function.
     }
 
