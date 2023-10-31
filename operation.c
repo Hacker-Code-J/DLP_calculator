@@ -152,13 +152,17 @@ void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
 void sub_borrow(WORD x, WORD y, WORD b, WORD* ptrQ, WORD* ptrR) {
     WORD tmp = x - b;
+    WORD tmp2 = y - b;
     *ptrQ = 0x00;
     if (x < b)
         *ptrQ = 0x01;
     if (tmp < y)
         *ptrQ += 0x01;
     tmp -= y;
-    *ptrR = tmp;
+    tmp2 -= x;
+    if (x > y) {
+        *ptrR = tmp;
+    } else { *ptrR = tmp2; }
     // //Optimize
     // *res = x-b;
     // *borrow = (x < b);
@@ -180,17 +184,22 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ){
     WORD b = 0x00;
 
     matchSize(pptrX,pptrY);
+    // printf("Z: ");printHex2(ptrZ);printf("\n");
     for(int i = 0; i < m; i++) {
+        printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         sub_borrow(ptrX->val[i], ptrY->val[i], b, &borrow, &res);
         ptrZ->val[i] = res;
-        // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
+        printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         b = borrow;
-    } for(int i = m; i < n; i++) {
+    }
+    // printf("Z*: ");printHex2(ptrZ);printf("\n");
+    for(int i = m; i < n; i++) {
         sub_borrow(ptrX->val[i], 0, b, &borrow, &res);
         ptrZ->val[i] = res;
         // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         b = borrow;
     }
+    // printf("Z**: ");printHex2(ptrZ);printf("\n");
     refine_BINT(ptrX); refine_BINT(ptrY);
 }
 // void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {//X>=Y>0
