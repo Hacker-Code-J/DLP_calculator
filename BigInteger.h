@@ -80,6 +80,8 @@ void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words);
  * @param pptrBint_src Double pointer to the source binary integer object.
  */
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src);
+void copyArray(WORD* ptrValX, WORD* ptrValY, int wordlen);
+void assignBINT(BINT** pptrBint_dst, BINT* ptrBint_src);
 
 void swapBINT(BINT** ptrBint1, BINT** ptrBint2);
 
@@ -208,12 +210,6 @@ void refine_BINT_word(BINT* ptrX, int num_words);
 void RANDOM_ARRARY(WORD* dst, int wordlen);
 void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen);
 
-//Copy Arrary
-void array_copy_x2y(WORD* X, WORD* Y, int wordlen);
-
-//Assign Y<-X
-void assgin_x2y(BINT* X, BINT** Y);
-
 //Compare
 // Return values:
 //  1 if X >= Y
@@ -240,7 +236,7 @@ void FLIP_SIGN(BINT** pptrBint);
 void left_shift(BINT** pptrbint, int num_bits);
 void right_shift(BINT** pptrX, int num_bits);
 
-void left_shift_word(BINT** pptrX, int shift_amount);
+void left_shift_word(BINT** pptrBint, int shift_amount);
 void right_shift_word(BINT** pptrBint, int shift_amount);
 
 void reduction(BINT** pptrBint, int pwOf2);

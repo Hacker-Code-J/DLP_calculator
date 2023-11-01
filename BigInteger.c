@@ -50,11 +50,9 @@ void SET_BINT_ZERO(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x00, 1, false); }
 void SET_BINT_ONE(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x01, 1, false); }
 
 void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words) {
-    delete_bint(pptrBint);
-    *pptrBint = (BINT*)malloc(sizeof(BINT));
-    (*pptrBint)->val = (WORD*)calloc(num_words,sizeof(WORD));
-    (*pptrBint)->wordlen = num_words;
-    (*pptrBint)->sign = false;
+    init_bint(pptrBint, num_words);
+    for(int i = 0; i < num_words; i++)
+        (*pptrBint)->val[i] = 0x00;
 }
 
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
@@ -73,6 +71,17 @@ void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     
     (ptrBint_dst)->wordlen = (ptrBint_src)->wordlen;
     (ptrBint_dst)->sign = (ptrBint_src)->sign;
+}
+void copyArray(WORD* ptrValX, WORD* ptrValY, int wordlen) {
+    for(int i = 0; i < wordlen; i++)
+        ptrValY[i] = ptrValX[i];
+}
+void assignBINT(BINT** pptrBint_dst, BINT* ptrBint_src) {
+    if(*pptrBint_dst)
+        delete_bint(pptrBint_dst);
+    init_bint(pptrBint_dst, ptrBint_src->wordlen);
+    (*pptrBint_dst)->sign = ptrBint_src->sign;
+    copyArray(ptrBint_src->val, (*pptrBint_dst)->val, ptrBint_src->wordlen);
 }
 
 void swapBINT(BINT** pptrBint1, BINT** pptrBint2) {
@@ -617,22 +626,6 @@ void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen) {
     refine_BINT(*pptrBint);
 }
 
-//Copy Arrary
-void array_copy_x2y(WORD* X, WORD* Y, int wordlen) {
-    for(int i=0; i<wordlen; i++)
-        Y[i] = X[i];
-}
-
-//Assign Y<-X
-void assgin_x2y(BINT* X, BINT** Y) {
-    if(*Y)
-        delete_bint(Y);
-    init_bint(Y, X->wordlen);
-    (*Y)->sign = X->sign;
-    array_copy_x2y(X->val,(*Y)->val,X->wordlen);
-}
-
-
 /**
  * @brief Compare the absolute values of two BINT numbers.
  *
@@ -844,41 +837,38 @@ void left_shift(BINT** pptrbint, int num_bits) {
 
 // NOTE: Still, be careful with memory management. You'll need to eventually free the val in BINT.
 
-void left_shift_word(BINT** pptrX, int shift_amount) {
-    // if (!pptrX || !*pptrX) {
-    //     fprintf(stderr, "Error: Invalid pointer in 'left_shift_word'\n");
-    //     return;
-    // }
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "left_shift_word");
+void left_shift_word(BINT** pptrBint, int shift_amount) {
+    CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "left_shift_word");
 
-    BINT* ptrX = *pptrX;
+    BINT* ptrBint = *pptrBint;
 
     if (shift_amount < 0) {
         fprintf(stderr, "Error: shift_amount is negative in 'left_shift_word'\n");
         return;
     }
 
-    int new_len = ptrX->wordlen + shift_amount;
+    int new_len = ptrBint->wordlen + shift_amount;
 
     // Reallocate memory for the new word length
-    WORD* new_val = (WORD*)realloc(ptrX->val, new_len * sizeof(int));
+    WORD* new_val = ptrBint->val;
+    new_val = (WORD*)realloc(ptrBint->val, new_len * sizeof(WORD));
     if (!new_val) {
         fprintf(stderr, "Error: Memory reallocation failed in 'left_shift_word'\n");
         exit(1);
     }
-    ptrX->val = new_val; // Assign the possibly new address to ptrX->val
+    ptrBint->val = new_val; // Assign the possibly new address to ptrX->val
 
     // Shift the existing values
     for (int i = new_len - 1; i >= shift_amount; i--) {
-        ptrX->val[i] = ptrX->val[i - shift_amount];
+        ptrBint->val[i] = ptrBint->val[i - shift_amount];
     }
 
     // Set the newly shifted-in part to zero
     for (int i = 0; i < shift_amount; i++) {
-        ptrX->val[i] = 0x00;
+        ptrBint->val[i] = 0x00;
     }
 
-    ptrX->wordlen = new_len;
+    ptrBint->wordlen = new_len;
 
     // // Efficiently set the shifted part to zero and update the word length
     // memset(ptrX->val, 0x00, shift_amount * sizeof(WORD)); // Setting initial shift_amount elements to zero

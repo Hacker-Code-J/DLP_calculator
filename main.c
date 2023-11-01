@@ -53,14 +53,14 @@ int main() {
         int sgn2 = rand() % 0x02;
         int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
         int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
-        // int len1 = (rand() % 0x5) + 0x1;
-        // int len2 = (rand() % 0x5) + 0x1;
+        // int len1 = (rand() % 0xa) + 0x1;
+        // int len2 = (rand() % 0xa) + 0x1;
         // int len1 = 0x6;
         // int len2 = 0x6;
-        RANDOM_BINT(&ptrX, false, len1);
-        RANDOM_BINT(&ptrY, false, len2);
-        // RANDOM_BINT(&ptrX, sgn1, len1);
-        // RANDOM_BINT(&ptrY, sgn2, len2);      
+        // RANDOM_BINT(&ptrX, false, len1);
+        // RANDOM_BINT(&ptrY, false, len2);
+        RANDOM_BINT(&ptrX, sgn1, len1);
+        RANDOM_BINT(&ptrY, sgn2, len2);      
 /*******************************************************************************/       
 /*************************** Non-Random Input **************************************/
         // const char* ptrTestX = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
@@ -82,7 +82,8 @@ int main() {
         // add_core_xyz(&ptrX,&ptrY,&ptrZ);
         // ADD(&ptrX,&ptrY,&ptrZ);
         // sub_core_xyz(&ptrX,&ptrY,&ptrZ);
-        SUB(&ptrX,&ptrY,&ptrZ);
+        // SUB(&ptrX,&ptrY,&ptrZ);
+        // mul_xyz(ptrX->val[0], ptrY->val[0], &ptrZ);  // len1 = 1 = len2
         // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_ImpTxtBk_test(&ptrX,&ptrY,&ptrZ);
         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
@@ -110,26 +111,26 @@ int main() {
         /** SAGE (ADD)
          * print(hex(0x00 + 0x00) == hex(0x00))
         */ 
-        // printf("print(hex(");
-        // if(ptrX->sign) printf("-");
-        // printHex2(ptrX);printf(" + ");
-        // if(ptrY->sign) printf("-");
-        // printHex2(ptrY);
-        // printf(") == hex(");
-        // if(ptrZ->sign) printf("-");
-        // printHex2(ptrZ);printf("))\n");
-        
-        /** SAGE (SUB).
-         * print((hex(0x00 - 0x00) == hex(0x00))
-        */
         printf("print(hex(");
         if(ptrX->sign) printf("-");
-        printHex2(ptrX);printf(" - ");
+        printHex2(ptrX);printf(" + ");
         if(ptrY->sign) printf("-");
         printHex2(ptrY);
         printf(") == hex(");
         if(ptrZ->sign) printf("-");
         printHex2(ptrZ);printf("))\n");
+        
+        /** SAGE (SUB).
+         * print((hex(0x00 - 0x00) == hex(0x00))
+        */
+        // printf("print(hex(");
+        // if(ptrX->sign) printf("-");
+        // printHex2(ptrX);printf(" - ");
+        // if(ptrY->sign) printf("-");
+        // printHex2(ptrY);
+        // printf(") == hex(");
+        // if(ptrZ->sign) printf("-");
+        // printHex2(ptrZ);printf("))\n");
 
         /** SAGE (MUL)
          * print(hex(0x00 * 0x00) == hex(0x00))

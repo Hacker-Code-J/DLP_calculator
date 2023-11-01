@@ -88,7 +88,6 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     init_bint(pptrZ, n+1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
-    BINT* ptrZ = *pptrZ;
 
     WORD res = 0x00;
     WORD carry = 0x00;
@@ -97,21 +96,21 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     for (int i = 0; i < m; i++) {
         // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);
         add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
-        ptrZ->val[i] = res;
+        (*pptrZ)->val[i] = res;
         // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
         k = carry;
     }
     for (int i = m; i < n; i++) {
         add_carry(ptrX->val[i],(WORD)0, k, &carry, &res);
-        ptrZ->val[i] = res;
+        (*pptrZ)->val[i] = res;
         k = carry;
     }
     if(k) {
-        ptrZ->val[n] = k;
+        (*pptrZ)->val[n] = k;
     } else {
-        ptrZ->wordlen = n;
+        (*pptrZ)->wordlen = n;
     }
-    refine_BINT(ptrZ);
+    refine_BINT((*pptrZ));
 }
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "ADD");
@@ -173,8 +172,7 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     init_bint(pptrZ, n);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "sub_core_xyz");
-    BINT* ptrZ = *pptrZ;
-
+    
     WORD res = 0x00;
     WORD borrow = 0x00;
 
@@ -183,14 +181,14 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     for(int i = 0; i < m; i++) {
         // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         sub_borrow(ptrX->val[i], ptrY->val[i], &borrow, &res);
-        ptrZ->val[i] = res;
+        (*pptrZ)->val[i] = res;
         // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
     }
     // printf("Z*: ");printHex2(ptrZ);printf("\n");
     for(int i = m; i < n; i++) {
         // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         sub_borrow(ptrX->val[i], (WORD)0, &borrow, &res);
-        ptrZ->val[i] = res;
+        (*pptrZ)->val[i] = res;
         // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
     }
     // printf("Z**: ");printHex2(ptrZ);printf("\n");
@@ -230,17 +228,6 @@ void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 }
 
 void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
-	// if (!pptrZ || !*pptrZ || !(*pptrZ)->val) {
-	// 	return;
-	// }
-    // If *pptrZ is NULL, allocate memory for it
-    if (!*pptrZ) {
-        init_bint(pptrZ, 2);
-        if (!*pptrZ) {
-            fprintf(stderr, "Error: Memory allocation failed in 'ADD'\n");
-            exit(1);
-        }
-    }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_xyz");
 
     const int half_w = WORD_BITLEN / 2; // if w=32, half_w = 16 = 2^4
@@ -251,13 +238,13 @@ void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
 	WORD X1 = valX >> half_w;
 	WORD Y0 = valY & MASK;
 	WORD Y1 = valY >> half_w;
-	
+
     // Cross multiplication
 	WORD T0 = X0 * Y1;
 	WORD T1 = X1 * Y0;
 	T0 = T0 + T1;
 	T1 = T0 < T1; // overflow
-	
+
     // Direct multiplication
 	WORD Z0 = X0 * Y0;
 	WORD Z1 = X1 * Y1;
@@ -276,42 +263,35 @@ void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_TxtBk_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_TxtBk_xyz");
 
-    BINT* ptrX = *pptrX;
-    BINT* ptrY = *pptrY;
+    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
+    int n = ptrX->wordlen; int m = ptrY->wordlen;
 
-    if (!*pptrZ) {
-        init_bint(pptrZ, ptrX->wordlen + ptrY->wordlen);
-        if (!*pptrZ) {
-            fprintf(stderr, "Error: Memory allocation failed in 'mul_core_TxtBk_xyz'\n");
-            exit(1);
-        }
-    }
+    init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_TxtBk_xyz");
-
+    BINT* ptrZ = *pptrZ;
+    SET_BINT_CUSTOM_ZERO(pptrZ, n+m);
 
     // if(ptrX->sign != ptrY->sign)
     //     (*pptrZ)->sign = true;
-    BINT* ptrTmp = NULL;
-    init_bint(&ptrTmp, ptrX->wordlen + ptrY->wordlen);
-    BINT* ptrWordMUl = NULL;
+    BINT* ptrWordMul = NULL;
+    init_bint(&ptrWordMul, 2);
+    SET_BINT_CUSTOM_ZERO(&ptrWordMul, 2);
 
-    for(int i = 0; i < ptrX->wordlen; i++) {
-        for(int j = 0; j < ptrY->wordlen; j++) {
-            init_bint(&ptrWordMUl,2);
-            mul_xyz(ptrX->val[i], ptrY->val[j], &ptrWordMUl);
-            left_shift_word(&ptrWordMUl, (i+j));
-            if ((*pptrZ)->wordlen < (ptrWordMUl->wordlen)){
-                add_core_xyz(&ptrWordMUl,pptrZ, &ptrTmp);
-            }
-            else{ 
-                add_core_xyz(pptrZ, &ptrWordMUl, &ptrTmp);
-            }
-            copyBINT(pptrZ, &ptrTmp);
-            delete_bint(&ptrWordMUl);
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            printf("\nBefore: x[%d]*y[%d] = 0x%x * 0x%x = ",i,j,ptrX->val[i], ptrY->val[j]);
+            mul_xyz(ptrX->val[i], ptrY->val[j], &ptrWordMul);
+            printf("\n-After: x[%d]*y[%d] = 0x%x * 0x%x = ",i,j,ptrX->val[i], ptrY->val[j]);
+            printHex2(ptrWordMul);printf("\n");
+            left_shift_word(&ptrWordMul, (i+j));
+            printf("After shift: ");printHex2(ptrWordMul);printf("\n");
+            add_core_xyz(pptrZ, pptrZ, pptrZ);
+            printf("\n Result: ");printHex2(ptrZ);printf("\n");
+            // ptrTmp->val = ptrZ->val;
+            // ADD(&ptrTmp, &ptrWordMul, pptrZ);
         }
     }
-    delete_bint(&ptrTmp);
-    refine_BINT(*pptrZ);
+    delete_bint(&ptrWordMul);
 }
 
 void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
