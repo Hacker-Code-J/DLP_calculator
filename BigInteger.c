@@ -481,9 +481,6 @@ void printHex(BINT* X) {
 }
 
 void printHex2(BINT* X) {
-    if(!X || (!&X)) {
-        fprintf(stderr, "Error: Print NULL!");
-    }
     printf("0x");
     for (int i=X->wordlen-1; i>=0; i--) {
         printf("%08x", X->val[i]);

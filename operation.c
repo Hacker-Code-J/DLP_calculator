@@ -82,8 +82,6 @@ void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "add_core_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "add_core_xyz");
-    // exit_on_null_error(ptrX, "ptrX", "add_core_xyz");
-    // exit_on_null_error(ptrY, "ptrY", "add_core_xyz");
     if (!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     int n = ptrX->wordlen; int m = ptrY->wordlen;
@@ -108,8 +106,8 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         ptrZ->val[i] = res;
         k = carry;
     }
-    if(carry) {
-        ptrZ->val[n] = carry;
+    if(k) {
+        ptrZ->val[n] = k;
     } else {
         ptrZ->wordlen = n;
     }
@@ -169,14 +167,13 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "sub_core_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "sub_core_xyz");
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
+    if(!compare_abs_bint(pptrX, pptrY)) swapBINT(pptrX,pptrY);
+
     int n = ptrX->wordlen; int m = ptrY->wordlen;
 
     init_bint(pptrZ, n);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "sub_core_xyz");
     BINT* ptrZ = *pptrZ;
-
-    bool xGeqy = compare_abs_bint(pptrX, pptrY);
-    if(!xGeqy) swapBINT(pptrX,pptrY);
 
     WORD res = 0x00;
     WORD borrow = 0x00;
@@ -192,7 +189,7 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     // printf("Z*: ");printHex2(ptrZ);printf("\n");
     for(int i = m; i < n; i++) {
         // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
-        sub_borrow(ptrX->val[i], 0, &borrow, &res);
+        sub_borrow(ptrX->val[i], (WORD)0, &borrow, &res);
         ptrZ->val[i] = res;
         // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
     }
