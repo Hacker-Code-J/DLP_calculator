@@ -30,7 +30,7 @@ int main() {
     clock_t start1, end1;
     clock_t start2, end2;
     double cpu_time_used1, cpu_time_used2;
-    int t = 10000;
+    int t = 10;
 
     BINT* ptrX = NULL;
     BINT* ptrY = NULL;
@@ -49,18 +49,28 @@ int main() {
     int idx = 0;
     while(idx < t) {
 /*************************** Random Input **************************************/
-        int sgn1 = rand() % 0x02;
-        int sgn2 = rand() % 0x02;
-        int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
-        int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
-        // int len1 = (rand() % 0xa) + 0x1;
-        // int len2 = (rand() % 0xa) + 0x1;
+        // int sgn1 = rand() % 0x02;
+        // int sgn2 = rand() % 0x02;
+        
+        // int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        // int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        // int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
+        // int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
+        // int len1 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
+        // int len2 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
+        // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
+        // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
+        
+        int len1 = (rand() % 0x8) + 0x1;
+        int len2 = (rand() % 0x8) + 0x1;
+        
         // int len1 = 0x6;
         // int len2 = 0x6;
-        // RANDOM_BINT(&ptrX, false, len1);
-        // RANDOM_BINT(&ptrY, false, len2);
-        RANDOM_BINT(&ptrX, sgn1, len1);
-        RANDOM_BINT(&ptrY, sgn2, len2);      
+        
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
+        // RANDOM_BINT(&ptrX, sgn1, len1);
+        // RANDOM_BINT(&ptrY, sgn2, len2);      
 /*******************************************************************************/       
 /*************************** Non-Random Input **************************************/
         // const char* ptrTestX = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
@@ -86,7 +96,7 @@ int main() {
         // mul_xyz(ptrX->val[0], ptrY->val[0], &ptrZ);  // len1 = 1 = len2
         // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_ImpTxtBk_test(&ptrX,&ptrY,&ptrZ);
-        // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+        MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
         // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
         end1 = clock();
@@ -111,14 +121,14 @@ int main() {
         /** SAGE (ADD)
          * print(hex(0x00 + 0x00) == hex(0x00))
         */ 
-        printf("print(hex(");
-        if(ptrX->sign) printf("-");
-        printHex2(ptrX);printf(" + ");
-        if(ptrY->sign) printf("-");
-        printHex2(ptrY);
-        printf(") == hex(");
-        if(ptrZ->sign) printf("-");
-        printHex2(ptrZ);printf("))\n");
+        // printf("print(hex(");
+        // if(ptrX->sign) printf("-");
+        // printHex2(ptrX);printf(" + ");
+        // if(ptrY->sign) printf("-");
+        // printHex2(ptrY);
+        // printf(") == hex(");
+        // if(ptrZ->sign) printf("-");
+        // printHex2(ptrZ);printf("))\n");
         
         /** SAGE (SUB).
          * print((hex(0x00 - 0x00) == hex(0x00))
@@ -135,14 +145,14 @@ int main() {
         /** SAGE (MUL)
          * print(hex(0x00 * 0x00) == hex(0x00))
         */ 
-        // printf("print(hex(");
-        // if(ptrX->sign) printf("-");
-        // printHex2(ptrX);printf(" * ");
-        // if(ptrY->sign) printf("-");
-        // printHex2(ptrY);
-        // printf(") == hex(");
-        // if(ptrZ->sign) printf("-");
-        // printHex2(ptrZ);printf("))\n");
+        printf("print(hex(");
+        if(ptrX->sign) printf("-");
+        printHex2(ptrX);printf(" * ");
+        if(ptrY->sign) printf("-");
+        printHex2(ptrY);
+        printf(") == hex(");
+        if(ptrZ->sign) printf("-");
+        printHex2(ptrZ);printf("))\n");
 /****************************************************************************************/
         delete_bint(&ptrX);
         delete_bint(&ptrY);

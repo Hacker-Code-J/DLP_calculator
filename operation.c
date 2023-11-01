@@ -83,8 +83,7 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "add_core_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "add_core_xyz");
     if (!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
-    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
-    int n = ptrX->wordlen; int m = ptrY->wordlen;
+    int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
 
     init_bint(pptrZ, n+1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
@@ -95,13 +94,13 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     for (int i = 0; i < m; i++) {
         // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);
-        add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
+        add_carry((*pptrX)->val[i], (*pptrY)->val[i], k, &carry, &res);
         (*pptrZ)->val[i] = res;
         // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
         k = carry;
     }
     for (int i = m; i < n; i++) {
-        add_carry(ptrX->val[i],(WORD)0, k, &carry, &res);
+        add_carry((*pptrX)->val[i],(WORD)0, k, &carry, &res);
         (*pptrZ)->val[i] = res;
         k = carry;
     }
@@ -115,31 +114,28 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "ADD");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "ADD");
-    bool xGeqy = compare_abs_bint(pptrX, pptrY);
-    if (!xGeqy) {
+    // bool xGeqy = compare_abs_bint(pptrX, pptrY);
+    if (!compare_abs_bint(pptrX, pptrY)) {
         swapBINT(pptrX,pptrY);
-        // ADD(pptrY, pptrX, pptrZ);
-        // return;
     }
-    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
-    refine_BINT(ptrX); refine_BINT(ptrY);
+    refine_BINT(*pptrX); refine_BINT(*pptrY);
     
-    int n = ptrX->wordlen;
+    int n = (*pptrX)->wordlen;
 
     init_bint(pptrZ, n+1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "ADD");
     
-    if (ptrX->sign == ptrY->sign) {
+    if ((*pptrX)->sign == (*pptrY)->sign) {
         // If signs are the same, add the numbers
         add_core_xyz(pptrX, pptrY, pptrZ);
-        if (ptrX->sign) {
+        if ((*pptrX)->sign) {
             // If both numbers are negative, then result is negative
             FLIP_SIGN(pptrZ);
         }
     } else {
         // If signs are different, subtract the numbers
         sub_core_xyz(pptrX, pptrY, pptrZ);
-        if (ptrX->sign) {
+        if ((*pptrX)->sign) {
             // If X is negative and Y is positive, then result is negative
             FLIP_SIGN(pptrZ);
         }
@@ -165,10 +161,10 @@ void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR) {
 void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "sub_core_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "sub_core_xyz");
-    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
+    // BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     if(!compare_abs_bint(pptrX, pptrY)) swapBINT(pptrX,pptrY);
 
-    int n = ptrX->wordlen; int m = ptrY->wordlen;
+    int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
 
     init_bint(pptrZ, n);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "sub_core_xyz");
@@ -176,51 +172,43 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     WORD res = 0x00;
     WORD borrow = 0x00;
 
-    matchSize(ptrX,ptrY);
-    // printf("Z: ");printHex2(ptrZ);printf("\n");
+    matchSize(*pptrX,*pptrY);
     for(int i = 0; i < m; i++) {
-        // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
-        sub_borrow(ptrX->val[i], ptrY->val[i], &borrow, &res);
+        sub_borrow((*pptrX)->val[i], (*pptrY)->val[i], &borrow, &res);
         (*pptrZ)->val[i] = res;
-        // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
     }
-    // printf("Z*: ");printHex2(ptrZ);printf("\n");
     for(int i = m; i < n; i++) {
-        // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
-        sub_borrow(ptrX->val[i], (WORD)0, &borrow, &res);
+        sub_borrow((*pptrX)->val[i], (WORD)0, &borrow, &res);
         (*pptrZ)->val[i] = res;
-        // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
     }
-    // printf("Z**: ");printHex2(ptrZ);printf("\n");
-    refine_BINT(ptrX); refine_BINT(ptrY);
+    refine_BINT(*pptrX); refine_BINT(*pptrY);
 }
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "SUB");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "SUB");
     // Swap the order if abs(X) < abs(Y) to ensure X >= Y
-    bool xGeqy = compare_abs_bint(pptrX, pptrY);
-    if (!xGeqy) {
+    if (!compare_abs_bint(pptrX, pptrY)) {
         swapBINT(pptrX,pptrY);
     }
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     refine_BINT(ptrX); refine_BINT(ptrY);
     
-    int n = ptrX->wordlen;
+    int n = (*pptrX)->wordlen;
 
     init_bint(pptrZ, n);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
     
-    if (ptrX->sign == ptrY->sign) {
+    if ((*pptrX)->sign == (*pptrY)->sign) {
         // If signs are the same, subtract the numbers
         sub_core_xyz(pptrX, pptrY, pptrZ);
-        if (ptrX->sign) {
+        if ((*pptrX)->sign) {
             // If both numbers are negative, flip the sign of the result
             FLIP_SIGN(pptrZ);
         }
     } else {
         // If signs are different, add the numbers
         add_core_xyz(pptrX, pptrY, pptrZ);
-        if (ptrX->sign) {
+        if ((*pptrX)->sign) {
             // If X is positive and Y is negative, then result is positive
             FLIP_SIGN(pptrZ);
         }
@@ -262,7 +250,6 @@ void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
 void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_TxtBk_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_TxtBk_xyz");
-
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     int n = ptrX->wordlen; int m = ptrY->wordlen;
 
@@ -297,19 +284,14 @@ void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_ImpTxtBk_test");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_ImpTxtBk_test");
-    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
-    int n = ptrX->wordlen; int m = ptrX->wordlen;
-    matchSize(ptrX, ptrY); makeEven(ptrX); makeEven(ptrY);
+    int n = (*pptrX)->wordlen; int m = (*pptrX)->wordlen;
+    matchSize(*pptrX, *pptrY); makeEven(*pptrX); makeEven(*pptrY);
+    custom_printHex_xy(*pptrX, *pptrY, MAX(n,m));
 
     init_bint(pptrZ, n+m);
-    if (!*pptrZ) {
-        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_ImpTxtBk_test'\n");
-        exit(1);
-    }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_ImpTxtBk_test");
-    BINT* ptrZ = *pptrZ;
 
-    int p = ptrX->wordlen / 2; int q = ptrY->wordlen / 2;
+    int p = n / 2; int q = n / 2;
 
     BINT* ptrT = NULL;
     init_bint(&ptrT, n+m);
@@ -325,8 +307,8 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     for(int j = 0; j < 2 * q; j++) {
         for(int k = 0; k < p; k++) {
             reset_bint(ptrTmp0); reset_bint(ptrTmp1);
-            mul_xyz(ptrX->val[2*k], ptrY->val[j], &ptrTmp0);
-            mul_xyz(ptrX->val[2*k+1], ptrY->val[j], &ptrTmp1);
+            mul_xyz((*pptrX)->val[2*k], (*pptrY)->val[j], &ptrTmp0);
+            mul_xyz((*pptrX)->val[2*k+1], (*pptrY)->val[j], &ptrTmp1);
             printf("\nx[%d]*y[%d]=Tmp0: ",2*k,j);printHex2(ptrTmp0);printf("\n");
             printf("x[%d]*y[%d]=Tmp1: ",2*k+1,j);printHex2(ptrTmp1);printf("\n");
             if (!k) {
@@ -366,7 +348,7 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         printf("\n\nprint(int(hex(");
         printHex2(ptrT);printf(" + ");printHex2(*pptrZ);
         printf("), 16) == int(\"");
-        if (ptrZ->wordlen > ptrT->wordlen) // wordlen Z >= wordlen T
+        if ((*pptrZ)->wordlen > ptrT->wordlen) // wordlen Z >= wordlen T
             add_core_xyz(pptrZ, &ptrT, pptrZ);
         else 
             add_core_xyz(&ptrT, pptrZ, pptrZ);
@@ -377,6 +359,7 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrT);
     delete_bint(&ptrT0); delete_bint(&ptrT1);
     delete_bint(&ptrTmp0); delete_bint(&ptrTmp1);
+    refine_BINT(*pptrX); refine_BINT(*pptrY);
 }
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk_xyz");
@@ -449,6 +432,68 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrT1);
     delete_bint(&ptrTmp0);
     delete_bint(&ptrTmp1);
+    // CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_ImpTxtBk_xyz");
+    // CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_ImpTxtBk_xyz");
+    
+    // int n = (*pptrX)->wordlen;
+    // int m = (*pptrX)->wordlen;
+
+    // matchSize(*pptrX, *pptrY);
+    // makeEven(*pptrX); makeEven(*pptrY);
+
+    // init_bint(pptrZ, n+m);
+    // CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_ImpTxtBk_xyz");
+
+    // int p = (*pptrX)->wordlen / 2;
+    // int q = (*pptrY)->wordlen / 2;
+
+    // BINT* ptrT = NULL;
+    // init_bint(&ptrT, n+m);
+    // BINT* ptrT0 = NULL;
+    // init_bint(&ptrT0, 2*p);
+    // BINT* ptrT1 = NULL;
+    // init_bint(&ptrT1, 2*p);
+    // BINT* ptrTmp0 = NULL;
+    // init_bint(&ptrTmp0, 2*p);
+    // BINT* ptrTmp1 = NULL;
+    // init_bint(&ptrTmp1, 2*p);
+
+    // for(int j = 0; j < 2 * q; j++) {
+    //     for(int k = 0; k < p; k++) {
+    //         reset_bint(ptrTmp0);
+    //         reset_bint(ptrTmp1);
+    //         mul_xyz((*pptrX)->val[2*k], (*pptrY)->val[j], &ptrTmp0);
+    //         mul_xyz((*pptrX)->val[2*k+1], (*pptrY)->val[j], &ptrTmp1);
+    //         if (!k) {
+    //             copyBINT(&ptrT0, &ptrTmp0);
+    //             copyBINT(&ptrT1, &ptrTmp1);
+    //         } else {
+    //             left_shift_word(&ptrTmp0, 2*k);
+    //             refine_BINT_word(ptrTmp0, 2*k);
+    //             OR_BINT(ptrTmp0, ptrT0, &ptrT0);
+
+    //             left_shift_word(&ptrTmp1, 2*k);
+    //             refine_BINT_word(ptrTmp1, 2*k);
+    //             OR_BINT(ptrTmp1, ptrT1, &ptrT1);
+    //         }
+    //     }
+    //     left_shift_word(&ptrT1, 1);
+    //     add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+    //     // if (ptrT1->wordlen > ptrT0->wordlen)
+    //     //     add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+    //     // else
+    //     //     add_core_xyz(&ptrT0, &ptrT1, &ptrT);
+    //     left_shift_word(&ptrT, j);
+    //     if ((*pptrZ)->wordlen > ptrT->wordlen) // wordlen Z >= wordlen T
+    //         add_core_xyz(pptrZ, &ptrT, pptrZ);
+    //     else 
+    //         add_core_xyz(&ptrT, pptrZ, pptrZ);
+    // }
+    // delete_bint(&ptrT);
+    // delete_bint(&ptrT0);
+    // delete_bint(&ptrT1);
+    // delete_bint(&ptrTmp0);
+    // delete_bint(&ptrTmp1);
 }
 
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
