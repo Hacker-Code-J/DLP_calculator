@@ -114,41 +114,40 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     }
     refine_BINT(ptrZ);
 }
-
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "ADD");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "ADD");
-    if((*pptrX)->wordlen < (*pptrY)->wordlen){
-        ADD(pptrY, pptrX, pptrZ);
-        return;
+    bool xGeqy = compare_abs_bint(pptrX, pptrY);
+    if (!xGeqy) {
+        swapBINT(pptrX,pptrY);
+        // ADD(pptrY, pptrX, pptrZ);
+        // return;
     }
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
+    refine_BINT(ptrX); refine_BINT(ptrY);
+    
     int n = ptrX->wordlen; int m = ptrY->wordlen;
 
     BINT* ptrZ = *pptrZ;
     ptrZ = init_bint(pptrZ, n+1);
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "ADD");
     
-    refine_BINT(ptrX); refine_BINT(ptrY);
-    // Determine order based on magnitude, irrespective of sign.
-    bool xGeqy = compare_abs_bint(pptrX, pptrY);
-    
-    // If signs are same, then addition is straightforward.
-    if (!(ptrX->sign == ptrY->sign)) {
-        if (ptrX->sign) { // If both are negative
+    if (ptrX->sign == ptrY->sign) {
+        // If signs are the same, add the numbers
+        add_core_xyz(pptrX, pptrY, pptrZ);
+        if (ptrX->sign) {
+            // If both numbers are negative, then result is negative
             FLIP_SIGN(pptrZ);
         }
-        add_core_xyz(xGeqy ? pptrX : pptrY, xGeqy ? pptrY : pptrX, pptrZ);
-    } else { // If signs are different, then subtraction is needed.
+    } else {
+        // If signs are different, subtract the numbers
+        sub_core_xyz(pptrX, pptrY, pptrZ);
         if (ptrX->sign) {
-            ptrZ->sign = !xGeqy; // X negative and Y positive
-        } else {
-            ptrZ->sign = xGeqy; // X positive and Y negative
+            // If X is negative and Y is positive, then result is negative
+            FLIP_SIGN(pptrZ);
         }
-        // sub_xyz(xGeqy ? ptrX : ptrY, xGeqy ? ptrY : ptrX, *pptrZ);
     }
 }
-
 
 void sub_borrow(WORD x, WORD y, WORD b, WORD* ptrQ, WORD* ptrR) {
     WORD tmp = x - *ptrQ;
@@ -166,15 +165,15 @@ void sub_borrow(WORD x, WORD y, WORD b, WORD* ptrQ, WORD* ptrR) {
     // *borrow += (*res < y);
     // *res -= y;
 }
-void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ){
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "add_core_xyz");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "add_core_xyz");
+void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "sub_core_xyz");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "sub_core_xyz");
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     int n = ptrX->wordlen; int m = ptrY->wordlen;
 
     BINT* ptrZ = *pptrZ;
     ptrZ = init_bint(pptrZ, n);
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "sub_core_xyz");
 
     bool xGeqy = compare_abs_bint(pptrX, pptrY);
     if(!xGeqy) swapBINT(pptrX,pptrY);
@@ -203,92 +202,38 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ){
     // printf("Z**: ");printHex2(ptrZ);printf("\n");
     refine_BINT(ptrX); refine_BINT(ptrY);
 }
-// void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {//X>=Y>0
-//     BINT* ptrX = *pptrX;
-//     BINT* ptrY = *pptrY;
-//     BINT* ptrZ = *pptrZ;
-    
-//     int n = ptrX->wordlen;
-//     int m = ptrY->wordlen;
-
-//     if(ptrY->sign == true) {
-//         fprintf(stderr, "Error: 'ptrY->sign' is negative 'sub_core_xyz'\n");
-//         exit(1);
-//     }
-//     if(n < m) {
-//         printf("\nwordlen X = %d, wordlen Y = %d\n",ptrX->wordlen, ptrY->wordlen);
-//         fprintf(stderr, "Error: wordlen(X) < wordlen(Y) is not vaild in 'sub_core_xyz'\n");
-//         exit(1);
-//     }
-
-//     // WORD* tmp;
-//     // tmp = (WORD*)realloc(ptrY->val,n*sizeof(WORD));
-//     // ptrY->val = tmp;
-
-//     // for(int i=m; i<n; i++)
-//     //     ptrY->val[i] = 0;
-
-//     WORD b = 0;
-//     WORD res = 0;
-//     WORD borrow = 0;
-
-//     //
-//     for(int i=0; i<MAX(n,m); i++) {
-//         // sub_xby(ptrX->val[i], b, ptrY->val[i], &res, &borrow);
-//         sub_borrow(ptrX->val[i], ptrY->val[i], b, &borrow, &res);
-//         ptrZ->val[i] = res;
-//         b = borrow;
-//     }
-    
-//     //refine_BINT(Z);
-// }
-
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "SUB");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "SUB");
-    BINT* ptrX = *pptrX;
-    BINT* ptrY = *pptrY;
-
-    delete_bint(pptrZ);
-    *pptrZ = init_bint(pptrZ, MAX(ptrX->wordlen, ptrY->wordlen));
-    if (!*pptrZ) {
-        fprintf(stderr, "Error: Memory allocation failed in 'MUL_Core_ImpTxtBk_xyz'\n");
-        exit(1);
+    // Swap the order if abs(X) < abs(Y) to ensure X >= Y
+    bool xGeqy = compare_abs_bint(pptrX, pptrY);
+    if (!xGeqy) {
+        swapBINT(pptrX,pptrY);
     }
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
-    BINT* ptrZ = *pptrZ;
+    BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
+    refine_BINT(ptrX); refine_BINT(ptrY);
+    
+    int n = ptrX->wordlen; int m = ptrY->wordlen;
 
-    matchSize(ptrX, ptrY);
-    if(ptrX->sign==false && ptrY->sign==false) {
-        if(compare_abs_bint(pptrX,pptrY))
-            sub_core_xyz(pptrX,pptrY,pptrZ);
-        else {
-            ptrZ->sign = true;
-            sub_core_xyz(pptrY,pptrX,pptrZ);
-        }
-    } else if(ptrX->sign==false && ptrY->sign==true) {
-        if(compare_abs_bint(pptrX,pptrY))
-            add_core_xyz(pptrX,pptrY,pptrZ);
-        else
-            add_core_xyz(pptrY,pptrX,pptrZ);
-    } else if(ptrX->sign==true && ptrY->sign==false) {
-        if(compare_abs_bint(pptrX,pptrY)) {
-            ptrZ->sign = true;
-            add_core_xyz(pptrX,pptrY,pptrZ);
-        } else {
-            ptrZ->sign = true;
-            add_core_xyz(pptrY,pptrX,pptrZ);
+    BINT* ptrZ = *pptrZ;
+    ptrZ = init_bint(pptrZ, n);
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
+    
+    if (ptrX->sign == ptrY->sign) {
+        // If signs are the same, subtract the numbers
+        sub_core_xyz(pptrX, pptrY, pptrZ);
+        if (ptrX->sign) {
+            // If both numbers are negative, flip the sign of the result
+            FLIP_SIGN(pptrZ);
         }
     } else {
-        if(compare_abs_bint(pptrX,pptrY)){
-            ptrZ->sign = true;
-            sub_core_xyz(pptrX,pptrY,pptrZ);
-        } else {
-            sub_core_xyz(pptrY,pptrX,pptrZ);
+        // If signs are different, add the numbers
+        add_core_xyz(pptrX, pptrY, pptrZ);
+        if (ptrX->sign) {
+            // If X is positive and Y is negative, then result is positive
+            FLIP_SIGN(pptrZ);
         }
     }
-    refine_BINT(ptrX);
-    refine_BINT(ptrY);
 }
 
 // void mul_xyc(WORD x, WORD y , WORD* C){

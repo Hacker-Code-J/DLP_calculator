@@ -82,7 +82,7 @@ void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words);
  */
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src);
 
-void swapBINT(BINT** ptrbint1, BINT** ptrbint2);
+void swapBINT(BINT** ptrBint1, BINT** ptrBint2);
 
 /**
  * Modifies the binary integer to be an even number, if it isn't already.

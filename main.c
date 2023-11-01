@@ -30,7 +30,7 @@ int main() {
     clock_t start1, end1;
     clock_t start2, end2;
     double cpu_time_used1, cpu_time_used2;
-    int t = 10000;
+    int t = 100000;
 
     BINT* bint1 = NULL;
     BINT* bint2 = NULL;
@@ -48,12 +48,16 @@ int main() {
     int idx = 0;
     while(idx < t) {
 /*************************** Random Input **************************************/
-        int n = (rand() % 0x1e0) + 0x0f0;
-        // int m = (rand() % 0x20) + 0x10;
+        int sgn1 = rand() % 0x02;
+        int sgn2 = rand() % 0x02;
+        int n = (rand() % 0x060) + 0x040;
+        int m = (rand() % 0x060) + 0x040;
         // int n = 0x6;
         // int m = 0x6;
-        rand_bint(&bint1, false, n);
-        rand_bint(&bint2, false, n);      
+        // rand_bint(&bint1, false, n);
+        // rand_bint(&bint2, false, m);
+        rand_bint(&bint1, sgn1, n);
+        rand_bint(&bint2, sgn2, m);      
 /*******************************************************************************/       
 /*************************** Specific Input **************************************/
         // const char* testBint1 = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
@@ -64,7 +68,7 @@ int main() {
         // int m = bint2->wordlen;          
 /*********************************************************************************/
 
-        if (bint1->wordlen < bint2->wordlen) swapBINT(&bint1,&bint2);
+        // if (bint1->wordlen < bint2->wordlen) swapBINT(&bint1,&bint2);
         // printf("Test[%d]---------------------------------------------------\n", idx+1);
         // printf("n m : %d %d\n", n, m);
         // custom_printHex_xy(bint1, bint2, MAX(n,m));
@@ -75,7 +79,9 @@ int main() {
         
         start1 = clock();
         // add_core_xyz(&bint1,&bint2,&bint3);
-        sub_core_xyz(&bint1,&bint2,&bint3);
+        // ADD(&bint1,&bint2,&bint3);
+        // sub_core_xyz(&bint1,&bint2,&bint3);
+        SUB(&bint1,&bint2,&bint3);
         // mul_core_ImpTxtBk_test(&bint1, &bint2, &bint3);
         // MUL_Core_ImpTxtBk_xyz(&bint1, &bint2, &bint3);
         // mul_core_Krtsb_test(&bint1, &bint2, &bint3);
@@ -100,32 +106,27 @@ int main() {
 
 /*************************** Sage (or Python) Test **************************************/
         /** SAGE (ADD)
-         * print(int(hex(0x00 + 0x00), 16) == int("0x00", 16))
+         * print(hex(0x00 + 0x00) == hex(0x00))
         */ 
-        // printf("print(int(hex(");
-        // printHex2(bint1);printf(" + ");printHex2(bint2);
-        // printf("), 16) == int(\"");
-        // printHex2(bint3);printf("\", 16))\n");
-
-        /** SAGE (SUB)
-         * print(int(hex(0x00 - 0x00), 16) == int("0x00", 16))
-        */ 
-        // printf("print(int(hex(");
-        // printHex2(bint1);printf(" - ");printHex2(bint2);
-        // printf("), 16) == int(\"");
-        // printHex2(bint3);printf("\", 16))\n");
+        // printf("print(hex(");
+        // if(bint1->sign) printf("-");
+        // printHex2(bint1);printf(" + ");
+        // if(bint2->sign) printf("-");
+        // printHex2(bint2);
+        // printf(") == hex(");
+        // if(bint3->sign) printf("-");
+        // printHex2(bint3);printf("))\n");
         
-        /** SAGE (SUB) abs ver (sub core test).
+        /** SAGE (SUB).
          * print((hex(0x00 - 0x00) == hex(0x00))
         */
-        bool xGeqy = compare_abs_bint(&bint1, &bint2);
         printf("print(hex(");
         if(bint1->sign) printf("-");
         printHex2(bint1);printf(" - ");
         if(bint2->sign) printf("-");
         printHex2(bint2);
         printf(") == hex(");
-        if(!xGeqy) printf("-");
+        if(bint3->sign) printf("-");
         printHex2(bint3);printf("))\n");
 
         /** SAGE (MUL)

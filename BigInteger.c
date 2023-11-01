@@ -70,22 +70,25 @@ void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     (ptrBint_dst)->sign = (ptrBint_src)->sign;
 }
 
-void swapBINT(BINT** pptrbint1, BINT** pptrbint2) {
-    BINT* ptrbint1 = *pptrbint1;
-    BINT* ptrbint2 = *pptrbint2;
+void swapBINT(BINT** pptrBint1, BINT** pptrBint2) {
+    // BINT** tmp = pptrBint1;
+    // pptrBint1 = pptrBint2;
+    // pptrBint1 = tmp;
+    BINT* ptrBint1 = *pptrBint1;
+    BINT* ptrBint2 = *pptrBint2;
 
-    if(ptrbint1 != ptrbint2) { // If they aren't the same pointer
-        ptrbint1->sign ^= ptrbint2->sign;
-        ptrbint2->sign ^= ptrbint1->sign;
-        ptrbint1->sign ^= ptrbint2->sign;
+    if(ptrBint1 != ptrBint2) { // If they aren't the same pointer
+        ptrBint1->sign ^= ptrBint2->sign;
+        ptrBint2->sign ^= ptrBint1->sign;
+        ptrBint1->sign ^= ptrBint2->sign;
 
-        ptrbint1->wordlen ^= ptrbint2->wordlen;
-        ptrbint2->wordlen ^= ptrbint1->wordlen;
-        ptrbint1->wordlen ^= ptrbint2->wordlen;
+        ptrBint1->wordlen ^= ptrBint2->wordlen;
+        ptrBint2->wordlen ^= ptrBint1->wordlen;
+        ptrBint1->wordlen ^= ptrBint2->wordlen;
 
-        WORD* tmpVal = ptrbint1->val;
-        ptrbint1->val = ptrbint2->val;
-        ptrbint2->val = tmpVal;
+        WORD* tmpVal = ptrBint1->val;
+        ptrBint1->val = ptrBint2->val;
+        ptrBint2->val = tmpVal;
     }
 
     // // Swapping the signs
@@ -652,9 +655,7 @@ bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
     // Dereference the double pointers to obtain actual BINT pointers
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     // Extract word lengths for both numbers
-    int n = ptrX->wordlen; int m = ptrX->wordlen;
-    // Extract word arrays for both numbers
-    WORD* X = ptrX->val; WORD* Y = ptrY->val;
+    int n = ptrX->wordlen; int m = ptrY->wordlen;
 
     // Compare the word lengths of the two numbers
     if(n > m) return 1;
@@ -662,8 +663,8 @@ bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
 
     // Perform a word-by-word comparison starting from the most significant word
     for(int i = ptrX->wordlen - 1; i >= 0; i--) {
-        if(X[i] > Y[i]) return 1;
-        if(X[i] < Y[i]) return 0;
+        if(ptrX->val[i] > ptrY->val[i]) return 1;
+        if(ptrX->val[i] < ptrY->val[i]) return 0;
     }
     // Numbers are equal in value
     return 1;
