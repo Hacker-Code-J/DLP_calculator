@@ -186,18 +186,18 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ){
     matchSize(pptrX,pptrY);
     // printf("Z: ");printHex2(ptrZ);printf("\n");
     for(int i = 0; i < m; i++) {
-        // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
+        printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         sub_borrow(ptrX->val[i], ptrY->val[i], b, &borrow, &res);
         ptrZ->val[i] = res;
-        // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
+        printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         b = borrow;
     }
     // printf("Z*: ");printHex2(ptrZ);printf("\n");
     for(int i = m; i < n; i++) {
-        // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
+        printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         sub_borrow(ptrX->val[i], 0, b, &borrow, &res);
         ptrZ->val[i] = res;
-        // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
+        printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
         b = borrow;
     }
     // printf("Z**: ");printHex2(ptrZ);printf("\n");

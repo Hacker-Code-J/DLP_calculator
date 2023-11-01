@@ -50,23 +50,24 @@ int main() {
 /*************************** Random Input **************************************/
         // int n = (rand() % 0xa) + 0x1;
         // int m = (rand() % 0x20) + 0x10;
-        int n = 0x6;
-        int m = 0x6;
-        rand_bint(&bint1, false, n);
-        rand_bint(&bint2, false, n);      
+        // int n = 0x6;
+        // int m = 0x6;
+        // rand_bint(&bint1, false, n);
+        // rand_bint(&bint2, false, n);      
 /*******************************************************************************/       
 /*************************** Specific Input **************************************/
-        // const char* testBint1 = "0x3922306cced6bc504a8571ac4cd6a26d1742dfacee21eeb3";
-        // const char* testBint2 = "0xb8b21068688bf7bc3f2119d10ad7f25ee9d06f3522377193";
-        // strToBINT(&bint1, testBint1);
-        // strToBINT(&bint2, testBint2);
-        // int n = bint1->wordlen;
-        // int m = bint2->wordlen;          
+        const char* testBint1 = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
+        const char* testBint2 = "0x296cfc6c8e42f584434cc1c56b20c1f0f1493ef22d5fb7e0";
+        strToBINT(&bint1, testBint1);
+        strToBINT(&bint2, testBint2);
+        int n = bint1->wordlen;
+        int m = bint2->wordlen;          
 /*********************************************************************************/
 
         if (bint1->wordlen < bint2->wordlen) swapBINT(&bint1,&bint2);
         // printf("Test[%d]---------------------------------------------------\n", idx+1);
         // printf("n m : %d %d\n", n, m);
+        custom_printHex_xy(bint1, bint2, MAX(n,m));
         // custom_printHex_xy(bint1, bint2, n+m);
 
         // printHex(bint1);printf("\n");
@@ -88,7 +89,7 @@ int main() {
         // cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
 
         // custom_printHex(bint1, bint2, bint3, 0);
-        // custom_printHex(bint1, bint2, bint3, 1);
+        custom_printHex(bint1, bint2, bint3, 1);
         // custom_printHex(bint1, bint2, bint3, 2);
 
         // const char *hexData = "1A3F";  // Sample data
