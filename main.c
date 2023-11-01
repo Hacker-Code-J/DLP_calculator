@@ -30,12 +30,12 @@ int main() {
     clock_t start1, end1;
     clock_t start2, end2;
     double cpu_time_used1, cpu_time_used2;
-    int t = 5;
+    int t = 10000;
 
-    BINT* bint1 = NULL;
-    BINT* bint2 = NULL;
-    BINT* bint3 = NULL;
-    
+    BINT* ptrX = NULL;
+    BINT* ptrY = NULL;
+    BINT* ptrZ = NULL;
+
     /**
      * if WORD_BITLEN = 32,
      * 0x020 -> ( 2 * 16 =  32) -> (32 *  32 =  1024-bit)
@@ -45,19 +45,20 @@ int main() {
      * 
      * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
     */
+    
     int idx = 0;
     while(idx < t) {
 /*************************** Random Input **************************************/
         // int sgn1 = rand() % 0x02;
         // int sgn2 = rand() % 0x02;
-        int n = (rand() % 0x060) + 0x040;
-        int m = (rand() % 0x060) + 0x040;
-        // int n = 0x6;
-        // int m = 0x6;
-        RANDOM_BINT(&bint1, false, n);
-        RANDOM_BINT(&bint2, false, m);
-        // RANDOM_BINT(&bint1, sgn1, n);
-        // RANDOM_BINT(&bint2, sgn2, m);      
+        int len1 = (rand() % 0x060) + 0x040;
+        int len2 = (rand() % 0x060) + 0x040;
+        // int len1 = 0x6;
+        // int len2 = 0x6;
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
+        // RANDOM_BINT(&bint1, sgn1, len1);
+        // RANDOM_BINT(&bint2, sgn2, len2);      
 /*******************************************************************************/       
 /*************************** Specific Input **************************************/
         // const char* testBint1 = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
@@ -77,8 +78,45 @@ int main() {
         // printHex(bint1);printf("\n");
         // printHex(bint2);printf("\n");
         
+        // exit_on_null_error(ptrX, "ptrX", "add_core_xyz");
+        // exit_on_null_error(ptrY, "ptrY", "add_core_xyz");
+        // int n = ptrX->wordlen; int m = ptrY->wordlen;
+
+        // init_bint(&ptrZ, n+1);
+        // CHECK_PTR_AND_DEREF(&ptrZ, "pptrZ", "add_core_xyz");
+        // BINT* ptrZ = &ptrZ;
+
+        // WORD res = 0x00;
+        // WORD carry = 0x00;
+        // // WORD* res = NULL;
+        // // WORD k = 0x00;
+        
+        // int i;
+        // for (i = 0; i < m; i++) {
+        //     // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);
+        //     add_carry(ptrX->val[i], ptrY->val[i], &carry, &res);
+        //     (*ptrZ)->val[i] = res;
+        //     // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
+        //     // k = carry;
+        // }
+        // for (i = m; i < n; i++) {
+        //     // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);    
+        //     add_carry(ptrX->val[i], 0, &carry, &res);
+        //     // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res, i, ptrZ->val[i]);
+        //     (*pptrZ)->val[i] = res;
+        //     // k = carry;
+        // }
+        // if(carry) {
+        //     (*pptrZ)->val[n] = carry;
+        // } else {
+        //     (*pptrZ)->wordlen = n;
+        // }
+        // refine_BINT(ptrX);
+        // refine_BINT(ptrY);
+        // refine_BINT(*pptrZ);
+
         start1 = clock();
-        add_core_xyz(&bint1,&bint2,&bint3);
+        add_core_xyz(&ptrX,&ptrY,&ptrZ);
         // ADD(&bint1,&bint2,&bint3);
         // sub_core_xyz(&bint1,&bint2,&bint3);
         // SUB(&bint1,&bint2,&bint3);
@@ -110,13 +148,13 @@ int main() {
          * print(hex(0x00 + 0x00) == hex(0x00))
         */ 
         printf("print(hex(");
-        if(bint1->sign) printf("-");
-        printHex2(bint1);printf(" + ");
-        if(bint2->sign) printf("-");
-        printHex2(bint2);
+        if(ptrX->sign) printf("-");
+        printHex2(ptrX);printf(" + ");
+        if(ptrY->sign) printf("-");
+        printHex2(ptrY);
         printf(") == hex(");
-        if(bint3->sign) printf("-");
-        printHex2(bint3);printf("))\n");
+        if(ptrZ->sign) printf("-");
+        printHex2(ptrZ);printf("))\n");
         
         /** SAGE (SUB).
          * print((hex(0x00 - 0x00) == hex(0x00))
@@ -144,9 +182,9 @@ int main() {
 /****************************************************************************************/
  
 
-        delete_bint(&bint1);
-        delete_bint(&bint2);
-        delete_bint(&bint3);
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrZ);
         // printf("%.8f\n", cpu_time_used);
         // printf("%.8f\n", cpu_time_used);
         idx++;

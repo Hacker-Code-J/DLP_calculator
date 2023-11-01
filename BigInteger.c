@@ -481,10 +481,11 @@ void printHex(BINT* X) {
 }
 
 void printHex2(BINT* X) {
-    //printf("[%d] 0x ",X->sign);
+    if(!X || (!&X)) {
+        fprintf(stderr, "Error: Print NULL!");
+    }
     printf("0x");
     for (int i=X->wordlen-1; i>=0; i--) {
-
         printf("%08x", X->val[i]);
     }
     //printf("\n");
@@ -576,7 +577,7 @@ void refine_BINT(BINT* X) {
     if(X->wordlen != new_wordlen) {
         X->wordlen = new_wordlen;
         WORD* tmp = X->val;
-        tmp = (WORD*)realloc(tmp, sizeof(WORD)*new_wordlen);
+        tmp = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
         X->val = tmp;
     }
 
@@ -591,7 +592,9 @@ void refine_BINT_word(BINT* ptrX, int num_words) {
     int new_wordlen = ptrX->wordlen - num_words;
     if(ptrX->wordlen != new_wordlen) {
         ptrX->wordlen = new_wordlen;
-        ptrX->val = (WORD*)realloc(ptrX->val, sizeof(WORD)*new_wordlen);
+        WORD* tmp = ptrX->val;
+        tmp = (WORD*)realloc(ptrX->val, sizeof(WORD)*new_wordlen);
+        ptrX->val = tmp;
     }
 
     if((ptrX->wordlen == 1) && (ptrX->val[0] == 0))

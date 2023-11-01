@@ -42,14 +42,15 @@ void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
 }
 
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
-    WORD tmp = x + y;
+    WORD sum = x + y;
 	*ptrQ = 0x00;
-	if(tmp < x)
+	if(sum < x)
 		*ptrQ = 0x01;
-	tmp += k;
-	*ptrR = tmp;
-	if(tmp < k)
+	sum += k;
+	*ptrR = sum;
+	if(sum < k)
 		*ptrQ += 0x01;
+	
     // if (WORD_BITLEN == 8 || WORD_BITLEN == 32) {
     //     u64 result = (u64)x + (u64)y + (u64)k;
     //     *ptrR = (WORD)result;
@@ -81,6 +82,9 @@ void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "add_core_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "add_core_xyz");
+    // exit_on_null_error(ptrX, "ptrX", "add_core_xyz");
+    // exit_on_null_error(ptrY, "ptrY", "add_core_xyz");
+    if (!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     int n = ptrX->wordlen; int m = ptrY->wordlen;
 
@@ -91,29 +95,24 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     WORD res = 0x00;
     WORD carry = 0x00;
     WORD k = 0x00;
-    
-    int i;
-    for (i = 0; i < m; i++) {
+
+    for (int i = 0; i < m; i++) {
         // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);
         add_carry(ptrX->val[i], ptrY->val[i], k, &carry, &res);
         ptrZ->val[i] = res;
         // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
         k = carry;
     }
-    for (i = m; i < n; i++) {
-        // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);    
-        add_carry(ptrX->val[i], 0, k, &carry, &res);
-        // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res, i, ptrZ->val[i]);
+    for (int i = m; i < n; i++) {
+        add_carry(ptrX->val[i],(WORD)0, k, &carry, &res);
         ptrZ->val[i] = res;
         k = carry;
     }
-    if(k) {
-        ptrZ->val[n] = k;
+    if(carry) {
+        ptrZ->val[n] = carry;
     } else {
         ptrZ->wordlen = n;
     }
-    refine_BINT(ptrX);
-    refine_BINT(ptrY);
     refine_BINT(ptrZ);
 }
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
@@ -151,13 +150,13 @@ void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 }
 
 void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR) {
-    WORD tmp = x - *ptrQ;
+    WORD tmp = (WORD)x - *ptrQ;
     *ptrQ = 0x00;
     if (x < tmp)
         *ptrQ = 0x01;
     if (tmp < y)
         *ptrQ += 0x01;
-    tmp -= y;
+    tmp = (WORD)tmp-y;
     *ptrR = tmp;
 
     // //Optimize
@@ -582,7 +581,7 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     BINT* ptrY = *pptrY;
     
     int n = ptrX->wordlen;
-    int m = ptrX->wordlen;
+    int m = ptrY->wordlen;
 
     init_bint(pptrZ, n+m);
     if (!*pptrZ) {
