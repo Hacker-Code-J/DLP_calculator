@@ -30,7 +30,7 @@ int main() {
     clock_t start1, end1;
     clock_t start2, end2;
     double cpu_time_used1, cpu_time_used2;
-    int t = 1;
+    int t = 10000;
 
     BINT* bint1 = NULL;
     BINT* bint2 = NULL;
@@ -48,26 +48,26 @@ int main() {
     int idx = 0;
     while(idx < t) {
 /*************************** Random Input **************************************/
-        // int n = (rand() % 0xa) + 0x1;
+        int n = (rand() % 0x1e0) + 0x0f0;
         // int m = (rand() % 0x20) + 0x10;
         // int n = 0x6;
         // int m = 0x6;
-        // rand_bint(&bint1, false, n);
-        // rand_bint(&bint2, false, n);      
+        rand_bint(&bint1, false, n);
+        rand_bint(&bint2, false, n);      
 /*******************************************************************************/       
 /*************************** Specific Input **************************************/
-        const char* testBint1 = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
-        const char* testBint2 = "0x296cfc6c8e42f584434cc1c56b20c1f0f1493ef22d5fb7e0";
-        strToBINT(&bint1, testBint1);
-        strToBINT(&bint2, testBint2);
-        int n = bint1->wordlen;
-        int m = bint2->wordlen;          
+        // const char* testBint1 = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
+        // const char* testBint2 = "0x296cfc6c8e42f584434cc1c56b20c1f0f1493ef22d5fb7e0";
+        // strToBINT(&bint1, testBint1);
+        // strToBINT(&bint2, testBint2);
+        // int n = bint1->wordlen;
+        // int m = bint2->wordlen;          
 /*********************************************************************************/
 
         if (bint1->wordlen < bint2->wordlen) swapBINT(&bint1,&bint2);
         // printf("Test[%d]---------------------------------------------------\n", idx+1);
         // printf("n m : %d %d\n", n, m);
-        custom_printHex_xy(bint1, bint2, MAX(n,m));
+        // custom_printHex_xy(bint1, bint2, MAX(n,m));
         // custom_printHex_xy(bint1, bint2, n+m);
 
         // printHex(bint1);printf("\n");
@@ -89,7 +89,7 @@ int main() {
         // cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
 
         // custom_printHex(bint1, bint2, bint3, 0);
-        custom_printHex(bint1, bint2, bint3, 1);
+        // custom_printHex(bint1, bint2, bint3, 1);
         // custom_printHex(bint1, bint2, bint3, 2);
 
         // const char *hexData = "1A3F";  // Sample data
@@ -116,27 +116,8 @@ int main() {
         // printHex2(bint3);printf("\", 16))\n");
         
         /** SAGE (SUB) abs ver (sub core test).
-         * print(int(hex(abs(0x00 - 0x00)), 16) == int("0x00", 16))
+         * print((hex(0x00 - 0x00) == hex(0x00))
         */
-        // printf("print(int(hex(abs(");
-        // if(bint1->sign) printf("-");
-        // printHex2(bint1);printf(" - ");
-        // if(bint2->sign) printf("-");
-        // printHex2(bint2);
-        // printf(")), 16) == int(\"");
-        // if(bint3->sign) printf("-");
-        // printHex2(bint3);printf("\", 16))\n");
-        
-        // bool xGeqy = compare_abs_bint(&bint1, &bint2);
-        // printf("print(int(hex(");
-        // if(bint1->sign) printf("-");
-        // printHex2(bint1);printf(" - ");
-        // if(bint2->sign) printf("-");
-        // printHex2(bint2);
-        // printf("), 16) == int(\"");
-        // if(!xGeqy) printf("-");
-        // printHex2(bint3);printf("\", 16))\n");
-
         bool xGeqy = compare_abs_bint(&bint1, &bint2);
         printf("print(hex(");
         if(bint1->sign) printf("-");

@@ -18,6 +18,9 @@ operation.o: operation.c
 main.o: main.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+run:
+	./a.out
+
 clean:
 	rm -f *.o a.out *.bin *.txt
 
