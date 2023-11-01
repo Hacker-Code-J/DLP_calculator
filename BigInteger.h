@@ -48,9 +48,8 @@ typedef struct {
  * allocate memory for the integer
  * @param bint_ptr  the point of BINT
  * @param wordlen   the initial size of the array
- * @return the integer pointer
  */
-BINT* init_bint(BINT** pptrBint, int wordlen);
+void init_bint(BINT** pptrBint, int wordlen);
 
 /**
  * Deletes the binary integer object pointed by the given pointer, and sets the pointer to NULL.

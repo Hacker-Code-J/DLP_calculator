@@ -7,7 +7,7 @@
 #include <string.h>
 #include <memory.h>
 
-BINT* init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
+void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
     if(pptrBint)
         delete_bint(pptrBint);
 
@@ -27,15 +27,19 @@ BINT* init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
     // Initialize structure members
     (*pptrBint)->sign = false;
     (*pptrBint)->wordlen = wordlen;
-    return *pptrBint;
 }
 
 void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
-    if (pptrBint && *pptrBint) {
-        free((*pptrBint)->val); // Free the allocated memory for val
-        free(*pptrBint); // Free the allocated memory for BINT structure
-        *pptrBint = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
-    }
+    if(!pptrBint)
+        return;
+    free((*pptrBint)->val);
+    free(*pptrBint);
+    *pptrBint = NULL;
+    // if (pptrBint && *pptrBint) {
+    //     free((*pptrBint)->val); // Free the allocated memory for val
+    //     free(*pptrBint); // Free the allocated memory for BINT structure
+    //     *pptrBint = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
+    // }
 }
 
 #define SET_WORD_DATA(PB, V, WL, S) if(*(PB)) delete_bint(PB); *(PB)=(BINT*)malloc(sizeof(BINT));\
@@ -60,7 +64,7 @@ void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     if(ptrBint_dst != NULL)
         delete_bint(pptrBint_dst);
 
-    ptrBint_dst = init_bint(pptrBint_dst, ptrBint_src->wordlen);
+    init_bint(pptrBint_dst, ptrBint_src->wordlen);
     // ptrBint_dst = (BINT*)calloc(1, sizeof(BINT));
     // (*pptrBint_dst)->val = (WORD*)calloc((*pptrBint_src)->wordlen, sizeof(WORD));
     for(int i = 0; i < (ptrBint_src)->wordlen; i++)
@@ -217,7 +221,7 @@ void strToBINT(BINT** pptrBint, const char* hexString) {
     }
 
     int hexLength = strlen(hexString) - 2; // Minus the "0x".
-    ptrBint = init_bint(pptrBint, (hexLength + 7) / 8); // Each WORD has 8 hex characters.
+    init_bint(pptrBint, (hexLength + 7) / 8); // Each WORD has 8 hex characters.
 
     // Convert each chunk of 8 hex digits to a WORD and store in val.
     int hexStart = 2 + hexLength - 8; // Start from the end, skipping the "0x".

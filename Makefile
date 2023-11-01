@@ -21,6 +21,9 @@ main.o: main.c
 run:
 	./a.out
 
+debug:
+	valgrind --leak-check=full ./a.out
+
 clean:
 	rm -f *.o a.out *.bin *.txt
 
