@@ -33,4 +33,7 @@ chart:
 	python3 test.py > test.txt
 	python3 sr_chart.py
 
+sage:
+	python3 SAGE_TEST.py
+
 .PHONY: clean
