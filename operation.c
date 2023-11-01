@@ -128,11 +128,10 @@ void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     refine_BINT(ptrX); refine_BINT(ptrY);
     
-    int n = ptrX->wordlen; int m = ptrY->wordlen;
+    int n = ptrX->wordlen;
 
     init_bint(pptrZ, n+1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "ADD");
-    BINT* ptrZ = *pptrZ;
     
     if (ptrX->sign == ptrY->sign) {
         // If signs are the same, add the numbers
@@ -151,7 +150,7 @@ void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     }
 }
 
-void sub_borrow(WORD x, WORD y, WORD b, WORD* ptrQ, WORD* ptrR) {
+void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR) {
     WORD tmp = x - *ptrQ;
     *ptrQ = 0x00;
     if (x < tmp)
@@ -182,24 +181,21 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     WORD res = 0x00;
     WORD borrow = 0x00;
-    WORD b = 0x00;
 
-    matchSize(pptrX,pptrY);
+    matchSize(ptrX,ptrY);
     // printf("Z: ");printHex2(ptrZ);printf("\n");
     for(int i = 0; i < m; i++) {
         // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
-        sub_borrow(ptrX->val[i], ptrY->val[i], b, &borrow, &res);
+        sub_borrow(ptrX->val[i], ptrY->val[i], &borrow, &res);
         ptrZ->val[i] = res;
         // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
-        b = borrow;
     }
     // printf("Z*: ");printHex2(ptrZ);printf("\n");
     for(int i = m; i < n; i++) {
         // printf("Before: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
-        sub_borrow(ptrX->val[i], 0, b, &borrow, &res);
+        sub_borrow(ptrX->val[i], 0, &borrow, &res);
         ptrZ->val[i] = res;
         // printf("-After: X[%d] - Y[%d] - k = %x  - %x - %x = - %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], b, borrow, res,i,ptrZ->val[i]);
-        b = borrow;
     }
     // printf("Z**: ");printHex2(ptrZ);printf("\n");
     refine_BINT(ptrX); refine_BINT(ptrY);
@@ -215,11 +211,10 @@ void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     BINT* ptrX = *pptrX; BINT* ptrY = *pptrY;
     refine_BINT(ptrX); refine_BINT(ptrY);
     
-    int n = ptrX->wordlen; int m = ptrY->wordlen;
+    int n = ptrX->wordlen;
 
     init_bint(pptrZ, n);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
-    BINT* ptrZ = *pptrZ;
     
     if (ptrX->sign == ptrY->sign) {
         // If signs are the same, subtract the numbers
@@ -595,7 +590,6 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         exit(1);
     }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
-    BINT* ptrZ = *pptrZ;
 
     if (FLAG >= MIN(n,m)) {
         MUL_Core_ImpTxtBk_xyz(pptrX,pptrY,pptrZ);

@@ -70,7 +70,7 @@ void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 * W := 2^{sizeof(WORD)*8}
 * x - b - y = - brrow * W + res
 ************************************/
-void sub_borrow(WORD x, WORD y, WORD b, WORD* ptrQ, WORD* ptrR); 
+void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR); 
 
 // Z = X - Y with X >= Y >= 0.
 void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);

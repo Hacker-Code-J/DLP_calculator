@@ -205,8 +205,8 @@ void refine_BINT_word(BINT* ptrX, int num_words);
 
 //Generate Random BINT
 
-void rand_array(WORD* dst, int wordlen);
-void rand_bint(BINT**x, int sign, int wordlen);
+void RANDOM_ARRARY(WORD* dst, int wordlen);
+void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen);
 
 //Copy Arrary
 void array_copy_x2y(WORD* X, WORD* Y, int wordlen);

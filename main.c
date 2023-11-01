@@ -54,10 +54,10 @@ int main() {
         int m = (rand() % 0x060) + 0x040;
         // int n = 0x6;
         // int m = 0x6;
-        rand_bint(&bint1, false, n);
-        rand_bint(&bint2, false, m);
-        // rand_bint(&bint1, sgn1, n);
-        // rand_bint(&bint2, sgn2, m);      
+        RANDOM_BINT(&bint1, false, n);
+        RANDOM_BINT(&bint2, false, m);
+        // RANDOM_BINT(&bint1, sgn1, n);
+        // RANDOM_BINT(&bint2, sgn2, m);      
 /*******************************************************************************/       
 /*************************** Specific Input **************************************/
         // const char* testBint1 = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";

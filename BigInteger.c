@@ -7,8 +7,21 @@
 #include <string.h>
 #include <memory.h>
 
+void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
+    if(!(*pptrBint))
+        return;
+    free((*pptrBint)->val);
+    free(*pptrBint);
+    *pptrBint = NULL;
+    // if (pptrBint && *pptrBint) {
+    //     free((*pptrBint)->val); // Free the allocated memory for val
+    //     free(*pptrBint); // Free the allocated memory for BINT structure
+    //     *pptrBint = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
+    // }
+}
+
 void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
-    if(pptrBint)
+    if((*pptrBint) != NULL)
         delete_bint(pptrBint);
 
     // Allocate memory for BINT structure
@@ -29,18 +42,6 @@ void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
     (*pptrBint)->wordlen = wordlen;
 }
 
-void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
-    if(!pptrBint)
-        return;
-    free((*pptrBint)->val);
-    free(*pptrBint);
-    *pptrBint = NULL;
-    // if (pptrBint && *pptrBint) {
-    //     free((*pptrBint)->val); // Free the allocated memory for val
-    //     free(*pptrBint); // Free the allocated memory for BINT structure
-    //     *pptrBint = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
-    // }
-}
 
 #define SET_WORD_DATA(PB, V, WL, S) if(*(PB)) delete_bint(PB); *(PB)=(BINT*)malloc(sizeof(BINT));\
     (*PB)->val=(WORD*)calloc(1,sizeof(WORD)); *(*PB)->val=(V); (*PB)->wordlen=(WL); (*PB)->sign=(S)
@@ -599,22 +600,21 @@ void refine_BINT_word(BINT* ptrX, int num_words) {
 
 //Generate Random BINT
 
-void rand_array(WORD* dst, int wordlen) {
-    u8* p = (u8*)dst; //u8 = byte
+void RANDOM_ARRARY(WORD* dst, int wordlen) {
+    u8* p = (u8*) dst;
     int cnt = wordlen * sizeof(WORD);
-    while(cnt > 0) {
-        *p = rand() & 0xFF;
+    while (cnt > 0) {
+        *p = rand() & 0xff;
         p++;
         cnt--;
     }
 }
 
-void rand_bint(BINT**x, int sign, int wordlen) {
-    init_bint(x, wordlen);
-    (*x)->sign = sign;
-    rand_array((*x)->val, wordlen);
-
-    refine_BINT(*x);
+void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen) {
+    init_bint(pptrBint, wordlen);
+    (*pptrBint)->sign = sign;
+    RANDOM_ARRARY((*pptrBint)->val, wordlen);
+    refine_BINT(*pptrBint);
 }
 
 //Copy Arrary
