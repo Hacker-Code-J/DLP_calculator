@@ -433,31 +433,30 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_Krtsb_test");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_Krtsb_test");
-
+    if(!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
     int n = (*pptrX)->wordlen;
     int m = (*pptrX)->wordlen;
+    custom_printHex_xy(*pptrX, *pptrY, MAX(n,m));
+
 
     init_bint(pptrZ, n+m);
-    if (!*pptrZ) {
-        fprintf(stderr, "Error: Memory allocation failed in 'mul_core_Krtsb_test'\n");
-        exit(1);
-    }
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_Krtsb_test");
-    BINT* ptrZ = *pptrZ;
 
     if (FLAG >= MIN(n,m)) {
-        mul_core_ImpTxtBk_test(pptrX,pptrY,pptrZ);
+        MUL_Core_ImpTxtBk_xyz(pptrX,pptrY,pptrZ);
         return;  // This will immediately terminate the function.
     }
 
     int l = (MAX(n,m) + 1) >> 1;
-    printf("l= MAX(%d, %d) + 1 >> 1 : %d\n\n", n, m, l);
+    printf("l= MAX(%d, %d) + 1 >> 1 = %d\n\n", n, m, l);
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
     BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
     BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
     BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
-    BINT* ptrS = NULL; BINT* ptrR = NULL; 
+    BINT* ptrS = NULL; BINT* ptrR = NULL;
+    BINT* ptrTmpST1 = NULL;
+    BINT* ptrTmpST0 = NULL;
 
     copyBINT(&ptrX1, pptrX);
     // printf("X1: ");printHex2(ptrX1);printf("\n");
@@ -504,28 +503,29 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     right_shift_word(&ptrT1, 2*l);
     printf("(X0-X1)*(Y1-Y0): ");printHex2(ptrS);printf(", X1Y1: ");printHex2(ptrT1);printf("\n");
-    add_core_xyz(&ptrS,&ptrT1,&ptrS);
-    // ADD(&ptrS,&ptrT1,&ptrS);
+    copyBINT(&ptrTmpST1, &ptrS);
+    ADD(&ptrTmpST1,&ptrT1,&ptrS);
     printf("(X0-X1)*(Y1-Y0) + X1Y1: ");printHex2(ptrS);printf("\n\n");
     
     
     printf("(X0-X1)*(Y1-Y0) + X1Y1: ");printHex2(ptrS);printf(", X0Y0: ");printHex2(ptrT0);printf("\n");
-    add_core_xyz(&ptrS,&ptrT0,&ptrS);
-    // ADD(&ptrS,&ptrT0,&ptrS);
+    copyBINT(&ptrTmpST0, &ptrS);
+    ADD(&ptrTmpST0,&ptrT0,&ptrS);
     printf("(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0: ");printHex2(ptrS);printf("\n\n");
     
     left_shift_word(&ptrS, l);
     printf("*W^l: ");printHex2(ptrS);printf("\n");
 
-    printf("X1Y1||X0Y0: ");printHex2(ptrZ);printf(", [(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0]w^l: ");printHex2(ptrS);printf("\n");
-    add_core_xyz(&ptrR, &ptrS, pptrZ);
-    printf("*Result: ");printHex2(ptrZ);printf("\n");
+    printf("X1Y1||X0Y0: ");printHex2(*pptrZ);printf(", [(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0]w^l: ");printHex2(ptrS);printf("\n");
+    ADD(&ptrR, &ptrS, pptrZ);
+    printf("*Result: ");printHex2(*pptrZ);printf("\n");
 
     delete_bint(&ptrX0); delete_bint(&ptrX1);
     delete_bint(&ptrY0); delete_bint(&ptrY1);
     delete_bint(&ptrT0); delete_bint(&ptrT1);
     delete_bint(&ptrS0); delete_bint(&ptrS1);
-    delete_bint(&ptrS); delete_bint(&ptrR); 
+    delete_bint(&ptrS); delete_bint(&ptrR);
+    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
 }
 
 
@@ -558,6 +558,8 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
     BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
     BINT* ptrS = NULL;
+    BINT* ptrTmpST1 = NULL;
+    BINT* ptrTmpST0 = NULL;
 
     copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
     copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
@@ -589,4 +591,5 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrT0); delete_bint(&ptrT1);
     delete_bint(&ptrS0); delete_bint(&ptrS1);
     delete_bint(&ptrS);
+    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
 }
