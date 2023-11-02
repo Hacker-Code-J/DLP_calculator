@@ -436,6 +436,7 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     if(!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
     int n = (*pptrX)->wordlen;
     int m = (*pptrX)->wordlen;
+    printf("\nKrtsb Start!\n");
     custom_printHex_xy(*pptrX, *pptrY, MAX(n,m));
 
 
@@ -459,19 +460,22 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     BINT* ptrTmpST0 = NULL;
 
     copyBINT(&ptrX1, pptrX);
-    // printf("X1: ");printHex2(ptrX1);printf("\n");
+    printf("X1: ");printHex2(ptrX1);printf("\n");
     right_shift_word(&ptrX1, l);
-    // printf("X1: ");printHex2(ptrX1);printf("\n");
+    printf("X1 >> %d: ", l);printHex2(ptrX1);printf("\n");
 
     copyBINT(&ptrX0, pptrX);
-    // printf("X0: ");printHex2(ptrX0);printf("\n");
+    printf("X0: ");printHex2(ptrX0);printf("\n");
     reduction(&ptrX0, l * WORD_BITLEN);
-    // printf("X0: ");printHex2(ptrX0);printf("\n");
+    printf("X0 mod 2^{w*%d}: ", l);printHex2(ptrX0);printf("\n");
 
     copyBINT(&ptrY1, pptrY);
+    printf("Y1: ");printHex2(ptrY1);printf("\n");
     right_shift_word(&ptrY1, l);
+    printf("Y1 >> %d: ", l);printHex2(ptrY1);printf("\n");
     copyBINT(&ptrY0, pptrY);
     reduction(&ptrY0, l * WORD_BITLEN);
+    printf("Y0 mod 2^{w*%d}: ", l);printHex2(ptrY0);printf("\n");
 
     mul_core_Krtsb_test(&ptrX1, &ptrY1, &ptrT1);
     printf("X1: ");printHex2(ptrX1);printf(", Y1 ");printHex2(ptrY1);printf("\n");
