@@ -371,6 +371,7 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     refine_BINT(*pptrX); refine_BINT(*pptrY);
 }
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    printf("Mul on!\n");
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_ImpTxtBk_test");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_ImpTxtBk_test");
     if(!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
@@ -433,20 +434,33 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_Krtsb_test");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_Krtsb_test");
-    if(!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
+    // if(!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
     int n = (*pptrX)->wordlen;
     int m = (*pptrX)->wordlen;
-    printf("\nKrtsb Start!\n");
+    printf("\nMain Krtsb Start!\n");
+    printf("FLAG and MIN: %d, %d\n", FLAG, MIN(n,m));
+    if (FLAG >= MIN(n,m)) {
+        printf("\nFLAG on!\n");
+        printf("Before ImpTxtBk:\n");
+        printHex2(*pptrX);printf(" * ");
+        printHex2(*pptrY);
+        printf("\n");
+        MUL_Core_ImpTxtBk_xyz(pptrX,pptrY,pptrZ);
+        printf("-After ImpTxtBk:\n");
+        printHex2(*pptrX);printf(" * ");
+        printHex2(*pptrY);printf("=\n");
+        printHex2(*pptrZ);
+        printf("\n");
+        printf("FLAG END\n\n");
+        return;  // This will immediately terminate the function.
+    }
     custom_printHex_xy(*pptrX, *pptrY, MAX(n,m));
 
 
     init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_Krtsb_test");
 
-    if (FLAG >= MIN(n,m)) {
-        MUL_Core_ImpTxtBk_xyz(pptrX,pptrY,pptrZ);
-        return;  // This will immediately terminate the function.
-    }
+    
 
     int l = (MAX(n,m) + 1) >> 1;
     printf("l= MAX(%d, %d) + 1 >> 1 = %d\n\n", n, m, l);
@@ -477,10 +491,12 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     reduction(&ptrY0, l * WORD_BITLEN);
     printf("Y0 mod 2^{w*%d}: ", l);printHex2(ptrY0);printf("\n");
 
+    printf("\nKrtsb - T1 start!\n");
     mul_core_Krtsb_test(&ptrX1, &ptrY1, &ptrT1);
     printf("X1: ");printHex2(ptrX1);printf(", Y1 ");printHex2(ptrY1);printf("\n");
     printf("X1*Y1: ");printHex2(ptrT1);printf("\n\n");
 
+    printf("\nKrtsb - T0 start!\n");
     mul_core_Krtsb_test(&ptrX0, &ptrY0, &ptrT0);
     printf("X0: ");printHex2(ptrX0);printf(", Y0 ");printHex2(ptrY0);printf("\n");
     printf("X0*Y0: ");printHex2(ptrT0);printf("\n\n");
@@ -501,6 +517,8 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     printf("Y1: ");printHex2(ptrY1);printf(", Y0 ");printHex2(ptrY0);printf("\n");
     printf("Y1-Y0: ");printHex2(ptrS0);printf("\n\n");
     
+
+    printf("\nKrtsb - S start!\n");
     mul_core_Krtsb_test(&ptrS1, &ptrS0, &ptrS);
     printf("X0-X1: ");printHex2(ptrS1);printf(", Y1-Y0 ");printHex2(ptrS0);printf("\n");
     printf("(X0-X1)*(Y1-Y0): ");printHex2(ptrS);printf("\n\n");
@@ -531,7 +549,6 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrS); delete_bint(&ptrR);
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
 }
-
 
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
