@@ -947,7 +947,6 @@ void right_shift_word(BINT** pptrBint, int shift_amount) {
 }
 
 void reduction(BINT** pptrBint, int pwOf2) {
-    BINT* ptrBint = *pptrBint;
     if (pwOf2 > BIT_LENGTH(pptrBint) ) return; // Trivial Case
 
     if (pwOf2 % WORD_BITLEN == 0 && pwOf2 < BIT_LENGTH(pptrBint)) {

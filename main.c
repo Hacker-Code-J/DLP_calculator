@@ -30,7 +30,7 @@ int main() {
     clock_t start1, end1;
     clock_t start2, end2;
     double cpu_time_used1, cpu_time_used2;
-    int t = 10;
+    int t = 10000;
 
     BINT* ptrX = NULL;
     BINT* ptrY = NULL;
@@ -52,8 +52,8 @@ int main() {
         // int sgn1 = rand() % 0x02;
         // int sgn2 = rand() % 0x02;
         
-        // int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
-        // int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
         // int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
         // int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
         // int len1 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
@@ -61,11 +61,11 @@ int main() {
         // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        int len1 = (rand() % 0x8) + 0x1;
-        int len2 = (rand() % 0x8) + 0x1;
+        // int len1 = (rand() % 0x08) + 0x03;
+        // int len2 = (rand() % 0x08) + 0x03;
         
-        // int len1 = 0x6;
-        // int len2 = 0x6;
+        // int len1 = 0x8;
+        // int len2 = 0x8;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
@@ -73,8 +73,8 @@ int main() {
         // RANDOM_BINT(&ptrY, sgn2, len2);      
 /*******************************************************************************/       
 /*************************** Non-Random Input **************************************/
-        // const char* ptrTestX = "0xd07a7eb3448033bddeba770afea9c37ee1a1047b2e78b1ff";
-        // const char* ptrTestY = "0x296cfc6c8e42f584434cc1c56b20c1f0f1493ef22d5fb7e0";
+        // const char* ptrTestX = "0xb5d091fa8794bc90d9866f43147c06174cbc3c56fbcf2823356aace88ae64fbb49fd3df6";
+        // const char* ptrTestY = "0x8833f2441f753e082982ccd286fdaa63c840b7e0";
         // strToBINT(&ptrX, ptrTestX);
         // strToBINT(&ptrY, ptrTestY);
         // int len1 = ptrX->wordlen;
