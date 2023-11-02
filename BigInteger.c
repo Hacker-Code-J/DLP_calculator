@@ -56,7 +56,7 @@ void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words) {
 }
 
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
-    CHECK_PTR_AND_DEREF(pptrBint_src, "pptrBint_src", "copy_BINT");
+    CHECK_PTR_AND_DEREF(pptrBint_src, "pptrBint_src", "copyBINT");
     
     if(*pptrBint_dst != NULL)
         delete_bint(pptrBint_dst);
@@ -908,17 +908,15 @@ void right_shift(BINT** pptrX, int num_bits) {
 void right_shift_word(BINT** pptrBint, int shift_amount) {
     CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "right_shift_word");
 
-    BINT* ptrBint = *pptrBint;
-
     if (shift_amount < 0) {
         fprintf(stderr, "Error: shift_amount is negative in 'right_shift_word'\n");
         return;
     }
 
-    // if (shift_amount >= ptrX->wordlen) {
-    //     fprintf(stderr, "Error: shift_amount exceeds or equals word length in 'right_shift_word'\n");
-    //     return;
-    // }
+    if (shift_amount >= (*pptrBint)->wordlen) {
+        // fprintf(stderr, "Error: shift_amount exceeds or equals word length in 'right_shift_word'\n");
+        return;
+    }
 
     int new_len = (*pptrBint)->wordlen - shift_amount;
 
@@ -930,15 +928,16 @@ void right_shift_word(BINT** pptrBint, int shift_amount) {
         (*pptrBint)->val[i] = 0x00;
     }
 
-    // // Reallocate memory for the new word length
-    // WORD* new_val = (WORD*)realloc(ptrBint->val, new_len * sizeof(WORD));
-    // if (!new_val) {
-    //     fprintf(stderr, "Error: Memory reallocation failed in 'right_shift_word'\n");
-    //     exit(1);
-    // }
-    // ptrBint->val = new_val; // Assign the new address to ptrX->val
+    // Reallocate memory for the new word length
+    WORD* new_val = (*pptrBint)->val;
+    new_val = (WORD*)realloc((*pptrBint)->val, new_len * sizeof(WORD));
+    if (!new_val) {
+        fprintf(stderr, "Error: Memory reallocation failed in 'right_shift_word'\n");
+        exit(1);
+    }
+    (*pptrBint)->val = new_val; // Assign the new address to ptrX->val
 
-    ptrBint->wordlen = new_len;
+    (*pptrBint)->wordlen = new_len;
 
     // Alternatively, for efficiency:
     // memmove(ptrX->val, ptrX->val + shift_amount, new_len * sizeof(WORD)); // Shifting the values to their new positions

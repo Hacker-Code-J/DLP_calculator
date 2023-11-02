@@ -29,12 +29,18 @@ int main() {
 
     clock_t start1, end1;
     clock_t start2, end2;
-    double cpu_time_used1, cpu_time_used2;
-    int t = 1;
+//     clock_t start3, end3;
+    double cpu_time_used1;
+    double cpu_time_used2;
+//     double cpu_time_used3;
+    int t = 1000;
 
     BINT* ptrX = NULL;
     BINT* ptrY = NULL;
     BINT* ptrZ = NULL;
+    BINT* ptrTmpX = NULL;
+    BINT* ptrTmpY = NULL;
+    BINT* ptrTmpZ = NULL;
 
     /**
      * if WORD_BITLEN = 32,
@@ -49,34 +55,37 @@ int main() {
     int idx = 0;
     while(idx < t) {
 /*************************** Random Input **************************************/
-        // // int sgn1 = rand() % 0x02;
-        // // int sgn2 = rand() % 0x02;
+        int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        // int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
+        // int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
+        // int len1 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
+        // int len2 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
+        // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
+        // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        // // int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
-        // // int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
-        // // int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
-        // // int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
-        // // int len1 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
-        // // int len2 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
-        // // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
-        // // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
+        // int len1 = (rand() % 0x08) + 0xa;
+        // int len2 = (rand() % 0x08) + 0xa;
         
-        // int len1 = (rand() % 0x08) + 0x03;
-        // int len2 = (rand() % 0x08) + 0x03;
+        // int len1 = 0x040;
+        // int len2 = 0x040;
         
-        // // int len1 = 0x8;
-        // // int len2 = 0x8;
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
         
-        // RANDOM_BINT(&ptrX, false, len1);
-        // RANDOM_BINT(&ptrY, false, len2);
-        // // RANDOM_BINT(&ptrX, sgn1, len1);
-        // // RANDOM_BINT(&ptrY, sgn2, len2);      
+        // int sgn1 = rand() % 0x02;
+        // int sgn2 = rand() % 0x02;
+        // RANDOM_BINT(&ptrX, sgn1, len1);
+        // RANDOM_BINT(&ptrY, sgn2, len2);
+        
+        // copyBINT(&ptrTmpX, &ptrX);      
+        // copyBINT(&ptrTmpY, &ptrY);
 /*******************************************************************************/       
 /*************************** Non-Random Input **************************************/
-        const char* ptrTestX = "0xe6a29ab895e3d2fc3e8178be0d8b5dfb5482379e4e92abd9130f20265f81f22d0db7e698";
-        const char* ptrTestY = "0xa551847f73ed611236dbc3b634a5f3757f9cb9ecb09f3431733b477512951425dd971e61";
-        strToBINT(&ptrX, ptrTestX);
-        strToBINT(&ptrY, ptrTestY);
+        // const char* ptrTestX = "0xe6a29ab895e3d2fc3e8178be0d8b5dfb5482379e4e92abd9130f20265f81f22d0db7e698";
+        // const char* ptrTestY = "0xa551847f73ed611236dbc3b634a5f3757f9cb9ecb09f3431733b477512951425dd971e61";
+        // strToBINT(&ptrX, ptrTestX);
+        // strToBINT(&ptrY, ptrTestY);
         // int len1 = ptrX->wordlen;
         // int len2 = ptrY->wordlen;          
 /***********************************************************************************/
@@ -97,19 +106,25 @@ int main() {
         // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_ImpTxtBk_test(&ptrX,&ptrY,&ptrZ);
         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
-        mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
-        // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+        // mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
+        MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
         end1 = clock();
         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
 
         // start2 = clock();
-        // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+        // // mul_core_TxtBk_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
         // end2 = clock();
         // cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
+
+        // start3 = clock();
+        // MUL_Core_ImpTxtBk_xyz(&ptrTTmpX,&ptrTTmpY,&ptrTTmpZ);
+        // end3 = clock();
+        // cpu_time_used3 = ((double) (end3 - start3)) / CLOCKS_PER_SEC;
 
         // custom_printHex(ptrX, ptrY, ptrZ, 0);
         // custom_printHex(ptrX, ptrY, ptrZ, 1);
         // custom_printHex(ptrX, ptrY, ptrZ, 2);
+        // custom_printHex(ptrTmpX, ptrTmpY, ptrTmpZ, 2);
 
         // const char *hexData = "1A3F";  // Sample data
         // char binaryOutput[5 * strlen(hexData) + 1];  // Max potential output size (4 bits for each hex + null terminator)
@@ -157,8 +172,11 @@ int main() {
         delete_bint(&ptrX);
         delete_bint(&ptrY);
         delete_bint(&ptrZ);
-        // printf("%.8f\n", cpu_time_used);
-        // printf("%.8f\n", cpu_time_used);
+        delete_bint(&ptrTmpX);
+        delete_bint(&ptrTmpY);
+        delete_bint(&ptrTmpZ);
+        // printf("%.6f\n", cpu_time_used1);
+        // printf("%.6f\n", cpu_time_used2);
         idx++;
     }
 }

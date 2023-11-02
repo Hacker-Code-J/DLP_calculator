@@ -28,7 +28,7 @@ clean:
 	rm -f *.o a.out *.bin *.txt
 
 clean-test:
-	rm -f test.py test.txt
+	rm -f test.py test.txt speed.txt
 
 test:
 	./a.out > test.py
@@ -38,6 +38,10 @@ chart:
 	./a.out > test.py
 	python3 test.py > test.txt
 	python3 sr_chart.py
+
+speed:
+	./a.out > speed.txt
+	python3 time_compare_chart.py
 
 sage:
 	python3 SAGE_TEST.py
