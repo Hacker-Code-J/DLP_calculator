@@ -653,32 +653,23 @@ bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
     return 1;
 }
 
-int compare_bint(const BINT* a, const BINT* b) {
-    // Return values:
-    // -1 if a < b
-    //  0 if a == b
-    //  1 if a > b
+bool compare_bint(BINT** pptrBint1, BINT** pptrBint2) {
+    // Ensure the provided pointers are valid
+    CHECK_PTR_AND_DEREF(pptrBint1, "pptrBint1", "compare_bint");
+    CHECK_PTR_AND_DEREF(pptrBint2, "pptrBint2", "compare_bint");
 
-    // Compare signs
-    if(!a->sign && b->sign) return 1; // a is positive, b is negative
-    if(a->sign && !b->sign) return -1; // a is negative, b is positive
-
-    // At this point, either both numbers are positive or both are negative
-
-    // Compare word lengths
-    if(a->wordlen > b->wordlen) return a->sign ? -1 : 1; // if both are negative, reverse the result
-    if(a->wordlen < b->wordlen) return a->sign ? 1 : -1;
-
-    // Word-by-word comparison
-    for(int i = a->wordlen - 1; i >= 0; i--) {
-        if(a->val[i] > b->val[i]) return a->sign ? -1 : 1;
-        if(a->val[i] < b->val[i]) return a->sign ? 1 : -1;
+    // If one is negative and the other positive, the positive one is greater
+    if ((*pptrBint1)->sign ^ (*pptrBint2)->sign) {
+        return (*pptrBint1)->sign < (*pptrBint2)->sign;
     }
 
-    // If you've reached this point, the numbers are equal
-    return 0;
-}
+    // If both have the same sign, compare their absolute values
+    bool abs_val = compare_abs_bint(pptrBint1, pptrBint2);
 
+    // If both are positive, the one with the greater absolute value is greater
+    // If both are negative, the one with the smaller absolute value is greater
+    return (*pptrBint1)->sign ? !abs_val : abs_val;
+}
 
 //Author: Moon Ye-chan
 int Get_bitlen(BINT* x){

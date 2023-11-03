@@ -44,6 +44,7 @@ int main() {
 
     /**
      * if WORD_BITLEN = 32,
+     * 0x010 -> ( 1 * 16 =  16) -> (16 *  32 =   512-bit)
      * 0x020 -> ( 2 * 16 =  32) -> (32 *  32 =  1024-bit)
      * 0x040 -> ( 4 * 16 =  64) -> (32 *  64 =  2048-bit)
      * 0x060 -> ( 6 * 16 =  96) -> (32 *  96 =  3072-bit)
@@ -55,6 +56,8 @@ int main() {
     int idx = 0;
     while(idx < t) {
 /*************************** Random Input **************************************/
+        // // int len1 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
+        // // int len2 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
         // // int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
         // // int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
         // // int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
@@ -64,20 +67,20 @@ int main() {
         // // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         // // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        // // int len1 = (rand() % 0x08) + 0xa;
-        // // int len2 = (rand() % 0x08) + 0xa;
+        // int len1 = (rand() % 0x08) + 0x3;
+        // int len2 = (rand() % 0x08) + 0x3;
         
-        // int len1 = 0x04;
-        // int len2 = 0x04;
+        // // int len1 = 0x04;
+        // // int len2 = 0x04;
         
-        // RANDOM_BINT(&ptrX, false, len1);
-        // RANDOM_BINT(&ptrY, false, len2);
+        // // RANDOM_BINT(&ptrX, false, len1);
+        // // RANDOM_BINT(&ptrY, false, len2);
         
-        // // int sgn1 = rand() % 0x02;
-        // // int sgn2 = rand() % 0x02;
-        // // RANDOM_BINT(&ptrX, sgn1, len1);
-        // // RANDOM_BINT(&ptrY, sgn2, len2);
-        
+        // int sgn1 = rand() % 0x02;
+        // int sgn2 = rand() % 0x02;
+        // RANDOM_BINT(&ptrX, sgn1, len1);
+        // RANDOM_BINT(&ptrY, sgn2, len2);
+     
         // // copyBINT(&ptrTmpX, &ptrX);      
         // // copyBINT(&ptrTmpY, &ptrY);
 /*******************************************************************************/       
@@ -88,8 +91,8 @@ int main() {
         const char* ptrTestY = "0x8e91703149a154b4b2a6faf2ce5b3f93";
         strToBINT(&ptrX, ptrTestX);
         strToBINT(&ptrY, ptrTestY);
-        int len1 = ptrX->wordlen;
-        int len2 = ptrY->wordlen; 
+        // int len1 = ptrX->wordlen;
+        // int len2 = ptrY->wordlen; 
         // init_bint(&ptrZ, len1+len2);         
 /***********************************************************************************/
 

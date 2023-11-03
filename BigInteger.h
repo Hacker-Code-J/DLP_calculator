@@ -215,7 +215,7 @@ void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen);
 //  1 if X >= Y
 //  0 if X < Y
 bool compare_abs_bint(BINT** pptrX, BINT** pptrY);
-int compare_bint(const BINT* a, const BINT* b);
+bool compare_bint(BINT** pptrBint1, BINT** pptrBint2);
 
 //Author: Moon Ye-chan
 int Get_bitlen(BINT* x);
