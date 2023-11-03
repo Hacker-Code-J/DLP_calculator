@@ -43,6 +43,10 @@ speed:
 	./a.out > speed.txt
 	python3 time_compare_chart.py
 
+speed2:
+	./a.out > speed.txt
+	python3 time_compare_mul.py
+
 sage:
 	python3 SAGE_TEST.py
 

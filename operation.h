@@ -24,6 +24,7 @@ void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
  * @param pptrZ  Pointer to the destination BINT pointer where the result will be stored.
  */
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+void OOR_BINT(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 /**
  * Computes the bitwise XOR of two given BINTs and stores the result in another BINT.
  * @param ptrX   Pointer to the first source BINT.

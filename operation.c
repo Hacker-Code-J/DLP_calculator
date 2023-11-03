@@ -22,6 +22,14 @@ void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     (*pptrZ)->wordlen = min_len; // The result size will be size of the smaller operand
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
+void OOR_BINT(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    int min_len = MIN((*pptrX)->wordlen, (*pptrY)->wordlen);
+    for (int i = 0; i < min_len; i++) {
+        (*pptrZ)->val[i] = (*pptrX)->val[i] | (*pptrY)->val[i];
+    }
+    (*pptrZ)->wordlen = min_len; // The result size will be size of the smaller operand
+    // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
+}
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     int min_len = MIN(ptrX->wordlen, ptrY->wordlen);
     for (int i = 0; i < min_len; i++) {
@@ -30,14 +38,6 @@ void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     (*pptrZ)->wordlen = min_len; // The result size will be size of the smaller operand
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
-// void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
-//     int min_len = MIN(ptrX->wordlen, ptrY->wordlen);
-//     for (int i = 0; i < min_len; i++) {
-//         (*pptrZ)->val[i] = ptrX->val[i] | ptrY->val[i];
-//     }
-//     (*pptrZ)->wordlen = min_len; // The result size will be size of the smaller operand
-//     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
-// }
 void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     int min_len = ptrX->wordlen < ptrY->wordlen ? ptrX->wordlen : ptrY->wordlen;
     for (int i = 0; i < min_len; i++) {
