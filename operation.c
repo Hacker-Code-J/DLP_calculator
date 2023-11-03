@@ -85,8 +85,12 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     if (!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
     int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
 
-    init_bint(pptrZ, n+1);
+     if(!pptrZ || !*pptrZ || !(*pptrZ)->val)
+        init_bint(pptrZ, n+1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
+
+    // init_bint(pptrZ, n+1);
+    // CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
 
     WORD res = 0x00;
     WORD carry = 0x00;
@@ -122,7 +126,8 @@ void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     
     int n = (*pptrX)->wordlen;
 
-    init_bint(pptrZ, n+1);
+    if(!pptrZ || !*pptrZ || !(*pptrZ)->val)
+        init_bint(pptrZ, n+1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "ADD");
     
     if ((*pptrX)->sign == (*pptrY)->sign) {
@@ -439,7 +444,11 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_Krtsb_test");
     int n = (*pptrX)->wordlen;
     int m = (*pptrX)->wordlen;
-    init_bint(pptrZ, n+m);
+    static int lenZ = -1; // Declare lenZ as a static variable
+    if (lenZ == -1) {
+        lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
+    }
+    init_bint(pptrZ, lenZ);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_Krtsb_test");
     if (FLAG >= MIN(n,m)) {
         BINT* tmpTxtBk_X = NULL;
@@ -464,12 +473,10 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     }
     printf("\nMain-----------------------------------------------------------\n");
     printf("Main Krtsb Start!\n");
-    printf("FLAG and MIN: %d, %d\n", FLAG, MIN(n,m));
+    printf("FLAG and MAX: %d, %d\n", FLAG, MAX(n,m));
     custom_printHex_xy(*pptrX, *pptrY, MAX(n,m));
 
-
-
-    const int l = (MAX(n,m) + 1) >> 1;
+    int l = (MAX(n,m) + 1) >> 1;
     printf("l= MAX(%d, %d) + 1 >> 1 = %d\n\n", n, m, l);
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
@@ -479,7 +486,9 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
     BINT* ptrS = NULL;
     init_bint(&ptrS, 2*l);
-    BINT* ptrTmpZ = NULL;
+    BINT* ptrR = NULL;
+    BINT* ptrTmpR = NULL;
+    init_bint(&ptrR, (*pptrZ)->wordlen);
     BINT* ptrTmpST1 = NULL;
     BINT* ptrTmpST0 = NULL;
 
@@ -519,10 +528,13 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     printf("*W^{2*%d}: ", l);printHex2(ptrT1);printf("\n");
 
     matchSize(ptrT0, ptrT1);
-    OR_BINT(ptrT0,ptrT1,pptrZ);
+    OR_BINT(ptrT0,ptrT1,&ptrR);
     refine_BINT(ptrT0);
     refine_BINT(ptrT1);
-    printf("X1Y1||X0Y0: ");printHex2(*pptrZ);printf("\n");
+    printf("X1Y1||X0Y0: ");printHex2(ptrR);printf("\n");
+
+    // ADD(&ptrT0, &ptrT1, &ptrTmpR);
+    // printf("X1Y1||X0Y0: ");printHex2(ptrTmpR);printf("\n");
 
     printf("X0: ");printHex2(ptrX0);printf(", X1 ");printHex2(ptrX1);printf("\n");
     bool signS1 = compare_abs_bint(&ptrX1,&ptrX0);
@@ -576,9 +588,10 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     printf("-After: W^%d: ", l);printHex2(ptrS);printf("\n");
     
 
-    printf("X1Y1||X0Y0: ");printHex2(*pptrZ);printf(", [(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0]w^l: ");printHex2(ptrS);printf("\n");
-    copyBINT(&ptrTmpZ, pptrZ);
-    ADD(&ptrTmpZ, &ptrS, pptrZ);
+    printf("X1Y1||X0Y0: ");printHex2(ptrR);printf(", [(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0]w^l: ");printHex2(ptrS);printf("\n");
+    copyBINT(&ptrTmpR, &ptrR);
+    printf("\nZ length: %d\n",(*pptrZ)->wordlen);
+    ADD(&ptrTmpR, &ptrS, pptrZ);
     printf("*Result: ");printHex2(*pptrZ);printf("\n");
 
     delete_bint(&ptrX0); delete_bint(&ptrX1);
@@ -587,7 +600,8 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     // delete_bint(&ptrS0); delete_bint(&ptrS1);
     delete_bint(&ptrS0); delete_bint(&ptrS1);
     delete_bint(&ptrS);
-    delete_bint(&ptrTmpZ);
+    delete_bint(&ptrR);
+    delete_bint(&ptrTmpR);
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
     printf("\nEndKarMain-----------------------------------------------------------\n");
 }
