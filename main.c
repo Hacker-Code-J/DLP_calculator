@@ -33,7 +33,7 @@ int main() {
     double cpu_time_used1;
     double cpu_time_used2;
 //     double cpu_time_used3;
-    int t = 1;
+    int t = 10000;
 
     BINT* ptrX = NULL;
     BINT* ptrY = NULL;
@@ -56,44 +56,44 @@ int main() {
     int idx = 0;
     while(idx < t) {
 /*************************** Random Input **************************************/
-        // // int len1 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
-        // // int len2 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
-        // // int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
-        // // int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
-        // // int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
-        // // int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
-        // // int len1 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
-        // // int len2 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
-        // // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
-        // // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
+        int len1 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
+        int len2 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
+        // int len1 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        // int len2 = (rand() % 0x040) + 0x020; // 1024 ~ 2048 bits
+        // int len1 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
+        // int len2 = (rand() % 0x060) + 0x040; // 2048 ~ 3072 bits
+        // int len1 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
+        // int len2 = (rand() % 0x0f0) + 0x060; // 3072 ~ 7680 bits
+        // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
+        // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
         // int len1 = (rand() % 0x08) + 0x3;
         // int len2 = (rand() % 0x08) + 0x3;
         
-        // // int len1 = 0x04;
-        // // int len2 = 0x04;
+        // int len1 = 0x0f;
+        // int len2 = 0x0f;
         
-        // // RANDOM_BINT(&ptrX, false, len1);
-        // // RANDOM_BINT(&ptrY, false, len2);
+        // RANDOM_BINT(&ptrX, false, len1);
+        // RANDOM_BINT(&ptrY, false, len2);
         
         // int sgn1 = rand() % 0x02;
         // int sgn2 = rand() % 0x02;
-        // RANDOM_BINT(&ptrX, sgn1, len1);
-        // RANDOM_BINT(&ptrY, sgn2, len2);
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
      
-        // // copyBINT(&ptrTmpX, &ptrX);      
-        // // copyBINT(&ptrTmpY, &ptrY);
+        // copyBINT(&ptrTmpX, &ptrX);      
+        // copyBINT(&ptrTmpY, &ptrY);
 /*******************************************************************************/       
 /*************************** Non-Random Input **************************************/
-        // const char* ptrTestX = "0xe6a29ab895e3d2fc3e8178be0d8b5dfb5482379e4e92abd9130f20265f81f22d0db7e698";
-        // const char* ptrTestY = "0xa551847f73ed611236dbc3b634a5f3757f9cb9ecb09f3431733b477512951425dd971e61";
-        const char* ptrTestX = "0x44b7014fff077a1eb414a9dc3694ee5d";
-        const char* ptrTestY = "0x8e91703149a154b4b2a6faf2ce5b3f93";
-        strToBINT(&ptrX, ptrTestX);
-        strToBINT(&ptrY, ptrTestY);
-        // int len1 = ptrX->wordlen;
-        // int len2 = ptrY->wordlen; 
-        // init_bint(&ptrZ, len1+len2);         
+        // // const char* ptrTestX = "0xe6a29ab895e3d2fc3e8178be0d8b5dfb5482379e4e92abd9130f20265f81f22d0db7e698";
+        // // const char* ptrTestY = "0xa551847f73ed611236dbc3b634a5f3757f9cb9ecb09f3431733b477512951425dd971e61";
+        // const char* ptrTestX = "0x44b7014fff077a1eb414a9dc3694ee5d";
+        // const char* ptrTestY = "0x8e91703149a154b4b2a6faf2ce5b3f93";
+        // strToBINT(&ptrX, ptrTestX);
+        // strToBINT(&ptrY, ptrTestY);
+        // // int len1 = ptrX->wordlen;
+        // // int len2 = ptrY->wordlen; 
+        // // init_bint(&ptrZ, len1+len2);         
 /***********************************************************************************/
 
         // if (ptrX->wordlen < ptrY->wordlen) swapBINT(&ptrX,&ptrY);
@@ -112,7 +112,8 @@ int main() {
         // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_ImpTxtBk_test(&ptrX,&ptrY,&ptrZ);
         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
-        mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
+        // mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
+        Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 10);
         // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
         end1 = clock();
         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
