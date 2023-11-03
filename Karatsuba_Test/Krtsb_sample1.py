@@ -1,5 +1,5 @@
 print(hex(0x44b7014fff077a1eb414a9dc3694ee5d * 0x8e91703149a154b4b2a6faf2ce5b3f93) == hex(0x26448c7f69235610793b06fae820cd11c1353e0bbebf012656bc1f8b8f3cc267))
-print(hex(0x44b7014fff077a1eb414a9dc3694ee5d * 0x8e91703149a154b4b2a6faf2ce5b3f93) == hex(0x26448c7f69235610793b06fae820cd11c1353e0bbebf012656bc1f8b8f3cc267))
+print(hex(0x44b7014fff077a1eb414a9dc3694ee5d * 0x8e91703149a154b4b2a6faf2ce5b3f93) == hex(0x26448c7f69235610793b06fa8f212751794c7931bebf012656bc1f8b8f3cc267))
 # 44b7014f ff077a1e b414a9dc 3694ee5d 
 # 8e917031 49a154b4 b2a6faf2 ce5b3f93
 # l = (MIN(4,4) + 1) >> 1 = 4 >> 1 = 2
@@ -70,6 +70,7 @@ print(hex(0x7dabd407861169f82bff4c4d8f3cc267 + 0xb73ff8902abcd33e00000000))
 print()
 print("Complete: T1, T0 <- MUL(X1,Y1), MUL(X0,Y0)")
 print()
+
 # T1 = X1*Y1 = 0x26448c7f6923560fe4fd31322031b518
 print(hex(0x44b7014fff077a1e * 0x8e91703149a154b4))
 # T0 = X0*Y0 = 0x7dabd4083d51628856bc1f8b8f3cc267
@@ -79,4 +80,33 @@ print("Z <- (T1 << 2lw) + T0")
 # T1 << 2l(2*1) 0x26448c7f6923560fe4fd31322031b5180000000000000000
 print(hex(0x26448c7f6923560fe4fd31322031b518 << 64))
 
-#  ;
+# 44b7014f ff077a1e b414a9dc 3694ee5d 
+# 8e917031 49a154b4 b2a6faf2 ce5b3f93
+# Find S1 = SUB(X0, Y1) and S0 = SUB(Y1,Y0)
+print(hex(0xb414a9dc3694ee5d - 0x44b7014fff077a1e)) # S1 = X0 - X1 =  0x6f5da88c378d743f
+print(hex(0x8e91703149a154b4 - 0xb2a6faf2ce5b3f93)) # S0 = Y1 - Y0 = -0x24158ac184b9eadf
+
+# Find S = (-1)^{sgn(S1) xor sgn(S0)} MUL_Krtsb(|S1|,|S0|)
+# |S1| = 0x 6f5da88c 378d743f
+# |S0| = 0x 24158ac1 84b9eadf
+#  l = MAX(2,2) + 1 >> 1 = 3 >> 1 = 2
+print("Partition 1------------------------------------------------------------------------")
+print(hex(0x6f5da88c * 0x24158ac1))     # X1Y1 = 0x fb28ab ef5f3898c
+print(hex(0x378d743f * 0x84b9eadf))     # X0Y0 = 0x 1ccd482 12e00d8e1
+
+# X1Y1 * W^{2*(l=1)} = 0xfb28abef5f3898c0000000000000000
+print(hex(0x0fb28abef5f3898c << 64))
+
+# X1Y1 * W^2 + X0Y0 = X1Y1 || X0Y0 = 0xfb28abef5f3898c1ccd48212e00d8e1
+print(hex(0xfb28abef5f3898c0000000000000000 | 0x1ccd48212e00d8e1))
+
+
+
+
+
+# EndPatition I ----------------------------------------------------------------------------
+
+
+
+
+
