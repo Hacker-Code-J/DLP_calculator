@@ -50,34 +50,6 @@ void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
 	*ptrR = sum;
 	if(sum < k)
 		*ptrQ += 0x01;
-	
-    // if (WORD_BITLEN == 8 || WORD_BITLEN == 32) {
-    //     u64 result = (u64)x + (u64)y + (u64)k;
-    //     *ptrR = (WORD)result;
-    //     *ptrQ = result >> WORD_BITLEN;
-    // } else if (WORD_BITLEN == 64) {
-    //     const WORD HALF_MASK = (1ULL << 32) - 1;
-    //     const u64 LOW_X = x & HALF_MASK;
-    //     const u64 HIGH_X = x >> 32;
-    //     const u64 LOW_Y = y & HALF_MASK;
-    //     const u64 HIGH_Y = y >> 32;
-
-    //     // Add the lower halves
-    //     u64 low_result = LOW_X + LOW_Y + (k & HALF_MASK);
-
-    //     // Check if there was a carry from the lower half
-    //     u64 low_carry = (low_result > HALF_MASK) ? 1 : 0;
-
-    //     // Add the upper halves
-    //     u64 high_result = HIGH_X + HIGH_Y + (k >> 32) + low_carry;
-
-    //     // Return results
-    //     *ptrR = (high_result << 32) | (low_result & HALF_MASK);
-    //     *ptrQ = (high_result >> 32);  // Carry from the higher half
-    // } else {
-    //     fprintf(stderr, "Unsupported WORD size in 'add_carry'\n");
-    //     exit(1);
-    // }
 }
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "add_core_xyz");
@@ -159,12 +131,6 @@ void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR) {
         *ptrQ += 0x01;
     tmp = (WORD)tmp-y;
     *ptrR = tmp;
-
-    // //Optimize
-    // *res = x-b;
-    // *borrow = (x < b);
-    // *borrow += (*res < y);
-    // *res -= y;
 }
 void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "sub_core_xyz");
@@ -194,39 +160,13 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "SUB");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "SUB");
-    // Swap the order if abs(X) < abs(Y) to ensure X >= Y
-    // bool xGeqy = compare_abs_bint(pptrX, pptrY);
     int n = (*pptrX)->wordlen;
     int m = (*pptrY)->wordlen;
     bool sgnX = (*pptrX)->sign;
     bool sgnY = (*pptrY)->sign;
-    // if (!xGeqy) { swapBINT(pptrX,pptrY); }
     
     init_bint(pptrZ, MAX(n,m));
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
-    
-    // if (!(*pptrY)->sign && compare_bint(pptrX,pptrY)) {
-    //     sub_core_xyz(pptrX,pptrY,pptrZ);
-    // } else if (!(*pptrX)->sign && !compare_bint(pptrX,pptrY)) {
-    //     sub_core_xyz(pptrY,pptrX,pptrZ);
-    //     (*pptrZ)->sign = true;
-    // } else if ((*pptrX)->sign && compare_bint(pptrX,pptrY)) {
-    //     (*pptrX)->sign = false;
-    //     (*pptrY)->sign = false;
-    //     sub_core_xyz(pptrY,pptrX,pptrZ);
-    // } else if ((*pptrY)->sign && !compare_bint(pptrX,pptrY)) {
-    //     (*pptrX)->sign = false;
-    //     (*pptrY)->sign = false;
-    //     sub_core_xyz(pptrX,pptrY,pptrZ);
-    //     (*pptrZ)->sign = true;
-    // } else if (!(*pptrX)->sign && (*pptrY)->sign == true) {
-    //     (*pptrY)->sign = false;
-    //     ADD(pptrX,pptrY,pptrZ);
-    // } else {
-    //     (*pptrX)->sign = false;
-    //     ADD(pptrX,pptrY,pptrZ);
-    //     (*pptrZ)->sign = true;
-    // }
 
     if ((*pptrY)->sign == false && compare_bint(pptrX,pptrY)) {
         sub_core_xyz(pptrX,pptrY,pptrZ);
@@ -253,7 +193,6 @@ void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     (*pptrX)->sign = sgnX;
     (*pptrY)->sign = sgnY;
-    // if (!xGeqy) { swapBINT(pptrX,pptrY); }
 }
 
 void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
