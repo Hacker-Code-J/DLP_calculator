@@ -33,7 +33,7 @@ int main() {
     double cpu_time_used1;
     // double cpu_time_used2;
     // double cpu_time_used3;
-    int t = 10;
+    int t = 2;
 
     BINT* ptrX = NULL;
     BINT* ptrY = NULL;
@@ -73,11 +73,11 @@ int main() {
         // int len1 = (rand() % 0x08) + 0x3;
         // int len2 = (rand() % 0x08) + 0x3;
         
-        int len1 = 0x08;
-        int len2 = 0x08;
+        int len1 = 0x03;
+        int len2 = 0x03;
         
-        RANDOM_BINT(&ptrX, false, len1);
-        RANDOM_BINT(&ptrY, false, len2);
+        RANDOM_BINT(&ptrX, true, len1);
+        RANDOM_BINT(&ptrY, true, len2);
         
         // int sgn1 = rand() % 0x02;
         // int sgn2 = rand() % 0x02;
@@ -174,13 +174,18 @@ int main() {
          * print(hex(0x00 * 0x00) == hex(0x00))
         */ 
         printf("print(hex(");
-        if(ptrX->sign) printf("-");
-        printHex2(ptrX);printf(" * ");
-        if(ptrY->sign) printf("-");
-        printHex2(ptrY);
+        // if(ptrX->sign) printf("-");
+        // printHex2(ptrX);
+        print_bint_hex_python(ptrX);
+        printf(" * ");
+        // if(ptrY->sign) printf("-");
+        // printHex2(ptrY);
+        print_bint_hex_python(ptrY);
         printf(") == hex(");
-        if(ptrZ->sign) printf("-");
-        printHex2(ptrZ);printf("))\n");
+        // if(ptrZ->sign) printf("-");
+        // printHex2(ptrZ);
+        print_bint_hex_python(ptrZ);
+        printf("))\n");
 /****************************************************************************************/
         delete_bint(&ptrX);
         delete_bint(&ptrY);

@@ -25,9 +25,11 @@ debug:
 	valgrind --leak-check=full ./a.out
 
 clean:
+	@echo "Cleaning up..."
 	rm -f *.o a.out *.bin *.txt
+	@echo "Cleaned."
 
-DIR=visualization
+DIR=Visualizations
 FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt
 clean-test:
 	@echo "Cleaning up..."
@@ -35,33 +37,38 @@ clean-test:
 	-rm -f $(FILES_TO_CLEAN)
 	@echo "Cleaned."
 
+convert:
+	@echo "Connecting converter..."
+	(cd Tools && python3 converter.py)
+	@echo "Disconnect Converter."
+
 test:
 	@echo "Creating text.txt ..."
 	./a.out > test.py
 	python3 test.py > test.txt
-	mv test.py test.txt visualization/
+	mv test.py test.txt Visualizations/
 	@echo "Created."
 
 chart:
 	@echo "Visualizing ..."
 	./a.out > test.py
 	python3 test.py > test.txt
-	mv test.py test.txt visualization/
-	(cd visualization && python3 sr_chart.py)
+	mv test.py test.txt Visualizations/
+	(cd Visualizations && python3 sr_chart.py)
 	@echo "Visualized."
 
 speed:
 	@echo "Visualizing ..."
 	./a.out > speed.txt
-	mv speed.txt visualization/
-	(cd visualization && python3 time_compare_chart.py)
+	mv speed.txt Visualizations/
+	(cd Visualizations && python3 time_compare_chart.py)
 	@echo "Visualized."
 
 speed2:
 	@echo "Visualizing ..."
 	./a.out > speed.txt
-	mv speed.txt visualization/
-	(cd visualization && python3 time_compare_mul.py)
+	mv speed.txt Visualizations/
+	(cd Visualizations && python3 time_compare_mul.py)
 	@echo "Visualized."
 
 .PHONY: clean

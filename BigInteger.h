@@ -182,6 +182,13 @@ BINT** multi_load_bints(const char* filename, int* num_bints);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
+void print_bint_bin(const BINT* ptrBint);
+void print_bint_hex(const BINT* ptrBint);
+void print_bint_bin_split(const BINT* ptrBint);
+void print_bint_hex_split(const BINT* ptrBint);
+void print_bint_bin_python(const BINT* ptrBint);
+void print_bint_hex_python(const BINT* ptrBint);
+
 void printHex(BINT* X);
 void printHex2(BINT* X);
 

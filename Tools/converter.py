@@ -9,7 +9,7 @@ def convert_number(input_value, base_from, base_to):
     if base_to == 10:
         return str(num)
     elif base_to == 16:
-        return '0x' + hex(num)[2:].upper()  # Keep the '0x' prefix for hex
+        return '0x' + hex(num)[2:].lower()  # Keep the '0x' prefix for hex
     elif base_to == 2:
         return '0b' + bin(num)[2:]  # Keep the '0b' prefix for bin
 

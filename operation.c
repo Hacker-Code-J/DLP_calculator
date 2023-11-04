@@ -766,3 +766,8 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);    
 }
 
+
+void DIV_Bianry_Long_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
+    
+}
+

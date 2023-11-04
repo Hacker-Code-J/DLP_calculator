@@ -117,4 +117,6 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag);
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
+void DIV_Bianry_Long_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR);
+
 #endif // OPERATION_H

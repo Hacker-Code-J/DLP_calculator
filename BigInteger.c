@@ -471,6 +471,60 @@ BINT** multi_load_bints(const char* filename, int* num_bints) {
 }
 
 
+void print_bint_bin(const BINT* ptrBint) {
+    if (ptrBint->sign) printf("-");
+    // printf("0b");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        for (int j = WORD_BITLEN - 1; j >= 0; --j)
+            printf("%d", (ptrBint->val[i] >> j) & 1);
+    }
+    printf("\n");
+}
+void print_bint_hex(const BINT* ptrBint) {
+    if (ptrBint->sign) { printf("-"); }
+    // printf("0x");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        printf("%x", ptrBint->val[i]);
+    }
+    printf("\n");
+}
+void print_bint_bin_split(const BINT* ptrBint) {
+    if (ptrBint->sign) printf("-");
+    printf("0b ");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+     for (int j = WORD_BITLEN - 1; j >= 0; --j) {
+            printf("%d", (ptrBint->val[i] >> j) & 1);
+        }
+        if (i > 0) {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+void print_bint_hex_split(const BINT* ptrBint) {
+    if (ptrBint->sign) { printf("-"); }
+    printf("0x ");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        printf("%x ", ptrBint->val[i]);
+    }
+    printf("\n");
+}
+void print_bint_bin_python(const BINT* ptrBint) {
+    if (ptrBint->sign) printf("-");
+    printf("0b");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        for (int j = WORD_BITLEN - 1; j >= 0; --j)
+            printf("%d", (ptrBint->val[i] >> j) & 1);
+    }
+}
+void print_bint_hex_python(const BINT* ptrBint) {
+    if (ptrBint->sign) { printf("-"); }
+    printf("0x");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        printf("%x", ptrBint->val[i]);
+    }
+}
+
 /******************************************************************/
 void printHex(BINT* X) {
     printf("[%d] 0x ",X->sign);
