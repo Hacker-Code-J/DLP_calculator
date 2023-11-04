@@ -27,36 +27,41 @@ debug:
 clean:
 	rm -f *.o a.out *.bin *.txt
 
+DIR=visualization
+FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt
 clean-test:
-	rm -f test.py test.txt speed.txt
+	@echo "Cleaning up..."
+	-rm -f test.py test.txt speed.txt
+	-rm -f $(FILES_TO_CLEAN)
+	@echo "Cleaned."
 
 test:
+	@echo "Creating text.txt ..."
 	./a.out > test.py
-	mv test.py visualization
-	cd visualization
 	python3 test.py > test.txt
-	cd ..
+	mv test.py test.txt visualization/
+	@echo "Created."
 
 chart:
+	@echo "Visualizing ..."
 	./a.out > test.py
-	mv test.py visualization
-	cd visualization
 	python3 test.py > test.txt
-	python3 sr_chart.py
-	cd ..
+	mv test.py test.txt visualization/
+	(cd visualization && python3 sr_chart.py)
+	@echo "Visualized."
 
 speed:
+	@echo "Visualizing ..."
 	./a.out > speed.txt
-	mv speed.txt visualization
-	cd visualization
-	python3 time_compare_chart.py
-	cd ..
+	mv speed.txt visualization/
+	(cd visualization && python3 time_compare_chart.py)
+	@echo "Visualized."
 
 speed2:
+	@echo "Visualizing ..."
 	./a.out > speed.txt
-	mv speed.txt visualization
-	cd visualization
-	python3 time_compare_mul.py
-	cd ..
+	mv speed.txt visualization/
+	(cd visualization && python3 time_compare_mul.py)
+	@echo "Visualized."
 
 .PHONY: clean
