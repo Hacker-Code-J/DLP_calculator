@@ -32,22 +32,31 @@ clean-test:
 
 test:
 	./a.out > test.py
+	mv test.py visualization
+	cd visualization
 	python3 test.py > test.txt
+	cd ..
 
 chart:
 	./a.out > test.py
+	mv test.py visualization
+	cd visualization
 	python3 test.py > test.txt
 	python3 sr_chart.py
+	cd ..
 
 speed:
 	./a.out > speed.txt
+	mv speed.txt visualization
+	cd visualization
 	python3 time_compare_chart.py
+	cd ..
 
 speed2:
 	./a.out > speed.txt
+	mv speed.txt visualization
+	cd visualization
 	python3 time_compare_mul.py
-
-sage:
-	python3 SAGE_TEST.py
+	cd ..
 
 .PHONY: clean

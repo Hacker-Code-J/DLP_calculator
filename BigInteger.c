@@ -135,7 +135,7 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
     // Resize ptrBint1 if its wordlen is smaller than max_wordlen
     if(ptrBint1->wordlen < max_wordlen) {
         WORD* tmp = ptrBint1->val;
-        tmp = (WORD*)realloc(tmp, max_wordlen * sizeof(WORD));
+        tmp = (WORD*)realloc(ptrBint1->val, max_wordlen * sizeof(WORD));
         ptrBint1->val = tmp;
         if (!ptrBint1->val) {
             // Handle memory allocation failure, exit or return an error
@@ -153,7 +153,7 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
     // Resize ptrBint2 if its wordlen is smaller than max_wordlen
     if(ptrBint2->wordlen < max_wordlen) {
         WORD* tmp = ptrBint2->val;
-        tmp = (WORD*)realloc(tmp, max_wordlen * sizeof(WORD));
+        tmp = (WORD*)realloc(ptrBint2->val, max_wordlen * sizeof(WORD));
         ptrBint2->val = tmp;
         if (!ptrBint2->val) {
             // Handle memory allocation failure, exit or return an error
@@ -643,8 +643,9 @@ bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
     // Compare the word lengths of the two numbers
     if(n > m) return 1;
     if(n < m) return 0;
-
+    
     // Perform a word-by-word comparison starting from the most significant word
+    matchSize(*pptrX, *pptrY);
     for(int i = (*pptrX)->wordlen - 1; i >= 0; i--) {
         if((*pptrX)->val[i] > (*pptrY)->val[i]) return 1;
         if((*pptrX)->val[i] < (*pptrY)->val[i]) return 0;

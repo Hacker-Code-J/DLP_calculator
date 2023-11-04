@@ -68,11 +68,9 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     }  
     int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
 
-    init_bint(pptrZ, n+1);
+    if (!pptrZ || !*pptrZ || !(*pptrZ)->val)
+        init_bint(pptrZ, n+1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
-
-    // init_bint(pptrZ, n+1);
-    // CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
 
     WORD res = 0x00;
     WORD carry = 0x00;
@@ -94,8 +92,11 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         (*pptrZ)->val[n] = k;
     } else {
         (*pptrZ)->wordlen = n;
+        // WORD* tmp = (*pptrZ)->val;
+        // tmp = (WORD*)realloc((*pptrZ)->val, n*sizeof(WORD));
+        // (*pptrZ)->val = tmp;
     }
-    refine_BINT((*pptrZ));
+    // refine_BINT((*pptrZ));
 }
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "ADD");
@@ -361,7 +362,7 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_ImpTxtBk_test");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_ImpTxtBk_test");
-    if(!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
+    // if(!compare_abs_bint(pptrX,pptrY)) swapBINT(pptrX,pptrY);
     matchSize(*pptrX, *pptrY);
     makeEven(*pptrX); makeEven(*pptrY);
     int n = (*pptrX)->wordlen; int m = (*pptrX)->wordlen;
@@ -614,7 +615,7 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     }
     matchSize(*pptrX,*pptrY);
     int l = (MAX(n,m) + 1) >> 1;
-    
+
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
     BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
     BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
@@ -634,8 +635,8 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     copyBINT(&ptrY1, pptrY); right_shift_word(&ptrY1, l);
     copyBINT(&ptrY0, pptrY); reduction(&ptrY0, l * WORD_BITLEN);
     
-    MUL_Core_Krtsb_xyz(&ptrX1, &ptrY1, &ptrT1);
-    MUL_Core_Krtsb_xyz(&ptrX0, &ptrY0, &ptrT0);
+    Krtsb_FLAG_Test(&ptrX1, &ptrY1, &ptrT1, flag);
+    Krtsb_FLAG_Test(&ptrX0, &ptrY0, &ptrT0, flag);
     
     left_shift_word(&ptrT1, 2*l);
     
@@ -653,7 +654,7 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     bool sgn_S = ((ptrS0)->sign) ^ ((ptrS1)->sign);
     ptrS0->sign = false;
     ptrS1->sign = false;
-    MUL_Core_Krtsb_xyz(&ptrS1, &ptrS0, &ptrS);
+    Krtsb_FLAG_Test(&ptrS1, &ptrS0, &ptrS, flag);
     ptrS->sign = sgn_S;
    
     right_shift_word(&ptrT1, 2*l);
@@ -675,7 +676,7 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     delete_bint(&ptrS0); delete_bint(&ptrS1);
     delete_bint(&ptrS);
     delete_bint(&ptrR); delete_bint(&ptrTmpR);
-    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);  
+    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
 }
 
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
