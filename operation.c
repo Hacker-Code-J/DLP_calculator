@@ -766,6 +766,34 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);    
 }
 
+void ADD_BIT(BINT *ptrBint, WORD bit) {
+    if (bit) {
+        if (ptrBint->wordlen == 0) {
+            // If the BINT is zero-length, allocate space for one word.
+            WORD* new_val = ptrBint->val;
+            new_val = (WORD*)realloc(ptrBint->val, sizeof(WORD));
+            ptrBint->val = new_val;
+            ptrBint->val[0] = bit;
+            ptrBint->wordlen = 1;
+        } else {
+            // Otherwise, add the bit to the least significant word.
+            WORD carry = bit;
+            for (int i = 0; i < ptrBint->wordlen && carry; ++i) {
+                WORD result = ptrBint->val[i] + carry;
+                carry = (result < ptrBint->val[i]) ? 1 : 0; // Detect overflow.
+                ptrBint->val[i] = result;
+            }
+            if (carry) {
+                // If there is a carry out of the most significant word, extend the BINT.
+                WORD* new_val = ptrBint->val;
+                new_val = (WORD*)realloc(ptrBint->val, (ptrBint->wordlen + 1) * sizeof(WORD));
+                ptrBint->val = new_val;
+                ptrBint->val[ptrBint->wordlen] = carry;
+                ptrBint->wordlen++;
+            }
+        }
+    }
+}
 
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
     if((*pptrDivisor)->wordlen == 0 || ((*pptrDivisor)->wordlen == 1 && (*pptrDivisor)->val[0] == 0) ) {
@@ -777,18 +805,21 @@ void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ,
     (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
     init_bint(pptrR, (*pptrDivisor)->wordlen); 
     
-    // while(n > 0) {
-    //     n--;
-    // }
+    while(n > 0) {
+        n--;
+        left_shift_bit(*pptrR, 1);
+        ADD_BIT(*pptrQ, ((*pptrDividend)->val[n / WORD_BITLEN] >> (n % WORD_BITLEN)) & 1);
+        if(compare_bint(pptrQ,pptrDivisor)) {
+            BINT* ptrTmpR = *pptrR;
+            SUB(&ptrTmpR,pptrDivisor, pptrR);
+            (*pptrQ)->val[n / WORD_BITLEN] |= (1 << (n % WORD_BITLEN));
+        }
+    }
 
-
-
-    // for (int i = (*pptrDividend)->wordlen - 1; i >= 0; --i) {
-    //     for (int j = WORD_BITLEN - 1; j >= 0; --j)
-            
-            
-    //         bool bit = ((*pptrDividend)->val[i] >> j) & 1;
-    // }
+    // Trim leading zeros in quotient.
+    while ((*pptrQ)->wordlen > 0 && (*pptrQ)->val[(*pptrQ)->wordlen - 1] == 0) {
+        (*pptrQ)->wordlen--;
+    }
 }
 
 

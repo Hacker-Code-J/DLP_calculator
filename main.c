@@ -77,10 +77,12 @@ int main() {
         // int len2 = (rand() % 0x08) + 0x3;
         
         int len1 = 0x06;
-        int len2 = 0x03;
+        int len2 = 0x05;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
+        printf("X:");print_bint_hex(ptrX);
+        printf("Y:");print_bint_hex(ptrY);
         
         // int sgn1 = rand() % 0x02;
         // int sgn2 = rand() % 0x02;
@@ -188,17 +190,21 @@ int main() {
         /** SAGE (DIV)
          * print(hex(0x00 * 0x00 + 0x00) == hex(0x00))
         */ 
-        printf("print(hex(");
-        print_bint_hex_python(ptrQ);
-        printf(" * ");
-        print_bint_hex_python(ptrY);
-        printf(" * ");
-        print_bint_hex_python(ptrR);
-        printf(") == hex(");
-        print_bint_hex_python(ptrX);
-        printf("))\n");
-
+        // printf("print(hex(");
+        // print_bint_hex_python(ptrQ);
+        // printf(" * ");
+        // print_bint_hex_python(ptrY);
+        // printf(" * ");
+        // print_bint_hex_python(ptrR);
+        // printf(") == hex(");
+        // print_bint_hex_python(ptrX);
+        // printf("))\n");
 /****************************************************************************************/
+        printf("Result X:");print_bint_hex(ptrX);
+        printf("Result Y:");print_bint_hex(ptrY);
+        printf("Result Q:");print_bint_hex(ptrQ);
+        printf("Result R:");print_bint_hex(ptrR);
+        
         delete_bint(&ptrX);
         delete_bint(&ptrY);
         delete_bint(&ptrZ);

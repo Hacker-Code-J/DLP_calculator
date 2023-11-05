@@ -250,6 +250,9 @@ void right_shift(BINT** pptrX, int num_bits);
 void left_shift_word(BINT** pptrBint, int shift_amount);
 void right_shift_word(BINT** pptrBint, int shift_amount);
 
+void left_shift_bit(BINT* ptrBint, int shift_amount);
+void right_shift_bit(BINT* ptrBint, int shift_amount);
+
 void reduction(BINT** pptrBint, int pwOf2);
 
 #endif // BIGINTEGER_H

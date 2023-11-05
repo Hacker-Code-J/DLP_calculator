@@ -42,6 +42,11 @@ convert:
 	(cd Tools && python3 converter.py)
 	@echo "Disconnect Converter."
 
+sage:
+	@echo "Loading SageMath..."
+	(cd SAGE_Tests && sage)
+	@echo "Quit SageMath."
+
 test:
 	@echo "Creating text.txt ..."
 	./a.out > test.py
