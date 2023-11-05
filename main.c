@@ -45,6 +45,9 @@ int main() {
     // BINT* ptrTTmpY = NULL;
     // BINT* ptrTTmpZ = NULL;
 
+    BINT* ptrQ = NULL;
+    BINT* ptrR = NULL;
+
     /**
      * if WORD_BITLEN = 32,
      * 0x010 -> ( 1 * 16 =  16) -> (16 *  32 =   512-bit)
@@ -73,11 +76,11 @@ int main() {
         // int len1 = (rand() % 0x08) + 0x3;
         // int len2 = (rand() % 0x08) + 0x3;
         
-        int len1 = 0x03;
+        int len1 = 0x06;
         int len2 = 0x03;
         
-        RANDOM_BINT(&ptrX, true, len1);
-        RANDOM_BINT(&ptrY, true, len2);
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
         
         // int sgn1 = rand() % 0x02;
         // int sgn2 = rand() % 0x02;
@@ -119,7 +122,8 @@ int main() {
         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
         // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 3);
-        MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+        // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+        DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
         end1 = clock();
         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
 
@@ -173,19 +177,27 @@ int main() {
         /** SAGE (MUL)
          * print(hex(0x00 * 0x00) == hex(0x00))
         */ 
+        // printf("print(hex(");
+        // print_bint_hex_python(ptrX);
+        // printf(" * ");
+        // print_bint_hex_python(ptrY);
+        // printf(") == hex(");
+        // print_bint_hex_python(ptrZ);
+        // printf("))\n");
+
+        /** SAGE (DIV)
+         * print(hex(0x00 * 0x00 + 0x00) == hex(0x00))
+        */ 
         printf("print(hex(");
-        // if(ptrX->sign) printf("-");
-        // printHex2(ptrX);
-        print_bint_hex_python(ptrX);
+        print_bint_hex_python(ptrQ);
         printf(" * ");
-        // if(ptrY->sign) printf("-");
-        // printHex2(ptrY);
         print_bint_hex_python(ptrY);
+        printf(" * ");
+        print_bint_hex_python(ptrR);
         printf(") == hex(");
-        // if(ptrZ->sign) printf("-");
-        // printHex2(ptrZ);
-        print_bint_hex_python(ptrZ);
+        print_bint_hex_python(ptrX);
         printf("))\n");
+
 /****************************************************************************************/
         delete_bint(&ptrX);
         delete_bint(&ptrY);

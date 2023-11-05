@@ -55,12 +55,19 @@ void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words) {
         (*pptrBint)->val[i] = 0x00;
 }
 
+void SET_BIT(BINT** ptrBint, int bit_idx, bool bit_val) {
+    int word_idx = bit_idx / (sizeof(WORD) * 8);
+    int bit_pos = bit_idx % (sizeof(WORD) * 8);
+    if (bit_val) {
+        (*ptrBint)->val[word_idx] |= (1 << bit_pos);
+    } else {
+        (*ptrBint)->val[word_idx] &= ~(1 << bit_pos);
+    }
+}
+
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     CHECK_PTR_AND_DEREF(pptrBint_src, "pptrBint_src", "copyBINT");
     
-    if(*pptrBint_dst != NULL)
-        delete_bint(pptrBint_dst);
-
     init_bint(pptrBint_dst, (*pptrBint_src)->wordlen);
     // ptrBint_dst = (BINT*)calloc(1, sizeof(BINT));
     // (*pptrBint_dst)->val = (WORD*)calloc((*pptrBint_src)->wordlen, sizeof(WORD));
@@ -74,7 +81,7 @@ void copyArray(WORD* ptrValX, WORD* ptrValY, int wordlen) {
     for(int i = 0; i < wordlen; i++)
         ptrValY[i] = ptrValX[i];
 }
-void assignBINT(BINT** pptrBint_dst, BINT* ptrBint_src) {
+void assignBINT(BINT** pptrBint_dst, const BINT* ptrBint_src) {
     if(*pptrBint_dst)
         delete_bint(pptrBint_dst);
     init_bint(pptrBint_dst, ptrBint_src->wordlen);

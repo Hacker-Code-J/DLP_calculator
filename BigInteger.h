@@ -67,6 +67,10 @@ void SET_BINT_ZERO(BINT** pptrBint);
  * @param pptrBint Double pointer to the binary integer whose value is to be set.
  */
 void SET_BINT_ONE(BINT** pptrBint);
+
+// Utility function to set a specific bit in a BINT
+void SET_BIT(BINT** ptrBint, int bit_idx, bool bit_val);
+
 /**
  * Initializes the binary integer object with custom zero value based on the number of words.
  * @param pptrBint  Double pointer to the binary integer to be initialized.
@@ -81,7 +85,7 @@ void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words);
  */
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src);
 void copyArray(WORD* ptrValX, WORD* ptrValY, int wordlen);
-void assignBINT(BINT** pptrBint_dst, BINT* ptrBint_src);
+void assignBINT(BINT** pptrBint_dst, const BINT* ptrBint_src);
 
 void swapBINT(BINT** ptrBint1, BINT** ptrBint2);
 

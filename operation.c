@@ -767,7 +767,28 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 }
 
 
-void DIV_Bianry_Long_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
+void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
+    if((*pptrDivisor)->wordlen == 0 || ((*pptrDivisor)->wordlen == 1 && (*pptrDivisor)->val[0] == 0) ) {
+        fprintf(stderr, "Division by zero error.\n");
+        exit(1);
+    }
+    int n = (*pptrDividend)->wordlen;
+    init_bint(pptrQ, n);
+    (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
+    init_bint(pptrR, (*pptrDivisor)->wordlen); 
     
+    // while(n > 0) {
+    //     n--;
+    // }
+
+
+
+    // for (int i = (*pptrDividend)->wordlen - 1; i >= 0; --i) {
+    //     for (int j = WORD_BITLEN - 1; j >= 0; --j)
+            
+            
+    //         bool bit = ((*pptrDividend)->val[i] >> j) & 1;
+    // }
 }
+
 
