@@ -33,7 +33,7 @@ int main() {
     double cpu_time_used1;
     // double cpu_time_used2;
     // double cpu_time_used3;
-    int t = 2;
+    int t = 10;
 
     BINT* ptrX = NULL;
     BINT* ptrY = NULL;
@@ -45,8 +45,8 @@ int main() {
     // BINT* ptrTTmpY = NULL;
     // BINT* ptrTTmpZ = NULL;
 
-    // BINT* ptrQ = NULL;
-    // BINT* ptrR = NULL;
+    BINT* ptrQ = NULL;
+    BINT* ptrR = NULL;
 
     /**
      * if WORD_BITLEN = 32,
@@ -73,8 +73,8 @@ int main() {
         // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        int len1 = (rand() % 0x03) + 0x1;
-        int len2 = (rand() % 0x03) + 0x1;
+        int len1 = (rand() % 0x02) + 0x1;
+        int len2 = (rand() % 0x01) + 0x1;
         
         // int len1 = 0x04;
         // int len2 = 0x04;
@@ -95,14 +95,16 @@ int main() {
         // copyBINT(&ptrTTmpY, &ptrY);
 /*******************************************************************************/       
 /*************************** Non-Random Input **************************************/
-        // // const char* ptrTestX = "0xe6a29ab895e3d2fc3e8178be0d8b5dfb5482379e4e92abd9130f20265f81f22d0db7e698";
-        // // const char* ptrTestY = "0xa551847f73ed611236dbc3b634a5f3757f9cb9ecb09f3431733b477512951425dd971e61";
+        // const char* ptrTestX = "0xe6a29ab895e3d2fc3e8178be0d8b5dfb5482379e4e92abd9130f20265f81f22d0db7e698";
+        // const char* ptrTestY = "0xa551847f73ed611236dbc3b634a5f3757f9cb9ecb09f3431733b477512951425dd971e61";
         // const char* ptrTestX = "0x44b7014fff077a1eb414a9dc3694ee5d";
         // const char* ptrTestY = "0x8e91703149a154b4b2a6faf2ce5b3f93";
+        // const char* ptrTestX = "0xae035de48a0ca938";
+        // const char* ptrTestY = "0x0000000010a85e3a";
         // strToBINT(&ptrX, ptrTestX);
         // strToBINT(&ptrY, ptrTestY);
-        // // int len1 = ptrX->wordlen;
-        // // int len2 = ptrY->wordlen; 
+        // int len1 = ptrX->wordlen;
+        // int len2 = ptrY->wordlen; 
         // // init_bint(&ptrZ, len1+len2);         
 /***********************************************************************************/
 
@@ -113,6 +115,8 @@ int main() {
         // custom_printHex_xy(ptrX, ptrY, MIN(len1,len2));
         // custom_printHex_xy(ptrX, ptrY, len1+len2);
 
+        // print_bint_hex_split(ptrX);
+        // print_bint_hex_split(ptrY);
         start1 = clock();
         // add_core_xyz(&ptrX,&ptrY,&ptrZ);
         // ADD(&ptrX,&ptrY,&ptrZ);
@@ -126,8 +130,9 @@ int main() {
         // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 3);
         // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
         // DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
-        bool* binaryX = HexToBinary(ptrX);
-        bool* binaryY = HexToBinary(ptrY);
+        DIV_Bianry_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
+        // bool* binaryX = HexToBinary(ptrX);
+        // bool* binaryY = HexToBinary(ptrY);
         end1 = clock();
         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
 
@@ -192,35 +197,53 @@ int main() {
         /** SAGE (DIV)
          * print(hex(0x00 * 0x00 + 0x00) == hex(0x00))
         */ 
-        // printf("print(hex(");
-        // print_bint_hex_python(ptrQ);
-        // printf(" * ");
-        // print_bint_hex_python(ptrY);
-        // printf(" * ");
-        // print_bint_hex_python(ptrR);
-        // printf(") == hex(");
-        // print_bint_hex_python(ptrX);
-        // printf("))\n");
+        printf("print(hex(");
+        print_bint_hex_python(&ptrQ);
+        printf(" * ");
+        print_bint_hex_python(&ptrY);
+        printf(" + ");
+        print_bint_hex_python(&ptrR);
+        printf(") == hex(");
+        print_bint_hex_python(&ptrX);
+        printf("))\n");
 /****************************************************************************************/
-        printf("Random X:");print_bint_hex_split(ptrX);
-        printf("Random Y:");print_bint_hex_split(ptrY);
+        // printf("X:");print_bint_hex_split(ptrX);
+        // printf("Y:");print_bint_hex_split(ptrY);
         // printf("Random X:");print_bint_hex(ptrX);
         // printf("Random Y:");print_bint_hex(ptrY);
         // PrintBinary(binaryX, ptrX->wordlen, WORD_BITLEN);
         // PrintBinary(binaryY, ptrY->wordlen, WORD_BITLEN);
-        PrintBinary(binaryX, ptrX->wordlen * WORD_BITLEN);
-        PrintBinary(binaryY, ptrY->wordlen * WORD_BITLEN);
+        // PrintBinary(binaryX, ptrX->wordlen * WORD_BITLEN);
+        // PrintBinary(binaryY, ptrY->wordlen * WORD_BITLEN);
+        // printf("0-th bit: of X: %d\n", GET_BIT(&ptrX, 0));
+        // printf("1-th bit: of X: %d\n", GET_BIT(&ptrX, 1));
+        // printf("2-th bit: of X: %d\n", GET_BIT(&ptrX, 2));
+        // printf("3-th bit: of X: %d\n", GET_BIT(&ptrX, 3));
+        // printf("4-th bit: of X: %d\n", GET_BIT(&ptrX, 4));
+        // printf("5-th bit: of X: %d\n", GET_BIT(&ptrX, 5));
+        // printf("6-th bit: of X: %d\n", GET_BIT(&ptrX, 6));
+        // printf("7-th bit: of X: %d\n", GET_BIT(&ptrX, 7));
+        // printf("0-th bit: of Y: %d\n", GET_BIT(&ptrY, 0));
+        // printf("1-th bit: of Y: %d\n", GET_BIT(&ptrY, 1));
+        // printf("2-th bit: of Y: %d\n", GET_BIT(&ptrY, 2));
+        // printf("3-th bit: of Y: %d\n", GET_BIT(&ptrY, 3));
+        // printf("4-th bit: of Y: %d\n", GET_BIT(&ptrY, 4));
+        // printf("5-th bit: of Y: %d\n", GET_BIT(&ptrY, 5));
+        // printf("6-th bit: of Y: %d\n", GET_BIT(&ptrY, 6));
+        // printf("7-th bit: of Y: %d\n", GET_BIT(&ptrY, 7));
 
-        BINT* ptrX2 = BinaryToHex(binaryX, ptrX->wordlen * WORD_BITLEN);
-        BINT* ptrY2 = BinaryToHex(binaryY, ptrY->wordlen * WORD_BITLEN);
-        printf("Result X2:");print_bint_hex_split(ptrX2);
-        printf("-Lenth X2: %d\n", ptrX2->wordlen);
-        printf("Result Y2:");print_bint_hex_split(ptrY2);
-        printf("-Lenth Y2: %d\n", ptrY2->wordlen);
-        printf("==================================================\n");
+        // BINT* ptrX2 = BinaryToHex(binaryX, ptrX->wordlen * WORD_BITLEN);
+        // BINT* ptrY2 = BinaryToHex(binaryY, ptrY->wordlen * WORD_BITLEN);
+        // printf("Result X2:");print_bint_hex_split(ptrX2);
+        // printf("-Lenth X2: %d\n", ptrX2->wordlen);
+        // printf("Result Y2:");print_bint_hex_split(ptrY2);
+        // printf("-Lenth Y2: %d\n", ptrY2->wordlen);
        
         // printf("Result Q:");print_bint_hex(ptrQ);
         // printf("Result R:");print_bint_hex(ptrR);
+
+
+        // printf("==================================================\n");
         
         delete_bint(&ptrX);
         delete_bint(&ptrY);
@@ -231,6 +254,14 @@ int main() {
         // delete_bint(&ptrTTmpX);
         // delete_bint(&ptrTTmpY);
         // delete_bint(&ptrTTmpZ);
+        delete_bint(&ptrQ);
+        delete_bint(&ptrR);
+
+        // delete_bint(&ptrX2);
+        // delete_bint(&ptrY2);
+        // free(binaryX);
+        // free(binaryY);
+
         // printf("%.6f\n", cpu_time_used1);
         // printf("%.6f\n", cpu_time_used2);
         // printf("%.6f\n", cpu_time_used3);

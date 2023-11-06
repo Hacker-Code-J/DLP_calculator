@@ -516,19 +516,19 @@ void print_bint_hex_split(const BINT* ptrBint) {
     }
     printf("\n");
 }
-void print_bint_bin_python(const BINT* ptrBint) {
-    if (ptrBint->sign) printf("-");
+void print_bint_bin_python(BINT** pptrBint) {
+    if ((*pptrBint)->sign) printf("-");
     printf("0b");
-    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
-        for (int j = WORD_BITLEN - 1; j >= 0; --j)
-            printf("%d", (ptrBint->val[i] >> j) & 1);
+    for (int i = (*pptrBint)->wordlen - 1; i >= 0; i--) {
+        for (int j = WORD_BITLEN - 1; j >= 0; j--)
+            printf("%d", ((*pptrBint)->val[i] >> j) & 1);
     }
 }
-void print_bint_hex_python(const BINT* ptrBint) {
-    if (ptrBint->sign) { printf("-"); }
+void print_bint_hex_python(BINT** pptrBint) {
+    if ((*pptrBint)->sign) { printf("-"); }
     printf("0x");
-    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
-        printf("%x", ptrBint->val[i]);
+    for (int i = (*pptrBint)->wordlen - 1; i >= 0; i--) {
+        printf("%x", (*pptrBint)->val[i]);
     }
 }
 
@@ -633,11 +633,18 @@ BINT* BinaryToHex(bool *binary, int length) {
 void PrintBinary(bool* binary, int length) {
     for (int i = 0; i < length; ++i) {
         printf("%d", binary[i] ? 1 : 0);
-        if ((i + 1) % 4 == 0 && (i + 1) != length) {
+        if ((i + 1) % 16 == 0 && (i + 1) != length) {
             printf(" "); // Optional: Print a space every 4 bits for readability.
         }
     }
     printf("\n"); // Print a newline at the end.
+}
+
+bool GET_BIT(BINT** pptrBint, int i_th)  {
+   if (i_th >= WORD_BITLEN)
+      return (((*pptrBint)->val[i_th / WORD_BITLEN] >> (i_th % WORD_BITLEN)) & 1);
+
+   return (((*pptrBint)->val[0] >> i_th) & 1);
 }
 
 // // Function to print a bool array representing binary digits, with spacing for readability.

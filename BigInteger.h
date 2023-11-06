@@ -190,14 +190,16 @@ void print_bint_bin(const BINT* ptrBint);
 void print_bint_hex(const BINT* ptrBint);
 void print_bint_bin_split(const BINT* ptrBint);
 void print_bint_hex_split(const BINT* ptrBint);
-void print_bint_bin_python(const BINT* ptrBint);
-void print_bint_hex_python(const BINT* ptrBint);
+void print_bint_bin_python(BINT** pptrBint);
+void print_bint_hex_python(BINT** pptrBint);
 
 void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits);
 bool* HexToBinary(BINT* hex);
 
 WORD BinaryToHexDigit(bool *binary, int start_index, int bits);
 BINT* BinaryToHex(bool *binary, int length);
+
+bool GET_BIT(BINT** pptrBint, int i_th);
 
 void printHex(BINT* X);
 void printHex2(BINT* X);

@@ -55,7 +55,10 @@ def main():
 
         try:
             converted_value = convert_number(value, base_from, base_to)
+            print("=============================================")
             print(f"Converted value: {converted_value}")
+            print("=============================================")
+            print()
         except ValueError:
             print("Invalid input number.")
 
