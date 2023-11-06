@@ -76,8 +76,8 @@ int main() {
         // int len1 = (rand() % 0x08) + 0x3;
         // int len2 = (rand() % 0x08) + 0x3;
         
-        int len1 = 0x03;
-        int len2 = 0x03;
+        int len1 = 0x04;
+        int len2 = 0x04;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
@@ -202,13 +202,15 @@ int main() {
         // print_bint_hex_python(ptrX);
         // printf("))\n");
 /****************************************************************************************/
-        printf("Result X:");print_bint_hex(ptrX);
-        printf("Result Y:");print_bint_hex(ptrY);
-        PrintBinary(binaryX, WORD_BITLEN * ptrX->wordlen);
-        PrintBinary(binaryY, WORD_BITLEN * ptrY->wordlen);
+        printf("Result X:");print_bint_hex_split(ptrX);
+        printf("Result Y:");print_bint_hex_split(ptrY);
+        // PrintBinary(binaryX, ptrX->wordlen, WORD_BITLEN);
+        // PrintBinary(binaryY, ptrY->wordlen, WORD_BITLEN);
+        PrintBinary(binaryX, ptrX->wordlen * WORD_BITLEN);
+        PrintBinary(binaryY, ptrY->wordlen * WORD_BITLEN);
 
-        BINT* ptrX2 = BinaryToHex(binaryX, WORD_BITLEN * ptrX->wordlen);
-        BINT* ptrY2 = BinaryToHex(binaryY, WORD_BITLEN * ptrY->wordlen);
+        BINT* ptrX2 = BinaryToHex(binaryX, ptrX->wordlen);
+        BINT* ptrY2 = BinaryToHex(binaryY, ptrY->wordlen);
         printf("Result X2:");print_bint_hex_split(ptrX2);
         printf("Result Y2:");print_bint_hex_split(ptrY2);
        

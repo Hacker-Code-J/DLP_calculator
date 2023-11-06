@@ -202,7 +202,8 @@ BINT* BinaryToHex(bool *binary, int length);
 void printHex(BINT* X);
 void printHex2(BINT* X);
 
-void PrintBinary(const bool* binary, int length);
+void PrintBinary(bool* binary, int length);
+// void PrintBinary(bool* binary, int wordlen, int bits_per_word);
 
 /**********************************************************************
 * x: [sgn] 0x ######## ######## 

@@ -593,7 +593,7 @@ BINT* BinaryToHex(bool *binary, int length) {
 }
 
 // Helper function to print the binary array.
-void PrintBinary(const bool* binary, int length) {
+void PrintBinary(bool* binary, int length) {
     for (int i = 0; i < length; ++i) {
         printf("%d", binary[i] ? 1 : 0);
         if ((i + 1) % 4 == 0 && (i + 1) != length) {
@@ -602,6 +602,27 @@ void PrintBinary(const bool* binary, int length) {
     }
     printf("\n"); // Print a newline at the end.
 }
+
+// // Function to print a bool array representing binary digits, with spacing for readability.
+// void PrintBinary(bool* binary, int wordlen, int bits_per_word) {
+//     // Start from the most significant WORD and move towards the least significant.
+//     for (int word_index = wordlen - 1; word_index >= 0; --word_index) {
+//         // Print the bits for each WORD in the correct order.
+//         for (int bit_index = 0; bit_index < bits_per_word; ++bit_index) {
+//             printf("%d", binary[word_index * bits_per_word + bit_index] ? 1 : 0);
+
+//             // Optional: Space every 4 bits for readability, except at the start of a new WORD.
+//             if ((bit_index + 1) % 4 == 0 && (bit_index + 1) != bits_per_word) {
+//                 printf(" ");
+//             }
+//         }
+//         // Optional: Space between WORDs for clarity.
+//         if (word_index > 0) {
+//             printf(" ");
+//         }
+//     }
+//     printf("\n"); // Newline at the end.
+// }
 
 // Example usage:
 // Assuming 'binaryNumber' is a bool* pointing to an array with 'length' elements.
