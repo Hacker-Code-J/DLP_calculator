@@ -532,14 +532,39 @@ void print_bint_hex_python(const BINT* ptrBint) {
     }
 }
 
-// Function to convert a single hexadecimal digit to binary.
+// // Function to convert a single hexadecimal digit to binary.
+// void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits) {
+//     for (int i = 0; i < bits; i++) {
+//         binary[start_index + i] = (hex_digit >> (bits - 1 - i)) & 1;
+//     }
+// }
+
+// // Function to convert a hexadecimal BINT to binary.
+// bool* HexToBinary(BINT* hex) {
+//     int bits_per_word = WORD_BITLEN;
+//     bool *binary = malloc(bits_per_word * hex->wordlen * sizeof(bool));
+//     if (!binary) {
+//         fprintf(stderr, "Memory allocation failure in HexToBinary");
+//         // Handle memory allocation failure.
+//         return NULL;
+//     }
+
+//     for (int i = 0; i < hex->wordlen; i++) {
+//         HexDigitToBinary(hex->val[i], binary, i * bits_per_word, bits_per_word);
+//     }
+
+//     return binary;
+// }
+
+// Function to convert a single hexadecimal digit to binary, stored backwards.
 void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits) {
     for (int i = 0; i < bits; i++) {
-        binary[start_index + i] = (hex_digit >> (bits - 1 - i)) & 1;
+        // Store bits in reverse order.
+        binary[start_index + bits - 1 - i] = (hex_digit >> i) & 1;
     }
 }
 
-// Function to convert a hexadecimal BINT to binary.
+// Function to convert a hexadecimal BINT to binary, with bits stored backwards.
 bool* HexToBinary(BINT* hex) {
     int bits_per_word = WORD_BITLEN;
     bool *binary = malloc(bits_per_word * hex->wordlen * sizeof(bool));
@@ -550,7 +575,8 @@ bool* HexToBinary(BINT* hex) {
     }
 
     for (int i = 0; i < hex->wordlen; i++) {
-        HexDigitToBinary(hex->val[i], binary, i * bits_per_word, bits_per_word);
+        // The start index is calculated to fill the array from the end.
+        HexDigitToBinary(hex->val[i], binary, (hex->wordlen - 1 - i) * bits_per_word, bits_per_word);
     }
 
     return binary;
@@ -567,7 +593,7 @@ WORD BinaryToHexDigit(bool *binary, int start_index, int bits) {
 
 // Function to convert binary BINT to hexadecimal.
 BINT* BinaryToHex(bool *binary, int length) {
-    int bits_per_word = sizeof(WORD) * 8;
+    int bits_per_word = WORD_BITLEN;
     int wordlen = (length + bits_per_word - 1) / bits_per_word;
     BINT *hex = malloc(sizeof(BINT));
     if (!hex) {
@@ -581,9 +607,20 @@ BINT* BinaryToHex(bool *binary, int length) {
         return NULL;
     }
 
+    // for (int i = 0; i < wordlen; i++) {
+    //     hex->val[i] = BinaryToHexDigit(binary, i*bits_per_word, bits_per_word);
+    // }
+    // Reverse the order in which WORDs are stored in hex->val.
     for (int i = 0; i < wordlen; i++) {
-        hex->val[i] = BinaryToHexDigit(binary, i * bits_per_word, bits_per_word);
+        int bits_to_convert = bits_per_word;
+        // Adjust for the last WORD if the binary array is not a multiple of bits_per_word.
+        if (i == wordlen - 1 && length % bits_per_word != 0) {
+            bits_to_convert = length % bits_per_word;
+        }
+        // Store WORDs in reverse order.
+        hex->val[wordlen - 1 - i] = BinaryToHexDigit(binary, i * bits_per_word, bits_to_convert);
     }
+
 
     hex->wordlen = wordlen;
     // Assuming the sign is determined elsewhere.
