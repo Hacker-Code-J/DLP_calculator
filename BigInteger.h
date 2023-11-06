@@ -193,6 +193,12 @@ void print_bint_hex_split(const BINT* ptrBint);
 void print_bint_bin_python(const BINT* ptrBint);
 void print_bint_hex_python(const BINT* ptrBint);
 
+void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits);
+bool* HexToBinary(const BINT* hex) ;
+
+WORD BinaryToHexDigit(const bool *binary, int start_index, int bits);
+BINT* BinaryToHex(const bool *binary, int length);
+
 void printHex(BINT* X);
 void printHex2(BINT* X);
 

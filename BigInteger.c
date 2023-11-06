@@ -532,6 +532,66 @@ void print_bint_hex_python(const BINT* ptrBint) {
     }
 }
 
+// Function to convert a single hexadecimal digit to binary.
+void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits) {
+    for (int i = 0; i < bits; ++i) {
+        binary[start_index + i] = (hex_digit >> (bits - 1 - i)) & 1;
+    }
+}
+
+// Function to convert a hexadecimal BINT to binary.
+bool* HexToBinary(const BINT* hex) {
+    int bits_per_word = sizeof(WORD) * 8;
+    bool *binary = malloc(bits_per_word * hex->wordlen * sizeof(bool));
+    if (!binary) {
+        // Handle memory allocation failure.
+        return NULL;
+    }
+
+    for (int i = 0; i < hex->wordlen; ++i) {
+        HexDigitToBinary(hex->val[i], binary, i * bits_per_word, bits_per_word);
+    }
+
+    return binary;
+}
+
+// Function to convert a binary digit array to a single hexadecimal WORD.
+WORD BinaryToHexDigit(const bool *binary, int start_index, int bits) {
+    WORD hex_digit = 0;
+    for (int i = 0; i < bits; ++i) {
+        hex_digit |= (binary[start_index + i] << (bits - 1 - i));
+    }
+    return hex_digit;
+}
+
+// Function to convert binary BINT to hexadecimal.
+BINT* BinaryToHex(const bool *binary, int length) {
+    int bits_per_word = sizeof(WORD) * 8;
+    int wordlen = (length + bits_per_word - 1) / bits_per_word;
+    BINT *hex = malloc(sizeof(BINT));
+    if (!hex) {
+        // Handle memory allocation failure.
+        return NULL;
+    }
+    hex->val = malloc(wordlen * sizeof(WORD));
+    if (!hex->val) {
+        // Handle memory allocation failure.
+        free(hex);
+        return NULL;
+    }
+
+    for (int i = 0; i < wordlen; ++i) {
+        hex->val[i] = BinaryToHexDigit(binary, i * bits_per_word, bits_per_word);
+    }
+
+    hex->wordlen = wordlen;
+    // Assuming the sign is determined elsewhere.
+    hex->sign = false;
+
+    return hex;
+}
+
+
 /******************************************************************/
 void printHex(BINT* X) {
     printf("[%d] 0x ",X->sign);
