@@ -14,46 +14,53 @@ def convert_number(input_value, base_from, base_to):
         return '0b' + bin(num)[2:]  # Keep the '0b' prefix for bin
 
 def main():
-    print("Number Converter")
-    print("----------------")
-    print("1. Dec -> Hec")
-    print("2. Dec -> Bin")
-    print("----------------")
-    print("3. Hex -> Dec")
-    print("4. Hex -> Bin")
-    print("----------------")
-    print("5. Bin -> Dec")
-    print("6. Bin -> Hex")
-    print("----------------")
-    print()
-    choice = input("Choose the conversion (1-6): ")
-    value = input("Enter the value to convert: ").strip()
+    while True:  # Start a loop to allow multiple conversions or quitting
+        print("Number Converter")
+        print("----------------")
+        print("1. Dec -> Hex")
+        print("2. Dec -> Bin")
+        print("----------------")
+        print("3. Hex -> Dec")
+        print("4. Hex -> Bin")
+        print("----------------")
+        print("5. Bin -> Dec")
+        print("6. Bin -> Hex")
+        print("----------------")
+        print("Enter 'q' to quit.")
+        print()
+        choice = input("Choose the conversion (1-6) or 'q' to quit: ")
+        if choice.lower() == 'q':  # Check if the user wants to quit
+            print("Exiting the program.")
+            break
 
-    base_from, base_to = 10, 10
-    if choice == '1':
-        base_from, base_to = 10, 16
-    elif choice == '2':
-        base_from, base_to = 10, 2
-    elif choice == '3':
-        base_from, base_to = 16, 10
-    elif choice == '4':
-        base_from, base_to = 16, 2
-    elif choice == '5':
-        base_from, base_to = 2, 10
-    elif choice == '6':
-        base_from, base_to = 2, 16
-    else:
-        print("Invalid choice.")
-        return
+        value = input("Enter the value to convert: ").strip()
 
-    try:
-        converted_value = convert_number(value, base_from, base_to)
-        print(f"Converted value: {converted_value}")
-    except ValueError:
-        print("Invalid input number.")
+        base_from, base_to = 10, 10
+        if choice == '1':
+            base_from, base_to = 10, 16
+        elif choice == '2':
+            base_from, base_to = 10, 2
+        elif choice == '3':
+            base_from, base_to = 16, 10
+        elif choice == '4':
+            base_from, base_to = 16, 2
+        elif choice == '5':
+            base_from, base_to = 2, 10
+        elif choice == '6':
+            base_from, base_to = 2, 16
+        else:
+            print("Invalid choice.")
+            continue  # Go back to the start of the loop
+
+        try:
+            converted_value = convert_number(value, base_from, base_to)
+            print(f"Converted value: {converted_value}")
+        except ValueError:
+            print("Invalid input number.")
 
 if __name__ == "__main__":
     main()
+
 
 # def decimal_to_hex(decimal_number):
 #     if not isinstance(decimal_number, int):

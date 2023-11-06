@@ -45,8 +45,8 @@ int main() {
     // BINT* ptrTTmpY = NULL;
     // BINT* ptrTTmpZ = NULL;
 
-    BINT* ptrQ = NULL;
-    BINT* ptrR = NULL;
+    // BINT* ptrQ = NULL;
+    // BINT* ptrR = NULL;
 
     /**
      * if WORD_BITLEN = 32,
@@ -76,8 +76,8 @@ int main() {
         // int len1 = (rand() % 0x08) + 0x3;
         // int len2 = (rand() % 0x08) + 0x3;
         
-        int len1 = 0x06;
-        int len2 = 0x05;
+        int len1 = 0x03;
+        int len2 = 0x03;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
@@ -125,7 +125,9 @@ int main() {
         // mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
         // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 3);
         // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
-        DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
+        // DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
+        bool* binaryX = HexToBinary(ptrX);
+        bool* binaryY = HexToBinary(ptrY);
         end1 = clock();
         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
 
@@ -202,8 +204,16 @@ int main() {
 /****************************************************************************************/
         printf("Result X:");print_bint_hex(ptrX);
         printf("Result Y:");print_bint_hex(ptrY);
-        printf("Result Q:");print_bint_hex(ptrQ);
-        printf("Result R:");print_bint_hex(ptrR);
+        PrintBinary(binaryX, WORD_BITLEN * ptrX->wordlen);
+        PrintBinary(binaryY, WORD_BITLEN * ptrY->wordlen);
+
+        BINT* ptrX2 = BinaryToHex(binaryX, WORD_BITLEN * ptrX->wordlen);
+        BINT* ptrY2 = BinaryToHex(binaryY, WORD_BITLEN * ptrY->wordlen);
+        printf("Result X2:");print_bint_hex_split(ptrX2);
+        printf("Result Y2:");print_bint_hex_split(ptrY2);
+       
+        // printf("Result Q:");print_bint_hex(ptrQ);
+        // printf("Result R:");print_bint_hex(ptrR);
         
         delete_bint(&ptrX);
         delete_bint(&ptrY);
