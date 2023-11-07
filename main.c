@@ -52,7 +52,7 @@ int main() {
      * 
      * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
     */
-    
+     
     int idx = 0;
     while(idx < t) {
         BINT* ptrX = NULL;

@@ -933,7 +933,8 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
     }
 
     (*pptrQ)->wordlen = ptrTmpAdd->wordlen;
-
+    refine_BINT(*pptrQ);
+    refine_BINT(*pptrQ);
     delete_bint(&ptrTmpAdd);
     delete_bint(&ptrTmpSub);
 
