@@ -33,7 +33,7 @@ int main() {
     double cpu_time_used1;
     // double cpu_time_used2;
     // double cpu_time_used3;
-    int t = 50;
+    int t = 100;
 
     // BINT* ptrTmpX = NULL;
     // BINT* ptrTmpY = NULL;
@@ -73,8 +73,8 @@ int main() {
         // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        int len1 = (rand() % 0x02) + 0x1;
-        int len2 = (rand() % 0x01) + 0x1;
+        int len1 = (rand() % 0x02) + 0x040;
+        int len2 = (rand() % 0x01) + 0x020;
         
         // int len1 = 0x04;
         // int len2 = 0x04;

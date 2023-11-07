@@ -900,11 +900,13 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
     }
     int n = (*pptrDividend)->wordlen;
     int m = (*pptrDivisor)->wordlen;
-    SET_BINT_ZERO(pptrQ);
+    // SET_BINT_ZERO(pptrQ);
+
     (*pptrQ)->sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
-    SET_BINT_ZERO(pptrR);
-    (*pptrR)->sign = false;
-    (*pptrR)->wordlen = m;
+    // SET_BINT_ZERO(pptrR);
+    init_bint(pptrR, m);
+    // (*pptrR)->sign = false;
+    // (*pptrR)->wordlen = m;
     
     BINT* ptrTmpSub = NULL;
     SET_BINT_ZERO(&ptrTmpSub);
@@ -916,7 +918,7 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
         left_shift_bit(*pptrR, 1);  // R <- 2R
         (*pptrR)->val[0] ^= GET_BIT(pptrDividend, i); // R <- R + x_i
         matchSize(*pptrR,*pptrDivisor);
-        if(compare_abs_bint(pptrR,pptrDivisor)) {
+        if(compare_bint(pptrR,pptrDivisor)) {
             copyBINT(&ptrTmpSub,pptrR);
             SUB(&ptrTmpSub,pptrDivisor,pptrR);
             SET_BINT_ONE(&ptrTmpAdd);
