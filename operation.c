@@ -799,37 +799,38 @@ void ADD_BIT(BINT *ptrBint, WORD bit) {
 
 // Only 0 <= X < YW
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
-    // if((*pptrDivisor)->wordlen == 0 || ((*pptrDivisor)->wordlen == 1 && (*pptrDivisor)->val[0] == 0) ) {
-    //     fprintf(stderr, "Division by zero error.\n");
-    //     exit(1);
-    // }
-    // if (!(*pptrDividend)->sign && compare_bint(pptrDivisor, pptrDividend)) {
-    //     SET_BINT_ZERO(pptrQ);
-    //     pptrR = pptrDividend;
-    //     return;
-    // }
-    // int n = (*pptrDividend)->wordlen;
-    // int m = (*pptrDivisor)->wordlen;
-    // // init_bint(pptrQ, n);
-    // SET_BINT_ZERO(pptrQ);
-    // (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
-    // // init_bint(pptrR, m);
-    // SET_BINT_ZERO(pptrR);
+    if((*pptrDivisor)->wordlen == 0 || ((*pptrDivisor)->wordlen == 1 && (*pptrDivisor)->val[0] == 0) ) {
+        fprintf(stderr, "Division by zero error.\n");
+        exit(1);
+    }
+    if (!(*pptrDividend)->sign && compare_bint(pptrDivisor, pptrDividend)) {
+        SET_BINT_ZERO(pptrQ);
+        copyBINT(pptrR, pptrDividend);
+        // pptrR = pptrDividend; // Correctly assign the value of pptrDividend to what pptrR is pointing to.
+        return;
+    }
+    int n = (*pptrDividend)->wordlen;
+    int m = (*pptrDivisor)->wordlen;
+    // init_bint(pptrQ, n);
+    SET_BINT_ZERO(pptrQ);
+    (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
+    // init_bint(pptrR, m);
+    SET_BINT_ZERO(pptrR);
     
-    // BINT* prtTmpSub = NULL;
-    // SET_BINT_ZERO(&prtTmpSub);
-    // BINT* prtTmpAdd = NULL;
-    // SET_BINT_ZERO(&prtTmpAdd);
+    BINT* ptrTmpSub = NULL;
+    SET_BINT_ZERO(&ptrTmpSub);
+    BINT* ptrTmpAdd = NULL;
+    SET_BINT_ZERO(&ptrTmpAdd);
 
-    // // bool* dividend = HexToBinary(*pptrDividend);
-    // // bool* divisor = HexToBinary(*pptrDivisor);
+    // bool* dividend = HexToBinary(*pptrDividend);
+    // bool* divisor = HexToBinary(*pptrDivisor);
 
-    // // Initialize quotient and remainder.
-    // // bool* quotient = (bool*)calloc(n, sizeof(bool));
-    // // int quotient_len = n * WORD_BITLEN;
-    // // bool* remainder = (bool*)calloc(m, sizeof(bool));
-    // // int remainder_len = m * WORD_BITLEN;
-    // // bool* tmp_remainder = (bool*)calloc(m,sizeof(bool));    
+    // Initialize quotient and remainder.
+    // bool* quotient = (bool*)calloc(n, sizeof(bool));
+    // int quotient_len = n * WORD_BITLEN;
+    // bool* remainder = (bool*)calloc(m, sizeof(bool));
+    // int remainder_len = m * WORD_BITLEN;
+    // bool* tmp_remainder = (bool*)calloc(m,sizeof(bool));    
 
     // printf("\nHexX: ");print_bint_hex_split(*pptrDividend);
     // printf("BinX: ");
@@ -840,49 +841,50 @@ void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ,
     // bool* binary2 = HexToBinary(*pptrDivisor);
     // PrintBinary(binary2, m*WORD_BITLEN);
     
-    // matchSize(*pptrDividend,*pptrDivisor);
-    // for(int i = n * WORD_BITLEN - 1; i >= 0 ; i--) {
-    //     printf("\nn: %02d |",i);
-    //     // printf("Q: ");print_bint_hex_python(*pptrQ);printf(" ");
-    //     // printf("R: ");print_bint_hex_python(*pptrR);printf(" \n");
-    //     left_shift_bit(*pptrR, 1);  // R <- 2R
-    //     printf("Get %d-th bit: %d\n", i, GET_BIT(pptrDividend, i));
-    //     // printf("-After R: ");print_bint_hex_split(*pptrR);
-    //     (*pptrR)->val[0] ^= GET_BIT(pptrDividend, i); // R <- R + x_i
-    //     // printf("Y: ");print_bint_hex_python(*pptrDivisor);printf(" \n");
+    matchSize(*pptrDividend,*pptrDivisor);
+    for(int i = n * WORD_BITLEN - 1; i >= 0 ; i--) {
+        printf("\nn: %02d |",i);
+        // printf("Q: ");print_bint_hex_python(*pptrQ);printf(" ");
+        // printf("R: ");print_bint_hex_python(*pptrR);printf(" \n");
+        left_shift_bit(*pptrR, 1);  // R <- 2R
+        printf("Get %d-th bit: %d\n", i, GET_BIT(pptrDividend, i));
+        // printf("-After R: ");print_bint_hex_split(*pptrR);
+        (*pptrR)->val[0] ^= GET_BIT(pptrDividend, i); // R <- R + x_i
+        // printf("Y: ");print_bint_hex_python(*pptrDivisor);printf(" \n");
         
-    //     printf("R(%d)>=Y(%d)? : %d\n", (*pptrR)->wordlen,(*pptrDivisor)->wordlen,compare_bint(pptrR,pptrDivisor));
+        printf("R(%d)>=Y(%d)? : %d\n", (*pptrR)->wordlen,(*pptrDivisor)->wordlen,compare_bint(pptrR,pptrDivisor));
 
-    //     matchSize(*pptrR,*pptrDivisor);
-    //     if(compare_bint(pptrR,pptrDivisor)) {   // R >= Y
-    //         // printf("Before Q: ");print_bint_hex_split(*pptrQ);
-    //         printf("\nR:");print_bint_hex(*pptrR);
-    //         printf("Y:");print_bint_hex(*pptrDivisor);
-    //         SUB(pptrR,pptrDivisor,&prtTmpSub);
-    //         printf("R-Y:");print_bint_hex(prtTmpSub);
-    //         copyBINT(pptrR,&prtTmpSub);
-    //         printf("R-Y:");print_bint_hex(*pptrR);
+        matchSize(*pptrR,*pptrDivisor);
+        if(compare_bint(pptrR,pptrDivisor)) {   // R >= Y
+            printf("\nR:");print_bint_hex(*pptrR);
+            // printf("Before Q: ");print_bint_hex_split(*pptrQ);
+            printf("Y:");print_bint_hex(*pptrDivisor);
+            SUB(pptrR,pptrDivisor,&ptrTmpSub);
+            printf("R-Y:");print_bint_hex(ptrTmpSub);
+            copyBINT(pptrR,&ptrTmpSub);
+            printf("R-Y:");print_bint_hex(*pptrR);
 
-    //         SET_BINT_ONE(&prtTmpAdd);
-    //         left_shift_bit(prtTmpAdd, i);
-    //         matchSize(*pptrQ, prtTmpAdd);
-    //         for(int j = 0; j < prtTmpAdd->wordlen; j++) {
-    //             (*pptrQ)->val[j] ^= prtTmpAdd->val[j];
-    //         }
+            SET_BINT_ONE(&ptrTmpAdd);
+            left_shift_bit(ptrTmpAdd, i);
+            matchSize(*pptrQ, ptrTmpAdd);
+            for(int j = 0; j < ptrTmpAdd->wordlen; j++) {
+                (*pptrQ)->val[j] ^= ptrTmpAdd->val[j];
+            }
             
-    //         // printf("-After Q: ");print_bint_hex_split(*pptrQ);
-    //     }
-    // }
+            // printf("-After Q: ");print_bint_hex_split(*pptrQ);
+        }
+    }
+    
 
     // free(binary);
-    // // *pptrQ = BinaryToHex(quotient, n * WORD_BITLEN);
-    // // *pptrR = BinaryToHex(remainder, m * WORD_BITLEN);
+    // *pptrQ = BinaryToHex(quotient, n * WORD_BITLEN);
+    // *pptrR = BinaryToHex(remainder, m * WORD_BITLEN);
 
-    // refine_BINT(*pptrQ);
-    // refine_BINT(*pptrR);
+    refine_BINT(*pptrQ);
+    refine_BINT(*pptrR);
 
-    // delete_bint(&prtTmpAdd);
-    // delete_bint(&prtTmpSub);
+    delete_bint(&ptrTmpAdd);
+    delete_bint(&ptrTmpSub);
 }
 
 
@@ -891,44 +893,47 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
         fprintf(stderr, "Division by zero error.\n");
         exit(1);
     }
-    if (!(*pptrDividend)->sign && compare_bint(pptrDivisor, pptrDividend)) {
+    if (compare_bint(pptrDivisor, pptrDividend)) {
         SET_BINT_ZERO(pptrQ);
-        pptrR = pptrDividend;
+        copyBINT(pptrR, pptrDividend);
         return;
     }
     int n = (*pptrDividend)->wordlen;
     int m = (*pptrDivisor)->wordlen;
     SET_BINT_ZERO(pptrQ);
-    (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
+    (*pptrQ)->sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
     SET_BINT_ZERO(pptrR);
+    (*pptrR)->sign = false;
+    (*pptrR)->wordlen = m;
     
-    BINT* prtTmpSub = NULL;
-    SET_BINT_ZERO(&prtTmpSub);
-    BINT* prtTmpAdd = NULL;
-    SET_BINT_ZERO(&prtTmpAdd);  
+    BINT* ptrTmpSub = NULL;
+    SET_BINT_ZERO(&ptrTmpSub);
+    BINT* ptrTmpAdd = NULL;
+    SET_BINT_ZERO(&ptrTmpAdd);
 
     matchSize(*pptrDividend,*pptrDivisor);
     for(int i = n * WORD_BITLEN - 1; i >= 0 ; i--) {
         left_shift_bit(*pptrR, 1);  // R <- 2R
         (*pptrR)->val[0] ^= GET_BIT(pptrDividend, i); // R <- R + x_i
         matchSize(*pptrR,*pptrDivisor);
-        if(compare_abs_bint(pptrR,pptrDivisor)) {   
-            SUB(pptrR,pptrDivisor,&prtTmpSub);
-            copyBINT(pptrR,&prtTmpSub);
-            SET_BINT_ONE(&prtTmpAdd);
-            left_shift_bit(prtTmpAdd, i);
-            matchSize(*pptrQ, prtTmpAdd);
-            for(int j = 0; j < prtTmpAdd->wordlen; j++) {
-                (*pptrQ)->val[j] ^= prtTmpAdd->val[j];
+        if(compare_abs_bint(pptrR,pptrDivisor)) {
+            copyBINT(&ptrTmpSub,pptrR);
+            SUB(&ptrTmpSub,pptrDivisor,pptrR);
+            SET_BINT_ONE(&ptrTmpAdd);
+            if(i)
+                left_shift_bit(ptrTmpAdd, i);
+            matchSize(*pptrQ, ptrTmpAdd);
+            for(int j = 0; j < ptrTmpAdd->wordlen; j++) {
+                (*pptrQ)->val[j] ^= ptrTmpAdd->val[j];
             }
             
         }
     }
 
-    refine_BINT(*pptrQ);
-    refine_BINT(*pptrR);
+    (*pptrQ)->wordlen = ptrTmpAdd->wordlen;
 
-    delete_bint(&prtTmpAdd);
-    delete_bint(&prtTmpSub);
+    delete_bint(&ptrTmpAdd);
+    delete_bint(&ptrTmpSub);
+
 }
 

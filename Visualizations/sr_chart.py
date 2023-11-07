@@ -1,5 +1,6 @@
 import sys
 print(sys.executable)
+
 import matplotlib.pyplot as plt
 import numpy as np
 

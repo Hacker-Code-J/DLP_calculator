@@ -44,7 +44,7 @@ void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
 
 
 #define SET_WORD_DATA(PB, V, WL, S) if(*(PB)) delete_bint(PB); *(PB)=(BINT*)malloc(sizeof(BINT));\
-    (*PB)->val=(WORD*)calloc(1,sizeof(WORD)); *(*PB)->val=(V); (*PB)->wordlen=(WL); (*PB)->sign=(S)
+    (*PB)->val=(WORD*)calloc(1,sizeof(WORD)); (*PB)->val[0]=(V); (*PB)->wordlen=(WL); (*PB)->sign=(S)
 
 void SET_BINT_ZERO(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x00, 1, false); }
 void SET_BINT_ONE(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x01, 1, false); }
@@ -516,19 +516,36 @@ void print_bint_hex_split(const BINT* ptrBint) {
     }
     printf("\n");
 }
-void print_bint_bin_python(BINT** pptrBint) {
-    if ((*pptrBint)->sign) printf("-");
+void print_bint_bin_python(BINT* ptrBint) {
+    if ((ptrBint)->sign) printf("-");
     printf("0b");
-    for (int i = (*pptrBint)->wordlen - 1; i >= 0; i--) {
+    for (int i = (ptrBint)->wordlen - 1; i >= 0; i--) {
         for (int j = WORD_BITLEN - 1; j >= 0; j--)
-            printf("%d", ((*pptrBint)->val[i] >> j) & 1);
+            printf("%d", ((ptrBint)->val[i] >> j) & 1);
     }
 }
 void print_bint_hex_python(BINT** pptrBint) {
+    if (!pptrBint) {
+        fprintf(stderr, "Invalid BINT** structure in 'print_hex_python'.\n");
+        return;
+    }
+    if (!(*pptrBint)) {
+        fprintf(stderr, "Invalid BINT* structure in 'print_hex_python'.\n");
+        return;
+    }
+    if (!(*pptrBint)->val) {
+        fprintf(stderr, "Invalid BINT->val in 'print_hex_python'.\n");
+        return;
+    }
     if ((*pptrBint)->sign) { printf("-"); }
     printf("0x");
+    
     for (int i = (*pptrBint)->wordlen - 1; i >= 0; i--) {
-        printf("%x", (*pptrBint)->val[i]);
+        printf("%08x", (*pptrBint)->val[i]);
+        // if(i >= 3) {  // Assuming MAX_WORDLEN is the maximum size of the val array
+        //     fprintf(stderr, "Word length exceeds maximum allowed length.\n");
+        //     return;
+        // }
     }
 }
 
@@ -1140,8 +1157,12 @@ void right_shift_word(BINT** pptrBint, int shift_amount) {
 }
 
 void left_shift_bit(BINT* ptrBint, int shift_amount) {
-    if (!ptrBint || shift_amount <= 0) {
-        fprintf(stderr, "Invalid parameters or no shift needed.");
+    if (!ptrBint) {
+        fprintf(stderr, "Parameter is NULL in 'left_shift_bit'\n");
+        return; // Invalid parameters or no shift needed.
+    }
+    if (shift_amount <= 0) {
+        fprintf(stderr, "No shift needed.\n");
         return; // Invalid parameters or no shift needed.
     }
 
