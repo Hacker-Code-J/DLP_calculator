@@ -918,7 +918,14 @@ void FLIP_SIGN(BINT** pptrBint) {
 }
 
 int BIT_LENGTH(BINT** pptrBint) {
-    return (*pptrBint)->wordlen * WORD_BITLEN;
+    int bit_len = (*pptrBint)->wordlen * WORD_BITLEN;
+    for (int i=bit_len-1 ; i>=0;i--){
+        if (GET_BIT(pptrBint,i)==0){
+            bit_len = bit_len -1;
+        }
+        else break;
+    }
+    return bit_len;
 }
 
 // //Author: Kim Ye-chan

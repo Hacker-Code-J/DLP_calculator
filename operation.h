@@ -124,4 +124,6 @@ void ADD_BIT(BINT *ptrBint, WORD bit);
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 
+void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ);
+
 #endif // OPERATION_H

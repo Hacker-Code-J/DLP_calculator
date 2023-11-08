@@ -940,3 +940,42 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
 
 }
 
+void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ){
+    //일단 비트수가 필요하다 그만큼 연산을 해야하니 
+    int bit_len = BIT_LENGTH(ptrY);
+    BINT* t0=NULL;
+    BINT* t1=NULL;
+    BINT* temp=NULL;
+    BINT* temp2=NULL;
+    SET_BINT_ONE(&t0);
+    copyBINT(&t1,ptrX);
+    
+
+    for (int i= bit_len-1 ; i >= 0 ;i--){
+        init_bint(&temp,1);
+        init_bint(&temp2,1);
+
+        if (GET_BIT(ptrY,i) == 0){
+            mul_core_TxtBk_xyz(&t0,&t1,&temp);
+            copyBINT(&t1,&temp);
+            copyBINT(&temp2,&t0);
+            mul_core_TxtBk_xyz(&t0,&temp2,&temp);
+            copyBINT(&t0,&temp);
+        }
+        else{
+            mul_core_TxtBk_xyz(&t0,&t1,&temp);
+            copyBINT(&t0,&temp);
+            copyBINT(&temp2,&t1);
+            mul_core_TxtBk_xyz(&t1,&temp2,&temp);
+            copyBINT(&t1,&temp);
+        }
+
+    }
+    copyBINT(ptrZ,&t0);
+    refine_BINT(*ptrZ);
+    delete_bint(&t0);
+    delete_bint(&t1);
+    delete_bint(&temp);
+    delete_bint(&temp2);
+    
+}
