@@ -33,7 +33,7 @@ int main() {
     double cpu_time_used1;
     // double cpu_time_used2;
     // double cpu_time_used3;
-    int t = 100;
+    int t = 1000;
 
     // BINT* ptrTmpX = NULL;
     // BINT* ptrTmpY = NULL;
@@ -57,10 +57,10 @@ int main() {
     while(idx < t) {
         BINT* ptrX = NULL;
         BINT* ptrY = NULL;
-        // BINT* ptrZ = NULL;
+        BINT* ptrZ = NULL;
 
-        BINT* ptrQ = NULL;
-        BINT* ptrR = NULL;
+        // BINT* ptrQ = NULL;
+        // BINT* ptrR = NULL;
 /*************************** Random Input **************************************/
         // int len1 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
         // int len2 = (rand() % 0x020) + 0x010; //  512 ~ 1024 bits
@@ -73,16 +73,16 @@ int main() {
         // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        int len1 = (rand() % 0x02) + 0x040;
-        int len2 = (rand() % 0x01) + 0x020;
+        int len1 = (rand() % 0x02) + 0x05;
+        int len2 = (rand() % 0x01) + 0x05;
         
         // int len1 = 0x04;
         // int len2 = 0x04;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
-        init_bint(&ptrQ, len1);
-        init_bint(&ptrR, len2);
+        // init_bint(&ptrQ, len1);
+        // init_bint(&ptrR, len2);
         // printf("X:");print_bint_hex(ptrX);
         // printf("Y:");print_bint_hex(ptrY);
         
@@ -130,9 +130,9 @@ int main() {
         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
         // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 3);
-        // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+        MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
         // DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
-        DIV_Bianry_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
+        // DIV_Bianry_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
         // bool* binaryX = HexToBinary(ptrX);
         // bool* binaryY = HexToBinary(ptrY);
         end1 = clock();
@@ -188,28 +188,26 @@ int main() {
         /** SAGE (MUL)
          * print(hex(0x00 * 0x00) == hex(0x00))
         */ 
-        // printf("print(hex(");
-        // print_bint_hex_python(ptrX);
-        // printf(" * ");
-        // print_bint_hex_python(ptrY);
-        // printf(") == hex(");
-        // print_bint_hex_python(ptrZ);
-        // printf("))\n");
-        if(!ptrR) {
-            printf("Error in Main\n");
-        }
-        /** SAGE (DIV)
-         * print(hex(0x00 * 0x00 + 0x00) == hex(0x00))
-        */ 
         printf("print(hex(");
-        print_bint_hex_python(&ptrQ);
+        print_bint_hex_python(&ptrX);
         printf(" * ");
         print_bint_hex_python(&ptrY);
-        printf(" + ");
-        print_bint_hex_python(&ptrR);
         printf(") == hex(");
-        print_bint_hex_python(&ptrX);
+        print_bint_hex_python(&ptrZ);
         printf("))\n");
+        
+        /** SAGE (DIV)
+         * print(hex(0x00 * 0x00 + 0x00) == hex(0x00))
+        // */ 
+        // printf("print(hex(");
+        // print_bint_hex_python(&ptrQ);
+        // printf(" * ");
+        // print_bint_hex_python(&ptrY);
+        // printf(" + ");
+        // print_bint_hex_python(&ptrR);
+        // printf(") == hex(");
+        // print_bint_hex_python(&ptrX);
+        // printf("))\n");
 /****************************************************************************************/
         // printf("X:");print_bint_hex_split(ptrX);
         // printf("Y:");print_bint_hex_split(ptrY);
@@ -251,15 +249,15 @@ int main() {
         
         delete_bint(&ptrX);
         delete_bint(&ptrY);
-        // delete_bint(&ptrZ);
+        delete_bint(&ptrZ);
         // delete_bint(&ptrTmpX);
         // delete_bint(&ptrTmpY);
         // delete_bint(&ptrTmpZ);
         // delete_bint(&ptrTTmpX);
         // delete_bint(&ptrTTmpY);
         // delete_bint(&ptrTTmpZ);
-        delete_bint(&ptrQ);
-        delete_bint(&ptrR);
+        // delete_bint(&ptrQ);
+        // delete_bint(&ptrR);
 
         // delete_bint(&ptrX2);
         // delete_bint(&ptrY2);
@@ -273,6 +271,7 @@ int main() {
     }
 }
 
+/* Measuring Performance*/
 // int main() {
 //     srand((unsigned int)time(NULL));
 

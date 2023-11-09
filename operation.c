@@ -406,12 +406,12 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         }
         left_shift_word(&ptrT1, 1);
 
-        add_core_xyz(&ptrT1, &ptrT0, &ptrT);
+        ADD(&ptrT1, &ptrT0, &ptrT);
         
         left_shift_word(&ptrT, j);
 
         copyBINT(&ptrTmpZ, pptrZ);
-        add_core_xyz(&ptrTmpZ, &ptrT, pptrZ);
+        ADD(&ptrTmpZ, &ptrT, pptrZ);
     }
     // Cleanup
     delete_bint(&ptrT);
@@ -729,11 +729,12 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     
     left_shift_word(&ptrT1, 2*l);
     
-    matchSize(ptrT0, ptrT1);
-    OR_BINT(ptrT0,ptrT1,&ptrR);
-    refine_BINT(ptrT0);
-    refine_BINT(ptrT1);
-    
+    // matchSize(ptrT0, ptrT1);
+    // OR_BINT(ptrT0,ptrT1,&ptrR);
+    // refine_BINT(ptrT0);
+    // refine_BINT(ptrT1);
+    ADD(&ptrT0,&ptrT1,&ptrR);
+
     // ADD(&ptrT0, &ptrT1, &ptrTmpR);
     // printf("X1Y1||X0Y0: ");printHex2(ptrTmpR);printf("\n");
 
@@ -810,7 +811,7 @@ void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ,
         return;
     }
     int n = (*pptrDividend)->wordlen;
-    int m = (*pptrDivisor)->wordlen;
+    // int m = (*pptrDivisor)->wordlen;
     // init_bint(pptrQ, n);
     SET_BINT_ZERO(pptrQ);
     (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
