@@ -25,19 +25,30 @@ void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
 void OOR_BINT(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    int min_len = MIN((*pptrX)->wordlen, (*pptrY)->wordlen);
-    for (int i = 0; i < min_len; i++) {
+    int max_len = MAX((*pptrX)->wordlen, (*pptrY)->wordlen);    
+    matchSize(*pptrX, *pptrY);
+    for (int i = 0; i < max_len; i++) {
         (*pptrZ)->val[i] = (*pptrX)->val[i] | (*pptrY)->val[i];
     }
-    (*pptrZ)->wordlen = min_len; // The result size will be size of the smaller operand
+    (*pptrZ)->wordlen = max_len; // The result size will be size of the smaller operand
+    refine_BINT(*pptrX);
+    refine_BINT(*pptrY);
+    refine_BINT(*pptrZ);
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     int min_len = MIN(ptrX->wordlen, ptrY->wordlen);
+    int max_len = MAX(ptrX->wordlen, ptrY->wordlen);
     for (int i = 0; i < min_len; i++) {
         (*pptrZ)->val[i] = ptrX->val[i] | ptrY->val[i];
     }
-    (*pptrZ)->wordlen = min_len; // The result size will be size of the smaller operand
+    for (int i = min_len; i < max_len; i++) {
+        if(ptrX->wordlen > ptrY->wordlen)
+            (*pptrZ)->val[i] = ptrX->val[i];
+        else
+            (*pptrZ)->val[i] = ptrY->val[i];
+    }
+    (*pptrZ)->wordlen = max_len; // The result size will be size of the smaller operand
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
 void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
@@ -729,11 +740,13 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     
     left_shift_word(&ptrT1, 2*l);
     
-    // matchSize(ptrT0, ptrT1);
-    // OR_BINT(ptrT0,ptrT1,&ptrR);
-    // refine_BINT(ptrT0);
-    // refine_BINT(ptrT1);
-    ADD(&ptrT0,&ptrT1,&ptrR);
+    matchSize(ptrT0, ptrT1);
+    OR_BINT(ptrT0,ptrT1,&ptrR);
+    refine_BINT(ptrT0);
+    refine_BINT(ptrT1);
+    // refine_BINT(ptrR);
+    // OOR_BINT(&ptrT0,&ptrT1,&ptrR);
+    // ADD(&ptrT0,&ptrT1,&ptrR);
 
     // ADD(&ptrT0, &ptrT1, &ptrTmpR);
     // printf("X1Y1||X0Y0: ");printHex2(ptrTmpR);printf("\n");

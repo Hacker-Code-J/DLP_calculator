@@ -31,7 +31,7 @@ int main() {
     double cpu_time_used1;
     // clock_t start2, end2;
     // double cpu_time_used2;
-    int t = 1000;
+    int t = 10;
 
     /**
      * if WORD_BITLEN = 32,
@@ -64,14 +64,15 @@ int main() {
         // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        int len1 = (rand() % 0x01) + 0x08;
-        int len2 = (rand() % 0x03) + 0x08;
+        int len1 = (rand() % 0x03) + 0x08;
+        int len2 = (rand() % 0x01) + 0x08;
         
         // int len1 = 0x02;
         // int len2 = 0x0a;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
+        init_bint(&ptrZ, len1 + len2);
         // init_bint(&ptrQ, len1);
         // init_bint(&ptrR, len2);
         // printf("X:");print_bint_hex(ptrX);
