@@ -129,11 +129,12 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
     if(ptrBint1->wordlen < max_wordlen) {
         WORD* tmp = ptrBint1->val;
         tmp = (WORD*)realloc(ptrBint1->val, max_wordlen * sizeof(WORD));
-        ptrBint1->val = tmp;
-        if (!ptrBint1->val) {
+        if (!tmp) {
             // Handle memory allocation failure, exit or return an error
+            fprintf(stderr,"Memory allocation failure in 'matchSize'");
             exit(1); 
         }
+        ptrBint1->val = tmp;
 
         // Initialize the newly allocated WORDs with 0
         for(int i = ptrBint1->wordlen; i < max_wordlen; i++) {
@@ -147,11 +148,12 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
     if(ptrBint2->wordlen < max_wordlen) {
         WORD* tmp = ptrBint2->val;
         tmp = (WORD*)realloc(ptrBint2->val, max_wordlen * sizeof(WORD));
-        ptrBint2->val = tmp;
-        if (!ptrBint2->val) {
+        if (!tmp) {
             // Handle memory allocation failure, exit or return an error
+            fprintf(stderr,"Memory allocation failure in 'matchSize'");
             exit(1); 
         }
+        ptrBint2->val = tmp;
 
         // Initialize the newly allocated WORDs with 0
         for(int i = ptrBint2->wordlen; i < max_wordlen; i++) {
@@ -660,9 +662,10 @@ void refine_BINT(BINT* X) {
     }
     if(X->wordlen != new_wordlen) {
         X->wordlen = new_wordlen;
-        WORD* tmp = X->val;
-        tmp = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
-        X->val = tmp;
+        // WORD* tmp = X->val;
+        // tmp = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
+        // X->val = tmp;
+        X->val = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
     }
 
     if((X->wordlen == 1) && (X->val[0] == 0))

@@ -79,36 +79,57 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         add_core_xyz(pptrY, pptrX, pptrZ);
         return;
     }  
-    int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
 
-    if (!pptrZ || !*pptrZ || !(*pptrZ)->val)
-        init_bint(pptrZ, n+1);
+    init_bint(pptrZ, (*pptrX)->wordlen + 1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
-
     WORD res = 0x00;
     WORD carry = 0x00;
-    WORD k = 0x00;
+    int k = 0x00;
 
-    for (int i = 0; i < m; i++) {
-        // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);
+    for(int i = 0; i < (*pptrY)->wordlen; i++) {
         add_carry((*pptrX)->val[i], (*pptrY)->val[i], k, &carry, &res);
         (*pptrZ)->val[i] = res;
         // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
         k = carry;
     }
-    for (int i = m; i < n; i++) {
+    for (int i = (*pptrY)->wordlen; i < (*pptrX)->wordlen; i++) {
         add_carry((*pptrX)->val[i],(WORD)0, k, &carry, &res);
         (*pptrZ)->val[i] = res;
         k = carry;
     }
-    if(k) {
-        (*pptrZ)->val[n] = k;
-    } else {
-        (*pptrZ)->wordlen = n;
-        // WORD* tmp = (*pptrZ)->val;
-        // tmp = (WORD*)realloc((*pptrZ)->val, n*sizeof(WORD));
-        // (*pptrZ)->val = tmp;
-    }
+    (*pptrZ)->val[(*pptrX)->wordlen] = k;
+    refine_BINT(*pptrZ);
+
+    // int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
+
+    // // if (!pptrZ || !*pptrZ || !(*pptrZ)->val)
+    // init_bint(pptrZ, n+1);
+    // CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
+
+    // WORD res = 0x00;
+    // WORD carry = 0x00;
+    // WORD k = 0x00;
+
+    // for (int i = 0; i < m; i++) {
+    //     // printf("Before: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res);
+    //     add_carry((*pptrX)->val[i], (*pptrY)->val[i], k, &carry, &res);
+    //     (*pptrZ)->val[i] = res;
+    //     // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
+    //     k = carry;
+    // }
+    // for (int i = m; i < n; i++) {
+    //     add_carry((*pptrX)->val[i],(WORD)0, k, &carry, &res);
+    //     (*pptrZ)->val[i] = res;
+    //     k = carry;
+    // }
+    // if(k == 1) {
+    //     (*pptrZ)->val[n] = k;
+    // } else {
+    //     (*pptrZ)->wordlen = n;
+    //     WORD* tmp = (*pptrZ)->val;
+    //     tmp = (WORD*)realloc((*pptrZ)->val, n*sizeof(WORD));
+    //     (*pptrZ)->val = tmp;
+    // }
     // refine_BINT((*pptrZ));
 }
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
@@ -436,213 +457,50 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 }
 
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_Krtsb_test");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_Krtsb_test");
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
+
+    print_bint_hex_split(*pptrX);
+    print_bint_hex_split(*pptrY);
+
     int n = (*pptrX)->wordlen;
     int m = (*pptrX)->wordlen;
     static int lenZ = -1; // Declare lenZ as a static variable
     if (lenZ == -1) {
         lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
+        init_bint(pptrZ, lenZ);
+        CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     }
-    init_bint(pptrZ, lenZ);
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_Krtsb_test");
     if (FLAG >= MIN(n,m)) {
         BINT* tmpTxtBk_X = NULL;
         BINT* tmpTxtBk_Y = NULL;
+        printf("=========================================\n");
+        printf("FLAG ON!!\n");
+        print_bint_hex_split(*pptrX);
+        print_bint_hex_split(*pptrY);
         copyBINT(&tmpTxtBk_X, pptrX);
         copyBINT(&tmpTxtBk_Y, pptrY);
-        printf("\nFLAG on!\n");
-        printf("Before ImpTxtBk:\n");
-        print_bint_hex_python(&tmpTxtBk_X);printf(" * ");
-        print_bint_hex_python(&tmpTxtBk_Y);
-        printf("\n");
         MUL_Core_ImpTxtBk_xyz(&tmpTxtBk_X,&tmpTxtBk_Y,pptrZ);
-        printf("-After ImpTxtBk:\n");
-        print_bint_hex_python(&tmpTxtBk_X);printf(" * ");
-        print_bint_hex_python(&tmpTxtBk_Y);printf("=\n");
-        print_bint_hex_python(pptrZ);
-        printf("\n");
-        printf("FLAG END\n\n");
         delete_bint(&tmpTxtBk_X);
         delete_bint(&tmpTxtBk_Y);
-        return;  // This will immediately terminate the function.
+        print_bint_hex_split(*pptrZ);
+        printf("=========================================\n");
+        return;
     }
-    printf("\nMain-----------------------------------------------------------\n");
-    printf("Main Krtsb Start!\n");
-    printf("FLAG and MAX: %d, %d\n", FLAG, MAX(n,m));
-    custom_printHex_xy(*pptrX, *pptrY, MAX(n,m));
-
-    int l = (MAX(n,m) + 1) >> 1;
-    printf("l= MAX(%d, %d) + 1 >> 1 = %d\n\n", n, m, l);
-
-    BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
-    BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
-    BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
-    // BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
-    BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
-    BINT* ptrS = NULL;
-    init_bint(&ptrS, 2*l);
-    BINT* ptrR = NULL;
-    BINT* ptrTmpR = NULL;
-    init_bint(&ptrR, (*pptrZ)->wordlen);
-    BINT* ptrTmpST1 = NULL;
-    BINT* ptrTmpST0 = NULL;
-
-    copyBINT(&ptrX1, pptrX);
-    printf("X1: ");print_bint_hex_python(&ptrX1);printf("\n");
-    right_shift_word(&ptrX1, l);
-    printf("X1 >> %d: ", l);print_bint_hex_python(&ptrX1);printf("\n");
-
-    copyBINT(&ptrX0, pptrX);
-    printf("X0: ");print_bint_hex_python(&ptrX0);printf("\n");
-    reduction(&ptrX0, l * WORD_BITLEN);
-    printf("X0 mod 2^{w*%d}: ", l);print_bint_hex_python(&ptrX0);printf("\n");
-
-    copyBINT(&ptrY1, pptrY);
-    printf("Y1: ");print_bint_hex_python(&ptrY1);printf("\n");
-    right_shift_word(&ptrY1, l);
-    printf("Y1 >> %d: ", l);print_bint_hex_python(&ptrY1);printf("\n");
-    copyBINT(&ptrY0, pptrY);
-    reduction(&ptrY0, l * WORD_BITLEN);
-    printf("Y0 mod 2^{w*%d}: ", l);print_bint_hex_python(&ptrY0);printf("\n");
-
-    printf("\nKarT1***************************************************************\n");
-    printf("\nKrtsb - T1 start!\n");
-    printf("X1 at Krtsb - T1: ");print_bint_hex_python(&ptrX1);
-    printf(",\n Y1 at Krtsb - T1: ");print_bint_hex_python(&ptrY1);printf("\n");
-    mul_core_Krtsb_test(&ptrX1, &ptrY1, &ptrT1);
-    printf("X1*Y1 at Krtsb - T1: ");print_bint_hex_python(&ptrT1);printf("\n\n");
-    printf("\nEndKarT1*************************************************************\n");
-    
-    printf("\nKarT0***************************************************************\n");
-    printf("\nKrtsb - T0 start!\n");
-    printf("X0 at Krtsb - T0: ");print_bint_hex_python(&ptrX0);
-    printf(",\n Y0 at Krtsb - T0 ");print_bint_hex_python(&ptrY0);printf("\n");
-    mul_core_Krtsb_test(&ptrX0, &ptrY0, &ptrT0);
-    printf("X0*Y0: ");print_bint_hex_python(&ptrT0);printf("\n\n");
-    printf("\nEndKarT0*************************************************************\n");
-    
-    left_shift_word(&ptrT1, 2*l);
-    printf("*W^{2*%d}: ", l);print_bint_hex_python(&ptrT1);printf("\n");
-
-    matchSize(ptrT0, ptrT1);
-    OR_BINT(ptrT0,ptrT1,&ptrR);
-    refine_BINT(ptrT0);
-    refine_BINT(ptrT1);
-    printf("X1Y1||X0Y0: ");print_bint_hex_python(&ptrR);printf("\n");
-
-    // ADD(&ptrT0, &ptrT1, &ptrTmpR);
-    // printf("X1Y1||X0Y0: ");print_bint_hex_python(&ptrTmpR);printf("\n");
-
-    printf("X0: ");print_bint_hex_python(&ptrX0);
-    printf(", X1 ");print_bint_hex_python(&ptrX1);printf("\n");
-    // bool signS1 = compare_abs_bint(&ptrX1,&ptrX0);
-    SUB(&ptrX0, &ptrX1, &ptrS1);
-    // ptrS1->sign = signS1;
-    printf("S1 := X0-X1 = ");print_bint_hex_python(&ptrS1);printf("\n");
-    printf("sgn_S1 = %d", (ptrS1)->sign);
-    printf("\n\n");
-    printf("Y1: ");print_bint_hex_python(&ptrY1);
-    printf(", Y0 ");print_bint_hex_python(&ptrY0);printf("\n");
-    // bool signS0 = compare_abs_bint(&ptrY0,&ptrY1);
-    SUB(&ptrY1, &ptrY0, &ptrS0);
-    // ptrS0->sign = signS0;
-    printf("S0 := Y1-Y0 = ");print_bint_hex_python(&ptrS0);printf("\n");
-    printf("sgn_S0 = %d", (ptrS0)->sign);
-    printf("\n\n");
-
-    printf("\nKarS***************************************************************\n");
-    printf("\nKrtsb - S start!\n");
-    printf("sgn_S0: %d, sgn_S1: %d\n", (ptrS0)->sign, (ptrS1)->sign);
-    bool sgn_S = ((ptrS0)->sign) ^ ((ptrS1)->sign);
-    ptrS0->sign = false;
-    ptrS1->sign = false;
-    printf("X0-X1: ");print_bint_hex_python(&ptrS1);
-    printf(", Y1-Y0 ");print_bint_hex_python(&ptrS0);printf("\n");
-    mul_core_Krtsb_test(&ptrS1, &ptrS0, &ptrS);
-    ptrS->sign = sgn_S;
-    printf("sgn_S: %d\n", ptrS->sign);
-    printf("S_1*S_0 = (X0-X1)*(Y1-Y0): ");print_bint_hex_python(&ptrS);
-    printf("\nsgn_{S1*S0} = %d", ptrS->sign);
-    printf("\n\n");
-    printf("\nEndKarS***************************************************************\n");
-   
-
-    right_shift_word(&ptrT1, 2*l);
-    printf("(X0-X1)*(Y1-Y0): ");print_bint_hex_python(&ptrS);
-    printf(", X1Y1: ");print_bint_hex_python(&ptrT1);printf("\n");
-    copyBINT(&ptrTmpST1, &ptrS);
-    ADD(&ptrTmpST1,&ptrT1,&ptrS);
-    printf("(X0-X1)*(Y1-Y0) + X1Y1: ");print_bint_hex_python(&ptrS);
-    printf("\nsgn_{(X0-X1)*(Y1-Y0) + X1Y1}: %d", ptrS->sign);
-    printf("\n\n");
-    
-    
-    printf("(X0-X1)*(Y1-Y0) + X1Y1: ");print_bint_hex_python(&ptrS);
-    printf(", X0Y0: ");print_bint_hex_python(&ptrT0);printf("\n");
-    copyBINT(&ptrTmpST0, &ptrS);
-    ADD(&ptrTmpST0,&ptrT0,&ptrS);
-    printf("(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0: ");print_bint_hex_python(&ptrS);
-    printf("\nsgn_{(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0}: %d", ptrS->sign);
-    printf("\n\n");
-    
-
-    printf("Before: W^%d: ", l);print_bint_hex_python(&ptrS);printf("\n");
-    left_shift_word(&ptrS, l);
-    printf("-After: W^%d: ", l);print_bint_hex_python(&ptrS);printf("\n");
-    
-
-    printf("X1Y1||X0Y0: ");print_bint_hex_python(&ptrR);
-    printf(", [(X0-X1)*(Y1-Y0) + X1Y1 + X0Y0]w^l: ");print_bint_hex_python(&ptrS);printf("\n");
-    copyBINT(&ptrTmpR, &ptrR);
-    printf("\nZ length: %d\n",(*pptrZ)->wordlen);
-    ADD(&ptrTmpR, &ptrS, pptrZ);
-    printf("*Result: ");print_bint_hex_python(pptrZ);printf("\n");
-
-    delete_bint(&ptrX0); delete_bint(&ptrX1);
-    delete_bint(&ptrY0); delete_bint(&ptrY1);
-    delete_bint(&ptrT0); delete_bint(&ptrT1);
-    // delete_bint(&ptrS0); delete_bint(&ptrS1);
-    delete_bint(&ptrS0); delete_bint(&ptrS1);
-    delete_bint(&ptrS);
-    delete_bint(&ptrR);
-    delete_bint(&ptrTmpR);
-    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
-    printf("\nEndKarMain-----------------------------------------------------------\n");
-}
-
-
-void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
-    int n = (*pptrX)->wordlen;
-    int m = (*pptrX)->wordlen;
-    static int lenZ = -1; // Declare lenZ as a static variable
-    if (lenZ == -1) {
-        lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
-    }
-    init_bint(pptrZ, lenZ);
+    init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
-    if (flag >= MIN(n,m)) {
-        BINT* tmpTxtBk_X = NULL;
-        BINT* tmpTxtBk_Y = NULL;
-        copyBINT(&tmpTxtBk_X, pptrX);
-        copyBINT(&tmpTxtBk_Y, pptrY);
-        MUL_Core_ImpTxtBk_xyz(&tmpTxtBk_X,&tmpTxtBk_Y,pptrZ);
-        delete_bint(&tmpTxtBk_X);
-        delete_bint(&tmpTxtBk_Y);
-        return;  // This will immediately terminate the function.
-    }
     matchSize(*pptrX,*pptrY);
     int l = (MAX(n,m) + 1) >> 1;
+    printf("l = 0x%x\n\n", l);
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
     BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
     BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
+    BINT* ptrShiftT1 = NULL;
     BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
     BINT* ptrS = NULL;
     init_bint(&ptrS, 2*l);
-    
+
     BINT* ptrR = NULL;
     BINT* ptrTmpR = NULL;
     init_bint(&ptrR, (*pptrZ)->wordlen);
@@ -651,48 +509,142 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
 
     copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
     copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
-    
+    printf("Split X to X1: ");print_bint_hex_python(&ptrX1);printf("\n");
+    printf("Split X to X0: ");print_bint_hex_python(&ptrX0);printf("\n");
+
+    copyBINT(&ptrY1, pptrY); right_shift_word(&ptrY1, l);
+    copyBINT(&ptrY0, pptrY); reduction(&ptrY0, l * WORD_BITLEN);
+    printf("Split Y to Y1: ");print_bint_hex_python(&ptrY1);printf("\n");
+    printf("Split Y to Y0: ");print_bint_hex_python(&ptrY0);printf("\n");
+
+    mul_core_Krtsb_test(&ptrX1, &ptrY1, &ptrT1);
+    mul_core_Krtsb_test(&ptrX0, &ptrY0, &ptrT0);
+    printf("T1: ");print_bint_hex_python(&ptrT1);printf("\n");
+    printf("T0: ");print_bint_hex_python(&ptrT0);printf("\n");
+
+    copyBINT(&ptrShiftT1, &ptrT1);
+    left_shift_word(&ptrShiftT1, 2*l);
+    ADD(&ptrShiftT1, &ptrT0, &ptrR);
+    printf("R: ");print_bint_hex_python(&ptrR);printf("\n");
+
+    SUB(&ptrX0, &ptrX1, &ptrS1);
+    SUB(&ptrY1, &ptrY0, &ptrS0);
+    printf("S1: ");print_bint_hex_python(&ptrS1);printf("\n");
+    printf("S0: ");print_bint_hex_python(&ptrS0);printf("\n");
+
+    bool sgn_S = ((ptrS0)->sign) ^ ((ptrS1)->sign);
+    ptrS0->sign = false;
+    ptrS1->sign = false;
+    mul_core_Krtsb_test(&ptrS1, &ptrS0, &ptrS);
+    ptrS->sign = sgn_S;
+    printf("S: ");print_bint_hex_python(&ptrS);printf("\n");
+
+    // copyBINT(&ptrTmpST1, &ptrS);
+    ADD(&ptrS,&ptrT1,&ptrTmpST1);
+    copyBINT(&ptrS,&ptrTmpST1);
+    printf("S + t1: ");print_bint_hex_python(&ptrS);printf("\n");
+
+    copyBINT(&ptrTmpST0, &ptrS);
+    ADD(&ptrTmpST0,&ptrT0,&ptrS);
+    printf("S + t0: ");print_bint_hex_python(&ptrS);printf("\n");
+
+    left_shift_word(&ptrS, l);
+    printf("S << lw: ");print_bint_hex_python(&ptrS);printf("\n");
+
+    ADD(&ptrR, &ptrS, pptrZ);
+    printf("Result: ");print_bint_hex_python(pptrZ);printf("\n");
+
+    delete_bint(&ptrX0); delete_bint(&ptrX1);
+    delete_bint(&ptrY0); delete_bint(&ptrY1);
+    delete_bint(&ptrT0); delete_bint(&ptrT1);
+    delete_bint(&ptrShiftT1);
+    delete_bint(&ptrS0); delete_bint(&ptrS1);
+    delete_bint(&ptrS);
+    delete_bint(&ptrR); delete_bint(&ptrTmpR);
+    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
+}
+
+
+void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
+
+    int n = (*pptrX)->wordlen;
+    int m = (*pptrX)->wordlen;
+    static int lenZ = -1; // Declare lenZ as a static variable
+    if (lenZ == -1) {
+        lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
+        init_bint(pptrZ, lenZ);
+        CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
+    }
+    if (flag >= MIN(n,m)) {
+        BINT* tmpTxtBk_X = NULL;
+        BINT* tmpTxtBk_Y = NULL;
+        copyBINT(&tmpTxtBk_X, pptrX);
+        copyBINT(&tmpTxtBk_Y, pptrY);
+        MUL_Core_ImpTxtBk_xyz(&tmpTxtBk_X,&tmpTxtBk_Y,pptrZ);
+        delete_bint(&tmpTxtBk_X);
+        delete_bint(&tmpTxtBk_Y);
+        return;
+    }
+    init_bint(pptrZ, n+m);
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
+    matchSize(*pptrX,*pptrY);
+    int l = (MAX(n,m) + 1) >> 1;
+
+    BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
+    BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
+    BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
+    BINT* ptrShiftT1 = NULL;
+    BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
+    BINT* ptrS = NULL;
+    init_bint(&ptrS, 2*l);
+
+    BINT* ptrR = NULL;
+    BINT* ptrTmpR = NULL;
+    init_bint(&ptrR, (*pptrZ)->wordlen);
+    BINT* ptrTmpST1 = NULL;
+    BINT* ptrTmpST0 = NULL;
+
+    copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
+    copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
+
     copyBINT(&ptrY1, pptrY); right_shift_word(&ptrY1, l);
     copyBINT(&ptrY0, pptrY); reduction(&ptrY0, l * WORD_BITLEN);
     
     Krtsb_FLAG_Test(&ptrX1, &ptrY1, &ptrT1, flag);
     Krtsb_FLAG_Test(&ptrX0, &ptrY0, &ptrT0, flag);
     
-    left_shift_word(&ptrT1, 2*l);
+    copyBINT(&ptrShiftT1, &ptrT1);
+    left_shift_word(&ptrShiftT1, 2*l);
+    ADD(&ptrShiftT1, &ptrT0, &ptrR);
     
-    matchSize(ptrT0, ptrT1);
-    OR_BINT(ptrT0,ptrT1,&ptrR);
-    refine_BINT(ptrT0);
-    refine_BINT(ptrT1);
-    
-    // ADD(&ptrT0, &ptrT1, &ptrTmpR);
-    // printf("X1Y1||X0Y0: ");printHex2(ptrTmpR);printf("\n");
-
     SUB(&ptrX0, &ptrX1, &ptrS1);
     SUB(&ptrY1, &ptrY0, &ptrS0);
-    
+   
     bool sgn_S = ((ptrS0)->sign) ^ ((ptrS1)->sign);
     ptrS0->sign = false;
     ptrS1->sign = false;
     Krtsb_FLAG_Test(&ptrS1, &ptrS0, &ptrS, flag);
     ptrS->sign = sgn_S;
-   
-    right_shift_word(&ptrT1, 2*l);
     
-    copyBINT(&ptrTmpST1, &ptrS);
-    ADD(&ptrTmpST1,&ptrT1,&ptrS);
+    ADD(&ptrS,&ptrT1,&ptrTmpST1);
+    copyBINT(&ptrS,&ptrTmpST1);
     
-    copyBINT(&ptrTmpST0, &ptrS);
-    ADD(&ptrTmpST0,&ptrT0,&ptrS);
-
+    // copyBINT(&ptrTmpST0, &ptrS);
+    // ADD(&ptrTmpST0,&ptrT0,&ptrS);
+    
+    ADD(&ptrS,&ptrT0,&ptrTmpST0);
+    copyBINT(&ptrS, &ptrTmpST0);
+    
     left_shift_word(&ptrS, l);
+   
+    ADD(&ptrR, &ptrS, pptrZ);
     
-    copyBINT(&ptrTmpR, &ptrR);
-    ADD(&ptrTmpR, &ptrS, pptrZ);
-
     delete_bint(&ptrX0); delete_bint(&ptrX1);
     delete_bint(&ptrY0); delete_bint(&ptrY1);
     delete_bint(&ptrT0); delete_bint(&ptrT1);
+    delete_bint(&ptrShiftT1);
     delete_bint(&ptrS0); delete_bint(&ptrS1);
     delete_bint(&ptrS);
     delete_bint(&ptrR); delete_bint(&ptrTmpR);
