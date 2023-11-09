@@ -64,11 +64,11 @@ int main() {
         // int len1 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         // int len2 = (rand() % 0x1e0) + 0x0f0; // 7680 ~ 15360 bits
         
-        int len1 = (rand() % 0x02) + 0x02;
-        int len2 = (rand() % 0x01) + 0x02;
+        int len1 = (rand() % 0x01) + 0x08;
+        int len2 = (rand() % 0x03) + 0x08;
         
-        // int len1 = 0x04;
-        // int len2 = 0x04;
+        // int len1 = 0x02;
+        // int len2 = 0x0a;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
@@ -118,7 +118,7 @@ int main() {
         // mul_core_ImpTxtBk_test(&ptrX,&ptrY,&ptrZ);
         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
         // mul_core_Krtsb_test(&ptrX,&ptrY,&ptrZ);
-        // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 3);
+        // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 4);
         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
         // DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
         // DIV_Bianry_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
