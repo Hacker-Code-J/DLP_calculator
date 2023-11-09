@@ -76,4 +76,9 @@ speed2:
 	(cd Visualizations && python3 time_compare_mul.py)
 	@echo "Visualized."
 
+flag:
+	@echo "Visualizing ..."
+	(cd Visualizations && python3 Krtsb_FLAG.py)
+	@echo "Visualized."
+
 .PHONY: clean
