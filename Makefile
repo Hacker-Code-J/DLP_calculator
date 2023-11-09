@@ -44,7 +44,7 @@ convert:
 
 sage:
 	@echo "Loading SageMath..."
-	(cd SAGE_Tests && sage)
+	(cd SAGE && sage)
 	@echo "Quit SageMath."
 
 test:

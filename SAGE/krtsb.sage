@@ -8,16 +8,24 @@ def get_sign(a):
     return 0
 
 def Mul_K (a, b):
+    print(f"Mul_K called with a = {a}, b = {b}")
     n = floor(len(a.bits())/w) + 1
     m = floor(len(b.bits())/w) + 1
+    print(f"n = {n}, m = {m}")
 
-    if 10 >= min(n, m):
-        return a*b
+
+    if 4 >= min(n, m):
+        result a*b
+        print(f"Direct multiplication result = {result}")
+        return result
 
     l = (max(n, m)+1) >> 1
     lw = l * w
     a1, a0 = a >> lw, a%(2^lw)
     b1, b0 = b >> lw, b%(2^lw)
+    print(f"Split a into a1 = {a1}, a0 = {a0}")
+    print(f"Split b into b1 = {b1}, b0 = {b0}")
+
     t1, t0 = Mul_K(a1, b1), Mul_K(a0, b0)
     r = (t1 << 2*lw) + t0
     s1, s0 = a0 - a1, b1 - b0
@@ -27,18 +35,13 @@ def Mul_K (a, b):
     s = s + t0
     s = s << lw
     r = r + s
+    print(f"Interim result r = {r}")
     return r
 
-a = 0x0000000084ebc20c29920bff48460f7589841c72abf8052b5c15f2c4ee8e00972718df78
-b = 0xaf23caacea1fa9499bbe868f94f48395ac3d8637b3021b4157233c2bc727390338ab03a1
+a = 0x34e69cc99a6e8a0c8ecf24219d6de0c9d6ed9d79dc17fefbf6386fbc5352dc6b4c2e3e8d
+b = 0x7f9d2c066846699facfb159f6d467b4ca90e6ce0387f43bfa32bc0a735883879
 print (hex(a))
 print (hex(b))
-c = 0x5aefbf1da7286df5ca90d496058c7bdc581a75f7617a9371e7f96c1d842a75ff2edde5fed78ac6b73f280202b0c91b581d01955708aa35ff248d02c37929096c666af278
-print (hex(c))
-# hex(0x0000000084ebc20c29920bff48460f7589841c72abf8052b5c15f2c4ee8e00972718df78)
-# hex(0xaf23caacea1fa9499bbe868f94f48395ac3d8637b3021b4157233c2bc727390338ab03a1)
-# hex(0x5aefbf1da7286df5ca90d496058c7bdc581a75f7617a9371e7f96c1d842a75ff2edde5fed78ac6b73f280202b0c91b581d01955708aa35ff248d02c37929096c666af278)
-
 
 c1 = Mul_K(a,b)
 c2 = a*b
