@@ -178,13 +178,13 @@ int main() {
         /** SAGE (MUL)
          * print(hex(0x00 * 0x00) == hex(0x00))
         */ 
-        // printf("print(hex(");
-        // print_bint_hex_python(&ptrX);
-        // printf(" * ");
-        // print_bint_hex_python(&ptrY);
-        // printf(") == hex(");
-        // print_bint_hex_python(&ptrZ);
-        // printf("))\n");
+        printf("print(hex(");
+        print_bint_hex_python(&ptrX);
+        printf(" * ");
+        print_bint_hex_python(&ptrY);
+        printf(") == hex(");
+        print_bint_hex_python(&ptrZ);
+        printf("))\n");
         
         /** SAGE (DIV)
          * print(hex(0x00 * 0x00 + 0x00) == hex(0x00))
@@ -203,13 +203,13 @@ int main() {
          * print(hex(0x00 ^ 0x00) == hex(0x00))
          * print(hex(power_mod(0x02, 0x03, 0x07)))
         */ 
-        printf("print(hex(");
-        print_bint_hex_python(&ptrX);
-        printf(" ^ ");
-        print_bint_hex_python(&ptrY);
-        printf(") == hex(");
-        print_bint_hex_python(&ptrZ);
-        printf("))\n");
+        // printf("print(hex(");
+        // print_bint_hex_python(&ptrX);
+        // printf(" ^ ");
+        // print_bint_hex_python(&ptrY);
+        // printf(") == hex(");
+        // print_bint_hex_python(&ptrZ);
+        // printf("))\n");
 /****************************************************************************************/
         // printf("X:");print_bint_hex_split(ptrX);
         // printf("Y:");print_bint_hex_split(ptrY);

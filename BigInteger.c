@@ -103,20 +103,6 @@ void swapBINT(BINT** pptrBint1, BINT** pptrBint2) {
         (*pptrBint1)->val = (*pptrBint2)->val;
         (*pptrBint2)->val = tmpVal;
     }
-    // // Swapping the signs
-    // bool tempSign = ptrbint1->sign;
-    // ptrbint1->sign = ptrbint1->sign;
-    // ptrbint2->sign = tempSign;
-
-    // // Swapping the word lengths
-    // int tempWordlen = ptrbint1->wordlen;
-    // ptrbint1->wordlen = ptrbint2->wordlen;
-    // ptrbint2->wordlen = tempWordlen;
-
-    // // Swapping the pointers
-    // WORD* tempVal = ptrbint1->val;
-    // ptrbint1->val = ptrbint2->val;
-    // ptrbint2->val = tempVal;
 }
 
 void makeEven(BINT* ptrBint) {
@@ -279,73 +265,6 @@ void hexToBinary(const char *hex, char *binaryOutput) {
     }
 }
 
-/**
- * 
-*/
-// BINTQueue* createQueue() {
-//     BINTQueue* q = (BINTQueue*)malloc(sizeof(BINTQueue));
-//     if (!q) return NULL;  // Memory allocation failure
-
-//     q->front = NULL;
-//     q->rear = NULL;
-
-//     return q;
-// }
-
-// void enqueue(BINTQueue* q, BINT data) {
-//     if (!q) return;
-
-//     Node* newNode = (Node*)malloc(sizeof(Node));
-//     if (!newNode) return;  // Memory allocation failure
-
-//     newNode->data = data;
-//     newNode->next = NULL;
-
-//     if (!q->rear) {
-//         q->front = newNode;
-//         q->rear = newNode;
-//     } else {
-//         q->rear->next = newNode;
-//         q->rear = newNode;
-//     }
-// }
-
-// BINT dequeue(BINTQueue* q) {
-//     if (!q || !q->front) return BINT_ZERO;
-
-//     Node* tempNode = q->front;
-//     BINT data = tempNode->data;
-
-//     q->front = q->front->next;
-
-//     if (!q->front) {
-//         q->rear = NULL;  // If the last node was dequeued, rear should also be NULL
-//     }
-
-//     free(tempNode);
-
-//     return data;
-// }
-
-// BINT peek(BINTQueue* q) {
-//     if (!q || !q->front) return BINT_ZERO;
-//     return q->front->data;
-// }
-
-// bool isempty(BINTQueue* q) {
-//     return (q == NULL || q->front == NULL);
-// }
-
-// void freeQueue(BINTQueue* q) {
-//     while (!isempty(q)) {
-//         dequeue(q);
-//     }
-//     free(q);
-// }
-
-/**
- * 
-*/
 bool store_bint(const char* filename, BINT* b) {
     if(!filename || !b) return false;
 
@@ -549,30 +468,6 @@ void print_bint_hex_python(BINT** pptrBint) {
     }
 }
 
-// // Function to convert a single hexadecimal digit to binary.
-// void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits) {
-//     for (int i = 0; i < bits; i++) {
-//         binary[start_index + i] = (hex_digit >> (bits - 1 - i)) & 1;
-//     }
-// }
-
-// // Function to convert a hexadecimal BINT to binary.
-// bool* HexToBinary(BINT* hex) {
-//     int bits_per_word = WORD_BITLEN;
-//     bool *binary = malloc(bits_per_word * hex->wordlen * sizeof(bool));
-//     if (!binary) {
-//         fprintf(stderr, "Memory allocation failure in HexToBinary");
-//         // Handle memory allocation failure.
-//         return NULL;
-//     }
-
-//     for (int i = 0; i < hex->wordlen; i++) {
-//         HexDigitToBinary(hex->val[i], binary, i * bits_per_word, bits_per_word);
-//     }
-
-//     return binary;
-// }
-
 // Function to convert a single hexadecimal digit to binary, stored backwards.
 void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits) {
     for (int i = 0; i < bits; i++) {
@@ -663,32 +558,6 @@ bool GET_BIT(BINT** pptrBint, int i_th)  {
 
    return (((*pptrBint)->val[0] >> i_th) & 1);
 }
-
-// // Function to print a bool array representing binary digits, with spacing for readability.
-// void PrintBinary(bool* binary, int wordlen, int bits_per_word) {
-//     // Start from the most significant WORD and move towards the least significant.
-//     for (int word_index = wordlen - 1; word_index >= 0; --word_index) {
-//         // Print the bits for each WORD in the correct order.
-//         for (int bit_index = 0; bit_index < bits_per_word; ++bit_index) {
-//             printf("%d", binary[word_index * bits_per_word + bit_index] ? 1 : 0);
-
-//             // Optional: Space every 4 bits for readability, except at the start of a new WORD.
-//             if ((bit_index + 1) % 4 == 0 && (bit_index + 1) != bits_per_word) {
-//                 printf(" ");
-//             }
-//         }
-//         // Optional: Space between WORDs for clarity.
-//         if (word_index > 0) {
-//             printf(" ");
-//         }
-//     }
-//     printf("\n"); // Newline at the end.
-// }
-
-// Example usage:
-// Assuming 'binaryNumber' is a bool* pointing to an array with 'length' elements.
-// PrintBinary(binaryNumber, length);
-
 
 /******************************************************************/
 void printHex(BINT* X) {
@@ -928,117 +797,6 @@ int BIT_LENGTH(BINT** pptrBint) {
     return bit_len;
 }
 
-// //Author: Kim Ye-chan
-// void MUL_Shift(BINT* X, BINT* result , int N) {
-//     int q = N / 32;
-//     int r = N % 32;
-
-//     if (r == 0) {
-//         for (int i = X->wordlen-1; i>=0; i--) {
-//             result->val[i+q] = X->val[i];
-            
-//         }
-//         for(int i=0; i<q; i++){
-//             result->val[i] = 0;
-            
-//         }
-        
-//     } 
-//     else {
-//         // r이 0이 아닌 경우 처리
-
-//         for (int i = X->wordlen; i>=0; i--) {
-//             if(i==X->wordlen){
-//                 result->val[i] = (X->val[i-1] >> (32-r));                
-//                 continue; 
-//             }
-//             else if(i < X->wordlen && i > 0){
-//                 result->val[i] = (X->val[i-1] >> (32-r)) | (X->val[i] << r);
-//                 continue;
-//             }
-
-//             else if(i == 0){
-//                 result->val[i] = (X->val[i] << r);
-                
-//             }
-//         }
-//         if (q > 0) {
-//             for (int i = result->wordlen-1; i>=0; i--) {
-//                 result->val[i+q] = result->val[i];
-//             }
-//             for(int i=0; i<q; i++){
-//                 result->val[i] = 0;
-//             }
-//         }         
-//     }
-//     // for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
-//     // printf("%08x ", result->val[i]);
-//     // }
-
-
-// } 
-
-// void DIV_Shift(BINT* X, BINT* result, int N) {
-//     int q = N / 32;
-//     int r = N % 32;
-
-//     if (r == 0) {
-//         for (int i = 0; i < X->wordlen - q; i++) {
-//             result->val[i] = X->val[i + q];
-//         }
-
-//     } else {
-//         for (int i = 0; i < X->wordlen; i++) {
-//             if (i < X->wordlen - 1) {
-//                 result->val[i] = (X->val[i + 1] << (32 - r)) | (X->val[i] >> r);
-//             } else {
-//                 result->val[i] = X->val[i] >> r;
-//             }
-//         }
-//         for (int i = 0; i < result->wordlen - q; i++) {
-//             result->val[i] = result->val[i + q];
-//         }
-//     }
-//     for (int i = result->wordlen - 1 ; i >= 0  ; i--) {
-//     printf("%08x ", result->val[i]);
-//     }
-// }
-
-void left_shift(BINT** pptrbint, int num_bits) {
-    // if (!pptrbint || !*pptrbint) return;
-    exit_on_null_error(pptrbint, "pptrbint", "left_shift");
-    exit_on_null_error(*pptrbint, "*pptrbint", "left_shift");
-
-    BINT* ptrbint = *pptrbint;
-
-    // WORD_BITLEN = sizeof(WORD) * 8
-    int word_shift = num_bits / WORD_BITLEN;  // Number of whole WORDs to shift
-    int bit_shift = num_bits % WORD_BITLEN;   // Number of bits within a WORD to shift
-
-    // Allocating new memory for the shifted value
-    WORD* new_val = (WORD*)calloc(ptrbint->wordlen + word_shift + 1, sizeof(WORD)); // +1 for potential overflow
-
-    if (!new_val) {
-        // Memory allocation failed
-        exit(1);
-    }
-
-    // Handle the shift within a WORD
-    for (int i = 0; i < ptrbint->wordlen; i++) {
-        new_val[i + word_shift] |= ptrbint->val[i] << bit_shift;
-        if (i + word_shift + 1 < ptrbint->wordlen + word_shift + 1) {
-            new_val[i + word_shift + 1] |= ptrbint->val[i] >> (WORD_BITLEN - bit_shift);
-        }
-    }
-
-    // Free old memory and assign new memory to the BINT
-    free(ptrbint->val);
-    ptrbint->val = new_val;
-    ptrbint->wordlen = ptrbint->wordlen + word_shift + 1; // Update wordlen
-}
-
-// NOTE: Still, be careful with memory management. You'll need to eventually free the val in BINT.
-
 void left_shift_word(BINT** pptrBint, int shift_amount) {
     CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "left_shift_word");
 
@@ -1075,52 +833,6 @@ void left_shift_word(BINT** pptrBint, int shift_amount) {
     // memmove(ptrX->val + shift_amount, ptrX->val, (new_len - shift_amount) * sizeof(WORD)); // Shifting the values to their new positions
 
     // ptrX->wordlen = new_len;
-}
-
-
-void right_shift(BINT** pptrX, int num_bits) {
-    // if (!pptrX || !*pptrX) return;
-    exit_on_null_error(pptrX, "pptrX", "right_shift");
-    exit_on_null_error(*pptrX, "*pptrX", "right_shift");
-
-    BINT* ptrX = *pptrX;
-
-    int word_shift = num_bits / WORD_BITLEN;  // Number of whole WORDs to shift
-    int bit_shift = num_bits % WORD_BITLEN;   // Number of bits within a WORD to shift
-
-    // If the right shift is greater than the total length of our BINT, set it to zero
-    if (word_shift >= ptrX->wordlen) {
-        free(ptrX->val);
-        ptrX->val = (WORD*)calloc(1, sizeof(WORD)); // Allocate memory for a single WORD set to 0
-        if (!ptrX->val) {
-            // Memory allocation failed
-            exit(1);
-        }
-        ptrX->wordlen = 1;
-        return;
-    }
-
-    // Allocate new memory for the shifted value
-    int new_wordlen = ptrX->wordlen - word_shift;
-    WORD* new_val = (WORD*)calloc(new_wordlen, sizeof(WORD));
-
-    if (!new_val) {
-        // Memory allocation failed
-        exit(1);
-    }
-
-    // Handle the shift within a WORD
-    for (int i = 0; i < new_wordlen; i++) {
-        new_val[i] = ptrX->val[i + word_shift] >> bit_shift;
-        if (i + word_shift + 1 < ptrX->wordlen) {
-            new_val[i] |= ptrX->val[i + word_shift + 1] << (WORD_BITLEN - bit_shift);
-        }
-    }
-
-    // Free old memory and assign new memory to the BINT
-    free(ptrX->val);
-    ptrX->val = new_val;
-    ptrX->wordlen = new_wordlen;
 }
 
 void right_shift_word(BINT** pptrBint, int shift_amount) {
@@ -1236,22 +948,6 @@ void right_shift_bit(BINT* ptrBint, int shift_amount) {
         return; // Invalid parameters or no shift needed.
     }
 
-    // WORD carry = 0;
-    // int shift_word = shift_amount / WORD_BITLEN;
-    // int shift_bit = shift_amount % WORD_BITLEN;
-
-    // // Perform bit-level shifts.
-    // for (int i = 0; i < ptrBint->wordlen; ++i) {
-    //     WORD next_carry = ptrBint->val[i] << (WORD_BITLEN - shift_bit);
-    //     ptrBint->val[i] = (ptrBint->val[i] >> shift_bit) | carry;
-    //     carry = next_carry;
-    // }
-
-    // // Zero-fill the upper words if there is a word-level shift.
-    // for (int i = ptrBint->wordlen - 1; i >= ptrBint->wordlen - shift_word; --i) {
-    //     ptrBint->val[i] = 0;
-    // }
-
     while (shift_amount > 0) {
         WORD carry = 0;
         for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
@@ -1263,10 +959,6 @@ void right_shift_bit(BINT* ptrBint, int shift_amount) {
         shift_amount--;
     }
 }
-
-
-
-
 
 void reduction(BINT** pptrBint, int pwOf2) {
     if (pwOf2 > BIT_LENGTH(pptrBint) ) return; // Trivial Case

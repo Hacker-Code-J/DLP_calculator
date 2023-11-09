@@ -45,17 +45,18 @@ typedef struct {
 } BINT;
 
 /**
+ * Deletes the binary integer object pointed by the given pointer, and sets the pointer to NULL.
+ * @param pptrBint Double pointer to the binary integer to be deleted.
+ */
+void delete_bint(BINT** pptrBint);
+
+/**
  * allocate memory for the integer
  * @param bint_ptr  the point of BINT
  * @param wordlen   the initial size of the array
  */
 void init_bint(BINT** pptrBint, int wordlen);
 
-/**
- * Deletes the binary integer object pointed by the given pointer, and sets the pointer to NULL.
- * @param pptrBint Double pointer to the binary integer to be deleted.
- */
-void delete_bint(BINT** pptrBint);
 
 /**
  * Sets the value of the binary integer object to zero.
@@ -166,26 +167,6 @@ BINT* load_bint(const char* filename);
  */
 BINT** multi_load_bints(const char* filename, int* num_bints);
 
-
-// typedef struct Node {
-//     BINT data;
-//     struct Node* next;
-// } Node;
-
-// typedef struct {
-//     Node* front;
-//     Node* rear;
-// } BINTQueue;
-
-// BINTQueue* createQueue();
-// void enqueue(BINTQueue* q, BINT data);
-// BINT dequeue(BINTQueue* q);
-// BINT peek(BINTQueue* q);
-// bool isempty(BINTQueue* q);
-// void freeQueue(BINTQueue* q);
-
-///////////////////////////////////////////////////////////////////////////////////////
-
 void print_bint_bin(const BINT* ptrBint);
 void print_bint_hex(const BINT* ptrBint);
 void print_bint_bin_split(const BINT* ptrBint);
@@ -199,14 +180,14 @@ bool* HexToBinary(BINT* hex);
 WORD BinaryToHexDigit(bool *binary, int start_index, int bits);
 BINT* BinaryToHex(bool *binary, int length);
 
-bool GET_BIT(BINT** pptrBint, int i_th);
-
-void printHex(BINT* X);
-void printHex2(BINT* X);
-
 void PrintBinary(bool* binary, int length);
 // void PrintBinary(bool* binary, int wordlen, int bits_per_word);
 
+bool GET_BIT(BINT** pptrBint, int i_th);
+
+
+void printHex(BINT* X);
+void printHex2(BINT* X);
 /**********************************************************************
 * x: [sgn] 0x ######## ######## 
 * y: [sgn] 0x ######## ######## 
@@ -254,9 +235,6 @@ void FLIP_SIGN(BINT** pptrBint);
 /** SHIFT and Reduction
  * 
 */
-void left_shift(BINT** pptrbint, int num_bits);
-void right_shift(BINT** pptrX, int num_bits);
-
 void left_shift_word(BINT** pptrBint, int shift_amount);
 void right_shift_word(BINT** pptrBint, int shift_amount);
 
