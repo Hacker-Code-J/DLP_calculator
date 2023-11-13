@@ -39,3 +39,12 @@ void reset_bint(BINT* ptrBint);
 
 WORD hexSubstringToWord(const char* str, int start, int length);
 void strToBINT(BINT** pptrBint, const char* hexString);
+
+void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits);
+bool* HexToBinary(BINT* hex);
+WORD BinaryToHexDigit(bool *binary, int start_index, int bits);
+BINT* BinaryToHex(bool *binary, int length);
+
+bool isZero(BINT* ptrbint);
+bool isOne(BINT* ptrbint);
+bool GET_BIT(BINT** pptrBint, int i_th);

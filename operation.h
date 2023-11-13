@@ -120,6 +120,8 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 
-void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ);
+void exp_Mongomery(BINT** ptrX, BINT** ptrY,BINT** ptrZ);
+
+void sqrt(BINT** pptrBint_dst, BINT** pptrBint_src);
 
 #endif // OPERATION_H

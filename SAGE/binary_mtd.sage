@@ -5,7 +5,7 @@ def binary_sqrt(number, precision=1e-10, max_iter=100):
 	if number < 0:
 		raise ValueError("Cannot find the square root of a negative number.")
 
-	a, b = 1, 5
+	a, b = 1, 2400
 	x = (a + b) / 2
 
 	# Lists to store the data for plotting
@@ -31,7 +31,7 @@ def binary_sqrt(number, precision=1e-10, max_iter=100):
 	
 	return x, x_values, f_x_values
 
-sqrt_2, x_values, f_x_values = binary_sqrt(2)
+sqrt_2, x_values, f_x_values = binary_sqrt(2400)
 
 # Plot the graph
 plt.figure()
