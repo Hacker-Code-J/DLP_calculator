@@ -922,24 +922,24 @@ void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ){
 }
 
 
-void sqrt(BINT** pptrBint_dst, BINT** pptrBint_src) {
-    if ((pptrBint_src)->sign) {
-        fprintf(stderr, "Negative is Invaild in 'sqrt");
-        return NULL;
-    }
+// void sqrt(BINT** pptrBint_dst, BINT** pptrBint_src) {
+//     if ((*pptrBint_src)->sign) {
+//         fprintf(stderr, "Negative is Invaild in 'sqrt");
+//         return NULL;
+//     }
 
-    BINT* low = NULL;
-    init_bint(&low, 1);
-    BINT* high = NULL;
-    copyBINT(&high, pptrBint_src);
-    BINT* mid = NULL;
-    BINT* mid_squared = NULL;
-    BINT* tmp = NULL;
-    BINT* one = NULL;
-    SET_BINT_ONE(&one);
+//     BINT* low = NULL;
+//     init_bint(&low, 1);
+//     BINT* high = NULL;
+//     copyBINT(&high, pptrBint_src);
+//     BINT* mid = NULL;
+//     BINT* mid_squared = NULL;
+//     BINT* tmp = NULL;
+//     BINT* one = NULL;
+//     SET_BINT_ONE(&one);
 
-    while(compare_bint(&low,&high)) {
+//     while(compare_bint(&low,&high)) {
         
 
-    }
-}
+//     }
+// }

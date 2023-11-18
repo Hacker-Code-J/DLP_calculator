@@ -122,6 +122,6 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
 
 void exp_Mongomery(BINT** ptrX, BINT** ptrY,BINT** ptrZ);
 
-void sqrt(BINT** pptrBint_dst, BINT** pptrBint_src);
+// void sqrt(BINT** pptrBint_dst, BINT** pptrBint_src);
 
 #endif // OPERATION_H
