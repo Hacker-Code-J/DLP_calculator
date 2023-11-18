@@ -69,7 +69,7 @@ speed:
 	(cd Visualizations && python3 time_compare_chart.py)
 	@echo "Visualized."
 
-speed2:
+speed-mul:
 	@echo "Visualizing ..."
 	./a.out > speed.txt
 	mv speed.txt Visualizations/

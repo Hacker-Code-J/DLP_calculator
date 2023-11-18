@@ -22,9 +22,9 @@ function3_smooth = np.convolve(function3_speeds, np.ones(window_size)/window_siz
 fig, ax = plt.subplots(figsize=(10,6))
 
 # Plot the smoothed data
-ax.plot(function1_smooth, color='blue', label='Function 1', alpha=0.9)
-ax.plot(function2_smooth, color='red', label='Function 2', alpha=0.9)
-ax.plot(function3_smooth, color='green', label='Function 3', alpha=0.9)
+ax.plot(function1_smooth, color='blue', label='TextBook', alpha=0.9)
+ax.plot(function2_smooth, color='red', label='Improved TextBook', alpha=0.9)
+ax.plot(function3_smooth, color='green', label='Karatsuba', alpha=0.9)
 
 # Optionally plot raw data with reduced alpha for background
 # ax.plot(function1_speeds, color='blue', alpha=0.1)
