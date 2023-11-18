@@ -13,22 +13,16 @@ flag2 = pd.read_csv('flag2.txt', sep='\t', header=None, names=['speed_difference
 flag2['FLAG'] = 'FLAG = 4 (128-bit)'
 
 flag3 = pd.read_csv('flag3.txt', sep='\t', header=None, names=['speed_difference'])
-flag3['FLAG'] = 'FLAG = 5 (160-bit)'
+flag3['FLAG'] = 'FLAG = 8 (256-bit)'
 
 flag4 = pd.read_csv('flag4.txt', sep='\t', header=None, names=['speed_difference'])
-flag4['FLAG'] = 'FLAG = 6 (192-bit)'
+flag4['FLAG'] = 'FLAG = 16 (512-bit)'
 
 flag5 = pd.read_csv('flag5.txt', sep='\t', header=None, names=['speed_difference'])
-flag5['FLAG'] = 'FLAG = 8 (256-bit)'
-
-flag6 = pd.read_csv('flag6.txt', sep='\t', header=None, names=['speed_difference'])
-flag6['FLAG'] = 'FLAG = 0xc (384-bit)'
-
-flag7 = pd.read_csv('flag7.txt', sep='\t', header=None, names=['speed_difference'])
-flag7['FLAG'] = 'FLAG = 0x10 (512-bit)'
+flag5['FLAG'] = 'FLAG = 32 (1024-bit)'
 
 # Combine the DataFrames
-combined_data = pd.concat([flag1, flag2, flag3, flag4, flag5, flag6, flag7])
+combined_data = pd.concat([flag1, flag2, flag3, flag4, flag5])
 
 # Now we create a cool and unique plot
 # We can use a violin plot as an example, which shows the distribution of the speed differences
@@ -42,7 +36,7 @@ sns.violinplot(x='FLAG', y='speed_difference', data=combined_data, palette=palet
 
 # Customize with unique aesthetics
 plt.title('Speed Difference Distribution by FLAG', fontsize=16)
-plt.xlabel('FLAG Setting', fontsize=12)
+# plt.xlabel('FLAG Setting', fontsize=12)
 plt.ylabel('Speed Difference', fontsize=12)
 
 # Add some unique touches
