@@ -464,7 +464,8 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     print_bint_hex_split(*pptrY);
 
     int n = (*pptrX)->wordlen;
-    int m = (*pptrX)->wordlen;
+    int m = (*pptrY)->wordlen;
+    printf("n, m = 0x%0x 0x%0x\n", n, m);
     static int lenZ = -1; // Declare lenZ as a static variable
     if (lenZ == -1) {
         lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
@@ -489,7 +490,7 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     }
     init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
-    matchSize(*pptrX,*pptrY);
+    // matchSize(*pptrX,*pptrY);
     int l = (MAX(n,m) + 1) >> 1;
     printf("l = 0x%x\n\n", l);
 
@@ -507,6 +508,7 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     BINT* ptrTmpST1 = NULL;
     BINT* ptrTmpST0 = NULL;
 
+    matchSize(*pptrX, *pptrY);
     copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
     copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
     printf("Split X to X1: ");print_bint_hex_python(&ptrX1);printf("\n");
@@ -569,27 +571,22 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
 
-    int n = (*pptrX)->wordlen;
-    int m = (*pptrX)->wordlen;
+    int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
     static int lenZ = -1; // Declare lenZ as a static variable
     if (lenZ == -1) {
         lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
         init_bint(pptrZ, lenZ);
         CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     }
-    if (flag >= MIN(n,m)) {
-        BINT* tmpTxtBk_X = NULL;
-        BINT* tmpTxtBk_Y = NULL;
-        copyBINT(&tmpTxtBk_X, pptrX);
-        copyBINT(&tmpTxtBk_Y, pptrY);
+    if (FLAG >= MIN(n,m)) {
+        BINT* tmpTxtBk_X = NULL; BINT* tmpTxtBk_Y = NULL;
+        copyBINT(&tmpTxtBk_X, pptrX); copyBINT(&tmpTxtBk_Y, pptrY);
         MUL_Core_ImpTxtBk_xyz(&tmpTxtBk_X,&tmpTxtBk_Y,pptrZ);
-        delete_bint(&tmpTxtBk_X);
-        delete_bint(&tmpTxtBk_Y);
+        delete_bint(&tmpTxtBk_X); delete_bint(&tmpTxtBk_Y);
         return;
     }
     init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
-    matchSize(*pptrX,*pptrY);
     int l = (MAX(n,m) + 1) >> 1;
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
@@ -606,9 +603,10 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     BINT* ptrTmpST1 = NULL;
     BINT* ptrTmpST0 = NULL;
 
+    matchSize(*pptrX, *pptrY);
     copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
     copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
-
+    
     copyBINT(&ptrY1, pptrY); right_shift_word(&ptrY1, l);
     copyBINT(&ptrY0, pptrY); reduction(&ptrY0, l * WORD_BITLEN);
     
@@ -621,24 +619,20 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     
     SUB(&ptrX0, &ptrX1, &ptrS1);
     SUB(&ptrY1, &ptrY0, &ptrS0);
-   
+    
     bool sgn_S = ((ptrS0)->sign) ^ ((ptrS1)->sign);
-    ptrS0->sign = false;
-    ptrS1->sign = false;
+    ptrS0->sign = false; ptrS1->sign = false;
     Krtsb_FLAG_Test(&ptrS1, &ptrS0, &ptrS, flag);
     ptrS->sign = sgn_S;
     
     ADD(&ptrS,&ptrT1,&ptrTmpST1);
     copyBINT(&ptrS,&ptrTmpST1);
     
-    // copyBINT(&ptrTmpST0, &ptrS);
-    // ADD(&ptrTmpST0,&ptrT0,&ptrS);
-    
-    ADD(&ptrS,&ptrT0,&ptrTmpST0);
-    copyBINT(&ptrS, &ptrTmpST0);
+    copyBINT(&ptrTmpST0, &ptrS);
+    ADD(&ptrTmpST0,&ptrT0,&ptrS);
     
     left_shift_word(&ptrS, l);
-   
+    
     ADD(&ptrR, &ptrS, pptrZ);
     
     delete_bint(&ptrX0); delete_bint(&ptrX1);
@@ -654,40 +648,40 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
-    int n = (*pptrX)->wordlen;
-    int m = (*pptrX)->wordlen;
+
+    int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
     static int lenZ = -1; // Declare lenZ as a static variable
     if (lenZ == -1) {
         lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
+        init_bint(pptrZ, lenZ);
+        CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     }
-    init_bint(pptrZ, lenZ);
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     if (FLAG >= MIN(n,m)) {
-        BINT* tmpTxtBk_X = NULL;
-        BINT* tmpTxtBk_Y = NULL;
-        copyBINT(&tmpTxtBk_X, pptrX);
-        copyBINT(&tmpTxtBk_Y, pptrY);
+        BINT* tmpTxtBk_X = NULL; BINT* tmpTxtBk_Y = NULL;
+        copyBINT(&tmpTxtBk_X, pptrX); copyBINT(&tmpTxtBk_Y, pptrY);
         MUL_Core_ImpTxtBk_xyz(&tmpTxtBk_X,&tmpTxtBk_Y,pptrZ);
-        delete_bint(&tmpTxtBk_X);
-        delete_bint(&tmpTxtBk_Y);
-        return;  // This will immediately terminate the function.
+        delete_bint(&tmpTxtBk_X); delete_bint(&tmpTxtBk_Y);
+        return;
     }
-    matchSize(*pptrX,*pptrY);
+    init_bint(pptrZ, n+m);
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     int l = (MAX(n,m) + 1) >> 1;
-    
+
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
     BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
     BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
+    BINT* ptrShiftT1 = NULL;
     BINT* ptrS0 = NULL; BINT* ptrS1 = NULL;
     BINT* ptrS = NULL;
     init_bint(&ptrS, 2*l);
-    
+
     BINT* ptrR = NULL;
     BINT* ptrTmpR = NULL;
     init_bint(&ptrR, (*pptrZ)->wordlen);
     BINT* ptrTmpST1 = NULL;
     BINT* ptrTmpST0 = NULL;
 
+    matchSize(*pptrX, *pptrY);
     copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
     copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
     
@@ -697,45 +691,36 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     MUL_Core_Krtsb_xyz(&ptrX1, &ptrY1, &ptrT1);
     MUL_Core_Krtsb_xyz(&ptrX0, &ptrY0, &ptrT0);
     
-    left_shift_word(&ptrT1, 2*l);
+    copyBINT(&ptrShiftT1, &ptrT1);
+    left_shift_word(&ptrShiftT1, 2*l);
+    ADD(&ptrShiftT1, &ptrT0, &ptrR);
     
-    matchSize(ptrT0, ptrT1);
-    OR_BINT(ptrT0,ptrT1,&ptrR);
-    // refine_BINT(ptrT0);
-    // refine_BINT(ptrT1);
-    
-    // ADD(&ptrT0, &ptrT1, &ptrTmpR);
-    // printf("X1Y1||X0Y0: ");printHex2(ptrTmpR);printf("\n");
-
     SUB(&ptrX0, &ptrX1, &ptrS1);
     SUB(&ptrY1, &ptrY0, &ptrS0);
     
     bool sgn_S = ((ptrS0)->sign) ^ ((ptrS1)->sign);
-    ptrS0->sign = false;
-    ptrS1->sign = false;
+    ptrS0->sign = false; ptrS1->sign = false;
     MUL_Core_Krtsb_xyz(&ptrS1, &ptrS0, &ptrS);
     ptrS->sign = sgn_S;
-   
-    right_shift_word(&ptrT1, 2*l);
     
-    copyBINT(&ptrTmpST1, &ptrS);
-    ADD(&ptrTmpST1,&ptrT1,&ptrS);
+    ADD(&ptrS,&ptrT1,&ptrTmpST1);
+    copyBINT(&ptrS,&ptrTmpST1);
     
     copyBINT(&ptrTmpST0, &ptrS);
     ADD(&ptrTmpST0,&ptrT0,&ptrS);
-
+    
     left_shift_word(&ptrS, l);
     
-    copyBINT(&ptrTmpR, &ptrR);
-    ADD(&ptrTmpR, &ptrS, pptrZ);
-
+    ADD(&ptrR, &ptrS, pptrZ);
+    
     delete_bint(&ptrX0); delete_bint(&ptrX1);
     delete_bint(&ptrY0); delete_bint(&ptrY1);
     delete_bint(&ptrT0); delete_bint(&ptrT1);
+    delete_bint(&ptrShiftT1);
     delete_bint(&ptrS0); delete_bint(&ptrS1);
     delete_bint(&ptrS);
     delete_bint(&ptrR); delete_bint(&ptrTmpR);
-    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);    
+    delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
 }
 
 // Only 0 <= X < YW

@@ -7,7 +7,7 @@ typedef unsigned long u64;
 
 #define false 0
 #define true !false
-#define FLAG 4 // Karatsuba Depth
+#define FLAG 8 // Karatsuba Depth
 
 /**
  * Determine the greater value between two inputs.

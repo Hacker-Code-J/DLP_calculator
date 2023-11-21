@@ -22,7 +22,7 @@ run:
 	./a.out
 
 debug:
-	valgrind --leak-check=full ./a.out
+	valgrind --leak-check=full --show-leak-kinds=all ./a.out
 
 clean:
 	@echo "Cleaning up..."

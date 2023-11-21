@@ -791,6 +791,17 @@ void FLIP_SIGN(BINT** pptrBint) {
 
 int BIT_LENGTH(BINT** pptrBint) {
     int bit_len = (*pptrBint)->wordlen * WORD_BITLEN;
+    // for (int i=bit_len-1 ; i>=0;i--){
+    //     if (GET_BIT(pptrBint,i)==0){
+    //         bit_len = bit_len -1;
+    //     }
+    //     else break;
+    // }
+    return bit_len;
+}
+
+int BIT_LENGTH_NONZERO(BINT** pptrBint) {
+    int bit_len = (*pptrBint)->wordlen * WORD_BITLEN;
     for (int i=bit_len-1 ; i>=0;i--){
         if (GET_BIT(pptrBint,i)==0){
             bit_len = bit_len -1;

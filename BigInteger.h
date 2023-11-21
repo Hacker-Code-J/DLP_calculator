@@ -225,6 +225,7 @@ int Get_sign(BINT* x);
 void Flip_sign(BINT* x);
 
 int BIT_LENGTH(BINT** pptrBint);
+int BIT_LENGTH_NONZERO(BINT** pptrBint);
 
 // //Author: Kim Ye-chan
 // void DIV_Shift(BINT* bigint, BINT* result, int N);// DIV shift  
