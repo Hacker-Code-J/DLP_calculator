@@ -24,6 +24,101 @@
 #include "BigInteger.h"
 #include "operation.h"
 
+/**
+ * if WORD_BITLEN = 32,
+ * 0x010 -> ( 1 * 16 =  16) -> (16 *  32 =   512-bit)
+ * 0x020 -> ( 2 * 16 =  32) -> (32 *  32 =  1024-bit)
+ * 0x040 -> ( 4 * 16 =  64) -> (32 *  64 =  2048-bit)
+ * 0x060 -> ( 6 * 16 =  96) -> (32 *  96 =  3072-bit)
+ * 0x0f0 -> (15 * 16 = 240) -> (32 * 240 =  7680-bit)
+ * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
+*/
+
+void test_rand_ADD(int cnt) {
+    int idx = 0;
+    while(idx < cnt) {
+        BINT* ptrX = NULL;
+        BINT* ptrY = NULL;
+        BINT* ptrZ = NULL;
+
+        /* 512 ~ 1024 bits */
+        // int len1 = (rand() % 0x010) + 0x010;
+        // int len2 = (rand() % 0x010) + 0x010;
+        /* 1024 ~ 2048 bits */
+        int len1 = (rand() % 0x020) + 0x020;
+        int len2 = (rand() % 0x020) + 0x020;
+        /* 2048 ~ 3072 bits */
+        // int len1 = (rand() % 0x020) + 0x040;
+        // int len2 = (rand() % 0x020) + 0x040;
+        /* 3072 ~ 7680 bits */
+        // int len1 = (rand() % 0x090) + 0x060;
+        // int len2 = (rand() % 0x090) + 0x060;
+        /* 7680 ~ 15360 bits */
+        // int len1 = (rand() % 0xf0) + 0x0f0;
+        // int len2 = (rand() % 0xf0) + 0x0;
+
+        int sgnX = rand() % 0x02;
+        int sgnY = rand() % 0x02;
+
+        RANDOM_BINT(&ptrX, sgnX, len1);
+        RANDOM_BINT(&ptrY, sgnY, len2);
+
+        ADD(&ptrX,&ptrY,&ptrZ);
+        
+        /* print(hex(0x00 + 0x00) == hex(0x00)) */
+        printf("print(hex(");
+        print_bint_hex_python(&ptrX);
+        printf(" + ");
+        print_bint_hex_python(&ptrY);
+        printf(") == hex(");
+        print_bint_hex_python(&ptrZ);
+        printf("))\n");
+    }
+}
+
+void test_rand_SUB(int cnt) {
+    int idx = 0;
+    while(idx < cnt) {
+        BINT* ptrX = NULL;
+        BINT* ptrY = NULL;
+        BINT* ptrZ = NULL;
+
+        /* 512 ~ 1024 bits */
+        // int len1 = (rand() % 0x010) + 0x010;
+        // int len2 = (rand() % 0x010) + 0x010;
+        /* 1024 ~ 2048 bits */
+        int len1 = (rand() % 0x020) + 0x020;
+        int len2 = (rand() % 0x020) + 0x020;
+        /* 2048 ~ 3072 bits */
+        // int len1 = (rand() % 0x020) + 0x040;
+        // int len2 = (rand() % 0x020) + 0x040;
+        /* 3072 ~ 7680 bits */
+        // int len1 = (rand() % 0x090) + 0x060;
+        // int len2 = (rand() % 0x090) + 0x060;
+        /* 7680 ~ 15360 bits */
+        // int len1 = (rand() % 0xf0) + 0x0f0;
+        // int len2 = (rand() % 0xf0) + 0x0f0;
+
+        int sgnX = rand() % 0x02;
+        int sgnY = rand() % 0x02;
+
+        RANDOM_BINT(&ptrX, sgnX, len1);
+        RANDOM_BINT(&ptrY, sgnY, len2);
+        
+        SUB(&ptrX,&ptrY,&ptrZ);
+        
+        /* print(hex(0x00 + 0x00) == hex(0x00)) */
+        printf("print(hex(");
+        print_bint_hex_python(&ptrX);
+        printf(" - ");
+        print_bint_hex_python(&ptrY);
+        printf(") == hex(");
+        print_bint_hex_python(&ptrZ);
+        printf("))\n");
+    }
+}
+
+
 int main() {
     srand((unsigned int)time(NULL));
 
@@ -40,7 +135,6 @@ int main() {
      * 0x040 -> ( 4 * 16 =  64) -> (32 *  64 =  2048-bit)
      * 0x060 -> ( 6 * 16 =  96) -> (32 *  96 =  3072-bit)
      * 0x0f0 -> (15 * 16 = 240) -> (32 * 240 =  7680-bit)
-     * 
      * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
     */
      
