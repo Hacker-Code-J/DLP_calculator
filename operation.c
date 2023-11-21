@@ -267,7 +267,6 @@ void mul_xyz(WORD valX, WORD valY, BINT** pptrZ) {
 	(*pptrZ)->val[0] = Z0;
 	(*pptrZ)->val[1] = Z1;
 }
-
 void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_TxtBk_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_TxtBk_xyz");
@@ -302,7 +301,6 @@ void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     if((*pptrX)->sign != (*pptrY)->sign)
         (*pptrZ)->sign = true;
 }
-
 void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "mul_core_ImpTxtBk_test");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "mul_core_ImpTxtBk_test");
@@ -455,7 +453,6 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     if((*pptrX)->sign != (*pptrY)->sign)
         (*pptrZ)->sign = true;
 }
-
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
@@ -565,8 +562,6 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrR); delete_bint(&ptrTmpR);
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
 }
-
-
 void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
@@ -644,7 +639,6 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     delete_bint(&ptrR); delete_bint(&ptrTmpR);
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
 }
-
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
@@ -721,6 +715,74 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrS);
     delete_bint(&ptrR); delete_bint(&ptrTmpR);
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
+}
+
+void squ_core(WORD valX,BINT** pptrZ){//테스트 완료
+    //CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_xyz");
+
+    const int half_w = WORD_BITLEN / 2; // if w=32, half_w = 16 = 2^4
+	const WORD MASK = (1 << half_w) - 1;
+
+	BINT* C=NULL;
+    init_bint(&C,2);
+    BINT* T=NULL;
+    init_bint(&T ,2);
+    BINT* Temp=NULL;
+    init_bint(&Temp ,2);
+    // Split the WORDs into halves
+	WORD X0 = valX & MASK;
+	WORD X1 = valX >> half_w;
+	
+
+    // Cross multiplication
+	WORD C1 = X1 * X1;
+	WORD C0 = X0 * X0;
+    C->val[0] = C0;
+    C->val[1] = C1;
+	T->val[0] = X0 * X1;
+    left_shift_bit(T,half_w + 1); 
+    ADD(&C,&T,&Temp);
+    
+	
+    copyBINT(pptrZ,&Temp);
+    delete_bint(&C);
+    delete_bint(&T);
+    delete_bint(&Temp);
+}
+void SQU_Txtbk_xz(BINT** pptrX,BINT** pptrZ){
+    //init_bint(pptrZ,2*((*pptrX)->wordlen));
+    BINT* C1=NULL;
+    init_bint(&C1,1);
+    BINT* C2=NULL;
+    init_bint(&C2,1);
+    BINT* T1=NULL;
+    init_bint(&T1,2);
+    BINT* T2=NULL;
+    init_bint(&T2,2);
+    BINT* Temp=NULL;
+    BINT* Temp2=NULL;
+    for(int j=0; j<(*pptrX)->wordlen; j++){
+        squ_core((*pptrX)->val[j],&T1);
+        left_shift_word(&T1,(2*j));
+        ADD(&T1,&C1,&Temp);
+        copyBINT(&C1,&Temp);
+        init_bint(&T1,2);
+        for ( int i = j+1; i< (*pptrX)->wordlen;i++){
+            mul_xyz((*pptrX)->val[j],(*pptrX)->val[i],&T2);
+            left_shift_word(&T2,(i+j));
+            ADD(&C2,&T2,&Temp2);
+            copyBINT(&C2,&Temp2);
+            init_bint(&T2,2);
+        }
+    }
+    left_shift_bit(C2,1);
+    ADD(&C1,&C2,pptrZ);
+    delete_bint(&C1);
+    delete_bint(&C2);
+    delete_bint(&T1);
+    delete_bint(&T2);
+    delete_bint(&Temp);
+    delete_bint(&Temp2);
 }
 
 // Only 0 <= X < YW
@@ -812,8 +874,6 @@ void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ,
     delete_bint(&ptrTmpAdd);
     delete_bint(&ptrTmpSub);
 }
-
-
 void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
     if((*pptrDivisor)->wordlen == 0 || ((*pptrDivisor)->wordlen == 1 && (*pptrDivisor)->val[0] == 0) ) {
         fprintf(stderr, "Division by zero error.\n");
@@ -866,9 +926,121 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
 
 }
 
-void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ){
-    //일단 비트수가 필요하다 그만큼 연산을 해야하니 
+void mul_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ) {
+int bit_len = BIT_LENGTH(ptrY);
+
+    BINT* t0=NULL;
+    BINT* temp=NULL;
+    SET_BINT_ONE(&t0);
+
+    for (int i= bit_len-1 ; i >= 0 ;i--){
+        init_bint(&temp,1);
+
+        if (GET_BIT(ptrY,i) == 1){
+            
+            SQU_Txtbk_xz(&t0,&temp);
+            mul_core_TxtBk_xyz(&temp,ptrX,&t0);
+        }
+        else{
+            SQU_Txtbk_xz(&t0,&temp);
+            copyBINT(&t0,&temp);
+        }
+    }       
+    copyBINT(ptrZ,&t0);
+    refine_BINT(*ptrZ);
+    delete_bint(&t0);
+    delete_bint(&temp);
+    
+}
+void add_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ) {
     int bit_len = BIT_LENGTH(ptrY);
+
+    BINT* t0=NULL;
+    BINT* temp=NULL;
+    SET_BINT_ZERO(&t0);
+
+    for (int i= bit_len-1 ; i >= 0 ;i--){
+        init_bint(&temp,1);
+
+        if (GET_BIT(ptrY,i) == 1){
+            left_shift_bit(t0,1);
+            copyBINT(&temp, &t0);
+            ADD(&temp,ptrX,&t0);
+        }
+        else{
+            left_shift_bit(t0,1);
+        }
+    }       
+    copyBINT(ptrZ,&t0);
+    refine_BINT(*ptrZ);
+    delete_bint(&t0);
+    delete_bint(&temp);
+    
+}
+void mul_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ) {
+    int bit_len = BIT_LENGTH(ptrY);
+
+    BINT* t0 = NULL;
+    BINT* t1 = NULL;
+    BINT* temp = NULL;
+    SET_BINT_ONE(&t0);
+    copyBINT(&t1, ptrX);
+
+    for (int i = 0; i <= bit_len-1; i++) {
+        init_bint(&temp, 1);
+
+        if (GET_BIT(ptrY, i) == 1) {
+            
+            mul_core_TxtBk_xyz(&t0, &t1, &temp);
+            copyBINT(&t0, &temp);
+
+            SQU_Txtbk_xz(&t1, &temp);
+            copyBINT(&t1, &temp);
+
+
+        } else {
+            SQU_Txtbk_xz(&t1, &temp);
+            copyBINT(&t1, &temp);
+        }
+    }
+
+    copyBINT(ptrZ, &t0);
+    refine_BINT(*ptrZ);
+    delete_bint(&t0);
+    delete_bint(&t1);
+    delete_bint(&temp);
+}
+void add_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ) {
+    int bit_len = BIT_LENGTH(ptrY);
+
+    BINT* t0 = NULL;
+    BINT* t1 = NULL;
+    BINT* temp = NULL;
+    SET_BINT_ZERO(&t0);
+    copyBINT(&t1, ptrX);
+
+    for (int i = 0; i <= bit_len - 1; i++) {
+        init_bint(&temp, 1);
+
+        if (GET_BIT(ptrY, i) == 1) {
+            ADD(&t0, &t1, &temp);
+            copyBINT(&t0, &temp);
+
+            left_shift_bit(t1, 1);
+   
+        } else {
+            left_shift_bit(t1, 1);
+ 
+        }
+    }
+    copyBINT(ptrZ, &t0);
+    refine_BINT(*ptrZ);
+    delete_bint(&t0);
+    delete_bint(&t1);
+    delete_bint(&temp);
+}
+void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ){
+    int bit_len = BIT_LENGTH_NONZERO(ptrY);
     BINT* t0=NULL;
     BINT* t1=NULL;
     BINT* temp=NULL;
@@ -876,7 +1048,6 @@ void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ){
     SET_BINT_ONE(&t0);
     copyBINT(&t1,ptrX);
     
-
     for (int i= bit_len-1 ; i >= 0 ;i--){
         init_bint(&temp,1);
         init_bint(&temp2,1);
@@ -903,28 +1074,4 @@ void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ){
     delete_bint(&t1);
     delete_bint(&temp);
     delete_bint(&temp2);
-    
 }
-
-
-// void sqrt(BINT** pptrBint_dst, BINT** pptrBint_src) {
-//     if ((*pptrBint_src)->sign) {
-//         fprintf(stderr, "Negative is Invaild in 'sqrt");
-//         return NULL;
-//     }
-
-//     BINT* low = NULL;
-//     init_bint(&low, 1);
-//     BINT* high = NULL;
-//     copyBINT(&high, pptrBint_src);
-//     BINT* mid = NULL;
-//     BINT* mid_squared = NULL;
-//     BINT* tmp = NULL;
-//     BINT* one = NULL;
-//     SET_BINT_ONE(&one);
-
-//     while(compare_bint(&low,&high)) {
-        
-
-//     }
-// }

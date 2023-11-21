@@ -57,15 +57,15 @@ int main() {
         // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
         // int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
         // int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-        int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-        int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
+        // int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
+        // int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
         // int len1 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
         // int len2 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
         // int len1 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
         // int len2 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
         
-        // int len1 = (rand() % 0x05) + 0x05;
-        // int len2 = (rand() % 0x05) + 0x05;
+        int len1 = (rand() % 0x05) + 0x05;
+        int len2 = (rand() % 0x05) + 0x05;
         
         // int len1 = 0x04;
         // int len2 = 0x08;
@@ -215,22 +215,6 @@ int main() {
         // print_bint_hex_python(&ptrZ);
         // printf("))\n");
 /****************************************************************************************/
-        // printf("X:");print_bint_hex_split(ptrX);
-        // printf("Y:");print_bint_hex_split(ptrY);
-        // printf("Random X:");print_bint_hex(ptrX);
-        // printf("Random Y:");print_bint_hex(ptrY);
-        // PrintBinary(binaryX, ptrX->wordlen, WORD_BITLEN);
-        // PrintBinary(binaryY, ptrY->wordlen, WORD_BITLEN);
-        // PrintBinary(binaryX, ptrX->wordlen * WORD_BITLEN);
-        // PrintBinary(binaryY, ptrY->wordlen * WORD_BITLEN);
-
-        // BINT* ptrX2 = BinaryToHex(binaryX, ptrX->wordlen * WORD_BITLEN);
-        // BINT* ptrY2 = BinaryToHex(binaryY, ptrY->wordlen * WORD_BITLEN);
-        // printf("Result X2:");print_bint_hex_split(ptrX2);
-        // printf("-Lenth X2: %d\n", ptrX2->wordlen);
-        // printf("Result Y2:");print_bint_hex_split(ptrY2);
-        // printf("-Lenth Y2: %d\n", ptrY2->wordlen);
-       
         // printf("Result Q:");print_bint_hex(ptrQ);
         // printf("Result R:");print_bint_hex(ptrR);
 
@@ -248,9 +232,6 @@ int main() {
 
         // delete_bint(&ptrX2);
         // delete_bint(&ptrY2);
-        // free(binaryX);
-        // free(binaryY);
-
         // printf("%.6f\n", cpu_time_used1);
         // printf("%.6f\n", cpu_time_used2);
         idx++;
