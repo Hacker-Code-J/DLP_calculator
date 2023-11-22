@@ -28,10 +28,13 @@ bar_width = 0.6
 
 bars = plt.bar(labels, values, color=colors, width=bar_width, edgecolor='black')
 
-# Annotate the bars with their respective percentage values
+# Annotate the bars with their respective percentage values and actual counts
 for bar in bars:
     yval = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval:.2f}%', ha='center', va='bottom', fontsize=12)
+    count = success_lines if bar.get_x() < 0.5 else failure_lines  # Assuming the success bar is the first one
+    plt.text(bar.get_x() + bar.get_width()/2, yval + 1,
+             f'{yval:.0f}% ({count}/{total_lines})',  # Adjusted formatting to remove decimal places and add counts
+             ha='center', va='bottom', fontsize=12)
 
 plt.ylabel('Percentage (%)')
 plt.title('Success Rate')

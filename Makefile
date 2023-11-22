@@ -59,7 +59,7 @@ chart:
 	./a.out > test.py
 	python3 test.py > test.txt
 	mv test.py test.txt Views/
-	(cd Views && python3 sr_chart.py)
+	(cd Views && python3 success_chart2.py)
 	@echo "Visualized."
 
 speed:

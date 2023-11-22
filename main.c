@@ -126,6 +126,9 @@ void test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op) {
     // Call the test function with the selected multiplication operation
     test_rand_OP(cnt, bit_op, mul_funcs[func_index], "*", sgn_op);
 }
+void test_rand_SQU(int cnt, int bit_op, int sgn_op) {
+
+}
 
 int main() {
     /**
@@ -149,23 +152,18 @@ int main() {
      * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
     */
     
-    // Addition
-    // test_rand_ADD(10, 0, 1);
-    // test_rand_ADD(10, 0, 0);
-    
-    // Subtraction
-    // test_rand_SUB(10, 0, 1);
-    // test_rand_SUB(10, 0, 0);
+    int t = 1000;
+    int bit_op = 0;
+    int sgn_op = 0;
 
-    // Multiplication - Positive
-    // test_rand_MUL(10, 0, 1, 0); // TextBook
-    // test_rand_MUL(10, 0, 1, 1); // Improved TextBook
-    test_rand_MUL(10, 0, 1, 2); // Kratsuba
+    // Addition and Subtraction
+    // test_rand_ADD(t, bit_op, sgn_op);
+    // test_rand_SUB(t, bit_op, sgn_op);
 
     // Multiplication
-    // test_rand_MUL(10, 0, 0, 0); // TextBook
-    // test_rand_MUL(10, 0, 0, 1); // Improved TextBook
-    // test_rand_MUL(10, 0, 0, 2); // Kratsuba
+    test_rand_MUL(t, bit_op, sgn_op, 2); // TextBook
+    // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
+    // test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
 
     return 0;
 }
