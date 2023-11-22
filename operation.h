@@ -118,6 +118,7 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 void squ_core(WORD valX,BINT** pptrZ);
 void SQU_Txtbk_xz(BINT** pptrX, BINT** pptrZ);
+void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
 
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);

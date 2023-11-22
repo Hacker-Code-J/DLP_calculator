@@ -21,7 +21,7 @@ main.o: main.c
 run:
 	./a.out
 
-debug:
+leak:
 	valgrind --leak-check=full --show-leak-kinds=all ./a.out
 
 clean:
@@ -44,7 +44,7 @@ convert:
 
 sage:
 	@echo "Loading SageMath..."
-	(cd SAGE && sage)
+	(cd Tests-SageMath && sage)
 	@echo "Quit SageMath."
 
 test:

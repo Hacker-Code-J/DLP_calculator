@@ -113,7 +113,6 @@ void test_rand_SUB(int cnt, int bit_op, int sgn_op) {
     test_rand_OP(cnt, bit_op, SUB, "-", sgn_op);
 }
 void test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op) {
-    // Function pointer array for multiplication operations
     void (*mul_funcs[])(BINT**, BINT**, BINT**) = {
         mul_core_TxtBk_xyz,           // Default multiplication function
         MUL_Core_ImpTxtBk_xyz,        // Multiplication function for mul_op == 1
@@ -126,8 +125,30 @@ void test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op) {
     // Call the test function with the selected multiplication operation
     test_rand_OP(cnt, bit_op, mul_funcs[func_index], "*", sgn_op);
 }
-void test_rand_SQU(int cnt, int bit_op, int sgn_op) {
+void test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op) {
+    int idx = 0x00;
+    while (idx < cnt) {
+        BINT *ptrX = NULL, *ptrRes = NULL;
+        int rnd, fix;
 
+        SET_BIT_LENGTHS(bit_op, rnd, fix);
+        int len = (rand() % rnd) + fix;
+        int sgnX = false;
+        if(!sgn_op) sgnX = rand() % 0x02;
+        RANDOM_BINT(&ptrX, sgnX, len);
+
+        if(squ_op == 1) SQU_Krtsb_xz(&ptrX, &ptrRes);
+        else SQU_Txtbk_xz(&ptrX, &ptrRes);
+
+        printf("print(hex(");print_bint_hex_python(&ptrX); \
+        printf(" * ");print_bint_hex_python(&ptrX);
+        printf(") == hex("); \
+        print_bint_hex_python(&ptrRes); \
+        printf("))\n"); \
+        delete_bint(&ptrX);
+        delete_bint(&ptrRes);
+        idx++;
+    }
 }
 
 int main() {
@@ -137,33 +158,42 @@ int main() {
      * 2: 3072 ~ 7680 bits
      * 3: 7680 ~ 15360 bits
      * default(0): 1024 ~ 2048 bits
-     * 
+     * ===============================================================
      * sgn_op
      * 0: random sign
      * 1: positive sign
-     * 
+     * ===============================================================
      * mul_op
      * 1: Improved TextBook
      * 2: Karatsuba
      * default(0): TextBook
-     * 
+     * ===============================================================
+     * squ_op
+     * 1: Karastsuba
+     * default(0): TextBook
+     * ===============================================================
      * test_rand_ADD(int cnt, int bit_op, int sgn_op)
      * test_rand_SUB(int cnt, int bit_op, int sgn_op)
      * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
+     * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
     */
-    
+
     int t = 1000;
     int bit_op = 0;
-    int sgn_op = 0;
+    int sgn_op = 1;
 
     // Addition and Subtraction
     // test_rand_ADD(t, bit_op, sgn_op);
     // test_rand_SUB(t, bit_op, sgn_op);
 
     // Multiplication
-    test_rand_MUL(t, bit_op, sgn_op, 2); // TextBook
+    // test_rand_MUL(t, bit_op, sgn_op, 2); // TextBook
     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
     // test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
+
+    // Squaring
+    // test_rand_SQU(t, bit_op, sgn_op, 0);
+    test_rand_SQU(t, bit_op, sgn_op, 1);
 
     return 0;
 }
@@ -381,7 +411,7 @@ int main() {
 //     }
 // }
 
-/* Measuring Performance*/
+// /* Measuring Performance*/
 // int main() {
 //     srand((unsigned int)time(NULL));
 
@@ -389,32 +419,21 @@ int main() {
 //     double cpu_time_used1;
 //     clock_t start2, end2;
 //     double cpu_time_used2;
-//     clock_t start3, end3;
-//     double cpu_time_used3;
+//     // clock_t start3, end3;
+//     // double cpu_time_used3;
 //     int t = 10000;
-
-//     /**
-//      * if WORD_BITLEN = 32
-//      * 0x010 -> ( 1 * 16 =  16) -> (16 *  32 =   512-bit)
-//      * 0x020 -> ( 2 * 16 =  32) -> (32 *  32 =  1024-bit)
-//      * 0x040 -> ( 4 * 16 =  64) -> (32 *  64 =  2048-bit)
-//      * 0x060 -> ( 6 * 16 =  96) -> (32 *  96 =  3072-bit)
-//      * 0x0f0 -> (15 * 16 = 240) -> (32 * 240 =  7680-bit)
-//      * 
-//      * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
-//     */
     
 //     int idx = 0;
 //     while(idx < t) {
 //         BINT* ptrX = NULL;
-//         BINT* ptrY = NULL;
+//         // BINT* ptrY = NULL;
 //         BINT* ptrZ = NULL;
 //         BINT* ptrTmpX = NULL;
-//         BINT* ptrTmpY = NULL;
+//         // BINT* ptrTmpY = NULL;
 //         BINT* ptrTmpZ = NULL;
-//         BINT* ptrTTmpX = NULL;
-//         BINT* ptrTTmpY = NULL;
-//         BINT* ptrTTmpZ = NULL;
+//         // BINT* ptrTTmpX = NULL;
+//         // BINT* ptrTTmpY = NULL;
+//         // BINT* ptrTTmpZ = NULL;
 // /*************************** Random Input **************************************/
 //         // int len1 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
 //         // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
@@ -430,8 +449,8 @@ int main() {
 //         // int len1 = (rand() % 0x08) + 0x3;
 //         // int len2 = (rand() % 0x08) + 0x3;
         
-//         int len1 = 0x0f0;
-//         int len2 = 0x0f0;
+//         int len1 = 0x020;
+//         // int len2 = 0x0f0;
         
 //         // RANDOM_BINT(&ptrX, false, len1);
 //         // RANDOM_BINT(&ptrY, false, len2);
@@ -439,40 +458,42 @@ int main() {
 //         // int sgn1 = rand() % 0x02;
 //         // int sgn2 = rand() % 0x02;
 //         RANDOM_BINT(&ptrX, false, len1);
-//         RANDOM_BINT(&ptrY, false, len2);
+//         // RANDOM_BINT(&ptrY, false, len2);
      
 //         copyBINT(&ptrTmpX, &ptrX);      
-//         copyBINT(&ptrTmpY, &ptrY);
-//         copyBINT(&ptrTTmpX, &ptrX);      
-//         copyBINT(&ptrTTmpY, &ptrY);
+//         // copyBINT(&ptrTmpY, &ptrY);
+//         // copyBINT(&ptrTTmpX, &ptrX);      
+//         // copyBINT(&ptrTTmpY, &ptrY);
 
 //         start1 = clock();
-//         mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+//         SQU_Txtbk_xz(&ptrX, &ptrZ);
+//         // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
 //         end1 = clock();
 //         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
 
 //         start2 = clock();
-//         MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+//         SQU_Krtsb_xz(&ptrTmpX,&ptrTmpZ);
+//         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
 //         end2 = clock();
 //         cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
         
-//         start3 = clock();
-//         Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 0x08);
-//         end3 = clock();
-//         cpu_time_used3 = ((double) (end3 - start3)) / CLOCKS_PER_SEC;
+//         // start3 = clock();
+//         // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 0x08);
+//         // end3 = clock();
+//         // cpu_time_used3 = ((double) (end3 - start3)) / CLOCKS_PER_SEC;
 
 //         delete_bint(&ptrX);
-//         delete_bint(&ptrY);
+//         // delete_bint(&ptrY);
 //         delete_bint(&ptrZ);
 //         delete_bint(&ptrTmpX);
-//         delete_bint(&ptrTmpY);
+//         // delete_bint(&ptrTmpY);
 //         delete_bint(&ptrTmpZ);
-//         delete_bint(&ptrTTmpX);
-//         delete_bint(&ptrTTmpY);
-//         delete_bint(&ptrTTmpZ);
+//         // delete_bint(&ptrTTmpX);
+//         // delete_bint(&ptrTTmpY);
+//         // delete_bint(&ptrTTmpZ);
 //         printf("%.6f\n", cpu_time_used1);
 //         printf("%.6f\n", cpu_time_used2);
-//         printf("%.6f\n", cpu_time_used3);
+//         // printf("%.6f\n", cpu_time_used3);
 //         // printf("%.6f\n", cpu_time_used1-cpu_time_used2);
 //         idx++;
 //     }

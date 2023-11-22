@@ -777,12 +777,61 @@ void SQU_Txtbk_xz(BINT** pptrX,BINT** pptrZ){
     }
     left_shift_bit(C2,1);
     ADD(&C1,&C2,pptrZ);
+    (*pptrZ)->sign = false;
     delete_bint(&C1);
     delete_bint(&C2);
     delete_bint(&T1);
     delete_bint(&T2);
     delete_bint(&Temp);
     delete_bint(&Temp2);
+}
+void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ) {
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "SQU_Krtsb_xz");
+    int n = (*pptrX)->wordlen;
+    static int lenZ = -1; // Declare lenZ as a static variable
+    if (lenZ == -1) {
+        lenZ = 2 * n;
+        init_bint(pptrZ, lenZ);
+        CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SQU_Krtsb_xz");
+    }
+    if (FLAG >= n) {
+        BINT* tmpTxtBk_X = NULL; copyBINT(&tmpTxtBk_X, pptrX);
+        SQU_Txtbk_xz(&tmpTxtBk_X, pptrZ);
+        delete_bint(&tmpTxtBk_X);
+        return;
+    }
+    init_bint(pptrZ, 2*n);
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SQU_Krtsb_xz");
+    int l = (n + 1) >> 1;
+
+    BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
+    BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
+    BINT* ptrShiftT1 = NULL;
+    BINT* ptrR = NULL;
+    BINT* ptrS = NULL;
+    init_bint(&ptrS, 2*l);
+
+    copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
+    copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
+
+    SQU_Krtsb_xz(&ptrX1, &ptrT1);
+    SQU_Krtsb_xz(&ptrX0, &ptrT0);
+
+    copyBINT(&ptrShiftT1, &ptrT1);
+    left_shift_word(&ptrShiftT1, 2*l);
+    ADD(&ptrShiftT1, &ptrT0, &ptrR);
+
+    MUL_Core_Krtsb_xyz(&ptrX1, &ptrX0, &ptrS);
+    left_shift_word(&ptrS, l);
+    left_shift_bit(ptrS, 1);
+
+    ADD(&ptrR, &ptrS, pptrZ);
+
+    delete_bint(&ptrX0); delete_bint(&ptrX1);
+    delete_bint(&ptrT0); delete_bint(&ptrT1);
+    delete_bint(&ptrShiftT1);
+    delete_bint(&ptrS);
+    delete_bint(&ptrR);
 }
 
 // Only 0 <= X < YW

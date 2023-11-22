@@ -19,7 +19,7 @@ def read_success_rate_from_file(file_path):
 # Adjust the 'draw_gauge_chart' function to move the success rate label lower on the chart
 def draw_gauge_chart(success_rate, title='Success Rate', label='', ax=None):
     if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 4))
+        fig, ax = plt.subplots(figsize=(10, 7))
 
     # Create the arc
     theta1, theta2 = 0, 180  # Arc from 0 to 180 degrees
