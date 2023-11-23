@@ -928,20 +928,15 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
         fprintf(stderr, "Division by zero error.\n");
         exit(1);
     }
-    if (compare_bint(pptrDivisor, pptrDividend)) {
+    if (!(*pptrDividend)->sign && compare_bint(pptrDivisor, pptrDividend)) {
         SET_BINT_ZERO(pptrQ);
         copyBINT(pptrR, pptrDividend);
         return;
     }
     int n = (*pptrDividend)->wordlen;
-    int m = (*pptrDivisor)->wordlen;
-    // SET_BINT_ZERO(pptrQ);
-
-    (*pptrQ)->sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
-    // SET_BINT_ZERO(pptrR);
-    init_bint(pptrR, m);
-    // (*pptrR)->sign = false;
-    // (*pptrR)->wordlen = m;
+    SET_BINT_ZERO(pptrQ);
+    (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
+    SET_BINT_ZERO(pptrR);
     
     BINT* ptrTmpSub = NULL;
     SET_BINT_ZERO(&ptrTmpSub);
@@ -952,27 +947,25 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
     for(int i = n * WORD_BITLEN - 1; i >= 0 ; i--) {
         left_shift_bit(*pptrR, 1);  // R <- 2R
         (*pptrR)->val[0] ^= GET_BIT(pptrDividend, i); // R <- R + x_i
+        
         matchSize(*pptrR,*pptrDivisor);
-        if(compare_bint(pptrR,pptrDivisor)) {
-            copyBINT(&ptrTmpSub,pptrR);
-            SUB(&ptrTmpSub,pptrDivisor,pptrR);
+        if(compare_bint(pptrR,pptrDivisor)) {   // R >= Y
+            SUB(pptrR,pptrDivisor,&ptrTmpSub);
+            copyBINT(pptrR,&ptrTmpSub);
+
             SET_BINT_ONE(&ptrTmpAdd);
-            if(i)
-                left_shift_bit(ptrTmpAdd, i);
+            left_shift_bit(ptrTmpAdd, i);
             matchSize(*pptrQ, ptrTmpAdd);
             for(int j = 0; j < ptrTmpAdd->wordlen; j++) {
                 (*pptrQ)->val[j] ^= ptrTmpAdd->val[j];
             }
-            
         }
     }
+    refine_BINT(*pptrQ);
+    refine_BINT(*pptrR);
 
-    (*pptrQ)->wordlen = ptrTmpAdd->wordlen;
-    refine_BINT(*pptrQ);
-    refine_BINT(*pptrQ);
     delete_bint(&ptrTmpAdd);
     delete_bint(&ptrTmpSub);
-
 }
 
 void mul_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ) {

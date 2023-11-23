@@ -69,8 +69,8 @@ void MUL_Core_Krtsb_xyz(BINT**, BINT**, BINT**);
     do { \
         int len1 = (rand() % rnd) + fix; \
         int len2 = (rand() % rnd) + fix; \
-        RANDOM_BINT(&ptrX, 0, len1); \
-        RANDOM_BINT(&ptrY, 0, len2); \
+        RANDOM_BINT(&ptrX, false, len1); \
+        RANDOM_BINT(&ptrY, false, len2); \
     } while(0)
 
 // Macro for the operation and result printing
@@ -140,13 +140,41 @@ void test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op) {
         if(squ_op == 1) SQU_Krtsb_xz(&ptrX, &ptrRes);
         else SQU_Txtbk_xz(&ptrX, &ptrRes);
 
-        printf("print(hex(");print_bint_hex_python(&ptrX); \
+        printf("print(hex(");print_bint_hex_python(&ptrX);
         printf(" * ");print_bint_hex_python(&ptrX);
-        printf(") == hex("); \
-        print_bint_hex_python(&ptrRes); \
-        printf("))\n"); \
+        printf(") == hex("); print_bint_hex_python(&ptrRes);
+        printf("))\n");
+
         delete_bint(&ptrX);
         delete_bint(&ptrRes);
+        idx++;
+    }
+}
+
+void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
+    int idx = 0x00;
+    while (idx < cnt) {
+        BINT *ptrX = NULL, *ptrY = NULL;
+        BINT* ptrQ = NULL;
+        BINT* ptrR = NULL;
+        int rnd, fix;
+
+        SET_BIT_LENGTHS(bit_op, rnd, fix);
+        POSITIVE_RANDOMIZE_BINTS(ptrX, ptrY, rnd, fix);
+
+        DIV_Bianry_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
+        // DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
+
+        printf("print(hex("); print_bint_hex_python(&ptrQ);
+        printf(" * "); print_bint_hex_python(&ptrY);
+        printf(" + "); print_bint_hex_python(&ptrR);
+        printf(") == hex("); print_bint_hex_python(&ptrX);
+        printf("))\n");
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrQ);
+        delete_bint(&ptrR);
         idx++;
     }
 }
@@ -193,7 +221,11 @@ int main() {
 
     // Squaring
     // test_rand_SQU(t, bit_op, sgn_op, 0);
-    test_rand_SQU(t, bit_op, sgn_op, 1);
+    // test_rand_SQU(t, bit_op, sgn_op, 1);
+
+    // Division
+    test_rand_DIV(t, bit_op, sgn_op);
+
 
     return 0;
 }

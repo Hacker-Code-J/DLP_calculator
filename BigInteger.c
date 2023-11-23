@@ -895,7 +895,7 @@ void left_shift_bit(BINT* ptrBint, int shift_amount) {
         return; // Invalid parameters or no shift needed.
     }
     if (shift_amount <= 0) {
-        fprintf(stderr, "No shift needed.\n");
+        // fprintf(stderr, "No shift needed.\n");
         return; // Invalid parameters or no shift needed.
     }
 
