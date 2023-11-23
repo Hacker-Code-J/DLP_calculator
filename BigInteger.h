@@ -24,7 +24,9 @@
 #ifndef BIGINTEGER_H
 #define BIGINTEGER_H
 
+// #define WORD_BITLEN 8
 #define WORD_BITLEN 32
+// #define WORD_BITLEN 64
 
 // Supports operations in 8-bit, 16-bit, 32-bit, and 64-bit units.
 #if WORD_BITLEN == 8

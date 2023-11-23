@@ -43,12 +43,6 @@ plt.ylabel('Speed Difference', fontsize=12)
 for spine in plt.gca().spines.values():
     spine.set_visible(False)
 
-# Create an annotation that will make the plot unique
-# plt.text(2, max(combined_data['speed_difference']), 'Custom Data Art', fontsize=12, ha='right', color='firebrick')
-
-# Save the plot as an image file with a high resolution
-# plt.savefig('unique_speed_difference_plot.png', dpi=300)
-
 # Show the plot
 plt.show()
 

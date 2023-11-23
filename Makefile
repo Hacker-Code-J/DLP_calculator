@@ -76,6 +76,13 @@ speed-mul:
 	(cd Views && python3 time_compare_mul.py)
 	@echo "Visualized."
 
+speed-len:
+	@echo "Visualizing ..."
+	./a.out > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 time_compare_mul.py)
+	@echo "Visualized."
+
 flag:
 	@echo "Visualizing ..."
 	(cd Views && python3 Krtsb_FLAG.py)

@@ -10,7 +10,8 @@
     "string_view": "c",
     "setup.h": "c",
     "operation.h": "c",
-    "bint_fifo.h": "c"
+    "bint_fifo.h": "c",
+    "stdbool.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "C_Cpp_Runner.cCompilerPath": "gcc",
