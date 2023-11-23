@@ -105,7 +105,6 @@ void test_rand_OP(int cnt, int bit_op, void (*op_func)(BINT**, BINT**, BINT**), 
         idx++;
     }
 }
-
 void test_rand_ADD(int cnt, int bit_op, int sgn_op) {
     test_rand_OP(cnt, bit_op, ADD, "+", sgn_op);
 }
@@ -134,7 +133,7 @@ void test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op) {
         SET_BIT_LENGTHS(bit_op, rnd, fix);
         int len = (rand() % rnd) + fix;
         int sgnX = false;
-        if(!sgn_op) sgnX = rand() % 0x02;
+        if(!sgn_op) sgnX = rand()  % 0x02;
         RANDOM_BINT(&ptrX, sgnX, len);
 
         if(squ_op == 1) SQU_Krtsb_xz(&ptrX, &ptrRes);
@@ -150,7 +149,6 @@ void test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op) {
         idx++;
     }
 }
-
 void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
     int idx = 0x00;
     while (idx < cnt) {
@@ -182,6 +180,10 @@ void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
         idx++;
     }
 }
+void test_rand_EXP(int cnt, int bit_op, int sgn_op, int exp_op) {
+    // test_rand_OP(cnt, bit_op, SUB, "-", sgn_op);
+}
+
 
 // int main() {
 //     /**
@@ -228,7 +230,7 @@ void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
 //     // test_rand_SQU(t, bit_op, sgn_op, 1);
 
 //     // Division
-//     // test_rand_DIV(t, bit_op, sgn_op);
+//     test_rand_DIV(t, bit_op, sgn_op);
 
 
 //     return 0;
