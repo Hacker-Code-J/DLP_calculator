@@ -38,13 +38,13 @@ plt.figure(figsize=(15, 15))
 # Create a subplot for each flag file and plot both the readings and their average values
 for i, (label, series) in enumerate(data.items(), 1):
     ax = plt.subplot(len(data.columns), 1, i)
-    ax.plot(series, label='Readings')
+    ax.plot(series, label='Samples')
     average_value = series.mean()
     ax.hlines(average_value, xmin=0, xmax=len(series), colors='red', linestyles='dashed', label=f'Average: {average_value:.2f}')
     ax.text(len(series) * 0.9, average_value, f'{average_value:.2f}', va='center', ha='center', backgroundcolor='white')
-    ax.set_title(label)
+    ax.set_title(label, fontsize=14, fontweight='bold', color='magenta')
     ax.set_xlabel('Sample Index')
-    ax.set_ylabel('Reading Value')
+    ax.set_ylabel('Speed Difference(ms)',fontsize=14, fontweight='bold')
     ax.legend()
     ax.grid(True)
 

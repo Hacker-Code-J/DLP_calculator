@@ -18,24 +18,27 @@ function1_smooth = np.convolve(function1_speeds, np.ones(window_size)/window_siz
 function2_smooth = np.convolve(function2_speeds, np.ones(window_size)/window_size, mode='valid')
 function3_smooth = np.convolve(function3_speeds, np.ones(window_size)/window_size, mode='valid')
 
-# Set up the figure and axes
-fig, ax = plt.subplots(figsize=(10,6))
+# Set up the figure and axes for a prettier graph
+fig, ax = plt.subplots(figsize=(14, 7), dpi=100)
 
-# Plot the smoothed data
-ax.plot(function1_smooth, color='blue', label='TextBook', alpha=0.9)
-ax.plot(function2_smooth, color='red', label='Improved TextBook', alpha=0.9)
-ax.plot(function3_smooth, color='green', label='Karatsuba', alpha=0.9)
+# Plot the smoothed data with a prettier design
+ax.plot(function1_smooth, color='dodgerblue', label='TextBook', alpha=0.8, linewidth=2)
+ax.plot(function2_smooth, color='crimson', label='Improved TextBook', alpha=0.8, linewidth=2)
+ax.plot(function3_smooth, color='forestgreen', label='Karatsuba', alpha=0.8, linewidth=2)
 
-# Optionally plot raw data with reduced alpha for background
-# ax.plot(function1_speeds, color='blue', alpha=0.1)
-# ax.plot(function2_speeds, color='red', alpha=0.1)
+# Setting labels, title, and legend with a prettier font and style
+ax.set_ylabel('Speed (ms)', fontsize=14, fontweight='bold')
+ax.set_xlabel('Run Number', fontsize=14, fontweight='bold')
+ax.set_title('Comparison of Speeds', fontsize=16, fontweight='bold')
+ax.legend(frameon=True, framealpha=0.9, shadow=True, fancybox=True)
 
-# Setting labels, title, and legend
-ax.set_ylabel('Execution Speed')
-ax.set_xlabel('Run Number')
-ax.set_title('Comparison of Execution Speeds')
-ax.legend()
-
-plt.grid(True)
+# Customizing the grid to be less prominent and prettier
+plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
 plt.tight_layout()
+
+# Enhancing the overall look by setting a face and edge color
+fig.patch.set_facecolor('white')
+fig.patch.set_edgecolor('lightgrey')
+
+# Show the plot with a prettier design
 plt.show()
