@@ -123,7 +123,7 @@ void makeEven(BINT* ptrBint) {
 }
 
 void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
-    int max_wordlen = MAX(ptrBint1->wordlen, ptrBint2->wordlen);
+    int max_wordlen = MAXIMUM(ptrBint1->wordlen, ptrBint2->wordlen);
 
     // Resize ptrBint1 if its wordlen is smaller than max_wordlen
     if(ptrBint1->wordlen < max_wordlen) {

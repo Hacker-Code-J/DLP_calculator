@@ -15,7 +15,7 @@ typedef unsigned long u64;
  * @param x2 second input value
  * @return the larger of the two values
  */
-#define MAX(x1, x2) (x1 > x2 ? x1 : x2)
+#define MAXIMUM(x1, x2) (x1 > x2 ? x1 : x2)
 
 /**
  * Determine the lesser value between two inputs.
@@ -23,7 +23,7 @@ typedef unsigned long u64;
  * @param x2 second input value
  * @return the smaller of the two values
  */
-#define MIN(x1, x2) (x1 < x2 ? x1 : x2)
+#define MINIMUM(x1, x2) (x1 < x2 ? x1 : x2)
 
 /** Print Error
  * Error: 'ptr_name' is NULL in 'function_name'

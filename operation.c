@@ -25,7 +25,7 @@ void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
 void OOR_BINT(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-    int max_len = MAX((*pptrX)->wordlen, (*pptrY)->wordlen);    
+    int max_len = MAXIMUM((*pptrX)->wordlen, (*pptrY)->wordlen);    
     matchSize(*pptrX, *pptrY);
     for (int i = 0; i < max_len; i++) {
         (*pptrZ)->val[i] = (*pptrX)->val[i] | (*pptrY)->val[i];
@@ -37,8 +37,8 @@ void OOR_BINT(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     // ptrZ->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
 }
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
-    int min_len = MIN(ptrX->wordlen, ptrY->wordlen);
-    int max_len = MAX(ptrX->wordlen, ptrY->wordlen);
+    int min_len = MINIMUM(ptrX->wordlen, ptrY->wordlen);
+    int max_len = MAXIMUM(ptrX->wordlen, ptrY->wordlen);
     for (int i = 0; i < min_len; i++) {
         (*pptrZ)->val[i] = ptrX->val[i] | ptrY->val[i];
     }
@@ -180,7 +180,7 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     bool xGeqy = compare_abs_bint(pptrX, pptrY);
     if(!xGeqy) swapBINT(pptrX,pptrY);
 
-    init_bint(pptrZ, MAX(n,m));
+    init_bint(pptrZ, MAXIMUM(n,m));
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "sub_core_xyz");
     
     WORD res = 0x00;
@@ -206,7 +206,7 @@ void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     bool sgnX = (*pptrX)->sign;
     bool sgnY = (*pptrY)->sign;
     
-    init_bint(pptrZ, MAX(n,m));
+    init_bint(pptrZ, MAXIMUM(n,m));
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
 
     if ((*pptrY)->sign == false && compare_bint(pptrX,pptrY)) {
@@ -308,7 +308,7 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     matchSize(*pptrX, *pptrY);
     makeEven(*pptrX); makeEven(*pptrY);
     int n = (*pptrX)->wordlen; int m = (*pptrX)->wordlen;
-    custom_printHex_xy(*pptrX, *pptrY, MAX(n,m));
+    custom_printHex_xy(*pptrX, *pptrY, MAXIMUM(n,m));
 
     init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "mul_core_ImpTxtBk_test");
@@ -469,7 +469,7 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         init_bint(pptrZ, lenZ);
         CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     }
-    if (FLAG >= MIN(n,m)) {
+    if (FLAG >= MINIMUM(n,m)) {
         BINT* tmpTxtBk_X = NULL;
         BINT* tmpTxtBk_Y = NULL;
         printf("=========================================\n");
@@ -488,7 +488,7 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     // matchSize(*pptrX,*pptrY);
-    int l = (MAX(n,m) + 1) >> 1;
+    int l = (MAXIMUM(n,m) + 1) >> 1;
     printf("l = 0x%x\n\n", l);
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
@@ -573,7 +573,7 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
         init_bint(pptrZ, lenZ);
         CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     }
-    if (FLAG >= MIN(n,m)) {
+    if (FLAG >= MINIMUM(n,m)) {
         BINT* tmpTxtBk_X = NULL; BINT* tmpTxtBk_Y = NULL;
         copyBINT(&tmpTxtBk_X, pptrX); copyBINT(&tmpTxtBk_Y, pptrY);
         MUL_Core_ImpTxtBk_xyz(&tmpTxtBk_X,&tmpTxtBk_Y,pptrZ);
@@ -582,7 +582,7 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
     }
     init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
-    int l = (MAX(n,m) + 1) >> 1;
+    int l = (MAXIMUM(n,m) + 1) >> 1;
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
     BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
@@ -650,7 +650,7 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         init_bint(pptrZ, lenZ);
         CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     }
-    if (FLAG >= MIN(n,m)) {
+    if (FLAG >= MINIMUM(n,m)) {
         BINT* tmpTxtBk_X = NULL; BINT* tmpTxtBk_Y = NULL;
         copyBINT(&tmpTxtBk_X, pptrX); copyBINT(&tmpTxtBk_Y, pptrY);
         MUL_Core_ImpTxtBk_xyz(&tmpTxtBk_X,&tmpTxtBk_Y,pptrZ);
@@ -659,7 +659,7 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     }
     init_bint(pptrZ, n+m);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
-    int l = (MAX(n,m) + 1) >> 1;
+    int l = (MAXIMUM(n,m) + 1) >> 1;
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
     BINT* ptrY0 = NULL; BINT* ptrY1 = NULL;
