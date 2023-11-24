@@ -31,7 +31,7 @@ clean:
 	@echo "Cleaned."
 
 DIR=Views
-FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt
+FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt $(DIR)/lib_test.txt
 clean-test:
 	@echo "Cleaning up..."
 	-rm -f test.py test.txt speed.txt
@@ -61,32 +61,42 @@ chart:
 	python3 test.py > test.txt
 	mv test.py test.txt Views/
 	(cd Views && python3 success_chart2.py)
-	@echo "Visualized."
+	@echo "Completed."
 
 speed:
 	@echo "Visualizing ..."
 	./a.out > speed.txt
+	@echo "Converting to Text File ..."
 	mv speed.txt Views/
 	(cd Views && python3 time_compare_chart.py)
-	@echo "Visualized."
+	@echo "Completed."
 
 speed-mul:
 	@echo "Visualizing ..."
 	./a.out > speed.txt
+	@echo "Converting to Text File ..."
 	mv speed.txt Views/
 	(cd Views && python3 time_compare_mul.py)
-	@echo "Visualized."
+	@echo "Completed."
 
 speed-len:
 	@echo "Visualizing ..."
 	./a.out > speed.txt
+	@echo "Converting to Text File ..."
 	mv speed.txt Views/
 	(cd Views && python3 time_compare_mul.py)
-	@echo "Visualized."
+	@echo "Completed."
 
 flag:
 	@echo "Visualizing ..."
 	(cd Views && python3 Krtsb_FLAG.py)
-	@echo "Visualized."
+	@echo "Completed."
+
+lib:
+	@echo "Converting to Text File ..."
+	./a.out > lib_test.txt
+	mv lib_test.txt Views/
+	(cd Views && python3 lib_test.py)
+	@echo "Completed."
 
 .PHONY: clean
