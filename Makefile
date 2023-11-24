@@ -1,10 +1,11 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -O2
+LIBS = -lflint -lgmp
 OBJS = setup.o BigInteger.o operation.o main.o
 
 # Targets
 a.out: $(OBJS)
-	$(CC) -o $@ $^
+	$(CC) -o $@ $^ $(LIBS)
 
 setup.o: setup.c
 	$(CC) $(CFLAGS) -c -o $@ $<

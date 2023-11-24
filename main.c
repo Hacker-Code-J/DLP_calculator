@@ -20,6 +20,9 @@
 #include <memory.h>
 #include <time.h>
 
+#include <flint/flint.h>
+#include <flint/fmpz.h>
+
 #include "setup.h"
 #include "BigInteger.h"
 #include "operation.h"
@@ -184,56 +187,140 @@ void test_rand_EXP(int cnt, int bit_op, int sgn_op, int exp_op) {
     // test_rand_OP(cnt, bit_op, SUB, "-", sgn_op);
 }
 
+void test_flint_mul(int count) {
+    fmpz_t a, b, c;
+    fmpz_init(a);
+    fmpz_init(b);
+    fmpz_init(c);
+
+    gmp_randstate_t state;
+    gmp_randinit_default(state);
+    gmp_randseed_ui(state, time(NULL)); // Seed with current time
+
+    // Testing multiplication 'count' times
+    for (int i = 0; i < count; i++) {
+        fmpz_randbits(a, state, 2048); // Generate a random 2048-bit number
+        fmpz_randbits(b, state, 2048); // Generate another random 2048-bit number
+
+        clock_t start = clock();
+        fmpz_mul(c, a, b); // Multiply a and b
+        clock_t end = clock();
+
+        double time_taken = (double)(end - start) / CLOCKS_PER_SEC;
+        printf("Multiplication %d took %f seconds\n", i + 1, time_taken);
+    }
+
+    fmpz_clear(a);
+    fmpz_clear(b);
+    fmpz_clear(c);
+    gmp_randclear(state);
+}
+
 int main() {
-    /**
-    //  * bit_op
-    //  * 1: 2048 ~ 3072 bits
-    //  * 2: 3072 ~ 7680 bits
-    //  * 3: 7680 ~ 15360 bits
-    //  * default(0): 1024 ~ 2048 bits
-     * ===============================================================
-     * sgn_op
-     * 0: random sign
-     * 1: positive sign
-     * ===============================================================
-     * mul_op
-     * 1: Improved TextBook
-     * 2: Karatsuba
-     * default(0): TextBook
-     * ===============================================================
-     * squ_op
-     * 1: Karastsuba
-     * default(0): TextBook
-     * ===============================================================
-     * test_rand_ADD(int cnt, int bit_op, int sgn_op)
-     * test_rand_SUB(int cnt, int bit_op, int sgn_op)
-     * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
-     * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
-    */
-
-    int t = 10000;
-    int bit_op = 2;
-    int sgn_op = 1;
-
-    // Addition and Subtraction
-    // test_rand_ADD(t, bit_op, sgn_op);
-    // test_rand_SUB(t, bit_op, sgn_op);
-
-    // Multiplication
-    // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
-    // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
-    test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
-
-    // Squaring
-    // test_rand_SQU(t, bit_op, sgn_op, 0);
-    // test_rand_SQU(t, bit_op, sgn_op, 1);
-
-    // Division
-    // test_rand_DIV(t, bit_op, sgn_op);
-
+    int t = 10; // Number of tests
+    test_flint_mul(t);
 
     return 0;
 }
+// int main() {
+//     /**
+//     //  * bit_op
+//     //  * 1: 2048 ~ 3072 bits
+//     //  * 2: 3072 ~ 7680 bits
+//     //  * 3: 7680 ~ 15360 bits
+//     //  * default(0): 1024 ~ 2048 bits
+//      * ===============================================================
+//      * sgn_op
+//      * 0: random signnt main() {
+//     /**
+//     //  * bit_op
+//     //  * 1: 2048 ~ 3072 bits
+//     //  * 2: 3072 ~ 7680 bits
+//     //  * 3: 7680 ~ 15360 bits
+//     //  * default(0): 1024 ~ 2048 bits
+//      * ===============================================================
+//      * sgn_op
+//      * 0: random sign
+//      * 1: positive sign
+//      * ===============================================================
+//      * mul_op
+//      * 1: Improved TextBook
+//      * 2: Karatsuba
+//      * default(0): TextBook
+//      * ===============================================================
+//      * squ_op
+//      * 1: Karastsuba
+//      * default(0): TextBook
+//      * ===============================================================
+//      * test_rand_ADD(int cnt, int bit_op, int sgn_op)
+//      * test_rand_SUB(int cnt, int bit_op, int sgn_op)
+//      * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
+//      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
+//     */
+
+//     int t = 10000;
+//     int bit_op = 2;
+//     int sgn_op = 1;
+
+//     // Addition and Subtraction
+//     // test_rand_ADD(t, bit_op, sgn_op);
+//     // test_rand_SUB(t, bit_op, sgn_op);
+
+//     // Multiplication
+//     // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
+//     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
+//     test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
+
+//     // Squaring
+//     // test_rand_SQU(t, bit_op, sgn_op, 0);
+//     // test_rand_SQU(t, bit_op, sgn_op, 1);
+
+//     // Division
+//     // test_rand_DIV(t, bit_op, sgn_op);
+
+
+//     return 0;
+// }
+//      * 1: positive sign
+//      * ===============================================================
+//      * mul_op
+//      * 1: Improved TextBook
+//      * 2: Karatsuba
+//      * default(0): TextBook
+//      * ===============================================================
+//      * squ_op
+//      * 1: Karastsuba
+//      * default(0): TextBook
+//      * ===============================================================
+//      * test_rand_ADD(int cnt, int bit_op, int sgn_op)
+//      * test_rand_SUB(int cnt, int bit_op, int sgn_op)
+//      * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
+//      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
+//     */
+
+//     int t = 10000;
+//     int bit_op = 2;
+//     int sgn_op = 1;
+
+//     // Addition and Subtraction
+//     // test_rand_ADD(t, bit_op, sgn_op);
+//     // test_rand_SUB(t, bit_op, sgn_op);
+
+//     // Multiplication
+//     // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
+//     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
+//     test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
+
+//     // Squaring
+//     // test_rand_SQU(t, bit_op, sgn_op, 0);
+//     // test_rand_SQU(t, bit_op, sgn_op, 1);
+
+//     // Division
+//     // test_rand_DIV(t, bit_op, sgn_op);
+
+
+//     return 0;
+// }
 
 // =============================================================================================
 
