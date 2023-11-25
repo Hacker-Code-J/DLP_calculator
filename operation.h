@@ -122,6 +122,7 @@ void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
 
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
+void DIV_long(BINT** X, BINT** Y, BINT** Q, BINT** R);
 
 void mul_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
 void add_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);

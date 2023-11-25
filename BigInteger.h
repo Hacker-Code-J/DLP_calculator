@@ -186,6 +186,7 @@ void PrintBinary(bool* binary, int length);
 // void PrintBinary(bool* binary, int wordlen, int bits_per_word);
 
 bool GET_BIT(BINT** pptrBint, int i_th);
+WORD get_mth_word(BINT* bint, int m);
 
 
 void printHex(BINT* X);

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 // #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 
 #include "setup.h"
 #include "BigInteger.h"
@@ -967,6 +968,65 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
     delete_bint(&ptrTmpAdd);
     delete_bint(&ptrTmpSub);
 }
+
+// Function to perform division as per the provided algorithm
+void DIV_long(BINT** X, BINT** Y, BINT** Q, BINT** R) {
+    // Ensure proper initialization of Q and R
+    init_bint(Q, 1);  // Assume Q is no longer than 1 word.
+    init_bint(R, (*X)->wordlen); // R has the same word length as X for safety.
+
+    // Fetch bit lengths
+    int n = (*X)->wordlen;  // Pass the address of the pointer
+    int m = (*Y)->wordlen;  // Pass the address of the pointer
+
+    // Calculate W as 2^word size
+    WORD W = ((WORD)1) << (WORD_BITLEN - 1); // Use one less bit to avoid overflow
+
+    // Get the most significant word from X and Y
+    WORD x_m = get_mth_word(*X, m);     // assuming get_mth_word fetches the m-th WORD from BINT
+    WORD x_m_1 = get_mth_word(*X, m - 1);
+    WORD y_m_1 = get_mth_word(*Y, m - 1);
+
+    if(y_m_1 == 0)
+        printf("!!!!!!!!!!!!\n");
+
+    // Main algorithm as per the pseudocode
+    if (n == m) {
+        (*Q)->val[0] = x_m_1 / y_m_1;
+    } else if (n == m + 1) {
+        if (x_m == y_m_1) {
+            (*Q)->val[0] = W - 1;
+        } else {
+            // Cast to a larger integer type if necessary to prevent overflow
+            unsigned long long dividend = ((unsigned long long)x_m << (sizeof(WORD) * 8)) | x_m_1;
+            (*Q)->val[0] = (WORD)(dividend / y_m_1);
+        }
+    }
+
+    // Calculate R = X - Y * Q
+    BINT* YQ = NULL;
+    init_bint(&YQ, (*Y)->wordlen);
+    MUL_Core_Krtsb_xyz(Y, Q, &YQ);  // Pass the addresses of the pointers
+    SUB(X, &YQ, R);                 // Pass the addresses of the pointers
+
+    // Correct R if it is negative
+    while ((*R)->sign) {
+        BINT* ONE;
+        BINT* tmpQ;
+        BINT* tmpR;
+        SET_BINT_ONE(&ONE);         // Set ONE to 1
+        copyBINT(&tmpQ, Q);
+        SUB(&tmpQ, &ONE, Q);            // Q = Q - 1
+        copyBINT(&tmpR, R);
+        ADD(&tmpR, Y, R);              // R = R + Y
+        delete_bint(&ONE);          // Clean up ONE
+        delete_bint(&tmpQ);delete_bint(&tmpR);
+    }
+
+    // Clean up
+    delete_bint(&YQ);
+}
+
 
 void mul_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ) {
 int bit_len = BIT_LENGTH(ptrY);

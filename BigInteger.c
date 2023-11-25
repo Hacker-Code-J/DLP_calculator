@@ -560,6 +560,13 @@ bool GET_BIT(BINT** pptrBint, int i_th)  {
    return (((*pptrBint)->val[0] >> i_th) & 1);
 }
 
+WORD get_mth_word(BINT* bint, int m) {
+    if (m < 0 || m >= bint->wordlen) {
+        return 0;
+    }
+    return bint->val[m];
+}
+
 /******************************************************************/
 void printHex(BINT* X) {
     printf("[%d] 0x ",X->sign);

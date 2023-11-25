@@ -157,7 +157,8 @@ void test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op) {
         idx++;
     }
 }
-void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
+void test_rand_DIV(int cnt, int bit_op, int sgn_op, int div_op) {
+    srand((unsigned int)time(NULL));
     int idx = 0x00;
     while (idx < cnt) {
         BINT *ptrX = NULL, *ptrY = NULL;
@@ -165,16 +166,23 @@ void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
         BINT* ptrR = NULL;
         int rnd, fix;
 
-        SET_BIT_LENGTHS(bit_op, rnd, fix);
-        if (sgn_op) {
-            POSITIVE_RANDOMIZE_BINTS(ptrX, ptrY, rnd, fix);
-        } else {
-            RANDOMIZE_BINTS(ptrX, ptrY, rnd, fix);
-        }
+        int len1 = 0x08;
+        int len2 = 0x07;
+        
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
+        // SET_BIT_LENGTHS(bit_op, rnd, fix);
+        // if (sgn_op) {
+        //     POSITIVE_RANDOMIZE_BINTS(ptrX, ptrY, rnd, fix);
+        // } else {
+        //     RANDOMIZE_BINTS(ptrX, ptrY, rnd, fix);
+        // }
 
-        DIV_Bianry_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
-        // DIV_Bianry_Long_Test(&ptrX, &ptrY, &ptrQ, &ptrR);
-
+        if(div_op)
+            DIV_long(&ptrX, &ptrY, &ptrQ, &ptrR);
+        else
+            DIV_Bianry_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
+        
         printf("print(hex("); print_bint_hex_python(&ptrQ);
         printf(" * "); print_bint_hex_python(&ptrY);
         printf(" + "); print_bint_hex_python(&ptrR);
@@ -191,9 +199,6 @@ void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
 // void test_rand_EXP(int cnt, int bit_op, int sgn_op, int exp_op) {
 //     // test_rand_OP(cnt, bit_op, SUB, "-", sgn_op);
 // }
-
-#include <flint/flint.h>
-#include <flint/fmpz.h>
 
 void test_flint_mul(int count) {
     struct timespec start, end;
@@ -227,113 +232,57 @@ void test_flint_mul(int count) {
     flint_randclear(state);
 }
 
-// int main() {
-//     int t = 10; // Number of tests
-//     test_flint_mul(t);
+int main() {
+    /*
+     * bit_op
+     * 1: 2048 ~ 3072 bits
+     * 2: 3072 ~ 7680 bits
+     * 3: 7680 ~ 15360 bits
+     * default(0): 1024 ~ 2048 bits
+     * ===============================================================
+     * sgn_op
+     * 0: random sign
+     * 1: positive sign
+     * ===============================================================
+     * mul_op
+     * 1: Improved TextBook
+     * 2: Karatsuba
+     * default(0): TextBook
+     * ===============================================================
+     * squ_op
+     * 1: Karastsuba
+     * default(0): TextBook
+     * ===============================================================
+     * test_rand_ADD(int cnt, int bit_op, int sgn_op)
+     * test_rand_SUB(int cnt, int bit_op, int sgn_op)
+     * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
+     * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
+    */
 
-//     return 0;
-// }
+    int t = 1000;
+    int bit_op = 1;
+    int sgn_op = 1;
 
-// int main() {
-//     /**
-//     //  * bit_op
-//     //  * 1: 2048 ~ 3072 bits
-//     //  * 2: 3072 ~ 7680 bits
-//     //  * 3: 7680 ~ 15360 bits
-//     //  * default(0): 1024 ~ 2048 bits
-//      * ===============================================================
-//      * sgn_op
-//      * 0: random signnt main() {
-//     /**
-//     //  * bit_op
-//     //  * 1: 2048 ~ 3072 bits
-//     //  * 2: 3072 ~ 7680 bits
-//     //  * 3: 7680 ~ 15360 bits
-//     //  * default(0): 1024 ~ 2048 bits
-//      * ===============================================================
-//      * sgn_op
-//      * 0: random sign
-//      * 1: positive sign
-//      * ===============================================================
-//      * mul_op
-//      * 1: Improved TextBook
-//      * 2: Karatsuba
-//      * default(0): TextBook
-//      * ===============================================================
-//      * squ_op
-//      * 1: Karastsuba
-//      * default(0): TextBook
-//      * ===============================================================
-//      * test_rand_ADD(int cnt, int bit_op, int sgn_op)
-//      * test_rand_SUB(int cnt, int bit_op, int sgn_op)
-//      * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
-//      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
-//     */
+    // Addition and Subtraction
+    // test_rand_ADD(t, bit_op, sgn_op);
+    // test_rand_SUB(t, bit_op, sgn_op);
 
-//     int t = 10000;
-//     int bit_op = 2;
-//     int sgn_op = 1;
+    // Multiplication
+    // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
+    // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
+    // test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
 
-//     // Addition and Subtraction
-//     // test_rand_ADD(t, bit_op, sgn_op);
-//     // test_rand_SUB(t, bit_op, sgn_op);
+    // Squaring
+    // test_rand_SQU(t, bit_op, sgn_op, 0);
+    // test_rand_SQU(t, bit_op, sgn_op, 1);
 
-//     // Multiplication
-//     // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
-//     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
-//     test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
-
-//     // Squaring
-//     // test_rand_SQU(t, bit_op, sgn_op, 0);
-//     // test_rand_SQU(t, bit_op, sgn_op, 1);
-
-//     // Division
-//     // test_rand_DIV(t, bit_op, sgn_op);
+    // Division
+    // test_rand_DIV(t, bit_op, sgn_op, 0); // Binary Long
+    test_rand_DIV(t, bit_op, sgn_op, 1); // General Long
 
 
-//     return 0;
-// }
-//      * 1: positive sign
-//      * ===============================================================
-//      * mul_op
-//      * 1: Improved TextBook
-//      * 2: Karatsuba
-//      * default(0): TextBook
-//      * ===============================================================
-//      * squ_op
-//      * 1: Karastsuba
-//      * default(0): TextBook
-//      * ===============================================================
-//      * test_rand_ADD(int cnt, int bit_op, int sgn_op)
-//      * test_rand_SUB(int cnt, int bit_op, int sgn_op)
-//      * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
-//      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
-//     */
-
-//     int t = 10000;
-//     int bit_op = 2;
-//     int sgn_op = 1;
-
-//     // Addition and Subtraction
-//     // test_rand_ADD(t, bit_op, sgn_op);
-//     // test_rand_SUB(t, bit_op, sgn_op);
-
-//     // Multiplication
-//     // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
-//     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
-//     test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
-
-//     // Squaring
-//     // test_rand_SQU(t, bit_op, sgn_op, 0);
-//     // test_rand_SQU(t, bit_op, sgn_op, 1);
-
-//     // Division
-//     // test_rand_DIV(t, bit_op, sgn_op);
-
-
-//     return 0;
-// }
-
+    return 0;
+}
 // =============================================================================================
 
 // int main() {
@@ -553,99 +502,99 @@ void test_flint_mul(int count) {
 // /**
 //  *  Measuring Performance
 // */
-int main() {
-    srand((unsigned int)time(NULL));
+// int main() {
+//     srand((unsigned int)time(NULL));
     
-    struct timespec start, end;
-    double elapsed_time;
+//     struct timespec start, end;
+//     double elapsed_time;
     
-    // clock_t start2, end2;
-    // double cpu_time_used2;
-    // clock_t start3, end3;
-    // double cpu_time_used3;
-    int t = 10000;
+//     // clock_t start2, end2;
+//     // double cpu_time_used2;
+//     // clock_t start3, end3;
+//     // double cpu_time_used3;
+//     int t = 10000;
 
-    test_flint_mul(t);
+//     test_flint_mul(t);
 
-    int idx = 0;
-    while(idx < t) {
-        BINT* ptrX = NULL;
-        BINT* ptrY = NULL;
-        BINT* ptrZ = NULL;
-        // BINT* ptrTmpX = NULL;
-        // BINT* ptrTmpY = NULL;
-        // BINT* ptrTmpZ = NULL;
-        // BINT* ptrTTmpX = NULL;
-        // BINT* ptrTTmpY = NULL;
-        // BINT* ptrTTmpZ = NULL;
-/*************************** Random Input **************************************/
-        // int len1 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-        // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-        // int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-        // int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-        // int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-        // int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-        // int len1 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-        // int len2 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-        // int len1 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
-        // int len2 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
+//     int idx = 0;
+//     while(idx < t) {
+//         BINT* ptrX = NULL;
+//         BINT* ptrY = NULL;
+//         BINT* ptrZ = NULL;
+//         // BINT* ptrTmpX = NULL;
+//         // BINT* ptrTmpY = NULL;
+//         // BINT* ptrTmpZ = NULL;
+//         // BINT* ptrTTmpX = NULL;
+//         // BINT* ptrTTmpY = NULL;
+//         // BINT* ptrTTmpZ = NULL;
+// /*************************** Random Input **************************************/
+//         // int len1 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
+//         // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
+//         // int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
+//         // int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
+//         // int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
+//         // int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
+//         // int len1 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
+//         // int len2 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
+//         // int len1 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
+//         // int len2 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
 
-        int len1 = 0x20;
-        int len2 = 0x20;
+//         int len1 = 0x20;
+//         int len2 = 0x20;
         
-        RANDOM_BINT(&ptrX, false, len1);
-        RANDOM_BINT(&ptrY, false, len2);
+//         RANDOM_BINT(&ptrX, false, len1);
+//         RANDOM_BINT(&ptrY, false, len2);
         
-        // int sgn1 = rand() % 0x02;
-        // int sgn2 = rand() % 0x02;
-        // RANDOM_BINT(&ptrX, false, len1);
-        // RANDOM_BINT(&ptrY, false, len2);
+//         // int sgn1 = rand() % 0x02;
+//         // int sgn2 = rand() % 0x02;
+//         // RANDOM_BINT(&ptrX, false, len1);
+//         // RANDOM_BINT(&ptrY, false, len2);
      
-        // copyBINT(&ptrTmpX, &ptrX);      
-        // copyBINT(&ptrTmpY, &ptrY);
-        // copyBINT(&ptrTTmpX, &ptrX);      
-        // copyBINT(&ptrTTmpY, &ptrY);
+//         // copyBINT(&ptrTmpX, &ptrX);      
+//         // copyBINT(&ptrTmpY, &ptrY);
+//         // copyBINT(&ptrTTmpX, &ptrX);      
+//         // copyBINT(&ptrTTmpY, &ptrY);
 
-        clock_gettime(CLOCK_MONOTONIC, &start);
-        // MUL_Core_Krtsb_xyz(&ptrX, &ptrY, &ptrZ);
-        // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrX2,&ptrZ);
-        // SQU_Txtbk_xz(&ptrX, &ptrZ);
-        // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
-        MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
-        clock_gettime(CLOCK_MONOTONIC, &end);  
-        elapsed_time = (end.tv_sec - start.tv_sec) * 1e9;
-        elapsed_time = (elapsed_time + (end.tv_nsec - start.tv_nsec)) * 1e-9; // Convert to seconds
+//         clock_gettime(CLOCK_MONOTONIC, &start);
+//         // MUL_Core_Krtsb_xyz(&ptrX, &ptrY, &ptrZ);
+//         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrX2,&ptrZ);
+//         // SQU_Txtbk_xz(&ptrX, &ptrZ);
+//         // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+//         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+//         clock_gettime(CLOCK_MONOTONIC, &end);  
+//         elapsed_time = (end.tv_sec - start.tv_sec) * 1e9;
+//         elapsed_time = (elapsed_time + (end.tv_nsec - start.tv_nsec)) * 1e-9; // Convert to seconds
 
 
-        // start2 = clock();
-        // // SQU_Txtbk_xz(&ptrTmpX,&ptrTmpZ);
-        // // SQU_Krtsb_xz(&ptrTmpX,&ptrTmpZ);
-        // MUL_Core_ImpTxtBk_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
-        // end2 = clock();
-        // cpu_time_used2 = ((double) (end2 - start2));// / CLOCKS_PER_SEC;
+//         // start2 = clock();
+//         // // SQU_Txtbk_xz(&ptrTmpX,&ptrTmpZ);
+//         // // SQU_Krtsb_xz(&ptrTmpX,&ptrTmpZ);
+//         // MUL_Core_ImpTxtBk_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
+//         // end2 = clock();
+//         // cpu_time_used2 = ((double) (end2 - start2));// / CLOCKS_PER_SEC;
         
-        // start3 = clock();
-        // // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 0x08);
-        // MUL_Core_Krtsb_xyz(&ptrTTmpX,&ptrTTmpY,&ptrTTmpZ);
-        // end3 = clock();
-        // cpu_time_used3 = ((double) (end3 - start3));// / CLOCKS_PER_SEC;
+//         // start3 = clock();
+//         // // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 0x08);
+//         // MUL_Core_Krtsb_xyz(&ptrTTmpX,&ptrTTmpY,&ptrTTmpZ);
+//         // end3 = clock();
+//         // cpu_time_used3 = ((double) (end3 - start3));// / CLOCKS_PER_SEC;
 
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrZ);
-        // delete_bint(&ptrTmpX);
-        // delete_bint(&ptrTmpY);
-        // delete_bint(&ptrTmpZ);
-        // delete_bint(&ptrTTmpX);
-        // delete_bint(&ptrTTmpY);
-        // delete_bint(&ptrTTmpZ);
-        printf("%.6f\n", elapsed_time*1000);
-        // printf("%.0f\n", cpu_time_used2);
-        // printf("%.0f\n", cpu_time_used3);
-        // printf("%.6f\n", cpu_time_used1-cpu_time_used2);
-        idx++;
-    }
-}
+//         delete_bint(&ptrX);
+//         delete_bint(&ptrY);
+//         delete_bint(&ptrZ);
+//         // delete_bint(&ptrTmpX);
+//         // delete_bint(&ptrTmpY);
+//         // delete_bint(&ptrTmpZ);
+//         // delete_bint(&ptrTTmpX);
+//         // delete_bint(&ptrTTmpY);
+//         // delete_bint(&ptrTTmpZ);
+//         printf("%.6f\n", elapsed_time*1000);
+//         // printf("%.0f\n", cpu_time_used2);
+//         // printf("%.0f\n", cpu_time_used3);
+//         // printf("%.6f\n", cpu_time_used1-cpu_time_used2);
+//         idx++;
+//     }
+// }
 
 // *=============================================================================================
 // /**
