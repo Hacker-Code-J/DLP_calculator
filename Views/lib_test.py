@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+import pandas as pd
 
 # Read the simulated data from the file
 with open('lib_test.txt', 'r') as f:
@@ -7,31 +9,22 @@ with open('lib_test.txt', 'r') as f:
 
 # Split the data into two lists, one for each function
 speeds = [float(speed.strip()) for speed in lines]
-speed_function_1 = speeds[:10000]
-speed_function_2 = speeds[10000:]
+speed_f1 = speeds[:10000]
+speed_f2 = speeds[10000:]
 
-# For a novel visualization, let's use a boxplot, which will give us a good indication of the distribution of the speed data,
-# including the median, quartiles, and outliers for both functions.
+# Create interactive dual range slider plot
+fig = make_subplots(rows=1, cols=1)
+fig.add_trace(go.Scatter(x=time, y=speed_f1, mode='lines', name='Function 1'))
+fig.add_trace(go.Scatter(x=time, y=speed_f2, mode='lines', name='Function 2'))
 
-# To visualize data with large differences, another novel approach is to use a scatter plot with transparency (alpha value).
-# Each point represents an individual measurement of speed for the functions, and the transparency helps in visualizing the density.
+# Update layout for a range slider
+fig.update_layout(
+    title='Interactive Speed Comparison with Range Slider',
+    xaxis=dict(
+        rangeslider=dict(visible=True),
+        type='linear'
+    )
+)
 
-plt.figure(figsize=(12, 6))
-
-# Calculate the difference between the two functions' speeds
-difference = np.array(speed_function_1) - np.array(speed_function_2)
-
-# Plot the original speed data
-plt.plot(speed_function_1, label='Function 1', alpha=0.6)
-plt.plot(speed_function_2, label='Function 2', alpha=0.6)
-
-# Add the difference curve
-plt.plot(difference, label='Difference (F1 - F2)', color='black', linestyle='--')
-
-plt.title('Performance Speed and Difference Comparison')
-plt.xlabel('Measurements')
-plt.ylabel('Speed')
-plt.legend()
-plt.grid(True)
-plt.show()
-
+# Show the figure
+fig.show()

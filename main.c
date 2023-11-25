@@ -218,7 +218,7 @@ void test_flint_mul(int count) {
 
         elapsed_time = (end.tv_sec - start.tv_sec) * 1e9;
         elapsed_time = (elapsed_time + (end.tv_nsec - start.tv_nsec)) * 1e-9; // Convert to seconds
-        printf("%.9f\n", elapsed_time);
+        printf("%.6f\n", elapsed_time*1000);
     }
 
     fmpz_clear(a);
@@ -639,7 +639,7 @@ int main() {
         // delete_bint(&ptrTTmpX);
         // delete_bint(&ptrTTmpY);
         // delete_bint(&ptrTTmpZ);
-        printf("%.9f\n", elapsed_time);
+        printf("%.6f\n", elapsed_time*1000);
         // printf("%.0f\n", cpu_time_used2);
         // printf("%.0f\n", cpu_time_used3);
         // printf("%.6f\n", cpu_time_used1-cpu_time_used2);

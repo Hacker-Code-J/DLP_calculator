@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <memory.h>
 
 void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
     if(!(*pptrBint))

@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# Filename: converter.py
-
 def convert_number(input_value, base_from, base_to):
     # Convert the input to an integer from the given base
     num = int(input_value, base_from)
@@ -20,12 +17,6 @@ def main():
         print("---------------------------------------------")
         print("1. Dec -> Hex   3. Hex -> Dec   5. Bin -> Dec")
         print("2. Dec -> Bin   4. Hex -> Bin   6. Bin -> Hex")
-        # print("----------------")
-        # print("3. Hex -> Dec")
-        # print("4. Hex -> Bin")
-        # print("----------------")
-        # print("5. Bin -> Dec")
-        # print("6. Bin -> Hex")
         print("---------------------------------------------")
         print("Enter 'q' to quit.")
         print()
@@ -50,17 +41,26 @@ def main():
         elif choice == '6':
             base_from, base_to = 2, 16
         else:
-            print("Invalid choice.")
+            print()
+            print("*********************************************")
+            print("!!! Invalid choice !!!")
+            print("*********************************************")
+            print()
             continue  # Go back to the start of the loop
 
         try:
             converted_value = convert_number(value, base_from, base_to)
+            print()
             print("=============================================")
             print(f"Converted value: {converted_value}")
             print("=============================================")
             print()
         except ValueError:
-            print("Invalid input number.")
+            print()
+            print("*********************************************")
+            print("!!!Invalid input number !!!")
+            print("*********************************************")
+            print()
 
 if __name__ == "__main__":
     main()

@@ -25,15 +25,11 @@ run:
 leak:
 	valgrind --leak-check=full --show-leak-kinds=all ./a.out
 
+DIR=Views
+FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt $(DIR)/lib_test.txt
 clean:
 	@echo "Cleaning up..."
 	rm -f *.o a.out *.bin *.txt
-	@echo "Cleaned."
-
-DIR=Views
-FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt $(DIR)/lib_test.txt
-clean-test:
-	@echo "Cleaning up..."
 	-rm -f test.py test.txt speed.txt
 	-rm -f $(FILES_TO_CLEAN)
 	@echo "Cleaned."

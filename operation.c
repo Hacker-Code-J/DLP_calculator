@@ -1117,3 +1117,46 @@ void exp_Mongomery(BINT** ptrX,BINT** ptrY,BINT** ptrZ){
     delete_bint(&temp);
     delete_bint(&temp2);
 }
+
+void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ) {
+    //일단 비트수가 필요하다 그만큼 연산을 해야하니 
+    int bit_len = BIT_LENGTH_NONZERO(ptrY);
+    BINT* t0=NULL;
+    BINT* t1=NULL;
+    BINT* temp=NULL;
+    BINT* temp2=NULL;
+    BINT* Q1=NULL;
+    BINT* Q2=NULL;
+    SET_BINT_ONE(&t0);
+    copyBINT(&t1,ptrX);
+    
+
+    for (int i= bit_len-1 ; i >= 0 ;i--){
+        init_bint(&temp,1);
+        init_bint(&temp2,1);
+        init_bint(&Q1,1);
+        init_bint(&Q2,1);
+
+        if (GET_BIT(ptrY,i) == 0){
+            mul_core_TxtBk_xyz(&t0,&t1,&temp);
+            DIV_Bianry_Long(&temp,ptrM,&Q1,&t1);
+            SQU_Txtbk_xz(&t0,&temp2);
+            DIV_Bianry_Long(&temp2,ptrM,&Q2,&t0);
+        }
+        else{
+            mul_core_TxtBk_xyz(&t0,&t1,&temp);
+            DIV_Bianry_Long(&temp,ptrM,&Q1,&t0);
+            SQU_Txtbk_xz(&t1,&temp2);
+            DIV_Bianry_Long(&temp2,ptrM,&Q2,&t1);
+        }
+
+    }
+    copyBINT(ptrZ,&t0);
+    refine_BINT(*ptrZ);
+    delete_bint(&t0);
+    delete_bint(&t1);
+    delete_bint(&temp);
+    delete_bint(&temp2);
+    delete_bint(&Q1);
+    delete_bint(&Q2);
+}
