@@ -80,3 +80,12 @@ EXTRACT_ALL = YES
 ```
 
 By following these instructions, Doxygen will respect the dependencies between the included files in your project.
+
+## Step 8: Manual Document
+
+```plaintext
+cd latex
+make all
+```
+
+Open refman.pdf
