@@ -204,3 +204,448 @@ bool isOne(BINT* ptrbint) {
     
     return true;
 }
+
+bool GET_BIT(BINT** pptrBint, int i_th)  {
+   if (i_th >= WORD_BITLEN)
+      return (((*pptrBint)->val[i_th / WORD_BITLEN] >> (i_th % WORD_BITLEN)) & 1);
+
+   return (((*pptrBint)->val[0] >> i_th) & 1);
+}
+
+void RANDOM_ARRARY(WORD* dst, int wordlen) {
+    u8* p = (u8*) dst;
+    int cnt = wordlen * sizeof(WORD);
+    while (cnt > 0) {
+        *p = rand() & 0xff;
+        p++;
+        cnt--;
+    }
+}
+
+void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen) {
+    init_bint(pptrBint, wordlen);
+    (*pptrBint)->sign = sign;
+    RANDOM_ARRARY((*pptrBint)->val, wordlen);
+    refine_BINT(*pptrBint);
+}
+
+bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
+    // Ensure the provided pointers are valid
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "compare_abs_bint");
+    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "compare_abs_bint");
+
+    // Extract word lengths for both numbers
+    int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
+
+    // Compare the word lengths of the two numbers
+    if(n > m) return 1;
+    if(n < m) return 0;
+    
+    // Perform a word-by-word comparison starting from the most significant word
+    matchSize(*pptrX, *pptrY);
+    for(int i = (*pptrX)->wordlen - 1; i >= 0; i--) {
+        if((*pptrX)->val[i] > (*pptrY)->val[i]) return 1;
+        if((*pptrX)->val[i] < (*pptrY)->val[i]) return 0;
+    }
+    // Numbers are equal in value
+    return 1;
+}
+
+bool compare_bint(BINT** pptrBint1, BINT** pptrBint2) {
+    // Ensure the provided pointers are valid
+    CHECK_PTR_AND_DEREF(pptrBint1, "pptrBint1", "compare_bint");
+    CHECK_PTR_AND_DEREF(pptrBint2, "pptrBint2", "compare_bint");
+
+    // If one is negative and the other positive, the positive one is greater
+    if ((*pptrBint1)->sign ^ (*pptrBint2)->sign) {
+        return (*pptrBint1)->sign < (*pptrBint2)->sign;
+    }
+
+    // If both have the same sign, compare their absolute values
+    bool abs_val = compare_abs_bint(pptrBint1, pptrBint2);
+
+    // If both are positive, the one with the greater absolute value is greater
+    // If both are negative, the one with the smaller absolute value is greater
+    return (*pptrBint1)->sign ? !abs_val : abs_val;
+}
+
+int BIT_LENGTH(BINT** pptrBint) {
+    int bit_len = (*pptrBint)->wordlen * WORD_BITLEN;
+    // for (int i=bit_len-1 ; i>=0;i--){
+    //     if (GET_BIT(pptrBint,i)==0){
+    //         bit_len = bit_len -1;
+    //     }
+    //     else break;
+    // }
+    return bit_len;
+}
+
+int BIT_LENGTH_NONZERO(BINT** pptrBint) {
+    int bit_len = (*pptrBint)->wordlen * WORD_BITLEN;
+    for (int i=bit_len-1 ; i>=0;i--){
+        if (GET_BIT(pptrBint,i)==0){
+            bit_len = bit_len -1;
+        }
+        else break;
+    }
+    return bit_len;
+}
+
+void left_shift_word(BINT** pptrBint, int shift_amount) {
+    CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "left_shift_word");
+
+    if (shift_amount < 0) {
+        fprintf(stderr, "Error: shift_amount is negative in 'left_shift_word'\n");
+        return;
+    }
+
+    int new_len = (*pptrBint)->wordlen + shift_amount;
+
+    // Reallocate memory for the new word length
+    WORD* new_val = (*pptrBint)->val;
+    new_val = (WORD*)realloc((*pptrBint)->val, new_len * sizeof(WORD));
+    if (!new_val) {
+        fprintf(stderr, "Error: Memory reallocation failed in 'left_shift_word'\n");
+        exit(1);
+    }
+    (*pptrBint)->val = new_val; // Assign the possibly new address to ptrX->val
+
+    // Shift the existing values
+    for (int i = new_len - 1; i >= shift_amount; i--) {
+        (*pptrBint)->val[i] = (*pptrBint)->val[i - shift_amount];
+    }
+
+    // Set the newly shifted-in part to zero
+    for (int i = 0; i < shift_amount; i++) {
+        (*pptrBint)->val[i] = 0x00;
+    }
+
+    (*pptrBint)->wordlen = new_len;
+
+    // // Efficiently set the shifted part to zero and update the word length
+    // memset(ptrX->val, 0x00, shift_amount * sizeof(WORD)); // Setting initial shift_amount elements to zero
+    // memmove(ptrX->val + shift_amount, ptrX->val, (new_len - shift_amount) * sizeof(WORD)); // Shifting the values to their new positions
+
+    // ptrX->wordlen = new_len;
+}
+
+void right_shift_word(BINT** pptrBint, int shift_amount) {
+    CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "right_shift_word");
+
+    if (shift_amount < 0) {
+        fprintf(stderr, "Error: shift_amount is negative in 'right_shift_word'\n");
+        return;
+    }
+
+    if (shift_amount >= (*pptrBint)->wordlen) {
+        // fprintf(stderr, "Error: shift_amount exceeds or equals word length in 'right_shift_word'\n");
+        return;
+    }
+
+    int new_len = (*pptrBint)->wordlen - shift_amount;
+
+    // Shift the existing values
+    for (int i = 0; i < new_len; i++) {
+        (*pptrBint)->val[i] = (*pptrBint)->val[i + shift_amount];
+    }
+    for (int i = new_len; i < (*pptrBint)->wordlen; i++) {
+        (*pptrBint)->val[i] = 0x00;
+    }
+
+    // Reallocate memory for the new word length
+    WORD* new_val = (*pptrBint)->val;
+    new_val = (WORD*)realloc((*pptrBint)->val, new_len * sizeof(WORD));
+    if (!new_val) {
+        fprintf(stderr, "Error: Memory reallocation failed in 'right_shift_word'\n");
+        exit(1);
+    }
+    (*pptrBint)->val = new_val; // Assign the new address to ptrX->val
+
+    (*pptrBint)->wordlen = new_len;
+
+    // Alternatively, for efficiency:
+    // memmove(ptrX->val, ptrX->val + shift_amount, new_len * sizeof(WORD)); // Shifting the values to their new positions
+    // ptrX->val = (WORD*)realloc(ptrX->val, new_len * sizeof(WORD)); // Adjust memory allocation
+    // ptrX->wordlen = new_len;
+}
+
+void left_shift_bit(BINT* ptrBint, int shift_amount) {
+    if (!ptrBint) {
+        fprintf(stderr, "Parameter is NULL in 'left_shift_bit'\n");
+        return; // Invalid parameters or no shift needed.
+    }
+    if (shift_amount <= 0) {
+        // fprintf(stderr, "No shift needed.\n");
+        return; // Invalid parameters or no shift needed.
+    }
+
+    // WORD carry = 0;
+    // int shift_word = shift_amount / WORD_BITLEN;
+    // int shift_bit = shift_amount % WORD_BITLEN;
+
+    // // Handle word-level shifts if necessary.
+    // if (shift_word > 0) {
+    //     // Allocate new space for the increased val array.
+    //     WORD* new_val = ptrBint->val;
+    //     new_val = realloc(ptrBint->val, (ptrBint->wordlen + shift_word) * sizeof(WORD));
+    //     if (!new_val) {
+    //         // Handle memory allocation error.
+    //         return;
+    //     }
+    //     ptrBint->val = new_val;
+    //     // Move words in the array.
+    //     memmove(ptrBint->val + shift_word, ptrBint->val, ptrBint->wordlen * sizeof(WORD));
+    //     // Zero-fill the lower words.
+    //     memset(ptrBint->val, 0, shift_word * sizeof(WORD));
+    //     ptrBint->wordlen += shift_word;
+    // }
+
+    // // Perform bit-level shifts.
+    // for (int i = ptrBint->wordlen - 1; i >= shift_word; --i) {
+    //     WORD next_carry = ptrBint->val[i] >> (WORD_BITLEN - shift_bit);
+    //     ptrBint->val[i] = (ptrBint->val[i] << shift_bit) | carry;
+    //     carry = next_carry;
+    // }
+
+    while (shift_amount > 0) {
+        WORD carry = 0;
+        for (int i = 0; i < ptrBint->wordlen; ++i) {
+            WORD next_carry = (ptrBint->val[i] >> (WORD_BITLEN - 1)) & 1; // Save the bit that will be shifted out.
+            ptrBint->val[i] = (ptrBint->val[i] << 1) | carry;
+            carry = next_carry;
+        }
+        if (carry) {
+            // We need to increase the size of val to accommodate the new bit.
+            WORD* new_val = ptrBint->val;
+            new_val = realloc(ptrBint->val, (ptrBint->wordlen + 1) * sizeof(WORD));
+            // ptrBint->val = new_val;
+            if (new_val) {
+                ptrBint->val = new_val;
+                ptrBint->val[ptrBint->wordlen] = 0; // Initialize the new WORD to zero before setting the carry bit.
+                ptrBint->val[ptrBint->wordlen] |= carry; // Add the carried bit in the new WORD.
+                ptrBint->wordlen++;
+                // ptrBint->val = new_val;
+                // ptrBint->val[ptrBint->wordlen] = carry; // Add the carried bit in the new WORD.
+                // ptrBint->wordlen++;
+            } else {
+                fprintf(stderr, "Memory allocation failure during left shift operation.\n");
+                return; // Stop the function upon allocation failure.
+            }
+        }
+        shift_amount--;
+    }
+
+}
+void right_shift_bit(BINT* ptrBint, int shift_amount) {
+    if (!ptrBint || shift_amount <= 0) {
+        fprintf(stderr, "Invalid parameters or no shift needed.");
+        return; // Invalid parameters or no shift needed.
+    }
+
+    while (shift_amount > 0) {
+        WORD carry = 0;
+        for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+            WORD next_carry = ptrBint->val[i] & 1; // Save the bit that will be shifted out.
+            ptrBint->val[i] = (ptrBint->val[i] >> 1) | (carry << (WORD_BITLEN - 1));
+            carry = next_carry;
+        }
+        // No need to check for size reduction of val, as we're shifting right.
+        shift_amount--;
+    }
+}
+
+void reduction(BINT** pptrBint, int pwOf2) {
+    if (pwOf2 > BIT_LENGTH(pptrBint) ) return; // Trivial Case
+
+    if (pwOf2 % WORD_BITLEN == 0 && pwOf2 < BIT_LENGTH(pptrBint)) {
+#if WORD_BITLEN == 8
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, pwOf2 / WORD_BITLEN);
+    (*pptrBint)->val = tmp;
+#elif WORD_BITLEN == 64
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN));
+    (*pptrBint)->val = tmp;
+#else
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc((*pptrBint)->val, 4 * (pwOf2 / WORD_BITLEN));
+    (*pptrBint)->val = tmp;
+#endif
+    (*pptrBint)->wordlen = pwOf2 / WORD_BITLEN;
+    return;
+    }
+
+    (*pptrBint)->val[pwOf2 / WORD_BITLEN] = (*pptrBint)->val[pwOf2 / WORD_BITLEN] && (0xFF >> (pwOf2 % WORD_BITLEN));
+
+#if WORD_BITLEN == 8
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, (pwOf2 / WORD_BITLEN) + 1);
+    (*pptrBint)->val = tmp;
+#elif WORD_BITLEN == 64
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN) + 1);
+    (*pptrBint)->val = tmp;
+#else
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc((*pptrBint)->val, 4 * (pwOf2 / WORD_BITLEN) + 1);
+    (*pptrBint)->val = tmp;
+#endif
+
+    (*pptrBint)->wordlen = (pwOf2 / WORD_BITLEN) + 1;
+    return;
+}
+
+// Function to convert a single hexadecimal digit to binary, stored backwards.
+void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits) {
+    for (int i = 0; i < bits; i++) {
+        // Store bits in reverse order.
+        binary[start_index + bits - 1 - i] = (hex_digit >> i) & 1;
+    }
+}
+
+// Function to convert a hexadecimal BINT to binary, with bits stored backwards.
+bool* HexToBinary(BINT* hex) {
+    int bits_per_word = WORD_BITLEN;
+    bool *binary = malloc(bits_per_word * hex->wordlen * sizeof(bool));
+    if (!binary) {
+        fprintf(stderr, "Memory allocation failure in HexToBinary");
+        // Handle memory allocation failure.
+        return NULL;
+    }
+
+    for (int i = 0; i < hex->wordlen; i++) {
+        // The start index is calculated to fill the array from the end.
+        HexDigitToBinary(hex->val[i], binary, (hex->wordlen - 1 - i) * bits_per_word, bits_per_word);
+    }
+
+    return binary;
+}
+
+// Helper function to print the binary array.
+void PrintBinary(bool* binary, int length) {
+    for (int i = 0; i < length; ++i) {
+        printf("%d", binary[i] ? 1 : 0);
+        if ((i + 1) % 16 == 0 && (i + 1) != length) {
+            printf(" "); // Optional: Print a space every 4 bits for readability.
+        }
+    }
+    printf("\n"); // Print a newline at the end.
+}
+
+// Function to convert a binary digit array to a single hexadecimal WORD.
+WORD BinaryToHexDigit(bool *binary, int start_index, int bits) {
+    WORD hex_digit = 0;
+    for (int i = 0; i < bits; i++) {
+        hex_digit |= (binary[start_index + i] << (bits - 1 - i));
+    }
+    return hex_digit;
+}
+
+// Function to convert binary BINT to hexadecimal.
+BINT* BinaryToHex(bool *binary, int length) {
+    int bits_per_word = WORD_BITLEN;
+    int wordlen = (length + bits_per_word - 1) / bits_per_word;
+    BINT *hex = malloc(sizeof(BINT));
+    if (!hex) {
+        // Handle memory allocation failure.
+        return NULL;
+    }
+    hex->val = malloc(wordlen * sizeof(WORD));
+    if (!hex->val) {
+        // Handle memory allocation failure.
+        free(hex);
+        return NULL;
+    }
+
+    // for (int i = 0; i < wordlen; i++) {
+    //     hex->val[i] = BinaryToHexDigit(binary, i*bits_per_word, bits_per_word);
+    // }
+    // Reverse the order in which WORDs are stored in hex->val.
+    for (int i = 0; i < wordlen; i++) {
+        int bits_to_convert = bits_per_word;
+        // Adjust for the last WORD if the binary array is not a multiple of bits_per_word.
+        if (i == wordlen - 1 && length % bits_per_word != 0) {
+            bits_to_convert = length % bits_per_word;
+        }
+        // Store WORDs in reverse order.
+        hex->val[wordlen - 1 - i] = BinaryToHexDigit(binary, i * bits_per_word, bits_to_convert);
+    }
+
+
+    hex->wordlen = wordlen;
+    // Assuming the sign is determined elsewhere.
+    hex->sign = false;
+
+    return hex;
+}
+
+void print_bint_bin(const BINT* ptrBint) {
+    if (ptrBint->sign) printf("-");
+    // printf("0b");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        for (int j = WORD_BITLEN - 1; j >= 0; --j)
+            printf("%d", (ptrBint->val[i] >> j) & 1);
+    }
+    printf("\n");
+}
+void print_bint_hex(const BINT* ptrBint) {
+    if (ptrBint->sign) { printf("-"); }
+    // printf("0x");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        printf("%x", ptrBint->val[i]);
+    }
+    printf("\n");
+}
+void print_bint_bin_split(const BINT* ptrBint) {
+    if (ptrBint->sign) printf("-");
+    printf("0b ");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+     for (int j = WORD_BITLEN - 1; j >= 0; --j) {
+            printf("%d", (ptrBint->val[i] >> j) & 1);
+        }
+        if (i > 0) {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+void print_bint_hex_split(const BINT* ptrBint) {
+    if (ptrBint->sign) { printf("-"); }
+    printf("0x ");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+        printf("%x ", ptrBint->val[i]);
+    }
+    printf("\n");
+}
+void print_bint_bin_python(BINT* ptrBint) {
+    if ((ptrBint)->sign) printf("-");
+    printf("0b");
+    for (int i = (ptrBint)->wordlen - 1; i >= 0; i--) {
+        for (int j = WORD_BITLEN - 1; j >= 0; j--)
+            printf("%d", ((ptrBint)->val[i] >> j) & 1);
+    }
+}
+void print_bint_hex_python(BINT** pptrBint) {
+    if (!pptrBint) {
+        fprintf(stderr, "Invalid BINT** structure in 'print_hex_python'.\n");
+        return;
+    }
+    if (!(*pptrBint)) {
+        fprintf(stderr, "Invalid BINT* structure in 'print_hex_python'.\n");
+        return;
+    }
+    if (!(*pptrBint)->val) {
+        fprintf(stderr, "Invalid BINT->val in 'print_hex_python'.\n");
+        return;
+    }
+    if ((*pptrBint)->sign) { printf("-"); }
+    printf("0x");
+    
+    for (int i = (*pptrBint)->wordlen - 1; i >= 0; i--) {
+        printf("%08x", (*pptrBint)->val[i]);
+        // if(i >= 3) {  // Assuming MAX_WORDLEN is the maximum size of the val array
+        //     fprintf(stderr, "Word length exceeds maximum allowed length.\n");
+        //     return;
+        // }
+    }
+}
