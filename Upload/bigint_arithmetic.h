@@ -288,10 +288,6 @@ void mul_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
  */
 void add_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
 
-Here are the professional annotations for the division, multiplication, addition, and exponentiation functions in your C header file:
-
-c
-Copy code
 /**
  * @brief Tests the binary long division algorithm using BINT objects for the dividend and divisor, and stores the quotient and remainder.
  * @author Your Name

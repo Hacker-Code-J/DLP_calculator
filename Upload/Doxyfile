@@ -45,9 +45,9 @@ PROJECT_NUMBER         = 0.0.1
 # quick idea about the purpose of the project. Keep the description short.
 
 PROJECT_BRIEF          = This library contains the definitions and implementations
- *                   for large integer arithmetic, and aims to provide a robust and efficient solution for
- *       performing arithmetic on large integers beyond the limitations of
- *       standard data types.
+                    for large integer arithmetic, and aims to provide a robust and efficient solution for
+                    performing arithmetic on large integers beyond the limitations of
+                    standard data types.
 
 # With the PROJECT_LOGO tag one can specify a logo or an icon that is included
 # in the documentation. The maximum height of the logo should not exceed 55
