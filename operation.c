@@ -83,6 +83,7 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 
     init_bint(pptrZ, (*pptrX)->wordlen + 1);
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "add_core_xyz");
+
     WORD res = 0x00;
     WORD carry = 0x00;
     int k = 0x00;
@@ -179,7 +180,12 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "sub_core_xyz");
     int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
     bool xGeqy = compare_abs_bint(pptrX, pptrY);
-    if(!xGeqy) swapBINT(pptrX,pptrY);
+    // if(!xGeqy) swapBINT(pptrX,pptrY);
+    if (!xGeqy) {
+        sub_core_xyz(pptrY, pptrX, pptrZ);
+        swapBINT(pptrX,pptrY);
+        return;
+    }  
 
     init_bint(pptrZ, MAXIMUM(n,m));
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "sub_core_xyz");
@@ -757,7 +763,7 @@ void SQU_Txtbk_xz(BINT** pptrX,BINT** pptrZ){
     BINT* C2=NULL;
     init_bint(&C2,1);
     BINT* T1=NULL;
-    init_bint(&T1,2);
+    //init_bint(&T1,2);
     BINT* T2=NULL;
     init_bint(&T2,2);
     BINT* Temp=NULL;
@@ -765,20 +771,20 @@ void SQU_Txtbk_xz(BINT** pptrX,BINT** pptrZ){
     for(int j=0; j<(*pptrX)->wordlen; j++){
         squ_core((*pptrX)->val[j],&T1);
         left_shift_word(&T1,(2*j));
-        ADD(&T1,&C1,&Temp);
+        add_core_xyz(&T1,&C1,&Temp);
         copyBINT(&C1,&Temp);
-        init_bint(&T1,2);
+        //init_bint(&T1,2);
         for ( int i = j+1; i< (*pptrX)->wordlen;i++){
             mul_xyz((*pptrX)->val[j],(*pptrX)->val[i],&T2);
             left_shift_word(&T2,(i+j));
-            ADD(&C2,&T2,&Temp2);
+            add_core_xyz(&C2,&T2,&Temp2);
             copyBINT(&C2,&Temp2);
             init_bint(&T2,2);
         }
     }
     left_shift_bit(C2,1);
-    ADD(&C1,&C2,pptrZ);
-    (*pptrZ)->sign = false;
+    add_core_xyz(&C1,&C2,pptrZ);
+    //(*pptrZ)->sign = false;
     delete_bint(&C1);
     delete_bint(&C2);
     delete_bint(&T1);
@@ -859,25 +865,6 @@ void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ,
     SET_BINT_ZERO(&ptrTmpSub);
     BINT* ptrTmpAdd = NULL;
     SET_BINT_ZERO(&ptrTmpAdd);
-
-    // bool* dividend = HexToBinary(*pptrDividend);
-    // bool* divisor = HexToBinary(*pptrDivisor);
-
-    // Initialize quotient and remainder.
-    // bool* quotient = (bool*)calloc(n, sizeof(bool));
-    // int quotient_len = n * WORD_BITLEN;
-    // bool* remainder = (bool*)calloc(m, sizeof(bool));
-    // int remainder_len = m * WORD_BITLEN;
-    // bool* tmp_remainder = (bool*)calloc(m,sizeof(bool));    
-
-    // printf("\nHexX: ");print_bint_hex_split(*pptrDividend);
-    // printf("BinX: ");
-    // bool* binary = HexToBinary(*pptrDividend);
-    // PrintBinary(binary, n*WORD_BITLEN);
-    // printf("\nHexY: ");print_bint_hex_split(*pptrDivisor);
-    // printf("BinY: ");
-    // bool* binary2 = HexToBinary(*pptrDivisor);
-    // PrintBinary(binary2, m*WORD_BITLEN);
     
     matchSize(*pptrDividend,*pptrDivisor);
     for(int i = n * WORD_BITLEN - 1; i >= 0 ; i--) {
