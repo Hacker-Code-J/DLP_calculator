@@ -1,0 +1,1153 @@
+\hypertarget{bigint__utils_8h}{}\doxysection{bigint\+\_\+utils.\+h File Reference}
+\label{bigint__utils_8h}\index{bigint\_utils.h@{bigint\_utils.h}}
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for bigint\+\_\+utils.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{bigint__utils_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=286pt]{bigint__utils_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{bigint__utils_8h_a6721238d540365982b6eb0476aecf595}{BIGINT\+\_\+\+UTILS\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{bigint__utils_8h_a62e96c20b8fcec2f07c8f1c69c855f84}{exit\+\_\+on\+\_\+null\+\_\+error}} (const void $\ast$ptr, const char $\ast$ptr\+\_\+name, const char $\ast$function\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Exits program if pointer is NULL, indicating an allocation error. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a35baea2c83f4fe0611409d64e2f2fcb3}{delete\+\_\+bint}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Frees the memory allocated for a \mbox{\hyperlink{structBINT}{BINT}} object and sets the pointer to NULL. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a02229f63e98d71b8bb7fab59fa3e1b75}{init\+\_\+bint}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, int wordlen)
+\begin{DoxyCompactList}\small\item\em Initializes a \mbox{\hyperlink{structBINT}{BINT}} object with the specified word length. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_aa7c103a787bf9dfefa3c12a97f30f7a7}{SET\+\_\+\+BINT\+\_\+\+ZERO}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Sets the value of a \mbox{\hyperlink{structBINT}{BINT}} object to zero. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_ac8458d3c774873474e77811d60d13aff}{SET\+\_\+\+BINT\+\_\+\+ONE}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Sets the value of a \mbox{\hyperlink{structBINT}{BINT}} object to one (1). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_ab8ea8d5fbc88b216d285fc60e9c5e4bf}{copy\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint\+\_\+dst, const \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint\+\_\+src)
+\begin{DoxyCompactList}\small\item\em Copies the value of one \mbox{\hyperlink{structBINT}{BINT}} object to another. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a5328bab479e0a3136b42c2d83fe168df}{swap\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint1, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint2)
+\begin{DoxyCompactList}\small\item\em Swaps the values of two \mbox{\hyperlink{structBINT}{BINT}} objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_aa94a60eb56dfc6af9c67201eb53338e9}{make\+Even}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Modifies a \mbox{\hyperlink{structBINT}{BINT}} object to be an even number by clearing the least significant bit. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a27d8a0c2f923643bf593085308a57c1c}{match\+Size}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint1, \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint2)
+\begin{DoxyCompactList}\small\item\em Ensures that two \mbox{\hyperlink{structBINT}{BINT}} objects have the same size by padding the smaller one with zeros. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_abbb822ab2baf5679f8704102fc27f6ec}{reset\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Resets a \mbox{\hyperlink{structBINT}{BINT}} object to its default state with a value of zero and minimal size. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a8bcf335c3f736a3ce35f682dcba590c3}{refine\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Refines the size of a \mbox{\hyperlink{structBINT}{BINT}} object to remove any leading zero words. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bigint__utils_8h_aae2c259c98d78bc0b280c21754dc6270}{is\+Zero}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Checks if a \mbox{\hyperlink{structBINT}{BINT}} object represents the zero value. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bigint__utils_8h_ad15bb939613b000b14af3265092f2479}{is\+One}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Checks if a \mbox{\hyperlink{structBINT}{BINT}} object represents the value one (1). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bigint__utils_8h_a563ba10630a1cb964e5db2db3d0e70ed}{GET\+\_\+\+BIT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, int i\+\_\+th)
+\begin{DoxyCompactList}\small\item\em Retrieves the value of a specific bit in a \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a1b8ad05f4f6fab468cab5622a2fd5d83}{RANDOM\+\_\+\+ARRARY}} (\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$dst, int wordlen)
+\begin{DoxyCompactList}\small\item\em Fills an array with random WORD values. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_ac8fe5ea6efaa840cccb6ca39fa99e4d7}{RANDOM\+\_\+\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, bool sign, int wordlen)
+\begin{DoxyCompactList}\small\item\em Initializes a \mbox{\hyperlink{structBINT}{BINT}} object with random values. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bigint__utils_8h_aed1c4cacf415873886989c9f3c04413d}{compare\+\_\+bint}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$pptr\+Bint1, \mbox{\hyperlink{structBINT}{BINT}} $\ast$pptr\+Bint2)
+\begin{DoxyCompactList}\small\item\em Compares two \mbox{\hyperlink{structBINT}{BINT}} objects for equality. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bigint__utils_8h_a0c8f4e10d1e5a2d37a16a4ce96a5ab19}{compare\+\_\+abs\+\_\+bint}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$pptr\+Bint1, \mbox{\hyperlink{structBINT}{BINT}} $\ast$pptr\+Bint2)
+\begin{DoxyCompactList}\small\item\em Compares the absolute values of two \mbox{\hyperlink{structBINT}{BINT}} objects for equality. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{bigint__utils_8h_a088ddfdb688adb2aabaf583ba8f8571c}{BIT\+\_\+\+LENGTH}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$pptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Calculates the bit length of a \mbox{\hyperlink{structBINT}{BINT}} object, including leading zeros. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{bigint__utils_8h_a546c37e674c09cd4898c3a7f1b5348ad}{BIT\+\_\+\+LENGTH\+\_\+\+NONZERO}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$pptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Calculates the bit length of a \mbox{\hyperlink{structBINT}{BINT}} object, excluding leading zeros. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_af939700f2fa7fce873236162bdfcf8e4}{left\+\_\+shift\+\_\+word}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, int \mbox{\hyperlink{bigint__utils_8h_a8e648b7fabb4ca1c371daece7770aae6}{shift\+\_\+amount}})
+\begin{DoxyCompactList}\small\item\em Performs a left shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of words. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a978c6f2ff8a0b56646562ec74b0e7d36}{right\+\_\+shift\+\_\+word}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, int \mbox{\hyperlink{bigint__utils_8h_a8e648b7fabb4ca1c371daece7770aae6}{shift\+\_\+amount}})
+\begin{DoxyCompactList}\small\item\em Performs a right shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of words. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a8422d630dc33bee2992219471bca053b}{left\+\_\+shift\+\_\+bit}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, int \mbox{\hyperlink{bigint__utils_8h_a8e648b7fabb4ca1c371daece7770aae6}{shift\+\_\+amount}})
+\begin{DoxyCompactList}\small\item\em Performs a left shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of bits. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_ab905146dd07865eeebab59af86153108}{left\+\_\+right\+\_\+bit}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, int \mbox{\hyperlink{bigint__utils_8h_a8e648b7fabb4ca1c371daece7770aae6}{shift\+\_\+amount}})
+\begin{DoxyCompactList}\small\item\em Performs a right shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of bits (possibly a typo for right\+\_\+shift\+\_\+bit). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a6941c160c17caf811e2d37468d15d64d}{reduction}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, int pw\+Of2)
+\begin{DoxyCompactList}\small\item\em Reduces a \mbox{\hyperlink{structBINT}{BINT}} object modulo a power of 2 specified by pw\+Of2. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} \mbox{\hyperlink{bigint__utils_8h_a33d1e0072eb955bc6c3a176e32ab1163}{hex\+Substring\+To\+Word}} (const char $\ast$str, int start, int length)
+\begin{DoxyCompactList}\small\item\em Converts a hexadecimal substring to a WORD value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a42961872dc35ee8e0f4d1e7159168bf7}{str\+To\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint, const char $\ast$hex\+String)
+\begin{DoxyCompactList}\small\item\em Converts a hexadecimal string to a \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a871757d340b6d79a55039b9a41dd4adc}{Hex\+Digit\+To\+Binary}} (\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} hex\+\_\+digit, bool $\ast$binary, int start\+\_\+index, int bits)
+\begin{DoxyCompactList}\small\item\em Converts a hexadecimal digit to a binary representation and stores it in an array. \end{DoxyCompactList}\item 
+bool $\ast$ \mbox{\hyperlink{bigint__utils_8h_a0e5b58745e0d6dc433c058c1138cbc02}{Hex\+To\+Binary}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$hex)
+\begin{DoxyCompactList}\small\item\em Converts a \mbox{\hyperlink{structBINT}{BINT}} object\textquotesingle{}s hexadecimal value to a binary array representation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a6d1d1b51757f73b5b3549081eea362ac}{Print\+Binary}} (bool $\ast$binary, int length)
+\begin{DoxyCompactList}\small\item\em Prints the binary representation of an array to standard output. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} \mbox{\hyperlink{bigint__utils_8h_a47811823e2fb2a51d55cb588d9b1d65d}{Binary\+To\+Hex\+Digit}} (bool $\ast$binary, int start\+\_\+index, int bits)
+\begin{DoxyCompactList}\small\item\em Converts a binary array to a hexadecimal digit starting from a specified index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structBINT}{BINT}} $\ast$ \mbox{\hyperlink{bigint__utils_8h_ae1060724d2bac228563c516830c40f2b}{Binary\+To\+Hex}} (bool $\ast$binary, int length)
+\begin{DoxyCompactList}\small\item\em Converts a binary array to a \mbox{\hyperlink{structBINT}{BINT}} object\textquotesingle{}s hexadecimal representation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a0acf0be0bb2d0d05d4673027e002a4d3}{print\+\_\+bint\+\_\+bin}} (const \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Prints the binary representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a43762a4e017935462908960241ee0441}{print\+\_\+bint\+\_\+hex}} (const \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Prints the hexadecimal representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a53c3d2d711654cf2e6bd9c2a9c5d61bc}{print\+\_\+bint\+\_\+bin\+\_\+split}} (const \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Prints the binary representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output with a split for readability. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_ac1846a7fa799b3e6d1928d14bfff0f17}{print\+\_\+bint\+\_\+hex\+\_\+split}} (const \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Prints the hexadecimal representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output with a split for readability. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_a70efd7798895d2ad8bd1d781ff31210d}{print\+\_\+bint\+\_\+bin\+\_\+py}} (const \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Prints the binary representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output in a format compatible with Python lists. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__utils_8h_ae10ccb3bd32b9a935b6557ac95d6fecf}{print\+\_\+bint\+\_\+hex\+\_\+py}} (const \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptr\+Bint)
+\begin{DoxyCompactList}\small\item\em Prints the hexadecimal representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output in a format compatible with Python lists. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Continuing with the professional annotations for the remaining functions in your C header \mbox{\hyperlink{bigint__utils_8h_a33c54bae6482b94202c765fc73f2cae6}{file}}
+\item 
+Continuing with the professional annotations for the remaining functions in your C header int \mbox{\hyperlink{bigint__utils_8h_a8e648b7fabb4ca1c371daece7770aae6}{shift\+\_\+amount}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{bigint__utils_8h_a6721238d540365982b6eb0476aecf595}\label{bigint__utils_8h_a6721238d540365982b6eb0476aecf595}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!BIGINT\_UTILS\_H@{BIGINT\_UTILS\_H}}
+\index{BIGINT\_UTILS\_H@{BIGINT\_UTILS\_H}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{BIGINT\_UTILS\_H}{BIGINT\_UTILS\_H}}
+{\footnotesize\ttfamily \#define BIGINT\+\_\+\+UTILS\+\_\+H}
+
+
+
+Definition at line 6 of file bigint\+\_\+utils.\+h.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bigint__utils_8h_ae1060724d2bac228563c516830c40f2b}\label{bigint__utils_8h_ae1060724d2bac228563c516830c40f2b}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!BinaryToHex@{BinaryToHex}}
+\index{BinaryToHex@{BinaryToHex}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{BinaryToHex()}{BinaryToHex()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structBINT}{BINT}}$\ast$ Binary\+To\+Hex (\begin{DoxyParamCaption}\item[{bool $\ast$}]{binary,  }\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Converts a binary array to a \mbox{\hyperlink{structBINT}{BINT}} object\textquotesingle{}s hexadecimal representation. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em binary} & A pointer to the binary array to convert. \\
+\hline
+{\em length} & The length of the binary array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object representing the binary array\textquotesingle{}s value. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+The caller is responsible for managing the memory of the returned \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a47811823e2fb2a51d55cb588d9b1d65d}\label{bigint__utils_8h_a47811823e2fb2a51d55cb588d9b1d65d}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!BinaryToHexDigit@{BinaryToHexDigit}}
+\index{BinaryToHexDigit@{BinaryToHexDigit}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{BinaryToHexDigit()}{BinaryToHexDigit()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} Binary\+To\+Hex\+Digit (\begin{DoxyParamCaption}\item[{bool $\ast$}]{binary,  }\item[{int}]{start\+\_\+index,  }\item[{int}]{bits }\end{DoxyParamCaption})}
+
+
+
+Converts a binary array to a hexadecimal digit starting from a specified index. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em binary} & A pointer to the binary array. \\
+\hline
+{\em start\+\_\+index} & The starting index in the array where the binary digit begins. \\
+\hline
+{\em bits} & The number of bits to use for the conversion. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The WORD value of the hexadecimal digit. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Assumes the binary array has at least \textquotesingle{}bits\textquotesingle{} elements starting from \textquotesingle{}start\+\_\+index\textquotesingle{}. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a088ddfdb688adb2aabaf583ba8f8571c}\label{bigint__utils_8h_a088ddfdb688adb2aabaf583ba8f8571c}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!BIT\_LENGTH@{BIT\_LENGTH}}
+\index{BIT\_LENGTH@{BIT\_LENGTH}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{BIT\_LENGTH()}{BIT\_LENGTH()}}
+{\footnotesize\ttfamily int BIT\+\_\+\+LENGTH (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{pptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Calculates the bit length of a \mbox{\hyperlink{structBINT}{BINT}} object, including leading zeros. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The bit length of the \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function includes leading zeros in the bit length calculation. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a546c37e674c09cd4898c3a7f1b5348ad}\label{bigint__utils_8h_a546c37e674c09cd4898c3a7f1b5348ad}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!BIT\_LENGTH\_NONZERO@{BIT\_LENGTH\_NONZERO}}
+\index{BIT\_LENGTH\_NONZERO@{BIT\_LENGTH\_NONZERO}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{BIT\_LENGTH\_NONZERO()}{BIT\_LENGTH\_NONZERO()}}
+{\footnotesize\ttfamily int BIT\+\_\+\+LENGTH\+\_\+\+NONZERO (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{pptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Calculates the bit length of a \mbox{\hyperlink{structBINT}{BINT}} object, excluding leading zeros. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The bit length of the \mbox{\hyperlink{structBINT}{BINT}} object, excluding leading zeros. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Useful for determining the actual number of significant bits. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a0c8f4e10d1e5a2d37a16a4ce96a5ab19}\label{bigint__utils_8h_a0c8f4e10d1e5a2d37a16a4ce96a5ab19}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!compare\_abs\_bint@{compare\_abs\_bint}}
+\index{compare\_abs\_bint@{compare\_abs\_bint}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{compare\_abs\_bint()}{compare\_abs\_bint()}}
+{\footnotesize\ttfamily bool compare\+\_\+abs\+\_\+bint (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{pptr\+Bint1,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{pptr\+Bint2 }\end{DoxyParamCaption})}
+
+
+
+Compares the absolute values of two \mbox{\hyperlink{structBINT}{BINT}} objects for equality. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint1} & A pointer to the first \mbox{\hyperlink{structBINT}{BINT}} object for comparison. \\
+\hline
+{\em pptr\+Bint2} & A pointer to the second \mbox{\hyperlink{structBINT}{BINT}} object for comparison. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the absolute values of the \mbox{\hyperlink{structBINT}{BINT}} objects are equal; otherwise, false. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function ignores the signs of the \mbox{\hyperlink{structBINT}{BINT}} objects. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_aed1c4cacf415873886989c9f3c04413d}\label{bigint__utils_8h_aed1c4cacf415873886989c9f3c04413d}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!compare\_bint@{compare\_bint}}
+\index{compare\_bint@{compare\_bint}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{compare\_bint()}{compare\_bint()}}
+{\footnotesize\ttfamily bool compare\+\_\+bint (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{pptr\+Bint1,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{pptr\+Bint2 }\end{DoxyParamCaption})}
+
+
+
+Compares two \mbox{\hyperlink{structBINT}{BINT}} objects for equality. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint1} & A pointer to the first \mbox{\hyperlink{structBINT}{BINT}} object for comparison. \\
+\hline
+{\em pptr\+Bint2} & A pointer to the second \mbox{\hyperlink{structBINT}{BINT}} object for comparison. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the \mbox{\hyperlink{structBINT}{BINT}} objects are equal; otherwise, false. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function compares both value and sign. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_ab8ea8d5fbc88b216d285fc60e9c5e4bf}\label{bigint__utils_8h_ab8ea8d5fbc88b216d285fc60e9c5e4bf}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!copyBINT@{copyBINT}}
+\index{copyBINT@{copyBINT}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{copyBINT()}{copyBINT()}}
+{\footnotesize\ttfamily void copy\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint\+\_\+dst,  }\item[{const \mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint\+\_\+src }\end{DoxyParamCaption})}
+
+
+
+Copies the value of one \mbox{\hyperlink{structBINT}{BINT}} object to another. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint\+\_\+dst} & A pointer to the point of the destination \mbox{\hyperlink{structBINT}{BINT}} object pointer. \\
+\hline
+{\em ptr\+Bint\+\_\+src} & A pointer to the point of the source \mbox{\hyperlink{structBINT}{BINT}} object to copy from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Assumes that both \mbox{\hyperlink{structBINT}{BINT}} objects have been properly initialized. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a35baea2c83f4fe0611409d64e2f2fcb3}\label{bigint__utils_8h_a35baea2c83f4fe0611409d64e2f2fcb3}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!delete\_bint@{delete\_bint}}
+\index{delete\_bint@{delete\_bint}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{delete\_bint()}{delete\_bint()}}
+{\footnotesize\ttfamily void delete\+\_\+bint (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Frees the memory allocated for a \mbox{\hyperlink{structBINT}{BINT}} object and sets the pointer to NULL. 
+
+\begin{DoxyAuthor}{Author}
+Ji Yong-\/\+Hyeon 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2023-\/11-\/26 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be deleted. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function should be called to avoid memory leaks. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a62e96c20b8fcec2f07c8f1c69c855f84}\label{bigint__utils_8h_a62e96c20b8fcec2f07c8f1c69c855f84}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!exit\_on\_null\_error@{exit\_on\_null\_error}}
+\index{exit\_on\_null\_error@{exit\_on\_null\_error}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{exit\_on\_null\_error()}{exit\_on\_null\_error()}}
+{\footnotesize\ttfamily void exit\+\_\+on\+\_\+null\+\_\+error (\begin{DoxyParamCaption}\item[{const void $\ast$}]{ptr,  }\item[{const char $\ast$}]{ptr\+\_\+name,  }\item[{const char $\ast$}]{function\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Exits program if pointer is NULL, indicating an allocation error. 
+
+\begin{DoxyAuthor}{Author}
+Ji Yong-\/\+Hyeon 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2023-\/11-\/26 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr} & -\/ The pointer to check. \\
+\hline
+{\em ptr\+\_\+name} & -\/ The name of the pointer variable. \\
+\hline
+{\em function\+\_\+name} & -\/ The name of the function calling this check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function will terminate the program on a null pointer error. 
+\end{DoxyNote}
+
+
+Definition at line 9 of file bigint\+\_\+utils.\+c.
+
+\mbox{\Hypertarget{bigint__utils_8h_a563ba10630a1cb964e5db2db3d0e70ed}\label{bigint__utils_8h_a563ba10630a1cb964e5db2db3d0e70ed}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!GET\_BIT@{GET\_BIT}}
+\index{GET\_BIT@{GET\_BIT}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{GET\_BIT()}{GET\_BIT()}}
+{\footnotesize\ttfamily bool GET\+\_\+\+BIT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{int}]{i\+\_\+th }\end{DoxyParamCaption})}
+
+
+
+Retrieves the value of a specific bit in a \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object. \\
+\hline
+{\em i\+\_\+th} & The index of the bit to retrieve. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the bit is set; otherwise, false. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Indexing starts at 0 and refers to the least significant bit. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a871757d340b6d79a55039b9a41dd4adc}\label{bigint__utils_8h_a871757d340b6d79a55039b9a41dd4adc}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!HexDigitToBinary@{HexDigitToBinary}}
+\index{HexDigitToBinary@{HexDigitToBinary}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{HexDigitToBinary()}{HexDigitToBinary()}}
+{\footnotesize\ttfamily void Hex\+Digit\+To\+Binary (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{hex\+\_\+digit,  }\item[{bool $\ast$}]{binary,  }\item[{int}]{start\+\_\+index,  }\item[{int}]{bits }\end{DoxyParamCaption})}
+
+
+
+Converts a hexadecimal digit to a binary representation and stores it in an array. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em hex\+\_\+digit} & The hexadecimal digit to convert. \\
+\hline
+{\em binary} & A pointer to the array where the binary representation will be stored. \\
+\hline
+{\em start\+\_\+index} & The starting index in the array where the binary representation begins. \\
+\hline
+{\em bits} & The number of bits to represent the hexadecimal digit. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Assumes the binary array has enough space to store the representation. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a33d1e0072eb955bc6c3a176e32ab1163}\label{bigint__utils_8h_a33d1e0072eb955bc6c3a176e32ab1163}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!hexSubstringToWord@{hexSubstringToWord}}
+\index{hexSubstringToWord@{hexSubstringToWord}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{hexSubstringToWord()}{hexSubstringToWord()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} hex\+Substring\+To\+Word (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{int}]{start,  }\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Converts a hexadecimal substring to a WORD value. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em str} & The string containing the hexadecimal characters. \\
+\hline
+{\em start} & The starting index of the substring. \\
+\hline
+{\em length} & The length of the substring. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The WORD value of the hexadecimal substring. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+If the substring is longer than what a WORD can represent, the behavior is undefined. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a0e5b58745e0d6dc433c058c1138cbc02}\label{bigint__utils_8h_a0e5b58745e0d6dc433c058c1138cbc02}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!HexToBinary@{HexToBinary}}
+\index{HexToBinary@{HexToBinary}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{HexToBinary()}{HexToBinary()}}
+{\footnotesize\ttfamily bool$\ast$ Hex\+To\+Binary (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{hex }\end{DoxyParamCaption})}
+
+
+
+Converts a \mbox{\hyperlink{structBINT}{BINT}} object\textquotesingle{}s hexadecimal value to a binary array representation. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em hex} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the binary array representing the \mbox{\hyperlink{structBINT}{BINT}} object\textquotesingle{}s value. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+The caller is responsible for freeing the memory allocated for the binary array. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a02229f63e98d71b8bb7fab59fa3e1b75}\label{bigint__utils_8h_a02229f63e98d71b8bb7fab59fa3e1b75}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!init\_bint@{init\_bint}}
+\index{init\_bint@{init\_bint}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{init\_bint()}{init\_bint()}}
+{\footnotesize\ttfamily void init\+\_\+bint (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{int}]{wordlen }\end{DoxyParamCaption})}
+
+
+
+Initializes a \mbox{\hyperlink{structBINT}{BINT}} object with the specified word length. 
+
+\begin{DoxyAuthor}{Author}
+Ji Yong-\/\+Hyeon 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2023-\/11-\/26 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be initialized. \\
+\hline
+{\em wordlen} & The word length for the \mbox{\hyperlink{structBINT}{BINT}} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The \mbox{\hyperlink{structBINT}{BINT}} object\textquotesingle{}s memory will be dynamically allocated. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_ad15bb939613b000b14af3265092f2479}\label{bigint__utils_8h_ad15bb939613b000b14af3265092f2479}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!isOne@{isOne}}
+\index{isOne@{isOne}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{isOne()}{isOne()}}
+{\footnotesize\ttfamily bool is\+One (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Checks if a \mbox{\hyperlink{structBINT}{BINT}} object represents the value one (1). 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the \mbox{\hyperlink{structBINT}{BINT}} object is one; otherwise, false. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is a quick check and does not modify the \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_aae2c259c98d78bc0b280c21754dc6270}\label{bigint__utils_8h_aae2c259c98d78bc0b280c21754dc6270}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!isZero@{isZero}}
+\index{isZero@{isZero}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{isZero()}{isZero()}}
+{\footnotesize\ttfamily bool is\+Zero (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Checks if a \mbox{\hyperlink{structBINT}{BINT}} object represents the zero value. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the \mbox{\hyperlink{structBINT}{BINT}} object is zero; otherwise, false. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is a quick check and does not modify the \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_ab905146dd07865eeebab59af86153108}\label{bigint__utils_8h_ab905146dd07865eeebab59af86153108}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!left\_right\_bit@{left\_right\_bit}}
+\index{left\_right\_bit@{left\_right\_bit}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{left\_right\_bit()}{left\_right\_bit()}}
+{\footnotesize\ttfamily void left\+\_\+right\+\_\+bit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{int}]{shift\+\_\+amount }\end{DoxyParamCaption})}
+
+
+
+Performs a right shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of bits (possibly a typo for right\+\_\+shift\+\_\+bit). 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer to be shifted. \\
+\hline
+{\em shift\+\_\+amount} & The number of bits to shift the \mbox{\hyperlink{structBINT}{BINT}} object by. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This operation can decrease the size of the \mbox{\hyperlink{structBINT}{BINT}} object if the shift goes beyond the current least significant bit. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a8422d630dc33bee2992219471bca053b}\label{bigint__utils_8h_a8422d630dc33bee2992219471bca053b}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!left\_shift\_bit@{left\_shift\_bit}}
+\index{left\_shift\_bit@{left\_shift\_bit}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{left\_shift\_bit()}{left\_shift\_bit()}}
+{\footnotesize\ttfamily void left\+\_\+shift\+\_\+bit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{int}]{shift\+\_\+amount }\end{DoxyParamCaption})}
+
+
+
+Performs a left shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of bits. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer to be shifted. \\
+\hline
+{\em shift\+\_\+amount} & The number of bits to shift the \mbox{\hyperlink{structBINT}{BINT}} object by. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This operation can increase the size of the \mbox{\hyperlink{structBINT}{BINT}} object if the shift goes beyond the current most significant bit. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_af939700f2fa7fce873236162bdfcf8e4}\label{bigint__utils_8h_af939700f2fa7fce873236162bdfcf8e4}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!left\_shift\_word@{left\_shift\_word}}
+\index{left\_shift\_word@{left\_shift\_word}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{left\_shift\_word()}{left\_shift\_word()}}
+{\footnotesize\ttfamily void left\+\_\+shift\+\_\+word (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{int}]{shift\+\_\+amount }\end{DoxyParamCaption})}
+
+
+
+Performs a left shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of words. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer to be shifted. \\
+\hline
+{\em shift\+\_\+amount} & The number of words to shift the \mbox{\hyperlink{structBINT}{BINT}} object by. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This operation is equivalent to multiplying the \mbox{\hyperlink{structBINT}{BINT}} object by 2$^\wedge$(WORD\+\_\+\+SIZE $\ast$ shift\+\_\+amount). 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_aa94a60eb56dfc6af9c67201eb53338e9}\label{bigint__utils_8h_aa94a60eb56dfc6af9c67201eb53338e9}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!makeEven@{makeEven}}
+\index{makeEven@{makeEven}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{makeEven()}{makeEven()}}
+{\footnotesize\ttfamily void make\+Even (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Modifies a \mbox{\hyperlink{structBINT}{BINT}} object to be an even number by clearing the least significant bit. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to be modified. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+If the \mbox{\hyperlink{structBINT}{BINT}} object is already even, the function will have no effect. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a27d8a0c2f923643bf593085308a57c1c}\label{bigint__utils_8h_a27d8a0c2f923643bf593085308a57c1c}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!matchSize@{matchSize}}
+\index{matchSize@{matchSize}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{matchSize()}{matchSize()}}
+{\footnotesize\ttfamily void match\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint1,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint2 }\end{DoxyParamCaption})}
+
+
+
+Ensures that two \mbox{\hyperlink{structBINT}{BINT}} objects have the same size by padding the smaller one with zeros. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint1} & A pointer to the first \mbox{\hyperlink{structBINT}{BINT}} object. \\
+\hline
+{\em ptr\+Bint2} & A pointer to the second \mbox{\hyperlink{structBINT}{BINT}} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This can be important for operations that require \mbox{\hyperlink{structBINT}{BINT}} objects of the same size. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a0acf0be0bb2d0d05d4673027e002a4d3}\label{bigint__utils_8h_a0acf0be0bb2d0d05d4673027e002a4d3}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!print\_bint\_bin@{print\_bint\_bin}}
+\index{print\_bint\_bin@{print\_bint\_bin}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{print\_bint\_bin()}{print\_bint\_bin()}}
+{\footnotesize\ttfamily void print\+\_\+bint\+\_\+bin (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Prints the binary representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to print. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Useful for debugging or displaying the binary form of a \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a70efd7798895d2ad8bd1d781ff31210d}\label{bigint__utils_8h_a70efd7798895d2ad8bd1d781ff31210d}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!print\_bint\_bin\_py@{print\_bint\_bin\_py}}
+\index{print\_bint\_bin\_py@{print\_bint\_bin\_py}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{print\_bint\_bin\_py()}{print\_bint\_bin\_py()}}
+{\footnotesize\ttfamily void print\+\_\+bint\+\_\+bin\+\_\+py (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Prints the binary representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output in a format compatible with Python lists. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to print. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The output format is designed to be directly usable in Python code. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a53c3d2d711654cf2e6bd9c2a9c5d61bc}\label{bigint__utils_8h_a53c3d2d711654cf2e6bd9c2a9c5d61bc}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!print\_bint\_bin\_split@{print\_bint\_bin\_split}}
+\index{print\_bint\_bin\_split@{print\_bint\_bin\_split}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{print\_bint\_bin\_split()}{print\_bint\_bin\_split()}}
+{\footnotesize\ttfamily void print\+\_\+bint\+\_\+bin\+\_\+split (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Prints the binary representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output with a split for readability. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to print. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The binary output is split into sections for easier reading. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a43762a4e017935462908960241ee0441}\label{bigint__utils_8h_a43762a4e017935462908960241ee0441}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!print\_bint\_hex@{print\_bint\_hex}}
+\index{print\_bint\_hex@{print\_bint\_hex}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{print\_bint\_hex()}{print\_bint\_hex()}}
+{\footnotesize\ttfamily void print\+\_\+bint\+\_\+hex (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Prints the hexadecimal representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to print. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Useful for debugging or displaying the hexadecimal form of a \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_ae10ccb3bd32b9a935b6557ac95d6fecf}\label{bigint__utils_8h_ae10ccb3bd32b9a935b6557ac95d6fecf}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!print\_bint\_hex\_py@{print\_bint\_hex\_py}}
+\index{print\_bint\_hex\_py@{print\_bint\_hex\_py}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{print\_bint\_hex\_py()}{print\_bint\_hex\_py()}}
+{\footnotesize\ttfamily void print\+\_\+bint\+\_\+hex\+\_\+py (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Prints the hexadecimal representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output in a format compatible with Python lists. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to print. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The output format is designed to be directly usable in Python code. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_ac1846a7fa799b3e6d1928d14bfff0f17}\label{bigint__utils_8h_ac1846a7fa799b3e6d1928d14bfff0f17}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!print\_bint\_hex\_split@{print\_bint\_hex\_split}}
+\index{print\_bint\_hex\_split@{print\_bint\_hex\_split}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{print\_bint\_hex\_split()}{print\_bint\_hex\_split()}}
+{\footnotesize\ttfamily void print\+\_\+bint\+\_\+hex\+\_\+split (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Prints the hexadecimal representation of a \mbox{\hyperlink{structBINT}{BINT}} object to standard output with a split for readability. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to print. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The hexadecimal output is split into sections for easier reading. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a6d1d1b51757f73b5b3549081eea362ac}\label{bigint__utils_8h_a6d1d1b51757f73b5b3549081eea362ac}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!PrintBinary@{PrintBinary}}
+\index{PrintBinary@{PrintBinary}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{PrintBinary()}{PrintBinary()}}
+{\footnotesize\ttfamily void Print\+Binary (\begin{DoxyParamCaption}\item[{bool $\ast$}]{binary,  }\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Prints the binary representation of an array to standard output. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em binary} & A pointer to the binary array to print. \\
+\hline
+{\em length} & The length of the binary array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Useful for debugging or displaying the binary form of data. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a1b8ad05f4f6fab468cab5622a2fd5d83}\label{bigint__utils_8h_a1b8ad05f4f6fab468cab5622a2fd5d83}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!RANDOM\_ARRARY@{RANDOM\_ARRARY}}
+\index{RANDOM\_ARRARY@{RANDOM\_ARRARY}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{RANDOM\_ARRARY()}{RANDOM\_ARRARY()}}
+{\footnotesize\ttfamily void RANDOM\+\_\+\+ARRARY (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$}]{dst,  }\item[{int}]{wordlen }\end{DoxyParamCaption})}
+
+
+
+Fills an array with random WORD values. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & A pointer to the WORD array to fill. \\
+\hline
+{\em wordlen} & The length of the WORD array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The randomness depends on the underlying random number generator. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_ac8fe5ea6efaa840cccb6ca39fa99e4d7}\label{bigint__utils_8h_ac8fe5ea6efaa840cccb6ca39fa99e4d7}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!RANDOM\_BINT@{RANDOM\_BINT}}
+\index{RANDOM\_BINT@{RANDOM\_BINT}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{RANDOM\_BINT()}{RANDOM\_BINT()}}
+{\footnotesize\ttfamily void RANDOM\+\_\+\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{bool}]{sign,  }\item[{int}]{wordlen }\end{DoxyParamCaption})}
+
+
+
+Initializes a \mbox{\hyperlink{structBINT}{BINT}} object with random values. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be initialized. \\
+\hline
+{\em sign} & The sign of the \mbox{\hyperlink{structBINT}{BINT}} object, where true indicates a negative number. \\
+\hline
+{\em wordlen} & The word length for the \mbox{\hyperlink{structBINT}{BINT}} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is useful for generating random \mbox{\hyperlink{structBINT}{BINT}} objects for testing. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a6941c160c17caf811e2d37468d15d64d}\label{bigint__utils_8h_a6941c160c17caf811e2d37468d15d64d}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!reduction@{reduction}}
+\index{reduction@{reduction}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{reduction()}{reduction()}}
+{\footnotesize\ttfamily void reduction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{int}]{pw\+Of2 }\end{DoxyParamCaption})}
+
+
+
+Reduces a \mbox{\hyperlink{structBINT}{BINT}} object modulo a power of 2 specified by pw\+Of2. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer to be reduced. \\
+\hline
+{\em pw\+Of2} & The power of 2 to use as the modulus for the reduction. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The reduction is done in-\/place and affects the original \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a8bcf335c3f736a3ce35f682dcba590c3}\label{bigint__utils_8h_a8bcf335c3f736a3ce35f682dcba590c3}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!refineBINT@{refineBINT}}
+\index{refineBINT@{refineBINT}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{refineBINT()}{refineBINT()}}
+{\footnotesize\ttfamily void refine\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Refines the size of a \mbox{\hyperlink{structBINT}{BINT}} object to remove any leading zero words. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to refine. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function optimizes memory usage by a \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_abbb822ab2baf5679f8704102fc27f6ec}\label{bigint__utils_8h_abbb822ab2baf5679f8704102fc27f6ec}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!resetBINT@{resetBINT}}
+\index{resetBINT@{resetBINT}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{resetBINT()}{resetBINT()}}
+{\footnotesize\ttfamily void reset\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Resets a \mbox{\hyperlink{structBINT}{BINT}} object to its default state with a value of zero and minimal size. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object to reset. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function can be used to reuse a \mbox{\hyperlink{structBINT}{BINT}} object without reallocating memory. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a978c6f2ff8a0b56646562ec74b0e7d36}\label{bigint__utils_8h_a978c6f2ff8a0b56646562ec74b0e7d36}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!right\_shift\_word@{right\_shift\_word}}
+\index{right\_shift\_word@{right\_shift\_word}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{right\_shift\_word()}{right\_shift\_word()}}
+{\footnotesize\ttfamily void right\+\_\+shift\+\_\+word (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{int}]{shift\+\_\+amount }\end{DoxyParamCaption})}
+
+
+
+Performs a right shift operation on a \mbox{\hyperlink{structBINT}{BINT}} object by a specified number of words. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer to be shifted. \\
+\hline
+{\em shift\+\_\+amount} & The number of words to shift the \mbox{\hyperlink{structBINT}{BINT}} object by. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This operation is equivalent to dividing the \mbox{\hyperlink{structBINT}{BINT}} object by 2$^\wedge$(WORD\+\_\+\+SIZE $\ast$ shift\+\_\+amount), without a remainder. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_ac8458d3c774873474e77811d60d13aff}\label{bigint__utils_8h_ac8458d3c774873474e77811d60d13aff}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!SET\_BINT\_ONE@{SET\_BINT\_ONE}}
+\index{SET\_BINT\_ONE@{SET\_BINT\_ONE}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{SET\_BINT\_ONE()}{SET\_BINT\_ONE()}}
+{\footnotesize\ttfamily void SET\+\_\+\+BINT\+\_\+\+ONE (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Sets the value of a \mbox{\hyperlink{structBINT}{BINT}} object to one (1). 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be set to one. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Assumes the \mbox{\hyperlink{structBINT}{BINT}} object has been properly initialized. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_aa7c103a787bf9dfefa3c12a97f30f7a7}\label{bigint__utils_8h_aa7c103a787bf9dfefa3c12a97f30f7a7}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!SET\_BINT\_ZERO@{SET\_BINT\_ZERO}}
+\index{SET\_BINT\_ZERO@{SET\_BINT\_ZERO}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{SET\_BINT\_ZERO()}{SET\_BINT\_ZERO()}}
+{\footnotesize\ttfamily void SET\+\_\+\+BINT\+\_\+\+ZERO (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint }\end{DoxyParamCaption})}
+
+
+
+Sets the value of a \mbox{\hyperlink{structBINT}{BINT}} object to zero. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be set to zero. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Assumes the \mbox{\hyperlink{structBINT}{BINT}} object has been properly initialized. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a42961872dc35ee8e0f4d1e7159168bf7}\label{bigint__utils_8h_a42961872dc35ee8e0f4d1e7159168bf7}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!strToBINT@{strToBINT}}
+\index{strToBINT@{strToBINT}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{strToBINT()}{strToBINT()}}
+{\footnotesize\ttfamily void str\+To\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint,  }\item[{const char $\ast$}]{hex\+String }\end{DoxyParamCaption})}
+
+
+
+Converts a hexadecimal string to a \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be initialized. \\
+\hline
+{\em hex\+String} & The hexadecimal string to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The function initializes the \mbox{\hyperlink{structBINT}{BINT}} object with the value represented by the hexadecimal string. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__utils_8h_a5328bab479e0a3136b42c2d83fe168df}\label{bigint__utils_8h_a5328bab479e0a3136b42c2d83fe168df}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!swapBINT@{swapBINT}}
+\index{swapBINT@{swapBINT}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{swapBINT()}{swapBINT()}}
+{\footnotesize\ttfamily void swap\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint1,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint2 }\end{DoxyParamCaption})}
+
+
+
+Swaps the values of two \mbox{\hyperlink{structBINT}{BINT}} objects. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Bint1} & A pointer to the point of the first \mbox{\hyperlink{structBINT}{BINT}} object pointer. \\
+\hline
+{\em pptr\+Bint2} & A pointer to the point of the second \mbox{\hyperlink{structBINT}{BINT}} object pointer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Assumes that both \mbox{\hyperlink{structBINT}{BINT}} objects have been properly initialized. 
+\end{DoxyNote}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{bigint__utils_8h_a33c54bae6482b94202c765fc73f2cae6}\label{bigint__utils_8h_a33c54bae6482b94202c765fc73f2cae6}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!file@{file}}
+\index{file@{file}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{file}{file}}
+{\footnotesize\ttfamily Continuing with the professional annotations for the remaining functions in your C header file}
+
+
+
+Definition at line 278 of file bigint\+\_\+utils.\+h.
+
+\mbox{\Hypertarget{bigint__utils_8h_a8e648b7fabb4ca1c371daece7770aae6}\label{bigint__utils_8h_a8e648b7fabb4ca1c371daece7770aae6}} 
+\index{bigint\_utils.h@{bigint\_utils.h}!shift\_amount@{shift\_amount}}
+\index{shift\_amount@{shift\_amount}!bigint\_utils.h@{bigint\_utils.h}}
+\doxysubsubsection{\texorpdfstring{shift\_amount}{shift\_amount}}
+{\footnotesize\ttfamily Continuing with the professional annotations for the remaining functions in your C header int shift\+\_\+amount}
+
+
+
+Definition at line 290 of file bigint\+\_\+utils.\+h.
+

@@ -1,0 +1,988 @@
+\hypertarget{bigint__arithmetic_8h}{}\doxysection{bigint\+\_\+arithmetic.\+h File Reference}
+\label{bigint__arithmetic_8h}\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bigint\+\_\+utils.\+h\char`\"{}}\newline
+Include dependency graph for bigint\+\_\+arithmetic.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{bigint__arithmetic_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_ab06113ba4c0da35c380b726733e259c8}{NOT\+\_\+\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrbint\+\_\+dst, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Bint\+\_\+src)
+\begin{DoxyCompactList}\small\item\em Performs a bitwise NOT operation on a \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a16e02671d9fdb83b2d1e3b0d8648220c}{AND\+\_\+\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Performs a bitwise AND operation between two \mbox{\hyperlink{structBINT}{BINT}} objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a982ee9478b984ac8046d85ae5fa75a78}{OR\+\_\+\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Performs a bitwise OR operation between two \mbox{\hyperlink{structBINT}{BINT}} objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_abd32e1804bafce7784bfd5f2e3fd86a4}{XOR\+\_\+\+BINT}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Performs a bitwise XOR operation between two \mbox{\hyperlink{structBINT}{BINT}} objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_af08119f63018506a83626915fc36f290}{add\+\_\+carry}} (\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} x, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} y, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} k, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$ptrQ, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$ptrR)
+\begin{DoxyCompactList}\small\item\em Performs addition with carry of two WORDs and stores the result and carry. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a6116869ad36eaefbd2e8390ea99b76d4}{add\+\_\+core\+\_\+xyz}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Adds two multi-\/word integers (BINTs) and stores the result in a third \mbox{\hyperlink{structBINT}{BINT}}, managing memory as needed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a104c7d3d2610616bc666ce3cef5c56e9}{ADD}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Public API function for adding two BINTs, wrapping the core addition functionality with user-\/friendly access. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a8870451c790cd6e073e114c33bbbb753}{sub\+\_\+borrow}} (\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} x, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} y, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$ptrQ, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$ptrR)
+\begin{DoxyCompactList}\small\item\em Subtracts two WORD-\/sized integers, taking into account a borrow, and outputs both the difference and the resulting borrow. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a1d2f0aaf4b988845d131463f88de7286}{sub\+\_\+core\+\_\+xyz}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Subtracts two multi-\/word integers (BINTs) and stores the result in a third \mbox{\hyperlink{structBINT}{BINT}}, managing memory as needed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_aad0094fa4d933eacb505a28cd050095f}{SUB}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Public API function for subtracting two BINTs, encapsulating the core subtraction functionality for ease of use. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a82542efbf2afe4c25f341d763d127fb5}{mul\+\_\+xyz}} (\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} valX, \mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} valY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Multiplies two WORD-\/sized integers and stores the result in a \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_aeb98cf8c0cd8cd747780ba1ebc40fbe8}{mul\+\_\+core\+\_\+\+Txt\+Bk\+\_\+xyz}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Core textbook algorithm for multiplying two \mbox{\hyperlink{structBINT}{BINT}} objects and storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_ad635b86f963700c6d3faaa0c761a40e5}{mul\+\_\+core\+\_\+\+Imp\+Txt\+Bk\+\_\+test}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Tests the improved textbook multiplication algorithm on two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a1cfeb81c29f7023137ac69298e9d7127}{MUL\+\_\+\+Core\+\_\+\+Imp\+Txt\+Bk\+\_\+xyz}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Core function for the improved textbook multiplication algorithm of two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a6b0debf8620b55f06b4f26ee1d694e18}{mul\+\_\+core\+\_\+\+Krtsb\+\_\+test}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Tests the Karatsuba multiplication algorithm on two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object, with a flag for testing purposes. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a4209df34dc50e00d70635fa59e6b4493}{Krtsb\+\_\+\+FLAG\+\_\+\+Test}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ, int flag)
+\begin{DoxyCompactList}\small\item\em Karatsuba multiplication test function with a flag parameter to control the behavior of the multiplication algorithm for two \mbox{\hyperlink{structBINT}{BINT}} objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_aa6cff8d4ad2fac48b8c5c093c2df76d2}{MUL\+\_\+\+Core\+\_\+\+Krtsb\+\_\+xyz}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Core Karatsuba multiplication algorithm for two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a9bb04180542b606d4f8f3da0f26b8ef9}{squ\+\_\+core}} (\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} valX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Performs squaring of a WORD-\/sized integer and stores the result in a \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a3c260efaddef40c9be5d8d07800fc700}{SQU\+\_\+\+Txtbk\+\_\+xz}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Textbook squaring algorithm for a \mbox{\hyperlink{structBINT}{BINT}} object, storing the result in another \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a85d0331ce25cc73e8d9da53705980ab6}{SQU\+\_\+\+Krtsb\+\_\+xz}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptrZ)
+\begin{DoxyCompactList}\small\item\em Karatsuba algorithm for squaring a \mbox{\hyperlink{structBINT}{BINT}} object, storing the result in another \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a949b6e0eb54ffb5f94a3624c6e02bc86}{DIV\+\_\+\+Bianry\+\_\+\+Long\+\_\+\+Test}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Dividend, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_ad5fbfaa5f2c7746c2a1013d21b0f5eb7}{pptr\+Divisor}}, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_ae46c1ebf2e373a41478fd7fbcaacc365}{pptrQ}}, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_a5b787ad72e477d0fb855563092a4250b}{pptrR}})
+\begin{DoxyCompactList}\small\item\em Tests the binary long division algorithm using \mbox{\hyperlink{structBINT}{BINT}} objects for the dividend and divisor, and stores the quotient and remainder. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a29909dc184227bd529480f64097ac86d}{DIV\+\_\+\+Bianry\+\_\+\+Long}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Dividend, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_ad5fbfaa5f2c7746c2a1013d21b0f5eb7}{pptr\+Divisor}}, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_ae46c1ebf2e373a41478fd7fbcaacc365}{pptrQ}}, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_a5b787ad72e477d0fb855563092a4250b}{pptrR}})
+\begin{DoxyCompactList}\small\item\em Performs binary long division on \mbox{\hyperlink{structBINT}{BINT}} objects for the dividend and divisor, and stores the quotient and remainder. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a250710ae3b23dc8baaa07689b231bf28}{DIV\+\_\+\+General\+\_\+\+Long}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$pptr\+Dividend, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_ad5fbfaa5f2c7746c2a1013d21b0f5eb7}{pptr\+Divisor}}, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_ae46c1ebf2e373a41478fd7fbcaacc365}{pptrQ}}, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$\mbox{\hyperlink{bigint__arithmetic_8h_a5b787ad72e477d0fb855563092a4250b}{pptrR}})
+\begin{DoxyCompactList}\small\item\em Performs general long division on \mbox{\hyperlink{structBINT}{BINT}} objects for the dividend and divisor, outputting the quotient and remainder. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a2b72ada9606d6acee4fedeea50f68b51}{mul\+\_\+\+Left\+To\+Right}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrZ)
+\begin{DoxyCompactList}\small\item\em Multiplies two \mbox{\hyperlink{structBINT}{BINT}} objects using a left-\/to-\/right binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a86ebd439410c173a8bc99e0f1b72bdd3}{add\+\_\+\+Left\+To\+Right}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrZ)
+\begin{DoxyCompactList}\small\item\em Adds two \mbox{\hyperlink{structBINT}{BINT}} objects using a left-\/to-\/right binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_aaed854fd0470f8e605618136b01ee0ce}{mul\+\_\+\+Right\+To\+Left}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrZ)
+\begin{DoxyCompactList}\small\item\em Multiplies two \mbox{\hyperlink{structBINT}{BINT}} objects using a right-\/to-\/left binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a8a12dd1777f9748bec347fde366bad78}{add\+\_\+\+Right\+To\+Left}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrZ)
+\begin{DoxyCompactList}\small\item\em Adds two \mbox{\hyperlink{structBINT}{BINT}} objects using a right-\/to-\/left binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a2e809e3d5ffdc66d29dbe75dbb24de60}{exp\+\_\+\+Mongomery}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrZ)
+\begin{DoxyCompactList}\small\item\em Calculates the Montgomery exponentiation of two \mbox{\hyperlink{structBINT}{BINT}} objects and stores the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bigint__arithmetic_8h_a574e18fb003ac7a598aa515abde23e47}{Mod\+\_\+\+Exp\+\_\+\+Mongo}} (\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrX, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrY, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrM, \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ptrZ)
+\begin{DoxyCompactList}\small\item\em Performs modular exponentiation using the Montgomery method on three \mbox{\hyperlink{structBINT}{BINT}} objects and stores the result in a fourth \mbox{\hyperlink{structBINT}{BINT}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Here are the professional annotations for the \mbox{\hyperlink{bigint__arithmetic_8h_ac51775097d45d30b874c1c32e182c74a}{division}}
+\item 
+Here are the professional annotations for the \mbox{\hyperlink{bigint__arithmetic_8h_ac191c15fd749f2681611318e52cbf321}{multiplication}}
+\item 
+Here are the professional annotations for the \mbox{\hyperlink{bigint__arithmetic_8h_abbd5a6c99c694795c0df860afbe64a24}{addition}}
+\item 
+Here are the professional annotations for the and exponentiation functions in your C header \mbox{\hyperlink{bigint__arithmetic_8h_afdad4b765d192b9d61f14333de5f28f9}{file}}
+\item 
+Here are the professional annotations for the and exponentiation functions in your C header \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ \mbox{\hyperlink{bigint__arithmetic_8h_ad5fbfaa5f2c7746c2a1013d21b0f5eb7}{pptr\+Divisor}}
+\item 
+Here are the professional annotations for the and exponentiation functions in your C header \mbox{\hyperlink{structBINT}{BINT}} \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ \mbox{\hyperlink{bigint__arithmetic_8h_ae46c1ebf2e373a41478fd7fbcaacc365}{pptrQ}}
+\item 
+Here are the professional annotations for the and exponentiation functions in your C header \mbox{\hyperlink{structBINT}{BINT}} \mbox{\hyperlink{structBINT}{BINT}} \mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$ \mbox{\hyperlink{bigint__arithmetic_8h_a5b787ad72e477d0fb855563092a4250b}{pptrR}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a104c7d3d2610616bc666ce3cef5c56e9}\label{bigint__arithmetic_8h_a104c7d3d2610616bc666ce3cef5c56e9}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!ADD@{ADD}}
+\index{ADD@{ADD}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{ADD()}{ADD()}}
+{\footnotesize\ttfamily void ADD (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Public API function for adding two BINTs, wrapping the core addition functionality with user-\/friendly access. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & Pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & Pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & Pointer to the pointer where the addition result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Utilizes add\+\_\+core\+\_\+xyz internally; users should call this function for adding BINTs. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_af08119f63018506a83626915fc36f290}\label{bigint__arithmetic_8h_af08119f63018506a83626915fc36f290}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!add\_carry@{add\_carry}}
+\index{add\_carry@{add\_carry}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{add\_carry()}{add\_carry()}}
+{\footnotesize\ttfamily void add\+\_\+carry (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{x,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{y,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{k,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$}]{ptrQ,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$}]{ptrR }\end{DoxyParamCaption})}
+
+
+
+Performs addition with carry of two WORDs and stores the result and carry. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The first WORD operand. \\
+\hline
+{\em y} & The second WORD operand. \\
+\hline
+{\em k} & The carry-\/in value. \\
+\hline
+{\em ptrQ} & A pointer to the WORD where the sum will be stored. \\
+\hline
+{\em ptrR} & A pointer to the WORD where the carry-\/out will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This is a low-\/level operation used in multi-\/word arithmetic. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a6116869ad36eaefbd2e8390ea99b76d4}\label{bigint__arithmetic_8h_a6116869ad36eaefbd2e8390ea99b76d4}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!add\_core\_xyz@{add\_core\_xyz}}
+\index{add\_core\_xyz@{add\_core\_xyz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{add\_core\_xyz()}{add\_core\_xyz()}}
+{\footnotesize\ttfamily void add\+\_\+core\+\_\+xyz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Adds two multi-\/word integers (BINTs) and stores the result in a third \mbox{\hyperlink{structBINT}{BINT}}, managing memory as needed. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & Pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & Pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & Pointer to the pointer where the resulting \mbox{\hyperlink{structBINT}{BINT}} will be stored after the addition. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function handles the intricacies of \mbox{\hyperlink{structBINT}{BINT}} addition, including memory reallocation for the result, if necessary. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a86ebd439410c173a8bc99e0f1b72bdd3}\label{bigint__arithmetic_8h_a86ebd439410c173a8bc99e0f1b72bdd3}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!add\_LeftToRight@{add\_LeftToRight}}
+\index{add\_LeftToRight@{add\_LeftToRight}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{add\_LeftToRight()}{add\_LeftToRight()}}
+{\footnotesize\ttfamily void add\+\_\+\+Left\+To\+Right (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrZ }\end{DoxyParamCaption})}
+
+
+
+Adds two \mbox{\hyperlink{structBINT}{BINT}} objects using a left-\/to-\/right binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} addend. \\
+\hline
+{\em ptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} addend. \\
+\hline
+{\em ptrZ} & A pointer to the pointer where the addition result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This method adds the \mbox{\hyperlink{structBINT}{BINT}} objects starting from the most significant bit and moving to the least significant bit. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a8a12dd1777f9748bec347fde366bad78}\label{bigint__arithmetic_8h_a8a12dd1777f9748bec347fde366bad78}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!add\_RightToLeft@{add\_RightToLeft}}
+\index{add\_RightToLeft@{add\_RightToLeft}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{add\_RightToLeft()}{add\_RightToLeft()}}
+{\footnotesize\ttfamily void add\+\_\+\+Right\+To\+Left (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrZ }\end{DoxyParamCaption})}
+
+
+
+Adds two \mbox{\hyperlink{structBINT}{BINT}} objects using a right-\/to-\/left binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} addend. \\
+\hline
+{\em ptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} addend. \\
+\hline
+{\em ptrZ} & A pointer to the pointer where the addition result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This method adds the \mbox{\hyperlink{structBINT}{BINT}} objects starting from the least significant bit and moving to the most significant bit. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a16e02671d9fdb83b2d1e3b0d8648220c}\label{bigint__arithmetic_8h_a16e02671d9fdb83b2d1e3b0d8648220c}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!AND\_BINT@{AND\_BINT}}
+\index{AND\_BINT@{AND\_BINT}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{AND\_BINT()}{AND\_BINT()}}
+{\footnotesize\ttfamily void AND\+\_\+\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Performs a bitwise AND operation between two \mbox{\hyperlink{structBINT}{BINT}} objects. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the first \mbox{\hyperlink{structBINT}{BINT}} object operand. \\
+\hline
+{\em ptrY} & A pointer to the second \mbox{\hyperlink{structBINT}{BINT}} object operand. \\
+\hline
+{\em pptrZ} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer where the result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The function will allocate memory for the result if necessary. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a29909dc184227bd529480f64097ac86d}\label{bigint__arithmetic_8h_a29909dc184227bd529480f64097ac86d}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!DIV\_Bianry\_Long@{DIV\_Bianry\_Long}}
+\index{DIV\_Bianry\_Long@{DIV\_Bianry\_Long}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{DIV\_Bianry\_Long()}{DIV\_Bianry\_Long()}}
+{\footnotesize\ttfamily void DIV\+\_\+\+Bianry\+\_\+\+Long (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Dividend,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Divisor,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrQ,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrR }\end{DoxyParamCaption})}
+
+
+
+Performs binary long division on \mbox{\hyperlink{structBINT}{BINT}} objects for the dividend and divisor, and stores the quotient and remainder. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Dividend} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object representing the dividend. \\
+\hline
+{\em pptr\+Divisor} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object representing the divisor. \\
+\hline
+{\em pptrQ} & A pointer to the pointer where the quotient \mbox{\hyperlink{structBINT}{BINT}} object will be stored. \\
+\hline
+{\em pptrR} & A pointer to the pointer where the remainder \mbox{\hyperlink{structBINT}{BINT}} object will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Implements the binary long division algorithm which is efficient for large \mbox{\hyperlink{structBINT}{BINT}} objects. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a949b6e0eb54ffb5f94a3624c6e02bc86}\label{bigint__arithmetic_8h_a949b6e0eb54ffb5f94a3624c6e02bc86}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!DIV\_Bianry\_Long\_Test@{DIV\_Bianry\_Long\_Test}}
+\index{DIV\_Bianry\_Long\_Test@{DIV\_Bianry\_Long\_Test}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{DIV\_Bianry\_Long\_Test()}{DIV\_Bianry\_Long\_Test()}}
+{\footnotesize\ttfamily void DIV\+\_\+\+Bianry\+\_\+\+Long\+\_\+\+Test (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Dividend,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Divisor,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrQ,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrR }\end{DoxyParamCaption})}
+
+
+
+Tests the binary long division algorithm using \mbox{\hyperlink{structBINT}{BINT}} objects for the dividend and divisor, and stores the quotient and remainder. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Dividend} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object representing the dividend. \\
+\hline
+{\em pptr\+Divisor} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object representing the divisor. \\
+\hline
+{\em pptrQ} & A pointer to the pointer where the quotient \mbox{\hyperlink{structBINT}{BINT}} object will be stored. \\
+\hline
+{\em pptrR} & A pointer to the pointer where the remainder \mbox{\hyperlink{structBINT}{BINT}} object will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is intended for testing the binary long division algorithm. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a250710ae3b23dc8baaa07689b231bf28}\label{bigint__arithmetic_8h_a250710ae3b23dc8baaa07689b231bf28}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!DIV\_General\_Long@{DIV\_General\_Long}}
+\index{DIV\_General\_Long@{DIV\_General\_Long}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{DIV\_General\_Long()}{DIV\_General\_Long()}}
+{\footnotesize\ttfamily void DIV\+\_\+\+General\+\_\+\+Long (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Dividend,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Divisor,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrQ,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrR }\end{DoxyParamCaption})}
+
+
+
+Performs general long division on \mbox{\hyperlink{structBINT}{BINT}} objects for the dividend and divisor, outputting the quotient and remainder. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptr\+Dividend} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object representing the dividend. \\
+\hline
+{\em pptr\+Divisor} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object representing the divisor. \\
+\hline
+{\em pptrQ} & A pointer to the pointer where the quotient \mbox{\hyperlink{structBINT}{BINT}} object will be stored. \\
+\hline
+{\em pptrR} & A pointer to the pointer where the remainder \mbox{\hyperlink{structBINT}{BINT}} object will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This version of long division is optimized for a general case and can handle different forms of \mbox{\hyperlink{structBINT}{BINT}} objects. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a2e809e3d5ffdc66d29dbe75dbb24de60}\label{bigint__arithmetic_8h_a2e809e3d5ffdc66d29dbe75dbb24de60}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!exp\_Mongomery@{exp\_Mongomery}}
+\index{exp\_Mongomery@{exp\_Mongomery}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{exp\_Mongomery()}{exp\_Mongomery()}}
+{\footnotesize\ttfamily void exp\+\_\+\+Mongomery (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrZ }\end{DoxyParamCaption})}
+
+
+
+Calculates the Montgomery exponentiation of two \mbox{\hyperlink{structBINT}{BINT}} objects and stores the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the pointer of the base \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrY} & A pointer to the pointer of the exponent \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrZ} & A pointer to the pointer where the exponentiation result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This method is used for efficient modular exponentiation, especially in cryptographic applications. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a4209df34dc50e00d70635fa59e6b4493}\label{bigint__arithmetic_8h_a4209df34dc50e00d70635fa59e6b4493}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!Krtsb\_FLAG\_Test@{Krtsb\_FLAG\_Test}}
+\index{Krtsb\_FLAG\_Test@{Krtsb\_FLAG\_Test}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{Krtsb\_FLAG\_Test()}{Krtsb\_FLAG\_Test()}}
+{\footnotesize\ttfamily void Krtsb\+\_\+\+FLAG\+\_\+\+Test (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ,  }\item[{int}]{flag }\end{DoxyParamCaption})}
+
+
+
+Karatsuba multiplication test function with a flag parameter to control the behavior of the multiplication algorithm for two \mbox{\hyperlink{structBINT}{BINT}} objects. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+{\em flag} & An integer to toggle specific behaviors or optimizations during the multiplication process. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function allows for controlled experimentation with the Karatsuba algorithm. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a574e18fb003ac7a598aa515abde23e47}\label{bigint__arithmetic_8h_a574e18fb003ac7a598aa515abde23e47}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!Mod\_Exp\_Mongo@{Mod\_Exp\_Mongo}}
+\index{Mod\_Exp\_Mongo@{Mod\_Exp\_Mongo}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{Mod\_Exp\_Mongo()}{Mod\_Exp\_Mongo()}}
+{\footnotesize\ttfamily void Mod\+\_\+\+Exp\+\_\+\+Mongo (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrM,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrZ }\end{DoxyParamCaption})}
+
+
+
+Performs modular exponentiation using the Montgomery method on three \mbox{\hyperlink{structBINT}{BINT}} objects and stores the result in a fourth \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the pointer of the base \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrY} & A pointer to the pointer of the exponent \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrM} & A pointer to the pointer of the modulus \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrZ} & A pointer to the pointer where the modular exponentiation result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is suitable for high-\/precision arithmetic, such as cryptographic operations involving large numbers. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_ad635b86f963700c6d3faaa0c761a40e5}\label{bigint__arithmetic_8h_ad635b86f963700c6d3faaa0c761a40e5}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!mul\_core\_ImpTxtBk\_test@{mul\_core\_ImpTxtBk\_test}}
+\index{mul\_core\_ImpTxtBk\_test@{mul\_core\_ImpTxtBk\_test}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{mul\_core\_ImpTxtBk\_test()}{mul\_core\_ImpTxtBk\_test()}}
+{\footnotesize\ttfamily void mul\+\_\+core\+\_\+\+Imp\+Txt\+Bk\+\_\+test (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Tests the improved textbook multiplication algorithm on two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is used for testing optimizations in the textbook multiplication algorithm. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a1cfeb81c29f7023137ac69298e9d7127}\label{bigint__arithmetic_8h_a1cfeb81c29f7023137ac69298e9d7127}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!MUL\_Core\_ImpTxtBk\_xyz@{MUL\_Core\_ImpTxtBk\_xyz}}
+\index{MUL\_Core\_ImpTxtBk\_xyz@{MUL\_Core\_ImpTxtBk\_xyz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{MUL\_Core\_ImpTxtBk\_xyz()}{MUL\_Core\_ImpTxtBk\_xyz()}}
+{\footnotesize\ttfamily void MUL\+\_\+\+Core\+\_\+\+Imp\+Txt\+Bk\+\_\+xyz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Core function for the improved textbook multiplication algorithm of two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is a more efficient version of the textbook multiplication algorithm, optimized for larger \mbox{\hyperlink{structBINT}{BINT}} objects. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a6b0debf8620b55f06b4f26ee1d694e18}\label{bigint__arithmetic_8h_a6b0debf8620b55f06b4f26ee1d694e18}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!mul\_core\_Krtsb\_test@{mul\_core\_Krtsb\_test}}
+\index{mul\_core\_Krtsb\_test@{mul\_core\_Krtsb\_test}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{mul\_core\_Krtsb\_test()}{mul\_core\_Krtsb\_test()}}
+{\footnotesize\ttfamily void mul\+\_\+core\+\_\+\+Krtsb\+\_\+test (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Tests the Karatsuba multiplication algorithm on two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object, with a flag for testing purposes. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+{\em flag} & An integer flag used to control test behavior or algorithm variants. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is used to validate the Karatsuba algorithm\textquotesingle{}s correctness and performance. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_aa6cff8d4ad2fac48b8c5c093c2df76d2}\label{bigint__arithmetic_8h_aa6cff8d4ad2fac48b8c5c093c2df76d2}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!MUL\_Core\_Krtsb\_xyz@{MUL\_Core\_Krtsb\_xyz}}
+\index{MUL\_Core\_Krtsb\_xyz@{MUL\_Core\_Krtsb\_xyz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{MUL\_Core\_Krtsb\_xyz()}{MUL\_Core\_Krtsb\_xyz()}}
+{\footnotesize\ttfamily void MUL\+\_\+\+Core\+\_\+\+Krtsb\+\_\+xyz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Core Karatsuba multiplication algorithm for two \mbox{\hyperlink{structBINT}{BINT}} objects, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function implements the Karatsuba algorithm for fast multiplication of large \mbox{\hyperlink{structBINT}{BINT}} objects. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_aeb98cf8c0cd8cd747780ba1ebc40fbe8}\label{bigint__arithmetic_8h_aeb98cf8c0cd8cd747780ba1ebc40fbe8}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!mul\_core\_TxtBk\_xyz@{mul\_core\_TxtBk\_xyz}}
+\index{mul\_core\_TxtBk\_xyz@{mul\_core\_TxtBk\_xyz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{mul\_core\_TxtBk\_xyz()}{mul\_core\_TxtBk\_xyz()}}
+{\footnotesize\ttfamily void mul\+\_\+core\+\_\+\+Txt\+Bk\+\_\+xyz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Core textbook algorithm for multiplying two \mbox{\hyperlink{structBINT}{BINT}} objects and storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function implements the standard long multiplication algorithm taught in textbooks. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a2b72ada9606d6acee4fedeea50f68b51}\label{bigint__arithmetic_8h_a2b72ada9606d6acee4fedeea50f68b51}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!mul\_LeftToRight@{mul\_LeftToRight}}
+\index{mul\_LeftToRight@{mul\_LeftToRight}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{mul\_LeftToRight()}{mul\_LeftToRight()}}
+{\footnotesize\ttfamily void mul\+\_\+\+Left\+To\+Right (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrZ }\end{DoxyParamCaption})}
+
+
+
+Multiplies two \mbox{\hyperlink{structBINT}{BINT}} objects using a left-\/to-\/right binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This method multiplies from the most significant bit to the least significant bit of the multiplier. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_aaed854fd0470f8e605618136b01ee0ce}\label{bigint__arithmetic_8h_aaed854fd0470f8e605618136b01ee0ce}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!mul\_RightToLeft@{mul\_RightToLeft}}
+\index{mul\_RightToLeft@{mul\_RightToLeft}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{mul\_RightToLeft()}{mul\_RightToLeft()}}
+{\footnotesize\ttfamily void mul\+\_\+\+Right\+To\+Left (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrZ }\end{DoxyParamCaption})}
+
+
+
+Multiplies two \mbox{\hyperlink{structBINT}{BINT}} objects using a right-\/to-\/left binary method, storing the result in a third \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrY} & A pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em ptrZ} & A pointer to the pointer where the multiplication result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This method multiplies from the least significant bit to the most significant bit of the multiplier. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a82542efbf2afe4c25f341d763d127fb5}\label{bigint__arithmetic_8h_a82542efbf2afe4c25f341d763d127fb5}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!mul\_xyz@{mul\_xyz}}
+\index{mul\_xyz@{mul\_xyz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{mul\_xyz()}{mul\_xyz()}}
+{\footnotesize\ttfamily void mul\+\_\+xyz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{valX,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{valY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Multiplies two WORD-\/sized integers and stores the result in a \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em valX} & The first WORD-\/sized integer operand. \\
+\hline
+{\em valY} & The second WORD-\/sized integer operand. \\
+\hline
+{\em pptrZ} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object where the result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is utilized for single word multiplication that needs to be stored in a multi-\/word \mbox{\hyperlink{structBINT}{BINT}} object. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_ab06113ba4c0da35c380b726733e259c8}\label{bigint__arithmetic_8h_ab06113ba4c0da35c380b726733e259c8}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!NOT\_BINT@{NOT\_BINT}}
+\index{NOT\_BINT@{NOT\_BINT}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{NOT\_BINT()}{NOT\_BINT()}}
+{\footnotesize\ttfamily void NOT\+\_\+\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{ptrbint\+\_\+dst,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptr\+Bint\+\_\+src }\end{DoxyParamCaption})}
+
+
+
+Performs a bitwise NOT operation on a \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrbint\+\_\+dst} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer where the result will be stored. \\
+\hline
+{\em pptr\+Bint\+\_\+src} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer to be negated. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The result is stored in ptrbint\+\_\+dst, and the original \mbox{\hyperlink{structBINT}{BINT}} object is not modified. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a982ee9478b984ac8046d85ae5fa75a78}\label{bigint__arithmetic_8h_a982ee9478b984ac8046d85ae5fa75a78}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!OR\_BINT@{OR\_BINT}}
+\index{OR\_BINT@{OR\_BINT}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{OR\_BINT()}{OR\_BINT()}}
+{\footnotesize\ttfamily void OR\+\_\+\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Performs a bitwise OR operation between two \mbox{\hyperlink{structBINT}{BINT}} objects. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the first \mbox{\hyperlink{structBINT}{BINT}} object operand. \\
+\hline
+{\em ptrY} & A pointer to the second \mbox{\hyperlink{structBINT}{BINT}} object operand. \\
+\hline
+{\em pptrZ} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer where the result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The function will allocate memory for the result if necessary. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a9bb04180542b606d4f8f3da0f26b8ef9}\label{bigint__arithmetic_8h_a9bb04180542b606d4f8f3da0f26b8ef9}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!squ\_core@{squ\_core}}
+\index{squ\_core@{squ\_core}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{squ\_core()}{squ\_core()}}
+{\footnotesize\ttfamily void squ\+\_\+core (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{valX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Performs squaring of a WORD-\/sized integer and stores the result in a \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em valX} & The WORD-\/sized integer to be squared. \\
+\hline
+{\em pptrZ} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object where the result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is optimized for squaring a single WORD-\/sized integer within a multi-\/word \mbox{\hyperlink{structBINT}{BINT}} context. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a85d0331ce25cc73e8d9da53705980ab6}\label{bigint__arithmetic_8h_a85d0331ce25cc73e8d9da53705980ab6}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!SQU\_Krtsb\_xz@{SQU\_Krtsb\_xz}}
+\index{SQU\_Krtsb\_xz@{SQU\_Krtsb\_xz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{SQU\_Krtsb\_xz()}{SQU\_Krtsb\_xz()}}
+{\footnotesize\ttfamily void SQU\+\_\+\+Krtsb\+\_\+xz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Karatsuba algorithm for squaring a \mbox{\hyperlink{structBINT}{BINT}} object, storing the result in another \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be squared. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the squaring result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Utilizes the efficient Karatsuba multiplication algorithm adapted for the squaring operation. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a3c260efaddef40c9be5d8d07800fc700}\label{bigint__arithmetic_8h_a3c260efaddef40c9be5d8d07800fc700}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!SQU\_Txtbk\_xz@{SQU\_Txtbk\_xz}}
+\index{SQU\_Txtbk\_xz@{SQU\_Txtbk\_xz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{SQU\_Txtbk\_xz()}{SQU\_Txtbk\_xz()}}
+{\footnotesize\ttfamily void SQU\+\_\+\+Txtbk\+\_\+xz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Textbook squaring algorithm for a \mbox{\hyperlink{structBINT}{BINT}} object, storing the result in another \mbox{\hyperlink{structBINT}{BINT}} object. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & A pointer to the pointer of the \mbox{\hyperlink{structBINT}{BINT}} object to be squared. \\
+\hline
+{\em pptrZ} & A pointer to the pointer where the squaring result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Implements the standard algorithm for squaring, similar to the textbook multiplication algorithm. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_aad0094fa4d933eacb505a28cd050095f}\label{bigint__arithmetic_8h_aad0094fa4d933eacb505a28cd050095f}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!SUB@{SUB}}
+\index{SUB@{SUB}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{SUB()}{SUB()}}
+{\footnotesize\ttfamily void SUB (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Public API function for subtracting two BINTs, encapsulating the core subtraction functionality for ease of use. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & Pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & Pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & Pointer to the pointer where the subtraction result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Utilizes sub\+\_\+core\+\_\+xyz internally; intended to be the function users call for subtracting BINTs. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a8870451c790cd6e073e114c33bbbb753}\label{bigint__arithmetic_8h_a8870451c790cd6e073e114c33bbbb753}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!sub\_borrow@{sub\_borrow}}
+\index{sub\_borrow@{sub\_borrow}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{sub\_borrow()}{sub\_borrow()}}
+{\footnotesize\ttfamily void sub\+\_\+borrow (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{x,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}}}]{y,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$}]{ptrQ,  }\item[{\mbox{\hyperlink{config_8h_a6080aa7706170fa1df1455be7ef1fe73}{WORD}} $\ast$}]{ptrR }\end{DoxyParamCaption})}
+
+
+
+Subtracts two WORD-\/sized integers, taking into account a borrow, and outputs both the difference and the resulting borrow. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The WORD from which y is to be subtracted. \\
+\hline
+{\em y} & The WORD to be subtracted from x. \\
+\hline
+{\em ptrQ} & Pointer to the variable where the difference will be stored. \\
+\hline
+{\em ptrR} & Pointer to the variable where the resulting borrow will be stored; it will be non-\/zero if the subtraction underflows. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Essential for multi-\/word subtraction, this function ensures that borrows are correctly propagated through the operation. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_a1d2f0aaf4b988845d131463f88de7286}\label{bigint__arithmetic_8h_a1d2f0aaf4b988845d131463f88de7286}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!sub\_core\_xyz@{sub\_core\_xyz}}
+\index{sub\_core\_xyz@{sub\_core\_xyz}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{sub\_core\_xyz()}{sub\_core\_xyz()}}
+{\footnotesize\ttfamily void sub\+\_\+core\+\_\+xyz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Subtracts two multi-\/word integers (BINTs) and stores the result in a third \mbox{\hyperlink{structBINT}{BINT}}, managing memory as needed. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em pptrX} & Pointer to the pointer of the first \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrY} & Pointer to the pointer of the second \mbox{\hyperlink{structBINT}{BINT}} operand. \\
+\hline
+{\em pptrZ} & Pointer to the pointer where the resulting \mbox{\hyperlink{structBINT}{BINT}} will be stored after the subtraction. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function handles the complexities of \mbox{\hyperlink{structBINT}{BINT}} subtraction, including memory reallocation for the result, if necessary. 
+\end{DoxyNote}
+\mbox{\Hypertarget{bigint__arithmetic_8h_abd32e1804bafce7784bfd5f2e3fd86a4}\label{bigint__arithmetic_8h_abd32e1804bafce7784bfd5f2e3fd86a4}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!XOR\_BINT@{XOR\_BINT}}
+\index{XOR\_BINT@{XOR\_BINT}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{XOR\_BINT()}{XOR\_BINT()}}
+{\footnotesize\ttfamily void XOR\+\_\+\+BINT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptrX,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$}]{ptrY,  }\item[{\mbox{\hyperlink{structBINT}{BINT}} $\ast$$\ast$}]{pptrZ }\end{DoxyParamCaption})}
+
+
+
+Performs a bitwise XOR operation between two \mbox{\hyperlink{structBINT}{BINT}} objects. 
+
+\begin{DoxyAuthor}{Author}
+Your Name 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Date of creation or last update 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptrX} & A pointer to the first \mbox{\hyperlink{structBINT}{BINT}} object operand. \\
+\hline
+{\em ptrY} & A pointer to the second \mbox{\hyperlink{structBINT}{BINT}} object operand. \\
+\hline
+{\em pptrZ} & A pointer to the \mbox{\hyperlink{structBINT}{BINT}} object pointer where the result will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The function will allocate memory for the result if necessary. 
+\end{DoxyNote}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{bigint__arithmetic_8h_abbd5a6c99c694795c0df860afbe64a24}\label{bigint__arithmetic_8h_abbd5a6c99c694795c0df860afbe64a24}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!addition@{addition}}
+\index{addition@{addition}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{addition}{addition}}
+{\footnotesize\ttfamily Here are the professional annotations for the addition}
+
+
+
+Definition at line 291 of file bigint\+\_\+arithmetic.\+h.
+
+\mbox{\Hypertarget{bigint__arithmetic_8h_ac51775097d45d30b874c1c32e182c74a}\label{bigint__arithmetic_8h_ac51775097d45d30b874c1c32e182c74a}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!division@{division}}
+\index{division@{division}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{division}{division}}
+{\footnotesize\ttfamily Here are the professional annotations for the division}
+
+
+
+Definition at line 291 of file bigint\+\_\+arithmetic.\+h.
+
+\mbox{\Hypertarget{bigint__arithmetic_8h_afdad4b765d192b9d61f14333de5f28f9}\label{bigint__arithmetic_8h_afdad4b765d192b9d61f14333de5f28f9}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!file@{file}}
+\index{file@{file}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{file}{file}}
+{\footnotesize\ttfamily Here are the professional annotations for the and exponentiation functions in your C header file}
+
+
+
+Definition at line 291 of file bigint\+\_\+arithmetic.\+h.
+
+\mbox{\Hypertarget{bigint__arithmetic_8h_ac191c15fd749f2681611318e52cbf321}\label{bigint__arithmetic_8h_ac191c15fd749f2681611318e52cbf321}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!multiplication@{multiplication}}
+\index{multiplication@{multiplication}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{multiplication}{multiplication}}
+{\footnotesize\ttfamily Here are the professional annotations for the multiplication}
+
+
+
+Definition at line 291 of file bigint\+\_\+arithmetic.\+h.
+
+\mbox{\Hypertarget{bigint__arithmetic_8h_ad5fbfaa5f2c7746c2a1013d21b0f5eb7}\label{bigint__arithmetic_8h_ad5fbfaa5f2c7746c2a1013d21b0f5eb7}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!pptrDivisor@{pptrDivisor}}
+\index{pptrDivisor@{pptrDivisor}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{pptrDivisor}{pptrDivisor}}
+{\footnotesize\ttfamily Here are the professional annotations for the and exponentiation functions in your C header \mbox{\hyperlink{structBINT}{BINT}}$\ast$$\ast$ pptr\+Divisor}
+
+
+
+Definition at line 305 of file bigint\+\_\+arithmetic.\+h.
+
+\mbox{\Hypertarget{bigint__arithmetic_8h_ae46c1ebf2e373a41478fd7fbcaacc365}\label{bigint__arithmetic_8h_ae46c1ebf2e373a41478fd7fbcaacc365}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!pptrQ@{pptrQ}}
+\index{pptrQ@{pptrQ}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{pptrQ}{pptrQ}}
+{\footnotesize\ttfamily Here are the professional annotations for the and exponentiation functions in your C header \mbox{\hyperlink{structBINT}{BINT}} \mbox{\hyperlink{structBINT}{BINT}}$\ast$$\ast$ pptrQ}
+
+
+
+Definition at line 305 of file bigint\+\_\+arithmetic.\+h.
+
+\mbox{\Hypertarget{bigint__arithmetic_8h_a5b787ad72e477d0fb855563092a4250b}\label{bigint__arithmetic_8h_a5b787ad72e477d0fb855563092a4250b}} 
+\index{bigint\_arithmetic.h@{bigint\_arithmetic.h}!pptrR@{pptrR}}
+\index{pptrR@{pptrR}!bigint\_arithmetic.h@{bigint\_arithmetic.h}}
+\doxysubsubsection{\texorpdfstring{pptrR}{pptrR}}
+{\footnotesize\ttfamily Here are the professional annotations for the and exponentiation functions in your C header \mbox{\hyperlink{structBINT}{BINT}} \mbox{\hyperlink{structBINT}{BINT}} \mbox{\hyperlink{structBINT}{BINT}}$\ast$$\ast$ pptrR}
+
+
+
+Definition at line 305 of file bigint\+\_\+arithmetic.\+h.
+

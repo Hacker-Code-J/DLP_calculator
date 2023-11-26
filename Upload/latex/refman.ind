@@ -1,5 +1,347 @@
 \begin{theindex}
 
-  \item {BINT}, \hyperpage{3}
+  \item {ADD}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{9}
+  \item {add\_carry}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{10}
+  \item {add\_core\_xyz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{10}
+  \item {add\_LeftToRight}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{11}
+  \item {add\_RightToLeft}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{11}
+  \item {addition}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{27}
+  \item {AND\_BINT}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{12}
+
+  \indexspace
+
+  \item {bigint\_arithmetic.c}, \hyperpage{7}
+  \item {bigint\_arithmetic.h}, \hyperpage{7}
+    \subitem {ADD}, \hyperpage{9}
+    \subitem {add\_carry}, \hyperpage{10}
+    \subitem {add\_core\_xyz}, \hyperpage{10}
+    \subitem {add\_LeftToRight}, \hyperpage{11}
+    \subitem {add\_RightToLeft}, \hyperpage{11}
+    \subitem {addition}, \hyperpage{27}
+    \subitem {AND\_BINT}, \hyperpage{12}
+    \subitem {DIV\_Bianry\_Long}, \hyperpage{13}
+    \subitem {DIV\_Bianry\_Long\_Test}, \hyperpage{13}
+    \subitem {DIV\_General\_Long}, \hyperpage{15}
+    \subitem {division}, \hyperpage{27}
+    \subitem {exp\_Mongomery}, \hyperpage{15}
+    \subitem {file}, \hyperpage{28}
+    \subitem {Krtsb\_FLAG\_Test}, \hyperpage{16}
+    \subitem {Mod\_Exp\_Mongo}, \hyperpage{17}
+    \subitem {mul\_core\_ImpTxtBk\_test}, \hyperpage{17}
+    \subitem {MUL\_Core\_ImpTxtBk\_xyz}, \hyperpage{18}
+    \subitem {mul\_core\_Krtsb\_test}, \hyperpage{18}
+    \subitem {MUL\_Core\_Krtsb\_xyz}, \hyperpage{19}
+    \subitem {mul\_core\_TxtBk\_xyz}, \hyperpage{20}
+    \subitem {mul\_LeftToRight}, \hyperpage{20}
+    \subitem {mul\_RightToLeft}, \hyperpage{21}
+    \subitem {mul\_xyz}, \hyperpage{21}
+    \subitem {multiplication}, \hyperpage{28}
+    \subitem {NOT\_BINT}, \hyperpage{22}
+    \subitem {OR\_BINT}, \hyperpage{23}
+    \subitem {pptrDivisor}, \hyperpage{28}
+    \subitem {pptrQ}, \hyperpage{28}
+    \subitem {pptrR}, \hyperpage{28}
+    \subitem {squ\_core}, \hyperpage{23}
+    \subitem {SQU\_Krtsb\_xz}, \hyperpage{24}
+    \subitem {SQU\_Txtbk\_xz}, \hyperpage{24}
+    \subitem {SUB}, \hyperpage{25}
+    \subitem {sub\_borrow}, \hyperpage{25}
+    \subitem {sub\_core\_xyz}, \hyperpage{26}
+    \subitem {XOR\_BINT}, \hyperpage{27}
+  \item {bigint\_utils.c}, \hyperpage{29}
+    \subitem {CHECK\_PTR\_AND\_DEREF}, \hyperpage{29}
+    \subitem {exit\_on\_null\_error}, \hyperpage{30}
+  \item {bigint\_utils.h}, \hyperpage{30}
+    \subitem {BIGINT\_UTILS\_H}, \hyperpage{33}
+    \subitem {BinaryToHex}, \hyperpage{33}
+    \subitem {BinaryToHexDigit}, \hyperpage{34}
+    \subitem {BIT\_LENGTH}, \hyperpage{34}
+    \subitem {BIT\_LENGTH\_NONZERO}, \hyperpage{35}
+    \subitem {compare\_abs\_bint}, \hyperpage{36}
+    \subitem {compare\_bint}, \hyperpage{36}
+    \subitem {copyBINT}, \hyperpage{37}
+    \subitem {delete\_bint}, \hyperpage{37}
+    \subitem {exit\_on\_null\_error}, \hyperpage{38}
+    \subitem {file}, \hyperpage{54}
+    \subitem {GET\_BIT}, \hyperpage{39}
+    \subitem {HexDigitToBinary}, \hyperpage{39}
+    \subitem {hexSubstringToWord}, \hyperpage{40}
+    \subitem {HexToBinary}, \hyperpage{41}
+    \subitem {init\_bint}, \hyperpage{41}
+    \subitem {isOne}, \hyperpage{42}
+    \subitem {isZero}, \hyperpage{42}
+    \subitem {left\_right\_bit}, \hyperpage{43}
+    \subitem {left\_shift\_bit}, \hyperpage{43}
+    \subitem {left\_shift\_word}, \hyperpage{44}
+    \subitem {makeEven}, \hyperpage{45}
+    \subitem {matchSize}, \hyperpage{45}
+    \subitem {print\_bint\_bin}, \hyperpage{46}
+    \subitem {print\_bint\_bin\_py}, \hyperpage{46}
+    \subitem {print\_bint\_bin\_split}, \hyperpage{47}
+    \subitem {print\_bint\_hex}, \hyperpage{47}
+    \subitem {print\_bint\_hex\_py}, \hyperpage{48}
+    \subitem {print\_bint\_hex\_split}, \hyperpage{48}
+    \subitem {PrintBinary}, \hyperpage{49}
+    \subitem {RANDOM\_ARRARY}, \hyperpage{49}
+    \subitem {RANDOM\_BINT}, \hyperpage{50}
+    \subitem {reduction}, \hyperpage{50}
+    \subitem {refineBINT}, \hyperpage{51}
+    \subitem {resetBINT}, \hyperpage{51}
+    \subitem {right\_shift\_word}, \hyperpage{52}
+    \subitem {SET\_BINT\_ONE}, \hyperpage{52}
+    \subitem {SET\_BINT\_ZERO}, \hyperpage{53}
+    \subitem {shift\_amount}, \hyperpage{55}
+    \subitem {strToBINT}, \hyperpage{53}
+    \subitem {swapBINT}, \hyperpage{54}
+  \item {BIGINT\_UTILS\_H}
+    \subitem {bigint\_utils.h}, \hyperpage{33}
+  \item {BinaryToHex}
+    \subitem {bigint\_utils.h}, \hyperpage{33}
+  \item {BinaryToHexDigit}
+    \subitem {bigint\_utils.h}, \hyperpage{34}
+  \item {BINT}, \hyperpage{5}
+    \subitem {sign}, \hyperpage{5}
+    \subitem {val}, \hyperpage{5}
+    \subitem {wordlen}, \hyperpage{5}
+  \item {BIT\_LENGTH}
+    \subitem {bigint\_utils.h}, \hyperpage{34}
+  \item {BIT\_LENGTH\_NONZERO}
+    \subitem {bigint\_utils.h}, \hyperpage{35}
+
+  \indexspace
+
+  \item {CHECK\_PTR\_AND\_DEREF}
+    \subitem {bigint\_utils.c}, \hyperpage{29}
+  \item {compare\_abs\_bint}
+    \subitem {bigint\_utils.h}, \hyperpage{36}
+  \item {compare\_bint}
+    \subitem {bigint\_utils.h}, \hyperpage{36}
+  \item {config.h}, \hyperpage{55}
+    \subitem {false}, \hyperpage{56}
+    \subitem {FLAG}, \hyperpage{56}
+    \subitem {MAXIMUM}, \hyperpage{56}
+    \subitem {MINIMUM}, \hyperpage{56}
+    \subitem {true}, \hyperpage{56}
+    \subitem {u32}, \hyperpage{57}
+    \subitem {u64}, \hyperpage{57}
+    \subitem {u8}, \hyperpage{57}
+    \subitem {WORD}, \hyperpage{57}
+    \subitem {WORD\_BITLEN}, \hyperpage{57}
+  \item {copyBINT}
+    \subitem {bigint\_utils.h}, \hyperpage{37}
+
+  \indexspace
+
+  \item {delete\_bint}
+    \subitem {bigint\_utils.h}, \hyperpage{37}
+  \item {DIV\_Bianry\_Long}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{13}
+  \item {DIV\_Bianry\_Long\_Test}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{13}
+  \item {DIV\_General\_Long}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{15}
+  \item {division}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{27}
+
+  \indexspace
+
+  \item {exit\_on\_null\_error}
+    \subitem {bigint\_utils.c}, \hyperpage{30}
+    \subitem {bigint\_utils.h}, \hyperpage{38}
+  \item {exp\_Mongomery}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{15}
+
+  \indexspace
+
+  \item {false}
+    \subitem {config.h}, \hyperpage{56}
+  \item {file}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{28}
+    \subitem {bigint\_utils.h}, \hyperpage{54}
+  \item {FLAG}
+    \subitem {config.h}, \hyperpage{56}
+
+  \indexspace
+
+  \item {GET\_BIT}
+    \subitem {bigint\_utils.h}, \hyperpage{39}
+
+  \indexspace
+
+  \item {HexDigitToBinary}
+    \subitem {bigint\_utils.h}, \hyperpage{39}
+  \item {hexSubstringToWord}
+    \subitem {bigint\_utils.h}, \hyperpage{40}
+  \item {HexToBinary}
+    \subitem {bigint\_utils.h}, \hyperpage{41}
+
+  \indexspace
+
+  \item {init\_bint}
+    \subitem {bigint\_utils.h}, \hyperpage{41}
+  \item {isOne}
+    \subitem {bigint\_utils.h}, \hyperpage{42}
+  \item {isZero}
+    \subitem {bigint\_utils.h}, \hyperpage{42}
+
+  \indexspace
+
+  \item {Krtsb\_FLAG\_Test}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{16}
+
+  \indexspace
+
+  \item {left\_right\_bit}
+    \subitem {bigint\_utils.h}, \hyperpage{43}
+  \item {left\_shift\_bit}
+    \subitem {bigint\_utils.h}, \hyperpage{43}
+  \item {left\_shift\_word}
+    \subitem {bigint\_utils.h}, \hyperpage{44}
+
+  \indexspace
+
+  \item {makeEven}
+    \subitem {bigint\_utils.h}, \hyperpage{45}
+  \item {matchSize}
+    \subitem {bigint\_utils.h}, \hyperpage{45}
+  \item {MAXIMUM}
+    \subitem {config.h}, \hyperpage{56}
+  \item {MINIMUM}
+    \subitem {config.h}, \hyperpage{56}
+  \item {Mod\_Exp\_Mongo}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{17}
+  \item {mul\_core\_ImpTxtBk\_test}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{17}
+  \item {MUL\_Core\_ImpTxtBk\_xyz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{18}
+  \item {mul\_core\_Krtsb\_test}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{18}
+  \item {MUL\_Core\_Krtsb\_xyz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{19}
+  \item {mul\_core\_TxtBk\_xyz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{20}
+  \item {mul\_LeftToRight}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{20}
+  \item {mul\_RightToLeft}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{21}
+  \item {mul\_xyz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{21}
+  \item {multiplication}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{28}
+
+  \indexspace
+
+  \item {NOT\_BINT}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{22}
+
+  \indexspace
+
+  \item {OR\_BINT}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{23}
+
+  \indexspace
+
+  \item {pptrDivisor}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{28}
+  \item {pptrQ}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{28}
+  \item {pptrR}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{28}
+  \item {print\_bint\_bin}
+    \subitem {bigint\_utils.h}, \hyperpage{46}
+  \item {print\_bint\_bin\_py}
+    \subitem {bigint\_utils.h}, \hyperpage{46}
+  \item {print\_bint\_bin\_split}
+    \subitem {bigint\_utils.h}, \hyperpage{47}
+  \item {print\_bint\_hex}
+    \subitem {bigint\_utils.h}, \hyperpage{47}
+  \item {print\_bint\_hex\_py}
+    \subitem {bigint\_utils.h}, \hyperpage{48}
+  \item {print\_bint\_hex\_split}
+    \subitem {bigint\_utils.h}, \hyperpage{48}
+  \item {PrintBinary}
+    \subitem {bigint\_utils.h}, \hyperpage{49}
+
+  \indexspace
+
+  \item {RANDOM\_ARRARY}
+    \subitem {bigint\_utils.h}, \hyperpage{49}
+  \item {RANDOM\_BINT}
+    \subitem {bigint\_utils.h}, \hyperpage{50}
+  \item {reduction}
+    \subitem {bigint\_utils.h}, \hyperpage{50}
+  \item {refineBINT}
+    \subitem {bigint\_utils.h}, \hyperpage{51}
+  \item {resetBINT}
+    \subitem {bigint\_utils.h}, \hyperpage{51}
+  \item {right\_shift\_word}
+    \subitem {bigint\_utils.h}, \hyperpage{52}
+
+  \indexspace
+
+  \item {SET\_BINT\_ONE}
+    \subitem {bigint\_utils.h}, \hyperpage{52}
+  \item {SET\_BINT\_ZERO}
+    \subitem {bigint\_utils.h}, \hyperpage{53}
+  \item {shift\_amount}
+    \subitem {bigint\_utils.h}, \hyperpage{55}
+  \item {sign}
+    \subitem {BINT}, \hyperpage{5}
+  \item {squ\_core}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{23}
+  \item {SQU\_Krtsb\_xz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{24}
+  \item {SQU\_Txtbk\_xz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{24}
+  \item {strToBINT}
+    \subitem {bigint\_utils.h}, \hyperpage{53}
+  \item {SUB}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{25}
+  \item {sub\_borrow}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{25}
+  \item {sub\_core\_xyz}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{26}
+  \item {swapBINT}
+    \subitem {bigint\_utils.h}, \hyperpage{54}
+
+  \indexspace
+
+  \item {true}
+    \subitem {config.h}, \hyperpage{56}
+
+  \indexspace
+
+  \item {u32}
+    \subitem {config.h}, \hyperpage{57}
+  \item {u64}
+    \subitem {config.h}, \hyperpage{57}
+  \item {u8}
+    \subitem {config.h}, \hyperpage{57}
+
+  \indexspace
+
+  \item {val}
+    \subitem {BINT}, \hyperpage{5}
+
+  \indexspace
+
+  \item {WORD}
+    \subitem {config.h}, \hyperpage{57}
+  \item {WORD\_BITLEN}
+    \subitem {config.h}, \hyperpage{57}
+  \item {wordlen}
+    \subitem {BINT}, \hyperpage{5}
+
+  \indexspace
+
+  \item {XOR\_BINT}
+    \subitem {bigint\_arithmetic.h}, \hyperpage{27}
 
 \end{theindex}

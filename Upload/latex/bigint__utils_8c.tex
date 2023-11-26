@@ -1,0 +1,82 @@
+\hypertarget{bigint__utils_8c}{}\doxysection{bigint\+\_\+utils.\+c File Reference}
+\label{bigint__utils_8c}\index{bigint\_utils.c@{bigint\_utils.c}}
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bigint\+\_\+utils.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for bigint\+\_\+utils.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{bigint__utils_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{bigint__utils_8c_a412d2e697af8f8d247abd15f71b152dc}{CHECK\+\_\+\+PTR\+\_\+\+AND\+\_\+\+DEREF}}(ptr,  name,  func)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{bigint__utils_8c_a62e96c20b8fcec2f07c8f1c69c855f84}{exit\+\_\+on\+\_\+null\+\_\+error}} (const void $\ast$ptr, const char $\ast$ptr\+\_\+name, const char $\ast$function\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Exits program if pointer is NULL, indicating an allocation error. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{bigint__utils_8c_a412d2e697af8f8d247abd15f71b152dc}\label{bigint__utils_8c_a412d2e697af8f8d247abd15f71b152dc}} 
+\index{bigint\_utils.c@{bigint\_utils.c}!CHECK\_PTR\_AND\_DEREF@{CHECK\_PTR\_AND\_DEREF}}
+\index{CHECK\_PTR\_AND\_DEREF@{CHECK\_PTR\_AND\_DEREF}!bigint\_utils.c@{bigint\_utils.c}}
+\doxysubsubsection{\texorpdfstring{CHECK\_PTR\_AND\_DEREF}{CHECK\_PTR\_AND\_DEREF}}
+{\footnotesize\ttfamily \#define CHECK\+\_\+\+PTR\+\_\+\+AND\+\_\+\+DEREF(\begin{DoxyParamCaption}\item[{}]{ptr,  }\item[{}]{name,  }\item[{}]{func }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \textcolor{keywordflow}{do} \{ \(\backslash\)}
+\DoxyCodeLine{        exit\_on\_null\_error(ptr, name, func); \(\backslash\)}
+\DoxyCodeLine{        exit\_on\_null\_error(*ptr, \textcolor{stringliteral}{"{}*"{}} name, func); \(\backslash\)}
+\DoxyCodeLine{    \} \textcolor{keywordflow}{while}(0)}
+
+\end{DoxyCode}
+
+
+Definition at line 15 of file bigint\+\_\+utils.\+c.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bigint__utils_8c_a62e96c20b8fcec2f07c8f1c69c855f84}\label{bigint__utils_8c_a62e96c20b8fcec2f07c8f1c69c855f84}} 
+\index{bigint\_utils.c@{bigint\_utils.c}!exit\_on\_null\_error@{exit\_on\_null\_error}}
+\index{exit\_on\_null\_error@{exit\_on\_null\_error}!bigint\_utils.c@{bigint\_utils.c}}
+\doxysubsubsection{\texorpdfstring{exit\_on\_null\_error()}{exit\_on\_null\_error()}}
+{\footnotesize\ttfamily void exit\+\_\+on\+\_\+null\+\_\+error (\begin{DoxyParamCaption}\item[{const void $\ast$}]{ptr,  }\item[{const char $\ast$}]{ptr\+\_\+name,  }\item[{const char $\ast$}]{function\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Exits program if pointer is NULL, indicating an allocation error. 
+
+\begin{DoxyAuthor}{Author}
+Ji Yong-\/\+Hyeon 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2023-\/11-\/26 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em ptr} & -\/ The pointer to check. \\
+\hline
+{\em ptr\+\_\+name} & -\/ The name of the pointer variable. \\
+\hline
+{\em function\+\_\+name} & -\/ The name of the function calling this check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function will terminate the program on a null pointer error. 
+\end{DoxyNote}
+
+
+Definition at line 9 of file bigint\+\_\+utils.\+c.
+
