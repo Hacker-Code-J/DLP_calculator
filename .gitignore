@@ -1,6 +1,14 @@
-lib_test.txt
+*.txt
+!flag1.txt
+!flag2.txt
+!flag3.txt
+!flag4.txt
+!flag5.txt
+
 test.py
-test.txt
+
+html/
+latex/
 
 # Prerequisites
 *.d
