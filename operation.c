@@ -978,7 +978,7 @@ void DIV_long(BINT** X, BINT** Y, BINT** Q, BINT** R) {
     // Fetch bit lengths
     int n = (*X)->wordlen;  // Pass the address of the pointer
     int m = (*Y)->wordlen;  // Pass the address of the pointer
-
+    
     // Calculate W as 2^word size
     WORD W = ((WORD)1) << (WORD_BITLEN - 1); // Use one less bit to avoid overflow
 
@@ -993,7 +993,8 @@ void DIV_long(BINT** X, BINT** Y, BINT** Q, BINT** R) {
     // Main algorithm as per the pseudocode
     if (n == m) {
         (*Q)->val[0] = x_m_1 / y_m_1;
-    } else if (n == m + 1) {
+    }
+    if (n == m + 1) {
         if (x_m == y_m_1) {
             (*Q)->val[0] = W - 1;
         } else {
@@ -1014,7 +1015,8 @@ void DIV_long(BINT** X, BINT** Y, BINT** Q, BINT** R) {
         BINT* ONE;
         BINT* tmpQ;
         BINT* tmpR;
-        SET_BINT_ONE(&ONE);         // Set ONE to 1
+        // SET_BINT_ONE(&ONE);         // Set ONE to 1
+        SET_BINT_CUSTOM_ONE(&ONE, (*Q)->wordlen);
         copyBINT(&tmpQ, Q);
         SUB(&tmpQ, &ONE, Q);            // Q = Q - 1
         copyBINT(&tmpR, R);

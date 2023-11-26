@@ -42,16 +42,27 @@ void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
 }
 
 
-#define SET_WORD_DATA(PB, V, WL, S) if(*(PB)) delete_bint(PB); *(PB)=(BINT*)malloc(sizeof(BINT));\
-    (*PB)->val=(WORD*)calloc(1,sizeof(WORD)); (*PB)->val[0]=(V); (*PB)->wordlen=(WL); (*PB)->sign=(S)
+#define SET_WORD_DATA(PB, V, WL, S) init_bint(PB, WL); (*PB)->val[0]=(V);
 
-void SET_BINT_ZERO(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x00, 1, false); }
-void SET_BINT_ONE(BINT** pptrBint) { SET_WORD_DATA(pptrBint, 0x01, 1, false); }
+void SET_BINT_ZERO(BINT** pptrBint) { 
+    init_bint(pptrBint, 1);
+    (*pptrBint)->val[0] = 0x00;
+}
+void SET_BINT_ONE(BINT** pptrBint) { 
+    init_bint(pptrBint, 1);
+    (*pptrBint)->val[0] = 0x01;
+ }
 
 void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words) {
     init_bint(pptrBint, num_words);
-    for(int i = 0; i < num_words; i++)
-        (*pptrBint)->val[i] = 0x00;
+    // for(int i = 0; i < num_words; i++)
+    //     (*pptrBint)->val[i] = 0x00;
+}
+void SET_BINT_CUSTOM_ONE(BINT** pptrBint, int num_words) {
+    init_bint(pptrBint, num_words);
+    (*pptrBint)->val[0] = 0x01;
+    // for(int i = 1; i < num_words; i++)
+    //     (*pptrBint)->val[i] = 0x00;
 }
 
 void SET_BIT(BINT** ptrBint, int bit_idx, bool bit_val) {

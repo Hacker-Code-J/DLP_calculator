@@ -80,6 +80,7 @@ void SET_BIT(BINT** ptrBint, int bit_idx, bool bit_val);
  * @param num_words Number of words for custom zero initialization.
  */
 void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words);
+void SET_BINT_CUSTOM_ONE(BINT** pptrBint, int num_words);
 
 /**
  * Copies the value from the source binary integer object to the destination binary integer object.
