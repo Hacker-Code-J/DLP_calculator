@@ -7,6 +7,7 @@ When documenting a set of interdependent files like `config.h`, `utils.h`, `util
 Install Doxygen on your Linux system using the package manager:
 
 ```bash
+doxygen -v
 sudo apt-get update
 sudo apt-get install doxygen
 ```
@@ -24,7 +25,7 @@ doxygen -g
 Edit the `Doxyfile` to include all relevant source files:
 
 ```plaintext
-INPUT = ./config.h ./utils.h ./utils.c ./opr.h ./opr.c
+INPUT = ./config.h ./bigint_utils.h ./bigint_utils.c ./bigint_arithmetic.h ./bigint_arithmetic.c
 ```
 
 Set the `RECURSIVE` tag to `YES` if your files are in different subdirectories:
@@ -54,9 +55,22 @@ Make sure your source files have Doxygen-compatible comments:
 
 ```c
 /**
- * @file config.h
- * @brief Configuration settings for the project.
+ * @brief Computes the sum of two integers.
+ * 
+ * This function takes two integers as input and returns their sum.
+ * It's a straightforward and efficient implementation using the plus operator.
+ * 
+ * @author Ji Yong-Hyeon
+ * @date 2023-11-27
+ * 
+ * @param a The first integer to add.
+ * @param b The second integer to add.
+ * 
+ * @note The function does not check for integer overflow.
  */
+int add(int a, int b) {
+    return a + b;
+}
 ```
 
 ## Step 5: Run Doxygen
