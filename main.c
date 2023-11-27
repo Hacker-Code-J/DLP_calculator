@@ -56,7 +56,7 @@ void MUL_Core_Krtsb_xyz(BINT**, BINT**, BINT**);
             case 5: rnd = 0x00; fix = 0x040; break; /* 2048-bit */ \
             case 6: rnd = 0x00; fix = 0x060; break; /* 3072-bit */ \
             case 7: rnd = 0x00; fix = 0x0f0; break; /* 7680-bit */ \
-            case 8: rnd = 0x00; fix = 0x1e0; break; /* 15360-s */ \
+            case 8: rnd = 0x00; fix = 0x1e0; break; /* 15360-bit */ \
             default: rnd = 0x20; fix = 0x20; /* 1024 ~ 2048 bits */ \
         } \
     } while(0)
@@ -74,7 +74,7 @@ void MUL_Core_Krtsb_xyz(BINT**, BINT**, BINT**);
 
 // Macro for positive random BINT generation
 #define POSITIVE_RANDOMIZE_BINTS(ptrX, ptrY, rnd, fix) \
-    do { \
+    do { \  
         int len1 = (rand() % rnd) + fix; \
         int len2 = (rand() % rnd) + fix; \
         RANDOM_BINT(&ptrX, false, len1); \
@@ -238,6 +238,11 @@ int main() {
      * 1: 2048 ~ 3072 bits
      * 2: 3072 ~ 7680 bits
      * 3: 7680 ~ 15360 bits
+     * 4: 1024-bit
+     * 5: 2048-bit
+     * 5: 3072-bit
+     * 5: 7680-bit
+     * 5: 15360-bit            case 5: rnd = 0x00; fix = 0x040; break;
      * default(0): 1024 ~ 2048 bits
      * ===============================================================
      * sgn_op
@@ -264,17 +269,17 @@ int main() {
     int sgn_op = 1;
 
     // Addition and Subtraction
-    // test_rand_ADD(t, bit_op, sgn_op);
+    test_rand_ADD(t, bit_op, sgn_op);
     // test_rand_SUB(t, bit_op, sgn_op);
 
     // Multiplication
     // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
-    // test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
+    // test_rand_MUL(t, bit_op, sgn_op, 2); // Karatsuba
 
     // Squaring
     // test_rand_SQU(t, bit_op, sgn_op, 0);
-    test_rand_SQU(t, bit_op, sgn_op, 1);
+    // test_rand_SQU(t, bit_op, sgn_op, 1);
 
     // Division
     // test_rand_DIV(t, bit_op, sgn_op, 0); // Binary Long

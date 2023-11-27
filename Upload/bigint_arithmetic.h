@@ -45,38 +45,53 @@ void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 
 /**
- * @brief Performs addition with carry of two WORDs and stores the result and carry.
+ * @brief Performs addition with carry of two WORDs, storing the sum and carry-out.
+ *        Essential for multi-word arithmetic operations.
+ *
  * @author Your Name
- * @date Date of creation or last update
- * @param x The first WORD operand.
- * @param y The second WORD operand.
- * @param k The carry-in value.
- * @param ptrQ A pointer to the WORD where the sum will be stored.
- * @param ptrR A pointer to the WORD where the carry-out will be stored.
- * @note This is a low-level operation used in multi-word arithmetic.
+ * @date [Date]
+ * @param x First WORD operand.
+ * @param y Second WORD operand.
+ * @param k Carry-in value (0 or 1).
+ * @param ptrQ Pointer to WORD for sum result.
+ * @param ptrR Pointer to WORD for carry-out result.
+ * @note Null-check for `ptrQ` and `ptrR` is expected.
  */
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR);
+
 /**
- * @brief Adds two multi-word integers (BINTs) and stores the result in a third BINT, managing memory as needed.
+ * @brief Adds two BINTs, storing result in third BINT. Manages memory allocation for result.
+ *
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX Pointer to the pointer of the first BINT operand.
- * @param pptrY Pointer to the pointer of the second BINT operand.
- * @param pptrZ Pointer to the pointer where the resulting BINT will be stored after the addition.
- * @note This function handles the intricacies of BINT addition, including memory reallocation for the result, if necessary.
+ * @date [Date]
+ * @param pptrX First BINT operand.
+ * @param pptrY Second BINT operand.
+ * @param pptrZ Result BINT.
+ * @note Handles overflow and memory allocation for `pptrZ`.
  */
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
 /**
- * @brief Public API function for adding two BINTs, wrapping the core addition functionality with user-friendly access.
+ * @brief Public API function to add two BINTs. This high-level function provides a simplified interface for users
+ *        to perform addition on BINTs, abstracting the complexity of the core addition logic.
+ *
+ * @details The function wraps the `add_core_xyz` to provide an easy-to-use interface for adding BINTs. It prepares
+ *          the operands and handles any necessary setup or cleanup.
+ * 
  * @author Your Name
  * @date Date of creation or last update
+ *
  * @param pptrX Pointer to the pointer of the first BINT operand.
  * @param pptrY Pointer to the pointer of the second BINT operand.
  * @param pptrZ Pointer to the pointer where the addition result will be stored.
- * @note Utilizes add_core_xyz internally; users should call this function for adding BINTs.
+ *
+ * @pre `pptrX` and `pptrY` must point to initialized BINT objects. `pptrZ` should be NULL or point to a BINT object
+ *      that can be safely deallocated and replaced.
+ * @post `*pptrZ` contains the sum of `*pptrX` and `*pptrY`. If `*pptrZ` was not NULL, its previous value has been
+ *       safely deallocated.
+ * @note Users should prefer this function for adding BINTs, rather than directly calling `add_core_xyz`.
  */
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
-
 /**
  * @brief Subtracts two WORD-sized integers, taking into account a borrow, and outputs both the difference and the resulting borrow.
  * @author Your Name

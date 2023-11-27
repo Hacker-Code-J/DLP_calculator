@@ -275,10 +275,6 @@ void strToBINT(BINT** pptrBint, const char* hexString);
  */
 void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits);
 
-Continuing with the professional annotations for the remaining functions in your C header file:
-
-c
-Copy code
 /**
  * @brief Performs a left shift operation on a BINT object by a specified number of words.
  * @author Your Name

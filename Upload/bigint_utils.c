@@ -2,8 +2,8 @@
 #include "bigint_utils.h"
 
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 
 void exit_on_null_error(const void* ptr, const char* ptr_name, const char* function_name) {
@@ -31,11 +31,6 @@ void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
     free((*pptrBint)->val);
     free(*pptrBint);
     *pptrBint = NULL;
-    // if (pptrBint && *pptrBint) {
-    //     free((*pptrBint)->val); // Free the allocated memory for val
-    //     free(*pptrBint); // Free the allocated memory for BINT structure
-    //     *pptrBint = NULL; // Set the pointer to NULL after freeing memory to avoid using a dangling pointer
-    // }
 }
 
 void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint

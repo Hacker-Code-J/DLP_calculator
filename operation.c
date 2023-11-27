@@ -137,11 +137,10 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "ADD");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "ADD");
-    // bool xGeqy = compare_abs_bint(pptrX, pptrY);
     if (!compare_abs_bint(pptrX, pptrY)) {
         ADD(pptrY, pptrX, pptrZ);
+        swapBINT(pptrX,pptrY);
         return;
-        // swapBINT(pptrX,pptrY);
     }    
     int n = (*pptrX)->wordlen;
 
@@ -202,7 +201,7 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         sub_borrow((*pptrX)->val[i], (WORD)0, &borrow, &res);
         (*pptrZ)->val[i] = res;
     }
-    // refine_BINT(*pptrX);
+    refine_BINT(*pptrX);
     refine_BINT(*pptrY);
     // if(!xGeqy) swapBINT(pptrX,pptrY);
 }

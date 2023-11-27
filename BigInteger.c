@@ -472,11 +472,13 @@ void print_bint_hex_python(BINT** pptrBint) {
     printf("0x");
     
     for (int i = (*pptrBint)->wordlen - 1; i >= 0; i--) {
-        printf("%08x", (*pptrBint)->val[i]);
-        // if(i >= 3) {  // Assuming MAX_WORDLEN is the maximum size of the val array
-        //     fprintf(stderr, "Word length exceeds maximum allowed length.\n");
-        //     return;
-        // }
+#if WORD_BITLEN == 8
+    printf("%02x", (*pptrBint)->val[i]);
+#elif WORD_BITLEN == 64
+    printf("%16x", (*pptrBint)->val[i]);
+#else
+    printf("%08x", (*pptrBint)->val[i]);
+#endif
     }
 }
 
