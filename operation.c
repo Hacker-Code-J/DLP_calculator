@@ -202,8 +202,9 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         sub_borrow((*pptrX)->val[i], (WORD)0, &borrow, &res);
         (*pptrZ)->val[i] = res;
     }
-    refine_BINT(*pptrX); refine_BINT(*pptrY);
-    if(!xGeqy) swapBINT(pptrX,pptrY);
+    // refine_BINT(*pptrX);
+    refine_BINT(*pptrY);
+    // if(!xGeqy) swapBINT(pptrX,pptrY);
 }
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "SUB");
@@ -216,16 +217,17 @@ void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     init_bint(pptrZ, MAXIMUM(n,m));
     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SUB");
 
-    if ((*pptrY)->sign == false && compare_bint(pptrX,pptrY)) {
+    bool xGeqy = compare_bint(pptrX, pptrY);
+    if ((*pptrY)->sign == false && xGeqy) {
         sub_core_xyz(pptrX,pptrY,pptrZ);
-    } else if ((*pptrX)->sign == false && !compare_bint(pptrX,pptrY)) {
+    } else if ((*pptrX)->sign == false && !xGeqy) {
         sub_core_xyz(pptrY,pptrX,pptrZ);
         (*pptrZ)->sign = true;
-    } else if ((*pptrX)->sign == true && compare_bint(pptrX,pptrY)) {
+    } else if ((*pptrX)->sign == true && xGeqy) {
         (*pptrX)->sign = false;
         (*pptrY)->sign = false;
         sub_core_xyz(pptrY,pptrX,pptrZ);
-    } else if ((*pptrY)->sign == true && !compare_bint(pptrX,pptrY)) {
+    } else if ((*pptrY)->sign == true && !xGeqy) {
         (*pptrX)->sign = false;
         (*pptrY)->sign = false;
         sub_core_xyz(pptrX,pptrY,pptrZ);
