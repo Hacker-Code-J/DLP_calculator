@@ -232,161 +232,161 @@ void test_flint_mul(int count) {
     flint_randclear(state);
 }
 
-// int main() {
-//     /*
-//      * bit_op
-//      * 1: 2048 ~ 3072 bits
-//      * 2: 3072 ~ 7680 bits
-//      * 3: 7680 ~ 15360 bits
-//      * default(0): 1024 ~ 2048 bits
-//      * ===============================================================
-//      * sgn_op
-//      * 0: random sign
-//      * 1: positive sign
-//      * ===============================================================
-//      * mul_op
-//      * 1: Improved TextBook
-//      * 2: Karatsuba
-//      * default(0): TextBook
-//      * ===============================================================
-//      * squ_op
-//      * 1: Karastsuba
-//      * default(0): TextBook
-//      * ===============================================================
-//      * test_rand_ADD(int cnt, int bit_op, int sgn_op)
-//      * test_rand_SUB(int cnt, int bit_op, int sgn_op)
-//      * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
-//      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
-//     */
+int main() {
+    /*
+     * bit_op
+     * 1: 2048 ~ 3072 bits
+     * 2: 3072 ~ 7680 bits
+     * 3: 7680 ~ 15360 bits
+     * default(0): 1024 ~ 2048 bits
+     * ===============================================================
+     * sgn_op
+     * 0: random sign
+     * 1: positive sign
+     * ===============================================================
+     * mul_op
+     * 1: Improved TextBook
+     * 2: Karatsuba
+     * default(0): TextBook
+     * ===============================================================
+     * squ_op
+     * 1: Karastsuba
+     * default(0): TextBook
+     * ===============================================================
+     * test_rand_ADD(int cnt, int bit_op, int sgn_op)
+     * test_rand_SUB(int cnt, int bit_op, int sgn_op)
+     * test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op)
+     * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
+    */
 
-//     int t = 1000;
-//     int bit_op = 1;
-//     int sgn_op = 1;
+    int t = 1000;
+    int bit_op = 1;
+    int sgn_op = 1;
 
-//     // Addition and Subtraction
-//     // test_rand_ADD(t, bit_op, sgn_op);
-//     // test_rand_SUB(t, bit_op, sgn_op);
+    // Addition and Subtraction
+    // test_rand_ADD(t, bit_op, sgn_op);
+    // test_rand_SUB(t, bit_op, sgn_op);
 
-//     // Multiplication
-//     // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
-//     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
-//     // test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
+    // Multiplication
+    // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
+    // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
+    // test_rand_MUL(t, bit_op, sgn_op, 2); // Kratsuba
 
-//     // Squaring
-//     // test_rand_SQU(t, bit_op, sgn_op, 0);
-//     test_rand_SQU(t, bit_op, sgn_op, 1);
+    // Squaring
+    // test_rand_SQU(t, bit_op, sgn_op, 0);
+    test_rand_SQU(t, bit_op, sgn_op, 1);
 
-//     // Division
-//     // test_rand_DIV(t, bit_op, sgn_op, 0); // Binary Long
-//     // test_rand_DIV(t, bit_op, sgn_op, 1); // General Long
+    // Division
+    // test_rand_DIV(t, bit_op, sgn_op, 0); // Binary Long
+    // test_rand_DIV(t, bit_op, sgn_op, 1); // General Long
 
 
-//     return 0;
-// }
+    return 0;
+}
 
 /*
  *  Measuring Performance
 */
-int main() {
-    srand((unsigned int)time(NULL));
+// int main() {
+//     srand((unsigned int)time(NULL));
 
-    clock_t start1, end1;
-    double cpu_time_used1;
-    clock_t start2, end2;
-    double cpu_time_used2;
-    // clock_t start3, end3;
-    // double cpu_time_used3;
-    int t = 10000;
+//     clock_t start1, end1;
+//     double cpu_time_used1;
+//     clock_t start2, end2;
+//     double cpu_time_used2;
+//     // clock_t start3, end3;
+//     // double cpu_time_used3;
+//     int t = 10000;
 
-    /**
-     * if WORD_BITLEN = 32
-     * 0x010 -> ( 1 * 16 =  16) -> (16 *  32 =   512-bit)
-     * 0x020 -> ( 2 * 16 =  32) -> (32 *  32 =  1024-bit)
-     * 0x040 -> ( 4 * 16 =  64) -> (32 *  64 =  2048-bit)
-     * 0x060 -> ( 6 * 16 =  96) -> (32 *  96 =  3072-bit)
-     * 0x0f0 -> (15 * 16 = 240) -> (32 * 240 =  7680-bit)
-     * 
-     * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
-    */
+//     /**
+//      * if WORD_BITLEN = 32
+//      * 0x010 -> ( 1 * 16 =  16) -> (16 *  32 =   512-bit)
+//      * 0x020 -> ( 2 * 16 =  32) -> (32 *  32 =  1024-bit)
+//      * 0x040 -> ( 4 * 16 =  64) -> (32 *  64 =  2048-bit)
+//      * 0x060 -> ( 6 * 16 =  96) -> (32 *  96 =  3072-bit)
+//      * 0x0f0 -> (15 * 16 = 240) -> (32 * 240 =  7680-bit)
+//      * 
+//      * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
+//     */
 
-    int idx = 0;
-    while(idx < t) {
-        BINT* ptrX = NULL;
-        BINT* ptrY = NULL;
-        BINT* ptrZ = NULL;
-        BINT* ptrTmpX = NULL;
-        BINT* ptrTmpY = NULL;
-        BINT* ptrTmpZ = NULL;
-        // BINT* ptrTTmpX = NULL;
-        // BINT* ptrTTmpY = NULL;
-        // BINT* ptrTTmpZ = NULL;
-/*************************** Random Input **************************************/
-        // int len1 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-        // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-        int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-        int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-        // int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-        // int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-        // int len1 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-        // int len2 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-        // int len1 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
-        // int len2 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
+//     int idx = 0;
+//     while(idx < t) {
+//         BINT* ptrX = NULL;
+//         BINT* ptrY = NULL;
+//         BINT* ptrZ = NULL;
+//         BINT* ptrTmpX = NULL;
+//         BINT* ptrTmpY = NULL;
+//         BINT* ptrTmpZ = NULL;
+//         // BINT* ptrTTmpX = NULL;
+//         // BINT* ptrTTmpY = NULL;
+//         // BINT* ptrTTmpZ = NULL;
+// /*************************** Random Input **************************************/
+//         // int len1 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
+//         // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
+//         int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
+//         int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
+//         // int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
+//         // int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
+//         // int len1 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
+//         // int len2 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
+//         // int len1 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
+//         // int len2 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
 
-        // int len1 = 0x020;
-        // int len2 = 0x020;
+//         // int len1 = 0x020;
+//         // int len2 = 0x020;
       
-        RANDOM_BINT(&ptrX, false, len1);
-        RANDOM_BINT(&ptrY, false, len2);
+//         RANDOM_BINT(&ptrX, false, len1);
+//         RANDOM_BINT(&ptrY, false, len2);
 
-        // int sgn1 = rand() % 0x02;
-        // int sgn2 = rand() % 0x02;
-        // RANDOM_BINT(&ptrX, false, len1);
-        // RANDOM_BINT(&ptrY, false, len2);
+//         // int sgn1 = rand() % 0x02;
+//         // int sgn2 = rand() % 0x02;
+//         // RANDOM_BINT(&ptrX, false, len1);
+//         // RANDOM_BINT(&ptrY, false, len2);
         
-        copyBINT(&ptrTmpX, &ptrX);      
-        copyBINT(&ptrTmpY, &ptrX);
-        // copyBINT(&ptrTTmpX, &ptrX);      
-        // copyBINT(&ptrTTmpY, &ptrY);
+//         copyBINT(&ptrTmpX, &ptrX);      
+//         copyBINT(&ptrTmpY, &ptrX);
+//         // copyBINT(&ptrTTmpX, &ptrX);      
+//         // copyBINT(&ptrTTmpY, &ptrY);
         
-        start1 = clock();
-        // add_core_xyz(&ptrX, &ptrY, &ptrZ);
-        // mul_core_TxtBk_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
-        // SQU_Txtbk_xz(&ptrX, &ptrZ);
-        MUL_Core_Krtsb_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
-        end1 = clock();
-        cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
+//         start1 = clock();
+//         // add_core_xyz(&ptrX, &ptrY, &ptrZ);
+//         // mul_core_TxtBk_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
+//         // SQU_Txtbk_xz(&ptrX, &ptrZ);
+//         MUL_Core_Krtsb_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
+//         end1 = clock();
+//         cpu_time_used1 = ((double) (end1 - start1)) / CLOCKS_PER_SEC;
 
-        start2 = clock();
-        // ADD(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
-        // sub_core_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
-        // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
-        // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
-        // SQU_Txtbk_xz(&ptrX, &ptrZ);
-        SQU_Krtsb_xz(&ptrX,&ptrZ);
-        end2 = clock();
-        cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
+//         start2 = clock();
+//         // ADD(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
+//         // sub_core_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
+//         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+//         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+//         // SQU_Txtbk_xz(&ptrX, &ptrZ);
+//         SQU_Krtsb_xz(&ptrX,&ptrZ);
+//         end2 = clock();
+//         cpu_time_used2 = ((double) (end2 - start2)) / CLOCKS_PER_SEC;
 
-        // start3 = clock();
-        // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 0x08);
-        // end3 = clock();
-        // cpu_time_used3 = ((double) (end3 - start3)) / CLOCKS_PER_SEC;
+//         // start3 = clock();
+//         // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 0x08);
+//         // end3 = clock();
+//         // cpu_time_used3 = ((double) (end3 - start3)) / CLOCKS_PER_SEC;
         
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrZ);
-        delete_bint(&ptrTmpX);
-        delete_bint(&ptrTmpY);
-        delete_bint(&ptrTmpZ);
-        // delete_bint(&ptrTTmpX);
-        // delete_bint(&ptrTTmpY);
-        // delete_bint(&ptrTTmpZ);
-        printf("%.6f\n", cpu_time_used1);
-        printf("%.6f\n", cpu_time_used2);
-        // printf("%.6f\n", cpu_time_used3);
-        // printf("%.6f\n", cpu_time_used1-cpu_time_used2);
-        idx++;
-    }
-}
+//         delete_bint(&ptrX);
+//         delete_bint(&ptrY);
+//         delete_bint(&ptrZ);
+//         delete_bint(&ptrTmpX);
+//         delete_bint(&ptrTmpY);
+//         delete_bint(&ptrTmpZ);
+//         // delete_bint(&ptrTTmpX);
+//         // delete_bint(&ptrTTmpY);
+//         // delete_bint(&ptrTTmpZ);
+//         printf("%.6f\n", cpu_time_used1);
+//         printf("%.6f\n", cpu_time_used2);
+//         // printf("%.6f\n", cpu_time_used3);
+//         // printf("%.6f\n", cpu_time_used1-cpu_time_used2);
+//         idx++;
+//     }
+// }
 
 
 
