@@ -5,122 +5,124 @@
 #define BIGINT_ARITHMETIC_H
 
 /**
- * @brief Performs a bitwise NOT operation on a BINT object.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrbint_dst A pointer to the BINT object pointer where the result will be stored.
- * @param pptrBint_src A pointer to the BINT object pointer to be negated.
- * @note The result is stored in ptrbint_dst, and the original BINT object is not modified.
+ * @brief Computes the bitwise NOT of a binary integer.
+ * @details This function takes a pointer to a pointer to a binary integer (BINT) and computes its bitwise NOT operation, storing the result in the location pointed to by ptrbint_dst.
+ * @param ptrbint_dst A pointer to a pointer to a BINT where the result should be stored.
+ * @param pptrBint_src A pointer to a pointer to a BINT that is the source for the NOT operation.
+ * @pre pptrBint_src must point to a valid BINT object. ptrbint_dst must be initialized and able to store the result.
+ * @post The result of the bitwise NOT operation is stored in the location pointed to by ptrbint_dst.
+ * @note This function assumes that the BINT data structure is properly defined and that the necessary memory management is handled outside of the function.
  */
 void NOT_BINT(BINT** ptrbint_dst, BINT** pptrBint_src);
+
 /**
- * @brief Performs a bitwise AND operation between two BINT objects.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrX A pointer to the first BINT object operand.
- * @param ptrY A pointer to the second BINT object operand.
- * @param pptrZ A pointer to the BINT object pointer where the result will be stored.
- * @note The function will allocate memory for the result if necessary.
+ * @brief Computes the bitwise AND of two binary integers.
+ * @details This function takes pointers to two BINTs and computes the bitwise AND, storing the result in the location pointed to by pptrZ.
+ * @param ptrX A pointer to a BINT representing the first operand.
+ * @param ptrY A pointer to a BINT representing the second operand.
+ * @param pptrZ A pointer to a pointer to a BINT where the result should be stored.
+ * @pre ptrX and ptrY must point to valid BINT objects. pptrZ must be initialized to store the result.
+ * @post The result of the bitwise AND operation is stored in the location pointed to by pptrZ.
+ * @note It is assumed that proper memory allocation for the result has been done before the function is called.
  */
 void AND_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+
 /**
- * @brief Performs a bitwise OR operation between two BINT objects.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrX A pointer to the first BINT object operand.
- * @param ptrY A pointer to the second BINT object operand.
- * @param pptrZ A pointer to the BINT object pointer where the result will be stored.
- * @note The function will allocate memory for the result if necessary.
+ * @brief Computes the bitwise OR of two binary integers.
+ * @details This function takes pointers to two BINTs and computes the bitwise OR, storing the result in the location pointed to by pptrZ.
+ * @param ptrX A pointer to a BINT representing the first operand.
+ * @param ptrY A pointer to a BINT representing the second operand.
+ * @param pptrZ A pointer to a pointer to a BINT where the result should be stored.
+ * @pre ptrX and ptrY must point to valid BINT objects. pptrZ must be initialized and able to store the result.
+ * @post The result of the bitwise OR operation is stored in the location pointed to by pptrZ.
+ * @note Ensure that the BINT data structure supports the operation and that memory for the result is allocated beforehand.
  */
 void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+
 /**
- * @brief Performs a bitwise XOR operation between two BINT objects.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrX A pointer to the first BINT object operand.
- * @param ptrY A pointer to the second BINT object operand.
- * @param pptrZ A pointer to the BINT object pointer where the result will be stored.
- * @note The function will allocate memory for the result if necessary.
+ * @brief Computes the bitwise XOR of two binary integers.
+ * @details This function takes pointers to two BINTs and computes the bitwise XOR, storing the result in the location pointed to by pptrZ.
+ * @param ptrX A pointer to a BINT representing the first operand.
+ * @param ptrY A pointer to a BINT representing the second operand.
+ * @param pptrZ A pointer to a pointer to a BINT where the result should be stored.
+ * @pre ptrX and ptrY must point to valid BINT objects. pptrZ must be initialized to store the result.
+ * @post The result of the bitwise XOR operation is stored in the location pointed to by pptrZ.
+ * @note The function assumes that memory allocation for the result has been managed outside of the function call.
  */
 void XOR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
 
 /**
- * @brief Performs addition with carry of two WORDs, storing the sum and carry-out.
- *        Essential for multi-word arithmetic operations.
- *
- * @author Your Name
- * @date [Date]
- * @param x First WORD operand.
- * @param y Second WORD operand.
- * @param k Carry-in value (0 or 1).
- * @param ptrQ Pointer to WORD for sum result.
- * @param ptrR Pointer to WORD for carry-out result.
- * @note Null-check for `ptrQ` and `ptrR` is expected.
+ * @brief Adds two WORD-sized integers with a carry.
+ * @details Computes the sum of x and y, adds a carry k, and stores the result in ptrQ. The overflow (if any) is stored in ptrR.
+ * @param x A WORD-sized integer to be added.
+ * @param y A WORD-sized integer to be added.
+ * @param k A WORD-sized carry value.
+ * @param ptrQ A pointer to a WORD where the sum is to be stored.
+ * @param ptrR A pointer to a WORD where the overflow is to be stored.
+ * @pre ptrQ and ptrR must be valid non-null pointers. x, y, and k must be within the bounds of the WORD type.
+ * @post *ptrQ contains the sum of x, y, and k. *ptrR contains the carry-out value.
+ * @note WORD is assumed to be a type alias for an integral type with a fixed size.
  */
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR);
 
 /**
- * @brief Adds two BINTs, storing result in third BINT. Manages memory allocation for result.
- *
- * @author Your Name
- * @date [Date]
- * @param pptrX First BINT operand.
- * @param pptrY Second BINT operand.
- * @param pptrZ Result BINT.
- * @note Handles overflow and memory allocation for `pptrZ`.
+ * @brief Adds two arbitrary-sized binary integers.
+ * @details Sums the binary integers pointed to by pptrX and pptrY and stores the result in the location pointed to by pptrZ.
+ * @param pptrX A pointer to a pointer to a BINT representing the first addend.
+ * @param pptrY A pointer to a pointer to a BINT representing the second addend.
+ * @param pptrZ A pointer to a pointer to a BINT where the result is to be stored.
+ * @pre pptrX and pptrY must point to valid BINT objects. pptrZ must be initialized to store the result.
+ * @post *pptrZ contains the sum of *pptrX and *pptrY.
+ * @note It's assumed that the BINT structure and associated functions properly manage memory and handle arithmetic.
  */
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /**
- * @brief Public API function to add two BINTs. This high-level function provides a simplified interface for users
- *        to perform addition on BINTs, abstracting the complexity of the core addition logic.
- *
- * @details The function wraps the `add_core_xyz` to provide an easy-to-use interface for adding BINTs. It prepares
- *          the operands and handles any necessary setup or cleanup.
- * 
- * @author Your Name
- * @date Date of creation or last update
- *
- * @param pptrX Pointer to the pointer of the first BINT operand.
- * @param pptrY Pointer to the pointer of the second BINT operand.
- * @param pptrZ Pointer to the pointer where the addition result will be stored.
- *
- * @pre `pptrX` and `pptrY` must point to initialized BINT objects. `pptrZ` should be NULL or point to a BINT object
- *      that can be safely deallocated and replaced.
- * @post `*pptrZ` contains the sum of `*pptrX` and `*pptrY`. If `*pptrZ` was not NULL, its previous value has been
- *       safely deallocated.
- * @note Users should prefer this function for adding BINTs, rather than directly calling `add_core_xyz`.
+ * @brief Adds two binary integers.
+ * @details Wrapper function that calls the core add function to sum two BINTs pointed to by pptrX and pptrY and stores the result at pptrZ.
+ * @param pptrX A pointer to a pointer to a BINT representing the first operand.
+ * @param pptrY A pointer to a pointer to a BINT representing the second operand.
+ * @param pptrZ A pointer to a pointer to a BINT where the result should be stored.
+ * @pre pptrX and pptrY must point to valid BINT objects. pptrZ must be properly allocated to store the result.
+ * @post The result of addition is stored in the location pointed to by pptrZ.
+ * @note This function may call other helper functions to manage BINT arithmetic and memory.
  */
 void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
 /**
- * @brief Subtracts two WORD-sized integers, taking into account a borrow, and outputs both the difference and the resulting borrow.
- * @author Your Name
- * @date Date of creation or last update
- * @param x The WORD from which y is to be subtracted.
- * @param y The WORD to be subtracted from x.
- * @param ptrQ Pointer to the variable where the difference will be stored.
- * @param ptrR Pointer to the variable where the resulting borrow will be stored; it will be non-zero if the subtraction underflows.
- * @note Essential for multi-word subtraction, this function ensures that borrows are correctly propagated through the operation.
+ * @brief Subtracts two WORD-sized integers with borrow handling.
+ * @details Computes the difference between x and y, considering an initial borrow, and stores the result in ptrQ. The borrow-out is stored in ptrR.
+ * @param x A WORD-sized integer from which y will be subtracted.
+ * @param y A WORD-sized integer to be subtracted from x.
+ * @param ptrQ A pointer to a WORD to store the result of the subtraction.
+ * @param ptrR A pointer to a WORD to store the borrow-out value.
+ * @pre ptrQ and ptrR must be valid non-null pointers.
+ * @post *ptrQ contains the result of the subtraction. *ptrR contains the borrow-out value.
+ * @note WORD is assumed to be a type alias for an integral type with a fixed size.
  */
-void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR); 
+void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR);
+
 /**
- * @brief Subtracts two multi-word integers (BINTs) and stores the result in a third BINT, managing memory as needed.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrX Pointer to the pointer of the first BINT operand.
- * @param pptrY Pointer to the pointer of the second BINT operand.
- * @param pptrZ Pointer to the pointer where the resulting BINT will be stored after the subtraction.
- * @note This function handles the complexities of BINT subtraction, including memory reallocation for the result, if necessary.
+ * @brief Subtracts two arbitrary-sized binary integers.
+ * @details Computes the difference between the binary integers pointed to by pptrX and pptrY and stores the result in the location pointed to by pptrZ.
+ * @param pptrX A pointer to a pointer to a BINT representing the minuend.
+ * @param pptrY A pointer to a pointer to a BINT representing the subtrahend.
+ * @param pptrZ A pointer to a pointer to a BINT where the result is to be stored.
+ * @pre pptrX and pptrY must point to valid BINT objects. pptrZ must be initialized to store the result.
+ * @post *pptrZ contains the difference of *pptrX and *pptrY.
+ * @note Assumes proper BINT structure and memory management.
  */
 void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
 /**
- * @brief Public API function for subtracting two BINTs, encapsulating the core subtraction functionality for ease of use.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrX Pointer to the pointer of the first BINT operand.
- * @param pptrY Pointer to the pointer of the second BINT operand.
- * @param pptrZ Pointer to the pointer where the subtraction result will be stored.
- * @note Utilizes sub_core_xyz internally; intended to be the function users call for subtracting BINTs.
+ * @brief Subtracts two binary integers.
+ * @details Wrapper function that calls the core subtract function to compute the difference between two BINTs pointed to by pptrX and pptrY, storing the result at pptrZ.
+ * @param pptrX A pointer to a pointer to a BINT representing the first operand.
+ * @param pptrY A pointer to a pointer to a BINT representing the second operand.
+ * @param pptrZ A pointer to a pointer to a BINT where the result should be stored.
+ * @pre pptrX and pptrY must point to valid BINT objects. pptrZ must be properly allocated to store the result.
+ * @post The result of subtraction is stored in the location pointed to by pptrZ.
+ * @note This function may utilize other helper functions for BINT arithmetic and memory management.
  */
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
