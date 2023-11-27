@@ -131,7 +131,6 @@ void add_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
 void exp_Mongomery(BINT** ptrX, BINT** ptrY,BINT** ptrZ);
 void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ);
 
-
-// void sqrt(BINT** pptrBint_dst, BINT** pptrBint_src);
+void Barrett_Reduction(BINT** ptrX,BINT**ptrY,BINT**ptrZ);
 
 #endif // OPERATION_H

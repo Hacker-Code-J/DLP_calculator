@@ -1209,3 +1209,43 @@ void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ) {
     delete_bint(&Q1);
     delete_bint(&Q2);
 }
+
+void Barrett_Reduction(BINT** ptrX,BINT**ptrY,BINT**ptrZ)
+{
+    BINT* Q=NULL;
+    BINT* R=NULL;
+    copyBINT(&Q,ptrX);
+    BINT* T=NULL;
+    BINT* W=NULL;
+    BINT* temp=NULL;
+    BINT* Y=NULL;
+    copyBINT(&Y,ptrY);
+    int n = (*ptrY)->wordlen;
+    init_bint(&W,(*ptrX)->wordlen+1);
+    W->val[(*ptrX)->wordlen] = 0x00000001;//W**2n은 1000000...형태 
+    // 변수 준비 끝
+    DIV_Bianry_Long(&W,&Y,&T,&temp);
+    right_shift_word(&Q,n-1);
+    MUL_Core_ImpTxtBk_xyz(&Q,&T,&temp);
+    copyBINT(&Q,&temp);
+    right_shift_word(&Q,n + 1);
+    copyBINT(&Y,ptrY);
+    MUL_Core_ImpTxtBk_xyz(&Q,&Y,&R);
+    sub_core_xyz(ptrX,&R,&temp);
+    copyBINT(&R,&temp);
+    refine_BINT(R);    
+    while (compare_bint(&R,ptrY) == 1)
+    {
+        copyBINT(&Y,ptrY);
+        SUB(&R,&Y,&temp);
+        copyBINT(&R,&temp);
+        refine_BINT(R);//비교시 길이로만 하기때문에 0으로 채워져 있는경우 정확한 비교가 불가능        
+    };
+    copyBINT(ptrZ,&R);
+    delete_bint(&Y);
+    delete_bint(&Q);
+    delete_bint(&R);
+    delete_bint(&T);
+    delete_bint(&W);
+    delete_bint(&temp);
+}

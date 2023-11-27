@@ -390,4 +390,15 @@ void exp_Mongomery(BINT** ptrX, BINT** ptrY,BINT** ptrZ);
  */
 void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ);
 
+/**
+ * @brief Performs the Barrett reduction on three BINT objects and stores the result in a fourth BINT object.
+ * @author Your Name
+ * @date Date of creation or last update
+ * @param ptrX A pointer to the pointer of the BINT object representing the numerator in the reduction.
+ * @param ptrY A pointer to the pointer of the BINT object representing the modulus in the reduction.
+ * @param ptrZ A pointer to the pointer where the Barrett reduction result will be stored.
+ * @note This function uses the Barrett reduction algorithm to compute the reduction of large integers, which is more efficient than traditional methods.
+ */
+void Barrett_Reduction(BINT** ptrX,BINT** ptrY,BINT** ptrZ);
+
 #endif // BIGINT_ARITHMETIC_H
