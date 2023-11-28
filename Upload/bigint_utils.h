@@ -6,67 +6,90 @@
 #define BIGINT_UTILS_H
 
 /**
- * @brief Exits program if pointer is NULL, indicating an allocation error.
- * @author Ji Yong-Hyeon
- * @date 2023-11-26
- * @param ptr - The pointer to check.
- * @param ptr_name - The name of the pointer variable.
- * @param function_name - The name of the function calling this check.
- * @note This function will terminate the program on a null pointer error.
+ * @brief Terminates program execution if a null pointer is encountered.
+ * @details This function checks if a given pointer is NULL. If it is, the function
+ *          prints an error message with the pointer's name and the name of the function
+ *          that encountered the error, then exits the program.
+ * @author Your Name
+ * @date Today's Date
+ * @param ptr Pointer to be checked for NULL.
+ * @param ptr_name The name of the pointer variable, used in the error message.
+ * @param function_name The name of the function calling this check, used in the error message.
+ * @pre ptr and ptr_name must be valid pointers, function_name must be a valid string.
+ * @post If ptr is NULL, the program will terminate.
+ * @warning Terminates program execution on encountering a NULL pointer.
  */
 void exit_on_null_error(const void* ptr, const char* ptr_name, const char* function_name);
 
 /**
- * @brief Frees the memory allocated for a BINT object and sets the pointer to NULL.
- * @author Ji Yong-Hyeon
- * @date 2023-11-26
- * @param pptrBint A pointer to the pointer of the BINT object to be deleted.
- * @note This function should be called to avoid memory leaks.
+ * @brief Deletes a dynamically allocated BINT object.
+ * @details Frees the memory allocated for a BINT object and sets the pointer to NULL to
+ *          prevent dangling pointer issues.
+ * @author Your Name
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be deleted.
+ * @pre pptrBint must point to a valid BINT object.
+ * @post pptrBint is set to NULL after deletion.
+ * @note This function assumes that the BINT object was dynamically allocated.
  */
 void delete_bint(BINT** pptrBint);
+
 /**
- * @brief Initializes a BINT object with the specified word length.
- * @author Ji Yong-Hyeon
- * @date 2023-11-26
- * @param pptrBint A pointer to the pointer of the BINT object to be initialized.
- * @param wordlen The word length for the BINT object.
- * @note The BINT object's memory will be dynamically allocated.
+ * @brief Initializes a BINT object with a specified word length.
+ * @details Allocates memory for a BINT object and initializes it to represent a number with
+ *          the given word length.
+ * @author Your Name
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be initialized.
+ * @param wordlen The word length for the BINT's internal representation.
+ * @pre wordlen should be a positive integer.
+ * @post pptrBint points to an initialized BINT object.
  */
 void init_bint(BINT** pptrBint, int wordlen);
 
 /**
- * @brief Sets the value of a BINT object to zero.
+ * @brief Sets a BINT object's value to zero.
+ * @details Modifies the BINT object to represent the value zero.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the pointer of the BINT object to be set to zero.
- * @note Assumes the BINT object has been properly initialized.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be modified.
+ * @pre pptrBint must point to a valid BINT object.
+ * @post The BINT object represents the value zero.
  */
 void SET_BINT_ZERO(BINT** pptrBint);
+
 /**
- * @brief Sets the value of a BINT object to one (1).
+ * @brief Sets a BINT object's value to one.
+ * @details Modifies the BINT object to represent the value one.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the pointer of the BINT object to be set to one.
- * @note Assumes the BINT object has been properly initialized.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be modified.
+ * @pre pptrBint must point to a valid BINT object.
+ * @post The BINT object represents the value one.
  */
 void SET_BINT_ONE(BINT** pptrBint);
 
 /**
- * @brief Copies the value of one BINT object to another.
+ * @brief Copies the value from one BINT object to another.
+ * @details The function copies the value of the source BINT object to the destination BINT object.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint_dst A pointer to the point of the destination BINT object pointer.
- * @param ptrBint_src A pointer to the point of the source BINT object to copy from.
- * @note Assumes that both BINT objects have been properly initialized.
+ * @date Today's Date
+ * @param pptrBint_dst Double pointer to the destination BINT object.
+ * @param ptrBint_src Pointer to the source BINT object.
+ * @pre ptrBint_src must point to a valid BINT object and pptrBint_dst must point to an initialized BINT object.
+ * @post pptrBint_dst contains the same value as ptrBint_src.
  */
 void copyBINT(BINT** pptrBint_dst, const BINT* ptrBint_src);
+
 /**
  * @brief Swaps the values of two BINT objects.
+ * @details Exchanges the values between the two provided BINT objects.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint1 A pointer to the point of the first BINT object pointer.
- * @param pptrBint2 A pointer to the point of the second BINT object pointer.
- * @note Assumes that both BINT objects have been properly initialized.
+ * @date Today's Date
+ * @param pptrBint1 Double pointer to the first BINT object.
+ * @param pptrBint2 Double pointer to the second BINT object.
+ * @pre Both pptrBint1 and pptrBint2 must point to valid BINT objects.
+ * @post The values of the two BINT objects are swapped.
  */
 void swapBINT(BINT** pptrBint1, BINT** pptrBint2);
 

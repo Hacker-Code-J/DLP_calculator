@@ -156,6 +156,7 @@ void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  * @param pptrZ A pointer to the pointer where the multiplication result will be stored.
  * @note This function is used for testing optimizations in the textbook multiplication algorithm.
  */
+
 void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 /**
  * @brief Core function for the improved textbook multiplication algorithm of two BINT objects, storing the result in a third BINT object.
@@ -168,7 +169,6 @@ void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  */
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
-
 /**
  * @brief Tests the Karatsuba multiplication algorithm on two BINT objects, storing the result in a third BINT object, with a flag for testing purposes.
  * @author Your Name
@@ -180,6 +180,7 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  * @note This function is used to validate the Karatsuba algorithm's correctness and performance.
  */
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
 /**
  * @brief Karatsuba multiplication test function with a flag parameter to control the behavior of the multiplication algorithm for two BINT objects.
  * @author Your Name
@@ -191,6 +192,7 @@ void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  * @note This function allows for controlled experimentation with the Karatsuba algorithm.
  */
 void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag);
+
 /**
  * @brief Core Karatsuba multiplication algorithm for two BINT objects, storing the result in a third BINT object.
  * @author Your Name
@@ -211,6 +213,7 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  * @note This function is optimized for squaring a single WORD-sized integer within a multi-word BINT context.
  */
 void squ_core(WORD valX,BINT** pptrZ);
+
 /**
  * @brief Textbook squaring algorithm for a BINT object, storing the result in another BINT object.
  * @author Your Name
@@ -220,6 +223,7 @@ void squ_core(WORD valX,BINT** pptrZ);
  * @note Implements the standard algorithm for squaring, similar to the textbook multiplication algorithm.
  */
 void SQU_Txtbk_xz(BINT** pptrX, BINT** pptrZ);
+
 /**
  * @brief Karatsuba algorithm for squaring a BINT object, storing the result in another BINT object.
  * @author Your Name
@@ -240,7 +244,9 @@ void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
  * @param pptrR A pointer to the pointer where the remainder BINT object will be stored.
  * @note This function is intended for testing the binary long division algorithm.
  */
+
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
+
 /**
  * @brief Performs binary long division on BINT objects for the dividend and divisor, and stores the quotient and remainder.
  * @author Your Name
@@ -252,6 +258,7 @@ void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ,
  * @note Implements the binary long division algorithm which is efficient for large BINT objects.
  */
 void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
+
 /**
  * @brief Performs general long division on BINT objects for the dividend and divisor, outputting the quotient and remainder.
  * @author Your Name
@@ -273,6 +280,7 @@ void DIV_General_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BIN
  * @param ptrZ A pointer to the pointer where the multiplication result will be stored.
  * @note This method multiplies from the most significant bit to the least significant bit of the multiplier.
  */
+
 void mul_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
 /**
  * @brief Adds two BINT objects using a left-to-right binary method, storing the result in a third BINT object.
@@ -283,6 +291,7 @@ void mul_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
  * @param ptrZ A pointer to the pointer where the addition result will be stored.
  * @note This method adds the BINT objects starting from the most significant bit and moving to the least significant bit.
  */
+
 void add_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
 /**
  * @brief Multiplies two BINT objects using a right-to-left binary method, storing the result in a third BINT object.
@@ -293,7 +302,9 @@ void add_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
  * @param ptrZ A pointer to the pointer where the multiplication result will be stored.
  * @note This method multiplies from the least significant bit to the most significant bit of the multiplier.
  */
+
 void mul_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
+
 /**
  * @brief Adds two BINT objects using a right-to-left binary method, storing the result in a third BINT object.
  * @author Your Name
@@ -395,6 +406,7 @@ void add_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
  * @note This method is used for efficient modular exponentiation, especially in cryptographic applications.
  */
 void exp_Mongomery(BINT** ptrX, BINT** ptrY,BINT** ptrZ);
+
 /**
  * @brief Performs modular exponentiation using the Montgomery method on three BINT objects and stores the result in a fourth BINT object.
  * @author Your Name
