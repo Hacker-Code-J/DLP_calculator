@@ -94,67 +94,87 @@ void copyBINT(BINT** pptrBint_dst, const BINT* ptrBint_src);
 void swapBINT(BINT** pptrBint1, BINT** pptrBint2);
 
 /**
- * @brief Modifies a BINT object to be an even number by clearing the least significant bit.
+ * @brief Adjusts the value of a BINT object to be even.
+ * @details If the BINT object represents an odd number, this function increments it to the next even number.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to be modified.
- * @note If the BINT object is already even, the function will have no effect.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be modified.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post The BINT object represents an even number.
+ * @note If the BINT object is already even, the value remains unchanged.
  */
 void makeEven(BINT* ptrBint);
+
 /**
- * @brief Ensures that two BINT objects have the same size by padding the smaller one with zeros.
+ * @brief Matches the size of two BINT objects.
+ * @details Adjusts the internal structure of both BINT objects so they both have the same size, facilitating operations on them.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint1 A pointer to the first BINT object.
- * @param ptrBint2 A pointer to the second BINT object.
- * @note This can be important for operations that require BINT objects of the same size.
+ * @date Today's Date
+ * @param ptrBint1 Pointer to the first BINT object.
+ * @param ptrBint2 Pointer to the second BINT object.
+ * @pre Both ptrBint1 and ptrBint2 must point to valid, initialized BINT objects.
+ * @post Both BINT objects have the same size.
  */
 void matchSize(BINT* ptrBint1, BINT* ptrBint2);
+
 /**
- * @brief Resets a BINT object to its default state with a value of zero and minimal size.
+ * @brief Resets a BINT object to its default state.
+ * @details Clears the value of the BINT object, setting it back to a default state as if it was just initialized.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to reset.
- * @note This function can be used to reuse a BINT object without reallocating memory.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be reset.
+ * @pre ptrBint must point to a valid BINT object.
+ * @post The BINT object is in a default, uninitialized state.
+ * @note This function does not deallocate memory.
  */
 void resetBINT(BINT* ptrBint);
+
 /**
- * @brief Refines the size of a BINT object to remove any leading zero words.
+ * @brief Refines the representation of a BINT object.
+ * @details Optimizes the internal structure of a BINT object, potentially reducing its size without changing its value.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to refine.
- * @note This function optimizes memory usage by a BINT object.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be refined.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post The BINT object might have a reduced size but represents the same value.
  */
 void refineBINT(BINT* ptrBint);
 
 /**
- * @brief Checks if a BINT object represents the zero value.
+ * @brief Checks if a BINT object represents zero.
+ * @details Returns true if the BINT object's value is zero; otherwise, false.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to check.
- * @return True if the BINT object is zero; otherwise, false.
- * @note This is a quick check and does not modify the BINT object.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be checked.
+ * @pre ptrBint must point to a valid BINT object.
+ * @post The BINT object is unchanged.
+ * @return bool True if the BINT object's value is zero, false otherwise.
  */
 bool isZero(BINT* ptrBint);
 
 /**
- * @brief Checks if a BINT object represents the value one (1).
+ * @brief Checks if a BINT object represents one.
+ * @details Returns true if the BINT object's value is one; otherwise, false.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to check.
- * @return True if the BINT object is one; otherwise, false.
- * @note This is a quick check and does not modify the BINT object.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be checked.
+ * @pre ptrBint must point to a valid BINT object.
+ * @post The BINT object is unchanged.
+ * @return bool True if the BINT object's value is one, false otherwise.
  */
 bool isOne(BINT* ptrBint);
 
 /**
- * @brief Retrieves the value of a specific bit in a BINT object.
+ * @brief Retrieves the value of a specified bit in a BINT object.
+ * @details Returns the value of the i-th bit of a BINT object as a boolean value.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the pointer of the BINT object.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object.
  * @param i_th The index of the bit to retrieve.
- * @return True if the bit is set; otherwise, false.
- * @note Indexing starts at 0 and refers to the least significant bit.
+ * @pre pptrBint must point to a valid BINT object, and i_th must be within the range of the BINT's size.
+ * @post The BINT object is unchanged.
+ * @return bool The value of the specified bit in the BINT object.
+ * @note Bits are indexed starting at 0.
  */
 bool GET_BIT(BINT** pptrBint, int i_th);
 
