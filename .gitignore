@@ -7,8 +7,8 @@
 
 test.py
 
-Upload/html/
-Upload/latex/
+src/html/
+src/latex/
 
 # Prerequisites
 *.d

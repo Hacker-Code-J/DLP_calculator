@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include "config.h"
-#include "bigint_utils.h"
-#include "bigint_arithmetic.h"
+#include "utils.h"
+#include "arithmetic.h"
 
 void NOT_BINT(BINT** pptrbint_dst, BINT** pptrbint_src) {
     BINT* ptrbint_dst = *pptrbint_dst;
