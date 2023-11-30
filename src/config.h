@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef _CONFIG_H
+#define _CONFIG_H
 
 // Type definitions for standardizing the size across different platforms
 typedef unsigned char u8;  // Define a byte (8-bit) as 'u8'
@@ -36,4 +36,4 @@ typedef struct {
     WORD* val;           // Pointer to the array of words representing the integer value
 } BINT;
 
-#endif // CONFIG_H
+#endif // _CONFIG_H

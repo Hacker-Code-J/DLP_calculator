@@ -2,8 +2,8 @@
 
 #include <stdbool.h>
 
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef _UTILS_H
+#define _UTILS_H
 
 /**
  * @brief Terminates program execution if a null pointer is encountered.
@@ -488,4 +488,4 @@ void print_bint_bin_py(const BINT* ptrBint);
  */
 void print_bint_hex_py(const BINT* ptrBint);
 
-#endif // UTILS_H
+#endif // _UTILS_H

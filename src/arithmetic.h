@@ -1,8 +1,8 @@
 #include "config.h"
 #include "utils.h"
 
-#ifndef ARITHMETIC_H
-#define ARITHMETIC_H
+#ifndef _ARITHMETIC_H
+#define _ARITHMETIC_H
 
 /**
  * @brief Computes the bitwise NOT of a binary integer.
@@ -361,4 +361,4 @@ void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ);
  */
 void Barrett_Reduction(BINT** ptrX,BINT** ptrY,BINT** ptrZ);
 
-#endif // ARITHMETIC_H
+#endif // _ARITHMETIC_H
