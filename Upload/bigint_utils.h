@@ -179,316 +179,312 @@ bool isOne(BINT* ptrBint);
 bool GET_BIT(BINT** pptrBint, int i_th);
 
 /**
- * @brief Fills an array with random WORD values.
+ * @brief Generates a random array of WORDs.
+ * @details Populates an array with random WORD values, with the array length specified by wordlen.
  * @author Your Name
- * @date Date of creation or last update
- * @param dst A pointer to the WORD array to fill.
- * @param wordlen The length of the WORD array.
- * @note The randomness depends on the underlying random number generator.
+ * @date Today's Date
+ * @param dst Pointer to the destination array where the random WORDs will be stored.
+ * @param wordlen The length of the array, indicating how many WORDs will be generated.
+ * @pre dst must be a valid pointer to an array of WORDs with at least 'wordlen' elements.
+ * @post The array pointed to by dst is filled with random WORD values.
+ * @note The randomness depends on the underlying random number generation mechanism.
  */
-void RANDOM_ARRARY(WORD* dst, int wordlen);
+void RANDOM_ARRAY(WORD* dst, int wordlen);
+
 /**
- * @brief Initializes a BINT object with random values.
+ * @brief Generates a random BINT object.
+ * @details Creates a BINT object with a random value, having a specified word length and sign.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the pointer of the BINT object to be initialized.
- * @param sign The sign of the BINT object, where true indicates a negative number.
- * @param wordlen The word length for the BINT object.
- * @note This function is useful for generating random BINT objects for testing.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be generated.
+ * @param sign Boolean indicating the sign of the generated BINT (true for negative, false for non-negative).
+ * @param wordlen The word length of the BINT's internal representation.
+ * @pre pptrBint must be a valid double pointer to a BINT object.
+ * @post pptrBint points to a BINT object with a random value.
+ * @note This function allocates memory for the BINT object.
  */
 void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen);
 
 /**
  * @brief Compares two BINT objects for equality.
+ * @details Returns true if both BINT objects represent the same value, including their sign.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint1 A pointer to the first BINT object for comparison.
- * @param pptrBint2 A pointer to the second BINT object for comparison.
- * @return True if the BINT objects are equal; otherwise, false.
- * @note This function compares both value and sign.
+ * @date Today's Date
+ * @param pptrBint1 Pointer to the first BINT object.
+ * @param pptrBint2 Pointer to the second BINT object.
+ * @pre Both pptrBint1 and pptrBint2 must point to valid BINT objects.
+ * @post The BINT objects remain unchanged.
+ * @return bool True if both BINT objects are equal, false otherwise.
  */
 bool compare_bint(BINT* pptrBint1, BINT* pptrBint2);
+
 /**
- * @brief Compares the absolute values of two BINT objects for equality.
+ * @brief Compares the absolute values of two BINT objects.
+ * @details Returns true if the absolute values of both BINT objects are equal, ignoring their sign.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint1 A pointer to the first BINT object for comparison.
- * @param pptrBint2 A pointer to the second BINT object for comparison.
- * @return True if the absolute values of the BINT objects are equal; otherwise, false.
- * @note This function ignores the signs of the BINT objects.
+ * @date Today's Date
+ * @param pptrBint1 Pointer to the first BINT object.
+ * @param pptrBint2 Pointer to the second BINT object.
+ * @pre Both pptrBint1 and pptrBint2 must point to valid BINT objects.
+ * @post The BINT objects remain unchanged.
+ * @return bool True if the absolute values of both BINT objects are equal, false otherwise.
  */
 bool compare_abs_bint(BINT* pptrBint1, BINT* pptrBint2);
 
 /**
- * @brief Calculates the bit length of a BINT object, including leading zeros.
+ * @brief Calculates the bit length of a BINT object.
+ * @details Returns the number of bits required to represent the BINT object, including the sign bit.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object.
- * @return The bit length of the BINT object.
- * @note This function includes leading zeros in the bit length calculation.
+ * @date Today's Date
+ * @param pptrBint Pointer to the BINT object.
+ * @pre pptrBint must point to a valid BINT object.
+ * @post The BINT object remains unchanged.
+ * @return int The number of bits required to represent the BINT object.
  */
 int BIT_LENGTH(BINT* pptrBint);
 
 /**
- * @brief Calculates the bit length of a BINT object, excluding leading zeros.
+ * @brief Calculates the bit length of a nonzero BINT object.
+ * @details Returns the number of bits required to represent the BINT object, excluding leading zeros and the sign bit.
+ *        If the BINT object is zero, returns 0.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object.
- * @return The bit length of the BINT object, excluding leading zeros.
- * @note Useful for determining the actual number of significant bits.
+ * @date Today's Date
+ * @param pptrBint Pointer to the BINT object.
+ * @pre pptrBint must point to a valid BINT object.
+ * @post The BINT object remains unchanged.
+ * @return int The number of bits required to represent the BINT object, excluding leading zeros and the sign bit.
  */
 int BIT_LENGTH_NONZERO(BINT* pptrBint);
 
 /**
  * @brief Performs a left shift operation on a BINT object by a specified number of words.
+ * @details Shifts the internal representation of the BINT object to the left by a number of words equal to shift_amount,
+ *          effectively multiplying the BINT by 2^(word size * shift_amount).
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of words to shift the BINT object by.
- * @note This operation is equivalent to multiplying the BINT object by 2^(WORD_SIZE * shift_amount).
- */
-void left_shift_word(BINT** pptrBint, int shift_amount);
-/**
- * @brief Performs a right shift operation on a BINT object by a specified number of words.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of words to shift the BINT object by.
- * @note This operation is equivalent to dividing the BINT object by 2^(WORD_SIZE * shift_amount), without a remainder.
- */
-void right_shift_word(BINT** pptrBint, int shift_amount);
-/**
- * @brief Performs a left shift operation on a BINT object by a specified number of bits.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of bits to shift the BINT object by.
- * @note This operation can increase the size of the BINT object if the shift goes beyond the current most significant bit.
- */
-void left_shift_bit(BINT** pptrBint, int shift_amount);
-/**
- * @brief Performs a right shift operation on a BINT object by a specified number of bits (possibly a typo for right_shift_bit).
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of bits to shift the BINT object by.
- * @note This operation can decrease the size of the BINT object if the shift goes beyond the current least significant bit.
- */
-void left_right_bit(BINT** pptrBint, int shift_amount);
-/**
- * @brief Reduces a BINT object modulo a power of 2 specified by pwOf2.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be reduced.
- * @param pwOf2 The power of 2 to use as the modulus for the reduction.
- * @note The reduction is done in-place and affects the original BINT object.
- */
-void reduction(BINT** pptrBint, int pwOf2);
-
-/**
- * @brief Converts a hexadecimal substring to a WORD value.
- * @author Your Name
- * @date Date of creation or last update
- * @param str The string containing the hexadecimal characters.
- * @param start The starting index of the substring.
- * @param length The length of the substring.
- * @return The WORD value of the hexadecimal substring.
- * @note If the substring is longer than what a WORD can represent, the behavior is undefined.
- */
-WORD hexSubstringToWord(const char* str, int start, int length);
-/**
- * @brief Converts a hexadecimal string to a BINT object.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the pointer of the BINT object to be initialized.
- * @param hexString The hexadecimal string to convert.
- * @note The function initializes the BINT object with the value represented by the hexadecimal string.
- */
-void strToBINT(BINT** pptrBint, const char* hexString);
-
-/**
- * @brief Converts a hexadecimal digit to a binary representation and stores it in an array.
- * @author Your Name
- * @date Date of creation or last update
- * @param hex_digit The hexadecimal digit to convert.
- * @param binary A pointer to the array where the binary representation will be stored.
- * @param start_index The starting index in the array where the binary representation begins.
- * @param bits The number of bits to represent the hexadecimal digit.
- * @note Assumes the binary array has enough space to store the representation.
- */
-void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits);
-
-/**
- * @brief Performs a left shift operation on a BINT object by a specified number of words.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of words to shift the BINT object by.
- * @note This operation is equivalent to multiplying the BINT object by 2^(WORD_SIZE * shift_amount).
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of words by which the BINT object will be shifted left.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted left by the specified number of words.
+ * @note The BINT object might grow in size depending on the shift_amount.
  */
 void left_shift_word(BINT** pptrBint, int shift_amount);
 
 /**
  * @brief Performs a right shift operation on a BINT object by a specified number of words.
+ * @details Shifts the internal representation of the BINT object to the right by a number of words equal to shift_amount,
+ *          effectively dividing the BINT by 2^(word size * shift_amount) and truncating towards zero.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of words to shift the BINT object by.
- * @note This operation is equivalent to dividing the BINT object by 2^(WORD_SIZE * shift_amount), without a remainder.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of words by which the BINT object will be shifted right.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted right by the specified number of words.
+ * @note The BINT object might decrease in size depending on the shift_amount.
  */
 void right_shift_word(BINT** pptrBint, int shift_amount);
 
 /**
  * @brief Performs a left shift operation on a BINT object by a specified number of bits.
+ * @details Shifts the internal representation of the BINT object to the left by a number of bits equal to shift_amount,
+ *          effectively multiplying the BINT by 2^shift_amount.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of bits to shift the BINT object by.
- * @note This operation can increase the size of the BINT object if the shift goes beyond the current most significant bit.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of bits by which the BINT object will be shifted left.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted left by the specified number of bits.
  */
 void left_shift_bit(BINT** pptrBint, int shift_amount);
 
 /**
- * @brief Performs a right shift operation on a BINT object by a specified number of bits (possibly a typo for right_shift_bit).
+ * @brief Performs a right shift operation on a BINT object by a specified number of bits.
+ * @details Shifts the internal representation of the BINT object to the right by a number of bits equal to shift_amount,
+ *          effectively dividing the BINT by 2^shift_amount and truncating towards zero.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be shifted.
- * @param shift_amount The number of bits to shift the BINT object by.
- * @note This operation can decrease the size of the BINT object if the shift goes beyond the current least significant bit.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of bits by which the BINT object will be shifted right.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted right by the specified number of bits.
  */
-void left_right_bit(BINT** pptrBint, int shift_amount); // Assuming this should be 'right_shift_bit'
+void right_shift_bit(BINT** pptrBint, int shift_amount);
 
 /**
- * @brief Reduces a BINT object modulo a power of 2 specified by pwOf2.
+ * @brief Performs a modular reduction of a BINT object by a power of 2.
+ * @details Reduces the BINT object modulo 2^pwOf2, effectively keeping the lower pwOf2 bits of the BINT and discarding the rest.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the BINT object pointer to be reduced.
- * @param pwOf2 The power of 2 to use as the modulus for the reduction.
- * @note The reduction is done in-place and affects the original BINT object.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be reduced.
+ * @param pwOf2 The power of 2 that will be used for the modular reduction.
+ * @pre pptrBint must point to a valid BINT object, and pwOf2 must be a non-negative integer.
+ * @post The BINT object is reduced modulo 2^pwOf2.
+ * @note This function is typically used in cryptographic algorithms for modulus operations.
  */
 void reduction(BINT** pptrBint, int pwOf2);
 
 /**
- * @brief Converts a hexadecimal substring to a WORD value.
+ * @brief Converts a hexadecimal substring to a WORD.
+ * @details Extracts a substring of specified length starting at 'start' from a hexadecimal string and converts it to a WORD.
  * @author Your Name
- * @date Date of creation or last update
- * @param str The string containing the hexadecimal characters.
- * @param start The starting index of the substring.
- * @param length The length of the substring.
- * @return The WORD value of the hexadecimal substring.
- * @note If the substring is longer than what a WORD can represent, the behavior is undefined.
+ * @date Today's Date
+ * @param str Pointer to the hexadecimal string.
+ * @param start The starting index of the substring within the string.
+ * @param length The length of the substring to be converted.
+ * @pre str must be a valid pointer to a null-terminated hexadecimal string. start and length must specify a valid range within str.
+ * @post None.
+ * @return WORD The numerical value of the hexadecimal substring.
  */
 WORD hexSubstringToWord(const char* str, int start, int length);
 
 /**
  * @brief Converts a hexadecimal string to a BINT object.
+ * @details Parses a hexadecimal string and creates a BINT object representing the same numerical value.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrBint A pointer to the pointer of the BINT object to be initialized.
- * @param hexString The hexadecimal string to convert.
- * @note The function initializes the BINT object with the value represented by the hexadecimal string.
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be set.
+ * @param hexString Pointer to the null-terminated hexadecimal string.
+ * @pre hexString must be a valid hexadecimal string.
+ * @post *pptrBint points to a BINT object representing the value of hexString.
  */
 void strToBINT(BINT** pptrBint, const char* hexString);
 
 /**
- * @brief Converts a hexadecimal digit to a binary representation and stores it in an array.
+ * @brief Converts a single hexadecimal digit to its binary representation.
+ * @details Converts the hexadecimal digit 'hex_digit' into a binary array, starting from 'start_index', covering 'bits' number of bits.
  * @author Your Name
- * @date Date of creation or last update
+ * @date Today's Date
  * @param hex_digit The hexadecimal digit to convert.
- * @param binary A pointer to the array where the binary representation will be stored.
- * @param start_index The starting index in the array where the binary representation begins.
- * @param bits The number of bits to represent the hexadecimal digit.
- * @note Assumes the binary array has enough space to store the representation.
+ * @param binary Pointer to the boolean array where the binary representation will be stored.
+ * @param start_index The starting index in the binary array for the conversion.
+ * @param bits The number of bits to be used for representing the hex digit.
+ * @pre binary must be a valid array with enough space to accommodate the binary representation.
+ * @post The binary array contains the binary representation of hex_digit starting from start_index.
  */
 void HexDigitToBinary(WORD hex_digit, bool *binary, int start_index, int bits);
 
 /**
- * @brief Converts a BINT object's hexadecimal value to a binary array representation.
+ * @brief Converts a BINT object representing a hexadecimal number to a binary array.
+ * @details Creates a binary array representing the binary form of the hexadecimal number in the BINT object.
  * @author Your Name
- * @date Date of creation or last update
- * @param hex A pointer to the BINT object to convert.
- * @return A pointer to the binary array representing the BINT object's value.
- * @note The caller is responsible for freeing the memory allocated for the binary array.
+ * @date Today's Date
+ * @param hex Pointer to the BINT object.
+ * @pre hex must point to a valid BINT object representing a hexadecimal number.
+ * @post None.
+ * @return bool* Pointer to a dynamically allocated array representing the binary form of the hexadecimal number.
+ * @note The caller is responsible for freeing the returned array.
  */
 bool* HexToBinary(BINT* hex);
+
 /**
- * @brief Prints the binary representation of an array to standard output.
+ * @brief Prints a binary array.
+ * @details Outputs the contents of a binary array to standard output, representing each boolean value as a binary digit.
  * @author Your Name
- * @date Date of creation or last update
- * @param binary A pointer to the binary array to print.
- * @param length The length of the binary array.
- * @note Useful for debugging or displaying the binary form of data.
+ * @date Today's Date
+ * @param binary Pointer to the boolean array.
+ * @param length The number of elements in the binary array.
+ * @pre binary must be a valid pointer to a boolean array of at least 'length' elements.
+ * @post None.
  */
 void PrintBinary(bool* binary, int length);
 
 /**
- * @brief Converts a binary array to a hexadecimal digit starting from a specified index.
+ * @brief Converts a binary sequence into a hexadecimal digit.
+ * @details Converts a sequence of binary values starting at 'start_index' and spanning 'bits' bits into a single hexadecimal digit.
  * @author Your Name
- * @date Date of creation or last update
- * @param binary A pointer to the binary array.
- * @param start_index The starting index in the array where the binary digit begins.
- * @param bits The number of bits to use for the conversion.
- * @return The WORD value of the hexadecimal digit.
- * @note Assumes the binary array has at least 'bits' elements starting from 'start_index'.
+ * @date Today's Date
+ * @param binary Pointer to the boolean array containing the binary sequence.
+ * @param start_index The starting index in the binary array for the conversion.
+ * @param bits The number of bits to be converted into a hexadecimal digit.
+ * @pre binary must be a valid array with at least (start_index + bits) elements.
+ * @post None.
+ * @return WORD The hexadecimal digit representing the specified binary sequence.
  */
 WORD BinaryToHexDigit(bool *binary, int start_index, int bits);
+
 /**
- * @brief Converts a binary array to a BINT object's hexadecimal representation.
+ * @brief Converts a binary array into a BINT object representing a hexadecimal number.
+ * @details Creates a BINT object representing a hexadecimal number from a binary array of a specified length.
  * @author Your Name
- * @date Date of creation or last update
- * @param binary A pointer to the binary array to convert.
- * @param length The length of the binary array.
- * @return A pointer to the BINT object representing the binary array's value.
+ * @date Today's Date
+ * @param binary Pointer to the boolean array representing the binary sequence.
+ * @param length The number of elements in the binary array.
+ * @pre binary must be a valid pointer to a boolean array of at least 'length' elements.
+ * @post None.
+ * @return BINT* Pointer to a dynamically allocated BINT object representing the hexadecimal value of the binary sequence.
  * @note The caller is responsible for managing the memory of the returned BINT object.
  */
 BINT* BinaryToHex(bool *binary, int length);
 
 /**
- * @brief Prints the binary representation of a BINT object to standard output.
+ * @brief Prints the binary representation of a BINT object.
+ * @details Outputs the binary representation of the value stored in the BINT object pointed to by ptrBint.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to print.
- * @note Useful for debugging or displaying the binary form of a BINT object.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be printed.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post None.
+ * @note This function prints the binary representation directly without any formatting.
  */
 void print_bint_bin(const BINT* ptrBint);
+
 /**
- * @brief Prints the hexadecimal representation of a BINT object to standard output.
+ * @brief Prints the hexadecimal representation of a BINT object.
+ * @details Outputs the hexadecimal representation of the value stored in the BINT object pointed to by ptrBint.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to print.
- * @note Useful for debugging or displaying the hexadecimal form of a BINT object.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be printed.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post None.
+ * @note This function prints the hexadecimal representation directly without any formatting.
  */
 void print_bint_hex(const BINT* ptrBint);
+
 /**
- * @brief Prints the binary representation of a BINT object to standard output with a split for readability.
+ * @brief Prints the binary representation of a BINT object with split digits.
+ * @details Outputs the binary representation of the BINT object, with each digit of the binary number printed separately for readability.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to print.
- * @note The binary output is split into sections for easier reading.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be printed.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post None.
+ * @note The output format is more readable with individual binary digits split.
  */
 void print_bint_bin_split(const BINT* ptrBint);
+
 /**
- * @brief Prints the hexadecimal representation of a BINT object to standard output with a split for readability.
+ * @brief Prints the hexadecimal representation of a BINT object with split digits.
+ * @details Outputs the hexadecimal representation of the BINT object, with each digit of the hexadecimal number printed separately for readability.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to print.
- * @note The hexadecimal output is split into sections for easier reading.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be printed.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post None.
+ * @note The output format is more readable with individual hexadecimal digits split.
  */
 void print_bint_hex_split(const BINT* ptrBint);
+
 /**
- * @brief Prints the binary representation of a BINT object to standard output in a format compatible with Python lists.
+ * @brief Prints the binary representation of a BINT object in a Python-friendly format.
+ * @details Outputs the binary representation of the BINT object in a format that is compatible with Python's binary notation, starting with '0b'.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to print.
- * @note The output format is designed to be directly usable in Python code.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be printed.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post None.
+ * @note Useful for generating binary strings that can be directly used in Python scripts.
  */
 void print_bint_bin_py(const BINT* ptrBint);
+
 /**
- * @brief Prints the hexadecimal representation of a BINT object to standard output in a format compatible with Python lists.
+ * @brief Prints the hexadecimal representation of a BINT object in a Python-friendly format.
+ * @details Outputs the hexadecimal representation of the BINT object in a format that is compatible with Python's hexadecimal notation, starting with '0x'.
  * @author Your Name
- * @date Date of creation or last update
- * @param ptrBint A pointer to the BINT object to print.
- * @note The output format is designed to be directly usable in Python code.
+ * @date Today's Date
+ * @param ptrBint Pointer to the BINT object to be printed.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post None.
+ * @note Useful for generating hexadecimal strings that can be directly used in Python scripts.
  */
 void print_bint_hex_py(const BINT* ptrBint);
 
