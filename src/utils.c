@@ -12,12 +12,33 @@ void exit_on_null_error(const void* ptr, const char* ptr_name, const char* funct
         exit(1);
     }
 }
+
+/**
+ * @brief Macro to check a pointer and its dereferenced value for NULL, and exit on error.
+ * @details Calls exit_on_null_error to check both the pointer itself and its dereferenced value for NULL.
+ *          If either is NULL, the program prints an error message and exits.
+ * @param ptr The double pointer to be checked.
+ * @param name The name of the double pointer, used in error messages.
+ * @param func The name of the function performing the check.
+ * @note This macro is used to ensure both a pointer and its dereferenced value are not NULL.
+ * @warning Exits the program if the pointer or its dereferenced value is NULL.
+ */
 #define CHECK_PTR_AND_DEREF(ptr, name, func) \
     do { \
         exit_on_null_error(ptr, name, func); \
         exit_on_null_error(*ptr, "*" name, func); \
     } while(0)
 
+/**
+ * @brief Macro to check a pointer, its dereferenced value, and a nested value for NULL, and exit on error.
+ * @details Calls exit_on_null_error to check the pointer, its dereferenced value, and a specific nested value within
+ *          the dereferenced pointer for NULL. If any are NULL, the program prints an error message and exits.
+ * @param ptr The triple pointer to be checked.
+ * @param name The name of the triple pointer, used in error messages.
+ * @param func The name of the function performing the check.
+ * @note This macro is used to ensure a pointer, its dereferenced value, and a nested value are not NULL.
+ * @warning Exits the program if any of the checked values are NULL.
+ */
 #define CHECK_PTR_DEREF_AND_VAL(ptr, name, func) \
     do { \
         exit_on_null_error(ptr, name, func); \

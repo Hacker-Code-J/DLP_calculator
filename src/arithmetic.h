@@ -127,149 +127,160 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /**
- * @brief Multiplies two WORD-sized integers and stores the result in a BINT object.
+ * @brief Multiplies two WORD values and stores the result in a BINT object.
+ * @details Performs multiplication of valX and valY, and stores the result in the BINT object pointed to by pptrZ.
  * @author Your Name
- * @date Date of creation or last update
- * @param valX The first WORD-sized integer operand.
- * @param valY The second WORD-sized integer operand.
- * @param pptrZ A pointer to the pointer of the BINT object where the result will be stored.
- * @note This function is utilized for single word multiplication that needs to be stored in a multi-word BINT object.
+ * @date Today's Date
+ * @param valX The first WORD value to be multiplied.
+ * @param valY The second WORD value to be multiplied.
+ * @param pptrZ Double pointer to the BINT object where the result will be stored.
+ * @pre pptrZ must point to a valid BINT object.
+ * @post *pptrZ contains the result of valX * valY.
  */
 void mul_xyz(WORD valX, WORD valY, BINT** pptrZ);
+
 /**
- * @brief Core textbook algorithm for multiplying two BINT objects and storing the result in a third BINT object.
+ * @brief Core multiplication function using the textbook algorithm.
+ * @details Multiplies the values in BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using the textbook multiplication algorithm.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the first BINT operand.
- * @param pptrY A pointer to the pointer of the second BINT operand.
- * @param pptrZ A pointer to the pointer where the multiplication result will be stored.
- * @note This function implements the standard long multiplication algorithm taught in textbooks.
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
  */
 void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /**
- * @brief Tests the improved textbook multiplication algorithm on two BINT objects, storing the result in a third BINT object.
+ * @brief Test function for improved textbook multiplication.
+ * @details Similar to mul_core_TxtBk_xyz, but for testing an improved textbook algorithm on BINT objects.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the first BINT operand.
- * @param pptrY A pointer to the pointer of the second BINT operand.
- * @param pptrZ A pointer to the pointer where the multiplication result will be stored.
- * @note This function is used for testing optimizations in the textbook multiplication algorithm.
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
  */
-
 void mul_core_ImpTxtBk_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
 /**
- * @brief Core function for the improved textbook multiplication algorithm of two BINT objects, storing the result in a third BINT object.
+ * @brief Core multiplication function using the improved textbook algorithm.
+ * @details Multiplies BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using an improved textbook algorithm for efficiency.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the first BINT operand.
- * @param pptrY A pointer to the pointer of the second BINT operand.
- * @param pptrZ A pointer to the pointer where the multiplication result will be stored.
- * @note This function is a more efficient version of the textbook multiplication algorithm, optimized for larger BINT objects.
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
  */
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /**
- * @brief Tests the Karatsuba multiplication algorithm on two BINT objects, storing the result in a third BINT object, with a flag for testing purposes.
+ * @brief Test function for Karatsuba multiplication.
+ * @details Tests the Karatsuba multiplication algorithm with BINT objects, similar in purpose to mul_core_ImpTxtBk_test but for Karatsuba algorithm.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the first BINT operand.
- * @param pptrY A pointer to the pointer of the second BINT operand.
- * @param pptrZ A pointer to the pointer where the multiplication result will be stored.
- * @param flag An integer flag used to control test behavior or algorithm variants.
- * @note This function is used to validate the Karatsuba algorithm's correctness and performance.
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
  */
 void mul_core_Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /**
- * @brief Karatsuba multiplication test function with a flag parameter to control the behavior of the multiplication algorithm for two BINT objects.
+ * @brief Karatsuba multiplication test function with a flag parameter.
+ * @details Performs Karatsuba multiplication on BINT objects with an additional parameter to toggle specific algorithmic behavior based on the flag.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the first BINT operand.
- * @param pptrY A pointer to the pointer of the second BINT operand.
- * @param pptrZ A pointer to the pointer where the multiplication result will be stored.
- * @param flag An integer to toggle specific behaviors or optimizations during the multiplication process.
- * @note This function allows for controlled experimentation with the Karatsuba algorithm.
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @param flag Integer flag to modify algorithmic behavior.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
  */
 void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag);
 
 /**
- * @brief Core Karatsuba multiplication algorithm for two BINT objects, storing the result in a third BINT object.
+ * @brief Core multiplication function using the Karatsuba algorithm.
+ * @details Multiplies BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using the Karatsuba multiplication algorithm for efficiency.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the first BINT operand.
- * @param pptrY A pointer to the pointer of the second BINT operand.
- * @param pptrZ A pointer to the pointer where the multiplication result will be stored.
- * @note This function implements the Karatsuba algorithm for fast multiplication of large BINT objects.
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
  */
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /**
- * @brief Performs squaring of a WORD-sized integer and stores the result in a BINT object.
+ * @brief Squares a WORD value and stores the result in a BINT object.
+ * @details Performs the squaring of valX and stores the result in the BINT object pointed to by pptrZ.
  * @author Your Name
- * @date Date of creation or last update
- * @param valX The WORD-sized integer to be squared.
- * @param pptrZ A pointer to the pointer of the BINT object where the result will be stored.
- * @note This function is optimized for squaring a single WORD-sized integer within a multi-word BINT context.
+ * @date Today's Date
+ * @param valX The WORD value to be squared.
+ * @param pptrZ Double pointer to the BINT object where the result will be stored.
+ * @pre pptrZ must point to a valid BINT object.
+ * @post *pptrZ contains the result of valX squared.
  */
 void squ_core(WORD valX,BINT** pptrZ);
 
 /**
- * @brief Textbook squaring algorithm for a BINT object, storing the result in another BINT object.
+ * @brief Squares a BINT object using the textbook algorithm.
+ * @details Squares the value in the BINT object pointed to by pptrX and stores the result in pptrZ using the textbook squaring algorithm.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the BINT object to be squared.
- * @param pptrZ A pointer to the pointer where the squaring result will be stored.
- * @note Implements the standard algorithm for squaring, similar to the textbook multiplication algorithm.
+ * @date Today's Date
+ * @param pptrX Double pointer to the BINT object to be squared.
+ * @param pptrZ Double pointer to the BINT object where the result will be stored.
+ * @pre pptrX must point to a valid BINT object; pptrZ must be initialized.
+ * @post *pptrZ contains the result of squaring *pptrX.
  */
 void SQU_Txtbk_xz(BINT** pptrX, BINT** pptrZ);
 
 /**
- * @brief Karatsuba algorithm for squaring a BINT object, storing the result in another BINT object.
+ * @brief Squares a BINT object using the Karatsuba algorithm.
+ * @details Squares the value in the BINT object pointed to by pptrX and stores the result in pptrZ using the Karatsuba squaring algorithm for efficiency.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrX A pointer to the pointer of the BINT object to be squared.
- * @param pptrZ A pointer to the pointer where the squaring result will be stored.
- * @note Utilizes the efficient Karatsuba multiplication algorithm adapted for the squaring operation.
+ * @date Today's Date
+ * @param pptrX Double pointer to the BINT object to be squared.
+ * @param pptrZ Double pointer to the BINT object where the result will be stored.
+ * @pre pptrX must point to a valid BINT object; pptrZ must be initialized.
+ * @post *pptrZ contains the result of squaring *pptrX.
  */
 void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
 
 /**
- * @brief Tests the binary long division algorithm using BINT objects for the dividend and divisor, and stores the quotient and remainder.
+ * @brief Tests the binary long division algorithm.
+ * @details Performs division of the BINT objects pointed to by pptrDividend and pptrDivisor and stores the quotient and remainder in pptrQ and pptrR, respectively, as a test for the binary long division algorithm.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrDividend A pointer to the pointer of the BINT object representing the dividend.
- * @param pptrDivisor A pointer to the pointer of the BINT object representing the divisor.
- * @param pptrQ A pointer to the pointer where the quotient BINT object will be stored.
- * @param pptrR A pointer to the pointer where the remainder BINT object will be stored.
- * @note This function is intended for testing the binary long division algorithm.
+ * @date Today's Date
+ * @param pptrDividend Double pointer to the BINT dividend.
+ * @param pptrDivisor Double pointer to the BINT divisor.
+ * @param pptrQ Double pointer to the BINT object to store the quotient.
+ * @param pptrR Double pointer to the BINT object to store the remainder.
+ * @pre pptrDividend and pptrDivisor must point to valid BINT objects; pptrQ and pptrR must be initialized.
+ * @post *pptrQ and *pptrR contain the quotient and remainder of the division, respectively.
  */
-
 void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 
 /**
- * @brief Performs binary long division on BINT objects for the dividend and divisor, and stores the quotient and remainder.
+ * @brief Performs binary long division.
+ * @details Divides the BINT objects pointed to by pptrDividend and pptrDivisor and stores the quotient and remainder in pptrQ and pptrR, respectively, using the binary long division algorithm.
  * @author Your Name
- * @date Date of creation or last update
- * @param pptrDividend A pointer to the pointer of the BINT object representing the dividend.
- * @param pptrDivisor A pointer to the pointer of the BINT object representing the divisor.
- * @param pptrQ A pointer to the pointer where the quotient BINT object will be stored.
- * @param pptrR A pointer to the pointer where the remainder BINT object will be stored.
- * @note Implements the binary long division algorithm which is efficient for large BINT objects.
+ * @date Today's Date
+ * @param pptrDividend Double pointer to the BINT dividend.
+ * @param pptrDivisor Double pointer to the BINT divisor.
+ * @param pptrQ Double pointer to the BINT object to store the quotient.
+ * @param pptrR Double pointer to the BINT object to store the remainder.
+ * @pre pptrDividend and pptrDivisor must point to valid BINT objects; pptrQ and pptrR must be initialized.
+ * @post *pptrQ and *pptrR contain the quotient and remainder of the division, respectively.
  */
 void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
-
-/**
- * @brief Performs general long division on BINT objects for the dividend and divisor, outputting the quotient and remainder.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrDividend A pointer to the pointer of the BINT object representing the dividend.
- * @param pptrDivisor A pointer to the pointer of the BINT object representing the divisor.
- * @param pptrQ A pointer to the pointer where the quotient BINT object will be stored.
- * @param pptrR A pointer to the pointer where the remainder BINT object will be stored.
- * @note This version of long division is optimized for a general case and can handle different forms of BINT objects.
- */
-void DIV_General_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 
 /**
  * @brief Multiplies two BINT objects using a left-to-right binary method, storing the result in a third BINT object.
@@ -303,86 +314,6 @@ void add_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
  * @note This method multiplies from the least significant bit to the most significant bit of the multiplier.
  */
 
-void mul_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
-
-/**
- * @brief Adds two BINT objects using a right-to-left binary method, storing the result in a third BINT object.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrX A pointer to the pointer of the first BINT addend.
- * @param ptrY A pointer to the pointer of the second BINT addend.
- * @param ptrZ A pointer to the pointer where the addition result will be stored.
- * @note This method adds the BINT objects starting from the least significant bit and moving to the most significant bit.
- */
-void add_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
-
-/**
- * @brief Tests the binary long division algorithm using BINT objects for the dividend and divisor, and stores the quotient and remainder.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrDividend A pointer to the pointer of the BINT object representing the dividend.
- * @param pptrDivisor A pointer to the pointer of the BINT object representing the divisor.
- * @param pptrQ A pointer to the pointer where the quotient BINT object will be stored.
- * @param pptrR A pointer to the pointer where the remainder BINT object will be stored.
- * @note This function is intended for testing the binary long division algorithm.
- */
-void DIV_Bianry_Long_Test(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
-
-/**
- * @brief Performs binary long division on BINT objects for the dividend and divisor, and stores the quotient and remainder.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrDividend A pointer to the pointer of the BINT object representing the dividend.
- * @param pptrDivisor A pointer to the pointer of the BINT object representing the divisor.
- * @param pptrQ A pointer to the pointer where the quotient BINT object will be stored.
- * @param pptrR A pointer to the pointer where the remainder BINT object will be stored.
- * @note Implements the binary long division algorithm which is efficient for large BINT objects.
- */
-void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
-
-/**
- * @brief Performs general long division on BINT objects for the dividend and divisor, outputting the quotient and remainder.
- * @author Your Name
- * @date Date of creation or last update
- * @param pptrDividend A pointer to the pointer of the BINT object representing the dividend.
- * @param pptrDivisor A pointer to the pointer of the BINT object representing the divisor.
- * @param pptrQ A pointer to the pointer where the quotient BINT object will be stored.
- * @param pptrR A pointer to the pointer where the remainder BINT object will be stored.
- * @note This version of long division is optimized for a general case and can handle different forms of BINT objects.
- */
-void DIV_General_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
-
-/**
- * @brief Multiplies two BINT objects using a left-to-right binary method, storing the result in a third BINT object.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrX A pointer to the pointer of the first BINT operand.
- * @param ptrY A pointer to the pointer of the second BINT operand.
- * @param ptrZ A pointer to the pointer where the multiplication result will be stored.
- * @note This method multiplies from the most significant bit to the least significant bit of the multiplier.
- */
-void mul_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
-
-/**
- * @brief Adds two BINT objects using a left-to-right binary method, storing the result in a third BINT object.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrX A pointer to the pointer of the first BINT addend.
- * @param ptrY A pointer to the pointer of the second BINT addend.
- * @param ptrZ A pointer to the pointer where the addition result will be stored.
- * @note This method adds the BINT objects starting from the most significant bit and moving to the least significant bit.
- */
-void add_LeftToRight(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
-
-/**
- * @brief Multiplies two BINT objects using a right-to-left binary method, storing the result in a third BINT object.
- * @author Your Name
- * @date Date of creation or last update
- * @param ptrX A pointer to the pointer of the first BINT operand.
- * @param ptrY A pointer to the pointer of the second BINT operand.
- * @param ptrZ A pointer to the pointer where the multiplication result will be stored.
- * @note This method multiplies from the least significant bit to the most significant bit of the multiplier.
- */
 void mul_RightToLeft(BINT** ptrX, BINT** ptrY, BINT** ptrZ);
 
 /**
