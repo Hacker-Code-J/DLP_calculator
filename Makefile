@@ -60,15 +60,14 @@ chart:
 	@echo "Completed."
 
 speed:
-	@echo "Visualizing ..."
-	./a.out > speed.txt
 	@echo "Converting to Text File ..."
+	./a.out > speed.txt
 	mv speed.txt Views/
 	(cd Views && python3 time_compare_chart.py)
 	@echo "Completed."
 
 speed-mul:
-	@echo "Visualizing ..."
+	@echo "Converting to Text File ..."
 	./a.out > speed.txt
 	@echo "Converting to Text File ..."
 	mv speed.txt Views/
@@ -76,7 +75,7 @@ speed-mul:
 	@echo "Completed."
 
 speed-len:
-	@echo "Visualizing ..."
+	@echo "Converting to Text File ..."
 	./a.out > speed.txt
 	@echo "Converting to Text File ..."
 	mv speed.txt Views/

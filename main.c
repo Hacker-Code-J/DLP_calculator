@@ -200,6 +200,41 @@ void test_rand_DIV(int cnt, int bit_op, int sgn_op, int div_op) {
 //     // test_rand_OP(cnt, bit_op, SUB, "-", sgn_op);
 // }
 
+// Configuration Macros
+#define TEST_ITERATIONS 10000
+#define MIN_BIT_LENGTH 32
+#define MAX_BIT_LENGTH 64
+
+// Timing Macro
+#define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
+
+void performTest(void (*testFunc)(BINT **, BINT **, BINT **), BINT **x, BINT **y, BINT **z) {
+    clock_t start = clock();
+    testFunc(x, y, z);
+    clock_t end = clock();
+    printf("%.6f\n", MEASURE_TIME(start, end));
+}
+
+void testBINTOperations() {
+    srand((unsigned int)time(NULL));
+
+    for (int idx = 0; idx < TEST_ITERATIONS; ++idx) {
+        int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+
+        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
+        RANDOM_BINT(&ptrX, 0, len1);
+        RANDOM_BINT(&ptrY, 0, len2);
+
+        performTest(MUL_Core_Krtsb_xyz, &ptrX, &ptrY, &ptrZ);
+        performTest(MUL_Core_ImpTxtBk_xyz, &ptrX, &ptrY, &ptrZ);
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrZ);
+    }
+}
+
 void test_flint_mul(int count) {
     struct timespec start, end;
     double elapsed_time;
@@ -264,12 +299,14 @@ int main() {
      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
     */
 
+    testBINTOperations();
+
     int t = 1000;
     int bit_op = 1;
     int sgn_op = 1;
 
     // Addition and Subtraction
-    test_rand_ADD(t, bit_op, sgn_op);
+    // test_rand_ADD(t, bit_op, sgn_op);
     // test_rand_SUB(t, bit_op, sgn_op);
 
     // Multiplication
