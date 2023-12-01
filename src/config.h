@@ -4,7 +4,7 @@
 // Type definitions for standardizing the size across different platforms
 typedef unsigned char u8;  // Define a byte (8-bit) as 'u8'
 typedef unsigned int u32;  // Define a 32-bit unsigned integer as 'u32'
-typedef unsigned long u64; // Define a 64-bit unsigned integer as 'u64'
+typedef unsigned long long u64; // Define a 64-bit unsigned integer as 'u64'
 
 // Boolean definitions for readability
 #define false 0            // Define 'false' as 0
@@ -18,7 +18,7 @@ typedef unsigned long u64; // Define a 64-bit unsigned integer as 'u64'
 #define MINIMUM(x1, x2) (x1 < x2 ? x1 : x2) // Return the minimum of x1 and x2
 
 // Define the size of a word in bits for the BigInteger implementation
-#define WORD_BITLEN 32     // Set the word size for big integers to 32 bits
+#define WORD_BITLEN 64     // Set the word size for big integers to 32 bits
 
 // Conditional compilation based on the word size for data type flexibility
 #if WORD_BITLEN == 8

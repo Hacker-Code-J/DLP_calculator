@@ -588,8 +588,8 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
         delete_bint(&tmpTxtBk_X); delete_bint(&tmpTxtBk_Y);
         return;
     }
-    init_bint(pptrZ, n+m);
-    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
+    // init_bint(pptrZ, n+m);
+    // CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
     int l = (MAXIMUM(n,m) + 1) >> 1;
 
     BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
@@ -650,14 +650,13 @@ void Krtsb_FLAG_Test(BINT** pptrX, BINT** pptrY, BINT** pptrZ, int flag) {
 void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "MUL_Core_Krtsb_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "MUL_Core_Krtsb_xyz");
-
     int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
-    static int lenZ = -1; // Declare lenZ as a static variable
-    if (lenZ == -1) {
-        lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
-        init_bint(pptrZ, lenZ);
-        CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
-    }
+    // static int lenZ = -1; // Declare lenZ as a static variable
+    // if (lenZ == -1) {
+    //     lenZ = n + m; // Calculate lenZ only if it hasn't been initialized yet
+    //     init_bint(pptrZ, lenZ);
+    //     CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "MUL_Core_Krtsb_xyz");
+    // }
     if (FLAG >= MINIMUM(n,m)) {
         BINT* tmpTxtBk_X = NULL; BINT* tmpTxtBk_Y = NULL;
         copyBINT(&tmpTxtBk_X, pptrX); copyBINT(&tmpTxtBk_Y, pptrY);
@@ -723,6 +722,7 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrS);
     delete_bint(&ptrR); delete_bint(&ptrTmpR);
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
+    refine_BINT(*pptrX); refine_BINT(*pptrY); refine_BINT(*pptrZ);
 }
 
 void squ_core(WORD valX,BINT** pptrZ){//테스트 완료

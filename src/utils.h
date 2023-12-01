@@ -144,6 +144,9 @@ void resetBINT(BINT* ptrBint);
  */
 void refineBINT(BINT* ptrBint);
 
+
+void refine_BINT_word(BINT* ptrBint, int num_words);
+
 /**
  * @brief Checks if a BINT object represents zero.
  * @details Returns true if the BINT object's value is zero; otherwise, false.
@@ -224,6 +227,53 @@ bool compare_bint(BINT* pptrBint1, BINT* pptrBint2);
  * @return bool True if the absolute values of both BINT objects are equal, false otherwise.
  */
 bool compare_abs_bint(BINT* ptrBint1, BINT* ptrBint2);
+
+/**
+ * @brief Calculates the bit length of a BINT object.
+ * @details Returns the number of bits required to represent the BINT object, including the sign bit.
+ * @param ptrBint Pointer to the BINT object.
+ * @pre pptrBint must point to a valid BINT object.
+ * @post The BINT object remains unchanged.
+ * @return int The number of bits required to represent the BINT object.
+ */
+int BIT_LENGTH(BINT* ptrBint);
+
+/**
+ * @brief Performs a left shift operation on a BINT object by a specified number of words.
+ * @details Shifts the internal representation of the BINT object to the left by a number of words equal to shift_amount,
+ *          effectively multiplying the BINT by 2^(word size * shift_amount).
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of words by which the BINT object will be shifted left.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted left by the specified number of words.
+ * @note The BINT object might grow in size depending on the shift_amount.
+ */
+void left_shift_word(BINT** pptrBint, int shift_amount);
+
+/**
+ * @brief Performs a right shift operation on a BINT object by a specified number of words.
+ * @details Shifts the internal representation of the BINT object to the right by a number of words equal to shift_amount,
+ *          effectively dividing the BINT by 2^(word size * shift_amount) and truncating towards zero.
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of words by which the BINT object will be shifted right.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted right by the specified number of words.
+ * @note The BINT object might decrease in size depending on the shift_amount.
+ */
+void right_shift_word(BINT** pptrBint, int shift_amount);
+
+/**
+ * @brief Performs a modular reduction of a BINT object by a power of 2.
+ * @details Reduces the BINT object modulo 2^pwOf2, effectively keeping the lower pwOf2 bits of the BINT and discarding the rest.
+ * @author Your Name
+ * @date Today's Date
+ * @param pptrBint Double pointer to the BINT object to be reduced.
+ * @param pwOf2 The power of 2 that will be used for the modular reduction.
+ * @pre pptrBint must point to a valid BINT object, and pwOf2 must be a non-negative integer.
+ * @post The BINT object is reduced modulo 2^pwOf2.
+ * @note This function is typically used in cryptographic algorithms for modulus operations.
+ */
+void reduction(BINT** pptrBint, int pwOf2);
 
 /**
  * @brief Prints the hexadecimal representation of a BINT object in a Python-friendly format.

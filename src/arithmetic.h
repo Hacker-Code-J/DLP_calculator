@@ -52,6 +52,18 @@
 #define _ARITHMETIC_H
 
 /**
+ * @brief Computes the bitwise OR of two binary integers.
+ * @details This function takes pointers to two BINTs and computes the bitwise OR, storing the result in the location pointed to by pptrZ.
+ * @param ptrX A pointer to a BINT representing the first operand.
+ * @param ptrY A pointer to a BINT representing the second operand.
+ * @param pptrZ A double pointer to a BINT where the result should be stored.
+ * @pre ptrX and ptrY must point to valid BINT objects. pptrZ must be initialized and able to store the result.
+ * @post The result of the bitwise OR operation is stored in the location pointed to by pptrZ.
+ * @note Ensure that the BINT data structure supports the operation and that memory for the result is allocated beforehand.
+ */
+void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+
+/**
  * @brief Adds two WORD-sized integers with a carry.
  * @details Computes the sum of x and y, adds a carry k, and stores the result in ptrQ. The overflow (if any) is stored in ptrR.
  * @param x A WORD-sized integer to be added.
@@ -125,5 +137,57 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  * @note This function may utilize other helper functions for BINT arithmetic and memory management.
  */
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+/**
+ * @brief Multiplies two WORD values and stores the result in a BINT object.
+ * @details Performs multiplication of valX and valY, and stores the result in the BINT object pointed to by pptrZ.
+ * @author Your Name
+ * @date Today's Date
+ * @param valX The first WORD value to be multiplied.
+ * @param valY The second WORD value to be multiplied.
+ * @param pptrZ Double pointer to the BINT object where the result will be stored.
+ * @pre pptrZ must point to a valid BINT object.
+ * @post *pptrZ contains the result of valX * valY.
+ */
+void mul_xyz(WORD valX, WORD valY, BINT** pptrZ);
+
+/**
+ * @brief Core multiplication function using the textbook algorithm.
+ * @details Multiplies the values in BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using the textbook multiplication algorithm.
+ * @author Your Name
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
+ */
+void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+/**
+ * @brief Core multiplication function using the improved textbook algorithm.
+ * @details Multiplies BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using an improved textbook algorithm for efficiency.
+ * @author Your Name
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
+ */
+void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+/**
+ * @brief Core multiplication function using the Karatsuba algorithm.
+ * @details Multiplies BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using the Karatsuba multiplication algorithm for efficiency.
+ * @author Your Name
+ * @date Today's Date
+ * @param pptrX Double pointer to the first BINT operand.
+ * @param pptrY Double pointer to the second BINT operand.
+ * @param pptrZ Double pointer to the BINT object to store the result.
+ * @pre pptrX and pptrY must point to valid BINT objects; pptrZ must be initialized.
+ * @post *pptrZ contains the result of the multiplication.
+ */
+void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 #endif // _ARITHMETIC_H

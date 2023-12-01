@@ -129,7 +129,7 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
     }
 }
 
-void reset_bint(BINT* ptrBint) {
+void resetBINT(BINT* ptrBint) {
     for (int i = 0; i < ptrBint->wordlen; i++)
         ptrBint->val[i] = 0;
 }
@@ -149,6 +149,21 @@ void refineBINT(BINT* ptrBint) {
         tmp = (WORD*)realloc(ptrBint->val, sizeof(WORD)*new_wordlen);
         ptrBint->val = tmp;
         // ptrBint->val = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
+    }
+
+    if((ptrBint->wordlen == 1) && (ptrBint->val[0] == 0))
+        ptrBint->sign = false;
+}
+
+void refine_BINT_word(BINT* ptrBint, int num_words) {
+    if(ptrBint == NULL) return;
+
+    int new_wordlen = ptrBint->wordlen - num_words;
+    if(ptrBint->wordlen != new_wordlen) {
+        ptrBint->wordlen = new_wordlen;
+        WORD* tmp = ptrBint->val;
+        tmp = (WORD*)realloc(ptrBint->val, sizeof(WORD)*new_wordlen);
+        ptrBint->val = tmp;
     }
 
     if((ptrBint->wordlen == 1) && (ptrBint->val[0] == 0))
@@ -219,26 +234,145 @@ bool compare_bint(BINT* ptrBint1, BINT* ptrBint2) {
     return (ptrBint1)->sign ? !abs_val : abs_val;
 }
 
-bool compare_abs_bint(BINT* ptrX, BINT* ptrY) {
+bool compare_abs_bint(BINT* ptrBint1, BINT* ptrBint2) {
     // Ensure the provided pointers are valid
-    CHECK_PTR_AND_DEREF(&ptrX, "pptrX", "compare_abs_bint");
-    CHECK_PTR_AND_DEREF(&ptrY, "pptrY", "compare_abs_bint");
+    CHECK_PTR_AND_DEREF(&ptrBint1, "ptrBint1", "compare_abs_bint");
+    CHECK_PTR_AND_DEREF(&ptrBint2, "ptrBint2", "compare_abs_bint");
 
     // Extract word lengths for both numbers
-    int n = (ptrX)->wordlen; int m = (ptrY)->wordlen;
+    int n = (ptrBint1)->wordlen; int m = (ptrBint2)->wordlen;
 
     // Compare the word lengths of the two numbers
     if(n > m) return 1;
     if(n < m) return 0;
     
     // Perform a word-by-word comparison starting from the most significant word
-    matchSize(ptrX, ptrY);
-    for(int i = (ptrX)->wordlen - 1; i >= 0; i--) {
-        if((ptrX)->val[i] > (ptrY)->val[i]) return 1;
-        if((ptrX)->val[i] < (ptrY)->val[i]) return 0;
+    matchSize(ptrBint1, ptrBint2);
+    for(int i = (ptrBint2)->wordlen - 1; i >= 0; i--) {
+        if((ptrBint1)->val[i] > (ptrBint2)->val[i]) return 1;
+        if((ptrBint1)->val[i] < (ptrBint2)->val[i]) return 0;
     }
     // Numbers are equal in value
     return 1;
+}
+
+int BIT_LENGTH(BINT* ptrBint) {
+    int bit_len = (ptrBint)->wordlen * WORD_BITLEN;
+    for (int i=bit_len-1 ; i>=0;i--){
+        if (GET_BIT(ptrBint,i)==0){
+            bit_len = bit_len -1;
+        }
+        else break;
+    }
+    return bit_len;
+}
+
+void left_shift_word(BINT** pptrBint, int shift_amount) {
+    CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "left_shift_word");
+
+    if (shift_amount < 0) {
+        fprintf(stderr, "Error: shift_amount is negative in 'left_shift_word'\n");
+        return;
+    }
+
+    int new_len = (*pptrBint)->wordlen + shift_amount;
+
+    // Reallocate memory for the new word length
+    WORD* new_val = (*pptrBint)->val;
+    new_val = (WORD*)realloc((*pptrBint)->val, new_len * sizeof(WORD));
+    if (!new_val) {
+        fprintf(stderr, "Error: Memory reallocation failed in 'left_shift_word'\n");
+        exit(1);
+    }
+    (*pptrBint)->val = new_val; // Assign the possibly new address to ptrX->val
+
+    // Shift the existing values
+    for (int i = new_len - 1; i >= shift_amount; i--) {
+        (*pptrBint)->val[i] = (*pptrBint)->val[i - shift_amount];
+    }
+
+    // Set the newly shifted-in part to zero
+    for (int i = 0; i < shift_amount; i++) {
+        (*pptrBint)->val[i] = 0x00;
+    }
+
+    (*pptrBint)->wordlen = new_len;
+}
+
+void right_shift_word(BINT** pptrBint, int shift_amount) {
+    CHECK_PTR_AND_DEREF(pptrBint, "pptrBint", "right_shift_word");
+
+    if (shift_amount < 0) {
+        fprintf(stderr, "Error: shift_amount is negative in 'right_shift_word'\n");
+        return;
+    }
+
+    if (shift_amount >= (*pptrBint)->wordlen) {
+        // fprintf(stderr, "Error: shift_amount exceeds or equals word length in 'right_shift_word'\n");
+        return;
+    }
+
+    int new_len = (*pptrBint)->wordlen - shift_amount;
+
+    // Shift the existing values
+    for (int i = 0; i < new_len; i++) {
+        (*pptrBint)->val[i] = (*pptrBint)->val[i + shift_amount];
+    }
+    for (int i = new_len; i < (*pptrBint)->wordlen; i++) {
+        (*pptrBint)->val[i] = 0;
+    }
+
+    // Reallocate memory for the new word length
+    WORD* new_val = (*pptrBint)->val;
+    new_val = (WORD*)realloc((*pptrBint)->val, new_len * sizeof(WORD));
+    if (!new_val) {
+        fprintf(stderr, "Error: Memory reallocation failed in 'right_shift_word'\n");
+        exit(1);
+    }
+    (*pptrBint)->val = new_val; // Assign the new address to ptrX->val
+
+    (*pptrBint)->wordlen = new_len;
+}
+
+void reduction(BINT** pptrBint, int pwOf2) {
+    if (pwOf2 > BIT_LENGTH(*pptrBint) ) return; // Trivial Case
+
+    if (pwOf2 % WORD_BITLEN == 0 && pwOf2 < BIT_LENGTH(*pptrBint)) {
+#if WORD_BITLEN == 8
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, pwOf2 / WORD_BITLEN);
+    (*pptrBint)->val = tmp;
+#elif WORD_BITLEN == 64
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN));
+    (*pptrBint)->val = tmp;
+#else
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc((*pptrBint)->val, 4 * (pwOf2 / WORD_BITLEN));
+    (*pptrBint)->val = tmp;
+#endif
+    (*pptrBint)->wordlen = pwOf2 / WORD_BITLEN;
+    return;
+    }
+
+    (*pptrBint)->val[pwOf2 / WORD_BITLEN] = (*pptrBint)->val[pwOf2 / WORD_BITLEN] && (0xFF >> (pwOf2 % WORD_BITLEN));
+
+#if WORD_BITLEN == 8
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, (pwOf2 / WORD_BITLEN) + 1);
+    (*pptrBint)->val = tmp;
+#elif WORD_BITLEN == 64
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN) + 1);
+    (*pptrBint)->val = tmp;
+#else
+    WORD* tmp = (*pptrBint)->val;
+    tmp = (WORD*)realloc((*pptrBint)->val, 4 * (pwOf2 / WORD_BITLEN) + 1);
+    (*pptrBint)->val = tmp;
+#endif
+
+    (*pptrBint)->wordlen = (pwOf2 / WORD_BITLEN) + 1;
+    return;
 }
 
 void print_bint_hex_py(const BINT* ptrBint) {
