@@ -32,7 +32,7 @@
 #if WORD_BITLEN == 8
 typedef u8 WORD;
 #elif WORD_BITLEN == 64
-typedef u64 WORD:
+typedef u64 WORD;
 #else
 typedef u32 WORD;
 #endif

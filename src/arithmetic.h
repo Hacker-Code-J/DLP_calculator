@@ -362,21 +362,23 @@ void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ);
 void Barrett_Reduction(BINT** ptrX,BINT** ptrY,BINT** ptrZ);
 
 /**
- * @brief Computes the Extended Euclidean Algorithm on two BINT objects.
- * @details This function computes the greatest common divisor (GCD) of two BINT objects (ptrX and ptrY) and also
- *          finds the coefficients (ptrS and ptrGCD) such that ptrS*ptrX + t*ptrY = GCD(ptrX, ptrY), where t is an internal variable.
- *          The GCD is stored in ptrGCD and the coefficient corresponding to ptrX is stored in ptrS.
- * @author Your Name
- * @date Today's Date
- * @param ptrX Double pointer to the first BINT operand.
- * @param ptrY Double pointer to the second BINT operand.
- * @param ptrGCD Double pointer to the BINT object where the GCD will be stored.
- * @param ptrS Double pointer to the BINT object where the coefficient for ptrX will be stored.
- * @pre ptrX and ptrY must point to valid BINT objects; ptrGCD and ptrS must be initialized.
- * @post *ptrGCD contains the GCD of *ptrX and *ptrY. *ptrS contains the coefficient such that *ptrS * *ptrX + t * *ptrY = GCD(*ptrX, *ptrY).
- * @note The variable t (coefficient for ptrY) is not returned by this function.
- * @warning This function involves multiple operations like division, multiplication, and subtraction on BINT objects, which must be handled carefully to avoid memory leaks or invalid operations.
+ * @brief Extended Euclidean Algorithm
+ * @details This function implements the Extended Euclidean Algorithm. It calculates the coefficients 
+ * of Bézout's identity and the greatest common divisor of two numbers, represented as binary integers (BINT).
+ * The algorithm finds integers x and y (coefficients of Bézout's identity) such that ax + by = gcd(a, b),
+ * where a and b are the input binary integers.
+ * @param ptrX Pointer to the first BINT input.
+ * @param ptrY Pointer to the second BINT input.
+ * @param ptrS Pointer to store the first coefficient of Bézout's identity.
+ * @param ptrT Pointer to store the second coefficient of Bézout's identity.
+ * @param ptrR Pointer to store the greatest common divisor (GCD).
+ * @pre ptrX and ptrY should be initialized and contain the binary integers. ptrS, ptrT, and ptrR should be pointers to BINT.
+ * @post The function updates ptrS, ptrT, and ptrR with the calculated values. ptrS and ptrT contain the coefficients of Bézout's identity,
+ *       and ptrR contains the GCD of the input binary integers.
+ * @note This function assumes that the binary integers and operations on them (like multiplication, subtraction, etc.) are properly defined.
+ * @warning Ensure that all BINT pointers are properly initialized before calling this function to avoid memory access violations.
  */
-void ExtendedEuclideanAlgorithm(BINT** ptrX, BINT** ptrY, BINT** ptrGCD, BINT** ptrS);
+
+void ExtendedEuclideanAlgorithm(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrR)
 
 #endif // _ARITHMETIC_H

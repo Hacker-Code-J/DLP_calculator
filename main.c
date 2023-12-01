@@ -299,9 +299,10 @@ int main() {
      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
     */
 
-    performBINT(MUL_Core_ImpTxtBk_xyz, MUL_Core_Krtsb_xyz);
+    // performBINT(MUL_Core_ImpTxtBk_xyz, MUL_Core_Krtsb_xyz);
 
-    int bit_op = 1;
+    int t = 10000;
+    int bit_op = 0;
     int sgn_op = 1;
 
     // Addition and Subtraction
@@ -314,7 +315,7 @@ int main() {
     // test_rand_MUL(t, bit_op, sgn_op, 2); // Karatsuba
 
     // Squaring
-    // test_rand_SQU(t, bit_op, sgn_op, 0);
+    test_rand_SQU(t, bit_op, sgn_op, 0);
     // test_rand_SQU(t, bit_op, sgn_op, 1);
 
     // Division

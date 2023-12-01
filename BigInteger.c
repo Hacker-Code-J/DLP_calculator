@@ -475,7 +475,7 @@ void print_bint_hex_python(BINT** pptrBint) {
 #if WORD_BITLEN == 8
     printf("%02x", (*pptrBint)->val[i]);
 #elif WORD_BITLEN == 64
-    printf("%16x", (*pptrBint)->val[i]);
+    printf("%016llx", (*pptrBint)->val[i]);
 #else
     printf("%08x", (*pptrBint)->val[i]);
 #endif
