@@ -12,7 +12,8 @@
     "operation.h": "c",
     "bint_fifo.h": "c",
     "stdbool.h": "c",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "utils.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "C_Cpp_Runner.cCompilerPath": "gcc",
