@@ -306,7 +306,7 @@ int main() {
     int sgn_op = 1;
 
     // Addition and Subtraction
-    // test_rand_ADD(t, bit_op, sgn_op);
+    test_rand_ADD(t, bit_op, sgn_op);
     // test_rand_SUB(t, bit_op, sgn_op);
 
     // Multiplication
@@ -315,7 +315,7 @@ int main() {
     // test_rand_MUL(t, bit_op, sgn_op, 2); // Karatsuba
 
     // Squaring
-    test_rand_SQU(t, bit_op, sgn_op, 0);
+    // test_rand_SQU(t, bit_op, sgn_op, 0);
     // test_rand_SQU(t, bit_op, sgn_op, 1);
 
     // Division
