@@ -222,6 +222,25 @@ void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
  * @pre pptrDividend and pptrDivisor must point to valid BINT objects; pptrQ and pptrR must be initialized.
  * @post *pptrQ and *pptrR contain the quotient and remainder of the division, respectively.
  */
-void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
+void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
+
+/**
+ * @brief Extended Euclidean Algorithm
+ * @details This function implements the Extended Euclidean Algorithm. It calculates the coefficients 
+ * of Bézout's identity and the greatest common divisor of two numbers, represented as binary integers (BINT).
+ * The algorithm finds integers x and y (coefficients of Bézout's identity) such that ax + by = gcd(a, b),
+ * where a and b are the input binary integers.
+ * @param ptrX Pointer to the first BINT input.
+ * @param ptrY Pointer to the second BINT input.
+ * @param ptrS Pointer to store the first coefficient of Bézout's identity.
+ * @param ptrT Pointer to store the second coefficient of Bézout's identity.
+ * @param ptrR Pointer to store the greatest common divisor (GCD).
+ * @pre ptrX and ptrY should be initialized and contain the binary integers. ptrS, ptrT, and ptrR should be pointers to BINT.
+ * @post The function updates ptrS, ptrT, and ptrR with the calculated values. ptrS and ptrT contain the coefficients of Bézout's identity,
+ *       and ptrR contains the GCD of the input binary integers.
+ * @note This function assumes that the binary integers and operations on them (like multiplication, subtraction, etc.) are properly defined.
+ * @warning Ensure that all BINT pointers are properly initialized before calling this function to avoid memory access violations.
+ */
+void EEA(BINT** pptrX, BINT** pptrY, BINT** pptrS, BINT** pptrT, BINT** ptrR);
 
 #endif // _ARITHMETIC_H

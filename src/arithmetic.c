@@ -473,7 +473,7 @@ void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ) {
     delete_bint(&ptrR);
 }
 
-void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
+void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
     if((*pptrDivisor)->wordlen == 0 || ((*pptrDivisor)->wordlen == 1 && (*pptrDivisor)->val[0] == 0) ) {
         fprintf(stderr, "Division by zero error.\n");
         exit(1);
@@ -517,4 +517,58 @@ void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
 
     delete_bint(&ptrTmpAdd);
     delete_bint(&ptrTmpSub);
+}
+
+void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrR) {
+    BINT *r1 = NULL, *r2 = NULL;
+    BINT *s1 = NULL, *s2 = NULL;
+    BINT *t1 = NULL, *t2 = NULL;   
+    BINT *q = NULL;
+    
+    init_bint(&s1, 1);
+    s1->val[0] = 0x01;
+    init_bint(&t2, 1);
+    s1->val[0] = 0x01;
+    
+    init_bint(&s2, 1);
+    init_bint(&t1, 1);
+    copyBINT(&r1, ptrX);
+    copyBINT(&r2, ptrY); 
+
+    while ((r2)->wordlen != 1 || (r2)->val[0] != 0) {
+        BINT* temp = NULL;
+        DIV_Binary_Long(&r1,&r2,&q, ptrR);
+
+        copyBINT(&r1, &r2);
+        copyBINT(&r2, ptrR);
+
+        MUL_Core_ImpTxtBk_xyz(&q, &s2, &temp);
+
+        SUB(&s1, &temp, ptrS);
+        
+        copyBINT(&s1, &s2);
+        copyBINT(&s2, ptrS);
+        
+        MUL_Core_ImpTxtBk_xyz(&q, &t2, &temp);
+        SUB(&t1, &temp, ptrT);
+
+        copyBINT(&t1, &t2);
+        copyBINT(&t2, ptrT);
+        
+        delete_bint(&temp);
+        
+        refineBINT(r2);
+    }
+    
+    copyBINT(ptrR, &r1);
+    copyBINT(ptrS, &s1);
+    copyBINT(ptrT, &t1);    
+    
+    delete_bint(&q);
+    delete_bint(&r1);
+    delete_bint(&r2);
+    delete_bint(&s1);
+    delete_bint(&s2);
+    delete_bint(&t1);
+    delete_bint(&t2);
 }
