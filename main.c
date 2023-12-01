@@ -37,14 +37,6 @@
  * 0x1e0 -> ( 1 * 256 + 14 * 16 = 480) -> (32 * 480 = 15360-bit)
 */
 
-// Function prototypes for operations
-void test_rand_OP(int cnt, int bit_op, void (*op_func)(BINT**, BINT**, BINT**), const char* op_symbol, int positive);
-void ADD(BINT**, BINT**, BINT**);
-void SUB(BINT**, BINT**, BINT**);
-void mul_core_TxtBk(BINT**, BINT**, BINT**);
-void MUL_Core_ImpTxtBk_xyz(BINT**, BINT**, BINT**);
-void MUL_Core_Krtsb_xyz(BINT**, BINT**, BINT**);
-
 // Macro for bit length setting
 #define SET_BIT_LENGTHS(bit_op, rnd, fix) \
     do { \
@@ -202,36 +194,44 @@ void test_rand_DIV(int cnt, int bit_op, int sgn_op, int div_op) {
 
 // Configuration Macros
 #define TEST_ITERATIONS 10000
-#define MIN_BIT_LENGTH 32
-#define MAX_BIT_LENGTH 64
+#define MIN_BIT_LENGTH 32 // 1024-bit
+#define MAX_BIT_LENGTH 64 // 2048-bit
 
 // Timing Macro
 #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
 
-void performTest(void (*testFunc)(BINT **, BINT **, BINT **), BINT **x, BINT **y, BINT **z) {
+void performTest(void (*testFunc)(BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     clock_t start = clock();
-    testFunc(x, y, z);
+    testFunc(pptrX, pptrY, pptrZ);
     clock_t end = clock();
     printf("%.6f\n", MEASURE_TIME(start, end));
 }
 
-void testBINTOperations() {
+void performBINT(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**)) {
     srand((unsigned int)time(NULL));
 
-    for (int idx = 0; idx < TEST_ITERATIONS; ++idx) {
+    for (int idx = 0; idx < TEST_ITERATIONS; idx++) {
         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
         int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
 
         BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
+        BINT* ptrTmpX = NULL;
+        BINT* ptrTmpY = NULL;
+        BINT* ptrTmpZ = NULL;
         RANDOM_BINT(&ptrX, 0, len1);
         RANDOM_BINT(&ptrY, 0, len2);
+        copyBINT(&ptrTmpX, &ptrX);      
+        copyBINT(&ptrTmpY, &ptrY);
 
-        performTest(MUL_Core_Krtsb_xyz, &ptrX, &ptrY, &ptrZ);
-        performTest(MUL_Core_ImpTxtBk_xyz, &ptrX, &ptrY, &ptrZ);
+        performTest(testFunc1, &ptrX, &ptrY, &ptrZ);
+        performTest(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpZ);
 
         delete_bint(&ptrX);
         delete_bint(&ptrY);
         delete_bint(&ptrZ);
+        delete_bint(&ptrTmpX);
+        delete_bint(&ptrTmpY);
+        delete_bint(&ptrTmpZ);
     }
 }
 
@@ -299,9 +299,8 @@ int main() {
      * test_rand_SQU(int cnt, int bit_op, int sgn_op, int squ_op)
     */
 
-    testBINTOperations();
+    performBINT(MUL_Core_ImpTxtBk_xyz, MUL_Core_Krtsb_xyz);
 
-    int t = 1000;
     int bit_op = 1;
     int sgn_op = 1;
 

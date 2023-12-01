@@ -361,4 +361,22 @@ void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ);
  */
 void Barrett_Reduction(BINT** ptrX,BINT** ptrY,BINT** ptrZ);
 
+/**
+ * @brief Computes the Extended Euclidean Algorithm on two BINT objects.
+ * @details This function computes the greatest common divisor (GCD) of two BINT objects (ptrX and ptrY) and also
+ *          finds the coefficients (ptrS and ptrGCD) such that ptrS*ptrX + t*ptrY = GCD(ptrX, ptrY), where t is an internal variable.
+ *          The GCD is stored in ptrGCD and the coefficient corresponding to ptrX is stored in ptrS.
+ * @author Your Name
+ * @date Today's Date
+ * @param ptrX Double pointer to the first BINT operand.
+ * @param ptrY Double pointer to the second BINT operand.
+ * @param ptrGCD Double pointer to the BINT object where the GCD will be stored.
+ * @param ptrS Double pointer to the BINT object where the coefficient for ptrX will be stored.
+ * @pre ptrX and ptrY must point to valid BINT objects; ptrGCD and ptrS must be initialized.
+ * @post *ptrGCD contains the GCD of *ptrX and *ptrY. *ptrS contains the coefficient such that *ptrS * *ptrX + t * *ptrY = GCD(*ptrX, *ptrY).
+ * @note The variable t (coefficient for ptrY) is not returned by this function.
+ * @warning This function involves multiple operations like division, multiplication, and subtraction on BINT objects, which must be handled carefully to avoid memory leaks or invalid operations.
+ */
+void ExtendedEuclideanAlgorithm(BINT** ptrX, BINT** ptrY, BINT** ptrGCD, BINT** ptrS);
+
 #endif // _ARITHMETIC_H

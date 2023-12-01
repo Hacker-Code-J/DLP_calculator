@@ -1250,3 +1250,64 @@ void Barrett_Reduction(BINT** ptrX,BINT**ptrY,BINT**ptrZ)
     delete_bint(&W);
     delete_bint(&temp);
 }
+
+void ExtendedEuclideanAlgorithm(BINT** ptrX, BINT** ptrY, BINT** ptrGCD, BINT** ptrS) {
+    BINT *s0 = NULL, *s1 = NULL;
+    BINT *t0 = NULL, *t1 = NULL;
+    BINT *r0 = NULL, *r1 = NULL;   
+    BINT *q = NULL;
+    
+    SET_BINT_ONE(&s0);
+    SET_BINT_ONE(&t1);
+    SET_BINT_ZERO(&s1);
+    SET_BINT_ZERO(&t0);
+    copyBINT(&r0, ptrX);
+    copyBINT(&r1, ptrY); 
+
+    while ((r1)->wordlen != 1 || (r1)->val[0] != 0) {
+        BINT *temp=NULL, *temp2 = NULL;
+        
+        DIV_Bianry_Long(&r0, &r1, &q, &temp);
+
+        copyBINT(&temp2, &r0);
+        copyBINT(&r0, &r1);
+
+        MUL_Core_ImpTxtBk_xyz(&q, &r1, &temp);
+
+        SUB(&temp2, &temp, &r1);
+        
+        copyBINT(&temp2, &s0);
+        
+        copyBINT(&s0, &s1);
+        MUL_Core_ImpTxtBk_xyz(&q, &s1, &temp);
+        SUB(&temp2, &temp, &s1);
+        
+        copyBINT(&temp2, &t0);
+
+        copyBINT(&t0, &t1);
+
+        MUL_Core_ImpTxtBk_xyz(&q, &t1, &temp);
+        SUB(&temp2, &temp, &t1);
+        
+        delete_bint(&temp);
+        delete_bint(&temp2);
+
+        // print_bint_hex(r0);
+        refine_BINT(r0);
+    }
+    
+    refine_BINT(s0);
+    
+    if((s0)->sign==true) ADD(&s0,ptrY,ptrS);
+    else copyBINT(ptrS,&s0);
+    
+    copyBINT(ptrGCD,&r0);
+    
+    delete_bint(&q);
+    delete_bint(&s0);
+    delete_bint(&s1);
+    delete_bint(&t0);
+    delete_bint(&t1);
+    delete_bint(&r0);
+    delete_bint(&r1);
+}

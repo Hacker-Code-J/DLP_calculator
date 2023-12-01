@@ -133,4 +133,6 @@ void Mod_Exp_Mongo(BINT** ptrX,BINT** ptrY,BINT** ptrM,BINT** ptrZ);
 
 void Barrett_Reduction(BINT** ptrX,BINT**ptrY,BINT**ptrZ);
 
+void ExtendedEuclideanAlgorithm(BINT** ptrX, BINT** ptrY, BINT** ptrGCD, BINT** ptrS);
+
 #endif // OPERATION_H

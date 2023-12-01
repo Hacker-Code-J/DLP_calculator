@@ -3,6 +3,13 @@ CFLAGS = -Wall -Wextra -g -O2
 LIBS = -lflint -lgmp
 OBJS = setup.o BigInteger.o operation.o main.o
 
+# # Name of the shared library
+# LIBNAME = libpubao.so
+
+# # Targets
+# $(LIBNAME): $(OBJS)
+# 	$(CC) -shared -o $@ $^ $(LIBS)
+
 # Targets
 a.out: $(OBJS)
 	$(CC) -o $@ $^ $(LIBS)
