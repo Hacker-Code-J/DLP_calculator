@@ -13,7 +13,7 @@ void exit_on_null_error(const void* ptr, const char* ptr_name, const char* funct
     }
 }
 
-void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
+void delete_bint(BINT** pptrBint) {
     if(!(*pptrBint))
         return;
     free((*pptrBint)->val);
@@ -21,7 +21,7 @@ void delete_bint(BINT** pptrBint) { // ptrBint = *pptrBint
     *pptrBint = NULL;
 }
 
-void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
+void init_bint(BINT** pptrBint, int wordlen) {
     if((*pptrBint) != NULL)
         delete_bint(pptrBint);
 
@@ -43,43 +43,10 @@ void init_bint(BINT** pptrBint, int wordlen) { // ptrBint = *pptrBint
     (*pptrBint)->wordlen = wordlen;
 }
 
-void SET_BINT_ZERO(BINT** pptrBint) { 
-    init_bint(pptrBint, 1);
-    (*pptrBint)->val[0] = 0x00;
-}
-void SET_BINT_ONE(BINT** pptrBint) { 
-    init_bint(pptrBint, 1);
-    (*pptrBint)->val[0] = 0x01;
- }
-
-void SET_BINT_CUSTOM_ZERO(BINT** pptrBint, int num_words) {
-    init_bint(pptrBint, num_words);
-    // for(int i = 0; i < num_words; i++)
-    //     (*pptrBint)->val[i] = 0x00;
-}
-void SET_BINT_CUSTOM_ONE(BINT** pptrBint, int num_words) {
-    init_bint(pptrBint, num_words);
-    (*pptrBint)->val[0] = 0x01;
-    // for(int i = 1; i < num_words; i++)
-    //     (*pptrBint)->val[i] = 0x00;
-}
-
-void SET_BIT(BINT** ptrBint, int bit_idx, bool bit_val) {
-    int word_idx = bit_idx / (sizeof(WORD) * 8);
-    int bit_pos = bit_idx % (sizeof(WORD) * 8);
-    if (bit_val) {
-        (*ptrBint)->val[word_idx] |= (1 << bit_pos);
-    } else {
-        (*ptrBint)->val[word_idx] &= ~(1 << bit_pos);
-    }
-}
-
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     CHECK_PTR_AND_DEREF(pptrBint_src, "pptrBint_src", "copyBINT");
     
     init_bint(pptrBint_dst, (*pptrBint_src)->wordlen);
-    // ptrBint_dst = (BINT*)calloc(1, sizeof(BINT));
-    // (*pptrBint_dst)->val = (WORD*)calloc((*pptrBint_src)->wordlen, sizeof(WORD));
     for(int i = 0; i < (*pptrBint_src)->wordlen; i++)
         (*pptrBint_dst)->val[i] = (*pptrBint_src)->val[i];
     
@@ -167,6 +134,28 @@ void reset_bint(BINT* ptrBint) {
         ptrBint->val[i] = 0;
 }
 
+void refineBINT(BINT* ptrBint) {
+    if(ptrBint == NULL) return;
+
+    int new_wordlen = ptrBint->wordlen;
+    while (new_wordlen > 1) { // at least one word needed
+        if(ptrBint->val[new_wordlen-1] != 0)
+            break;
+        new_wordlen--;
+    }
+    if(ptrBint->wordlen != new_wordlen) {
+        ptrBint->wordlen = new_wordlen;
+        WORD* tmp = ptrBint->val;
+        tmp = (WORD*)realloc(ptrBint->val, sizeof(WORD)*new_wordlen);
+        ptrBint->val = tmp;
+        // ptrBint->val = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
+    }
+
+    if((ptrBint->wordlen == 1) && (ptrBint->val[0] == 0))
+        ptrBint->sign = false;
+}
+
+
 bool isZero(BINT* ptrbint) {
     if (ptrbint->wordlen == 0) return true;
 
@@ -188,11 +177,11 @@ bool isOne(BINT* ptrbint) {
     return true;
 }
 
-bool GET_BIT(BINT** pptrBint, int i_th)  {
+bool GET_BIT(BINT* ptrBint, int i_th)  {
    if (i_th >= WORD_BITLEN)
-      return (((*pptrBint)->val[i_th / WORD_BITLEN] >> (i_th % WORD_BITLEN)) & 1);
+      return (((ptrBint)->val[i_th / WORD_BITLEN] >> (i_th % WORD_BITLEN)) & WORD_ONE);
 
-   return (((*pptrBint)->val[0] >> i_th) & 1);
+   return (((ptrBint)->val[0] >> i_th) & WORD_ONE);
 }
 
 void RANDOM_ARRARY(WORD* dst, int wordlen) {
@@ -209,45 +198,72 @@ void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen) {
     init_bint(pptrBint, wordlen);
     (*pptrBint)->sign = sign;
     RANDOM_ARRARY((*pptrBint)->val, wordlen);
-    refine_BINT(*pptrBint);
+    refineBINT(*pptrBint);
 }
 
-bool compare_bint(BINT** pptrBint1, BINT** pptrBint2) {
+bool compare_bint(BINT* ptrBint1, BINT* ptrBint2) {
     // Ensure the provided pointers are valid
-    CHECK_PTR_AND_DEREF(pptrBint1, "pptrBint1", "compare_bint");
-    CHECK_PTR_AND_DEREF(pptrBint2, "pptrBint2", "compare_bint");
+    CHECK_PTR_AND_DEREF(&ptrBint1, "pptrBint1", "compare_bint");
+    CHECK_PTR_AND_DEREF(&ptrBint2, "pptrBint2", "compare_bint");
 
     // If one is negative and the other positive, the positive one is greater
-    if ((*pptrBint1)->sign ^ (*pptrBint2)->sign) {
-        return (*pptrBint1)->sign < (*pptrBint2)->sign;
+    if ((ptrBint1)->sign ^ (ptrBint2)->sign) {
+        return (ptrBint1)->sign < (ptrBint2)->sign;
     }
 
     // If both have the same sign, compare their absolute values
-    bool abs_val = compare_abs_bint(pptrBint1, pptrBint2);
+    bool abs_val = compare_abs_bint(ptrBint1, ptrBint2);
 
     // If both are positive, the one with the greater absolute value is greater
     // If both are negative, the one with the smaller absolute value is greater
-    return (*pptrBint1)->sign ? !abs_val : abs_val;
+    return (ptrBint1)->sign ? !abs_val : abs_val;
 }
 
-bool compare_abs_bint(BINT** pptrX, BINT** pptrY) {
+bool compare_abs_bint(BINT* ptrX, BINT* ptrY) {
     // Ensure the provided pointers are valid
-    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "compare_abs_bint");
-    CHECK_PTR_AND_DEREF(pptrY, "pptrY", "compare_abs_bint");
+    CHECK_PTR_AND_DEREF(&ptrX, "pptrX", "compare_abs_bint");
+    CHECK_PTR_AND_DEREF(&ptrY, "pptrY", "compare_abs_bint");
 
     // Extract word lengths for both numbers
-    int n = (*pptrX)->wordlen; int m = (*pptrY)->wordlen;
+    int n = (ptrX)->wordlen; int m = (ptrY)->wordlen;
 
     // Compare the word lengths of the two numbers
     if(n > m) return 1;
     if(n < m) return 0;
     
     // Perform a word-by-word comparison starting from the most significant word
-    matchSize(*pptrX, *pptrY);
-    for(int i = (*pptrX)->wordlen - 1; i >= 0; i--) {
-        if((*pptrX)->val[i] > (*pptrY)->val[i]) return 1;
-        if((*pptrX)->val[i] < (*pptrY)->val[i]) return 0;
+    matchSize(ptrX, ptrY);
+    for(int i = (ptrX)->wordlen - 1; i >= 0; i--) {
+        if((ptrX)->val[i] > (ptrY)->val[i]) return 1;
+        if((ptrX)->val[i] < (ptrY)->val[i]) return 0;
     }
     // Numbers are equal in value
     return 1;
+}
+
+void print_bint_hex_py(const BINT* ptrBint) {
+    if (!(&ptrBint)) {
+        fprintf(stderr, "Invalid BINT** structure in 'print_hex_python'.\n");
+        return;
+    }
+    if (!(ptrBint)) {
+        fprintf(stderr, "Invalid BINT* structure in 'print_hex_python'.\n");
+        return;
+    }
+    if (!(ptrBint)->val) {
+        fprintf(stderr, "Invalid BINT->val in 'print_hex_python'.\n");
+        return;
+    }
+    if ((ptrBint)->sign) { printf("-"); }
+    printf("0x");
+    
+    for (int i = (ptrBint)->wordlen - 1; i >= 0; i--) {
+#if WORD_BITLEN == 8
+    printf("%02x", (ptrBint)->val[i]);
+#elif WORD_BITLEN == 64
+    printf("%016llx", (ptrBint)->val[i]);
+#else
+    printf("%08x", (ptrBint)->val[i]);
+#endif
+    }
 }

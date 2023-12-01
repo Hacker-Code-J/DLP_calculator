@@ -85,24 +85,6 @@ void delete_bint(BINT** pptrBint);
  */
 void init_bint(BINT** pptrBint, int wordlen);
 
-// /**
-//  * @brief Sets a BINT object's value to zero.
-//  * @details Modifies the BINT object to represent the value zero.
-//  * @param pptrBint Double pointer to the BINT object to be modified.
-//  * @pre pptrBint must point to a valid BINT object.
-//  * @post The BINT object represents the value zero.
-//  */
-// void SET_BINT_ZERO(BINT** pptrBint);
-
-// /**
-//  * @brief Sets a BINT object's value to one.
-//  * @details Modifies the BINT object to represent the value one.
-//  * @param pptrBint Double pointer to the BINT object to be modified.
-//  * @pre pptrBint must point to a valid BINT object.
-//  * @post The BINT object represents the value one.
-//  */
-// void SET_BINT_ONE(BINT** pptrBint);
-
 /**
  * @brief Copies the value from one BINT object to another.
  * @details The function copies the value of the source BINT object to the destination BINT object.
@@ -160,7 +142,7 @@ void resetBINT(BINT* ptrBint);
  * @pre ptrBint must point to a valid, initialized BINT object.
  * @post The BINT object might have a reduced size but represents the same value.
  */
-void refine_BINT(BINT* ptrBint);
+void refineBINT(BINT* ptrBint);
 
 /**
  * @brief Checks if a BINT object represents zero.
@@ -185,14 +167,14 @@ bool isOne(BINT* ptrBint);
 /**
  * @brief Retrieves the value of a specified bit in a BINT object.
  * @details Returns the value of the i-th bit of a BINT object as a boolean value.
- * @param pptrBint Double pointer to the BINT object.
+ * @param ptrBint Double pointer to the BINT object.
  * @param i_th The index of the bit to retrieve.
- * @pre pptrBint must point to a valid BINT object, and i_th must be within the range of the BINT's size.
+ * @pre ptrBint must point to a valid BINT object, and i_th must be within the range of the BINT's size.
  * @post The BINT object is unchanged.
  * @return bool The value of the specified bit in the BINT object.
  * @note Bits are indexed starting at 0.
  */
-bool GET_BIT(BINT** pptrBint, int i_th);
+bool GET_BIT(BINT* ptrBint, int i_th);
 
 /**
  * @brief Generates a random array of WORDs.
@@ -222,25 +204,35 @@ void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen);
  * @details Returns true if both BINT objects represent the same value, including their sign.
  * @author Your Name
  * @date Today's Date
- * @param pptrBint1 Pointer to the first BINT object.
- * @param pptrBint2 Pointer to the second BINT object.
- * @pre Both pptrBint1 and pptrBint2 must point to valid BINT objects.
+ * @param ptrBint1 Pointer to the first BINT object.
+ * @param ptrBint2 Pointer to the second BINT object.
+ * @pre Both ptrBint1 and ptrBint2 must point to valid BINT objects.
  * @post The BINT objects remain unchanged.
  * @return bool True if both BINT objects are equal, false otherwise.
  */
-bool compare_bint(BINT** pptrBint1, BINT** pptrBint2);
+bool compare_bint(BINT* pptrBint1, BINT* pptrBint2);
 
 /**
  * @brief Compares the absolute values of two BINT objects.
  * @details Returns true if the absolute values of both BINT objects are equal, ignoring their sign.
  * @author Your Name
  * @date Today's Date
- * @param pptrBint1 Pointer to the first BINT object.
- * @param pptrBint2 Pointer to the second BINT object.
- * @pre Both pptrBint1 and pptrBint2 must point to valid BINT objects.
+ * @param ptrBint1 Pointer to the first BINT object.
+ * @param ptrBint2 Pointer to the second BINT object.
+ * @pre Both ptrBint1 and ptrBint2 must point to valid BINT objects.
  * @post The BINT objects remain unchanged.
  * @return bool True if the absolute values of both BINT objects are equal, false otherwise.
  */
-bool compare_abs_bint(BINT** pptrBint1, BINT** pptrBint2);
+bool compare_abs_bint(BINT* ptrBint1, BINT* ptrBint2);
+
+/**
+ * @brief Prints the hexadecimal representation of a BINT object in a Python-friendly format.
+ * @details Outputs the hexadecimal representation of the BINT object in a format that is compatible with Python's hexadecimal notation, starting with '0x'.
+ * @param ptrBint Pointer to the BINT object to be printed.
+ * @pre ptrBint must point to a valid, initialized BINT object.
+ * @post None.
+ * @note Useful for generating hexadecimal strings that can be directly used in Python scripts.
+ */
+void print_bint_hex_py(const BINT* ptrBint);
 
 #endif // _UTILS_H

@@ -4,13 +4,119 @@
 
 #include "arithmetic.h"
 
+// Define Macros for Bit Lengths based on 32-bit word units
+#define BIT_1024 0x20  // 32 * 32 = 1024 bits
+#define BIT_2048 0x40  // 64 * 32 = 2048 bits
+#define BIT_3072 0x60  // 96 * 32 = 3072 bits
+#define BIT_7680 0xF0  // 240 * 32 = 7680 bits
+
 // Configuration Macros
 #define TEST_ITERATIONS 10000
 #define MIN_BIT_LENGTH 32 // 1024-bit
 #define MAX_BIT_LENGTH 64 // 2048-bit
 
+#define SET_BIT_LENGTHS(bit_op, rnd, fix) \
+    do { \
+        switch (bit_op) { \
+            case 1: fix = BIT_2048; rnd = 0; break;       /* Fixed 2048 bits */ \
+            case 2: fix = BIT_3072; rnd = 0; break;       /* Fixed 3072 bits */ \
+            case 3: fix = BIT_7680; rnd = 0; break;       /* Fixed 7680 bits */ \
+            case 4: rnd = BIT_1024; fix = BIT_1024; break; /* Range: 1024 ~ 2048 bits */ \
+            case 5: rnd = BIT_2048; fix = BIT_2048; break; /* Range: 2048 ~ 4096 bits */ \
+            case 6: rnd = BIT_2048; fix = BIT_3072; break; /* Range: 3072 ~ 5120 bits */ \
+            default: fix = BIT_1024; rnd = 0;              /* Default to fixed 1024 bits */ \
+        } \
+    } while(0)
+
+// Macro for BINT generation
+#define GENERATE_BINTS(ptrX, ptrY, rnd, fix) \
+    do { \
+        int lenX, lenY; \
+        if (rnd) { \
+            lenX = (rand() % rnd) + fix; \
+            lenY = (rand() % rnd) + fix; \
+        } else { \
+            lenX = lenY = fix; \
+        } \
+        int sgnX = rand() % 2; \
+        int sgnY = rand() % 2; \
+        RANDOM_BINT(&ptrX, sgnX, lenX); \
+        RANDOM_BINT(&ptrY, sgnY, lenY); \
+    } while(0)
+
+// Macro for positive BINT generation
+#define GENERATE_POSITIVE_BINTS(ptrX, ptrY, rnd, fix) \
+    do { \
+        int lenX, lenY; \
+        if (rnd) { \
+            lenX = (rand() % rnd) + fix; \
+            lenY = (rand() % rnd) + fix; \
+        } else { \
+            lenX = lenY = fix; \
+        } \
+        RANDOM_BINT(&ptrX, false, lenX); \
+        RANDOM_BINT(&ptrY, false, lenY); \
+    } while(0)
+
+// Macro for the operation and result printing
+#define PERFORM_OPERATION_AND_PRINT(OP, OP_SYMBOL, ptrX, ptrY, ptrZ) \
+    do { \
+        OP(&ptrX, &ptrY, &ptrZ); \
+        printf("print(hex("); \
+        print_bint_hex_py(ptrX); \
+        printf("%s", OP_SYMBOL); \
+        print_bint_hex_py(ptrY); \
+        printf(") == hex("); \
+        print_bint_hex_py(ptrZ); \
+        printf("))\n"); \
+        delete_bint(&ptrX); \
+        delete_bint(&ptrY); \
+        delete_bint(&ptrZ); \
+    } while(0)
+
+void test_rand_OP(int cnt, int bit_op, void (*op_func)(BINT**, BINT**, BINT**), const char* op_symbol, int positive) {
+    int idx = 0x00;
+    while (idx < cnt) {
+        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
+        int rnd, fix;
+
+        SET_BIT_LENGTHS(bit_op, rnd, fix);
+        if (positive) {
+            GENERATE_POSITIVE_BINTS(ptrX, ptrY, rnd, fix);
+        } else {
+            GENERATE_BINTS(ptrX, ptrY, rnd, fix);
+        }
+        PERFORM_OPERATION_AND_PRINT(op_func, op_symbol, ptrX, ptrY, ptrZ);
+        idx++;
+    }
+}
+void test_rand_ADD(int cnt, int bit_op, int sgn_op) {
+    test_rand_OP(cnt, bit_op, ADD, "+", sgn_op);
+}
+void test_rand_SUB(int cnt, int bit_op, int sgn_op) {
+    test_rand_OP(cnt, bit_op, SUB, "-", sgn_op);
+}
+
 int main() {
-    printf("Test\n");
+    /**
+     * bit_op
+     * default(0): Fixed 1024 bits
+     * 1: Fixed 2048 bits
+     * 2: Fixed 3072 bits
+     * 3: Fixed 7680 bits
+     * 4: 1024 ~ 2048 bits
+     * 5: 2048 ~ 4096 bits
+     * 6: 3072 ~ 5120 bits
+     * ===============================================================
+     * sgn_op
+     * 0: random sign
+     * 1: positive
+    */
+    int bit_op = 0;
+    int sgn_op = 1;
+
+    // Addition and Subtraction
+    test_rand_ADD(TEST_ITERATIONS, bit_op, sgn_op);
     return 0;
 }
 

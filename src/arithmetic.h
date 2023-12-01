@@ -52,8 +52,22 @@
 #define _ARITHMETIC_H
 
 /**
- * @brief Adds two Single WORD-sized binary integers.
- * @details Sums the binary int egers pointed to by pptrX and pptrY and stores the result in the location pointed to by pptrZ.
+ * @brief Adds two WORD-sized integers with a carry.
+ * @details Computes the sum of x and y, adds a carry k, and stores the result in ptrQ. The overflow (if any) is stored in ptrR.
+ * @param x A WORD-sized integer to be added.
+ * @param y A WORD-sized integer to be added.
+ * @param k A WORD-sized carry value.
+ * @param ptrQ A pointer to a WORD where the sum is to be stored.
+ * @param ptrR A pointer to a WORD where the overflow is to be stored.
+ * @pre ptrQ and ptrR must be valid non-null pointers. x, y, and k must be within the bounds of the WORD type.
+ * @post *ptrQ contains the sum of x, y, and k. *ptrR contains the carry-out value.
+ * @note WORD is assumed to be a type alias for an integral type with a fixed size.
+ */
+void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR);
+
+/**
+ * @brief Adds two arbitrary-sized binary integers.
+ * @details Sums the binary integers pointed to by pptrX and pptrY and stores the result in the location pointed to by pptrZ.
  * @param pptrX A pointer to a pointer to a BINT representing the first addend.
  * @param pptrY A pointer to a pointer to a BINT representing the second addend.
  * @param pptrZ A pointer to a pointer to a BINT where the result is to be stored.
@@ -62,5 +76,54 @@
  * @note It's assumed that the BINT structure and associated functions properly manage memory and handle arithmetic.
  */
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+/**
+ * @brief Adds two binary integers.
+ * @details Wrapper function that calls the core add function to sum two BINTs pointed to by pptrX and pptrY and stores the result at pptrZ.
+ * @param pptrX A pointer to a pointer to a BINT representing the first operand.
+ * @param pptrY A pointer to a pointer to a BINT representing the second operand.
+ * @param pptrZ A pointer to a pointer to a BINT where the result should be stored.
+ * @pre pptrX and pptrY must point to valid BINT objects. pptrZ must be properly allocated to store the result.
+ * @post The result of addition is stored in the location pointed to by pptrZ.
+ * @note This function may call other helper functions to manage BINT arithmetic and memory.
+ */
+void ADD(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+/**
+ * @brief Subtracts two WORD-sized integers with borrow handling.
+ * @details Computes the difference between x and y, considering an initial borrow, and stores the result in ptrQ. The borrow-out is stored in ptrR.
+ * @param x A WORD-sized integer from which y will be subtracted.
+ * @param y A WORD-sized integer to be subtracted from x.
+ * @param ptrQ A pointer to a WORD to store the result of the subtraction.
+ * @param ptrR A pointer to a WORD to store the borrow-out value.
+ * @pre ptrQ and ptrR must be valid non-null pointers.
+ * @post *ptrQ contains the result of the subtraction. *ptrR contains the borrow-out value.
+ * @note WORD is assumed to be a type alias for an integral type with a fixed size.
+ */
+void sub_borrow(WORD x, WORD y, WORD* ptrQ, WORD* ptrR);
+
+/**
+ * @brief Subtracts two arbitrary-sized binary integers.
+ * @details Computes the difference between the binary integers pointed to by pptrX and pptrY and stores the result in the location pointed to by pptrZ.
+ * @param pptrX A pointer to a pointer to a BINT representing the minuend.
+ * @param pptrY A pointer to a pointer to a BINT representing the subtrahend.
+ * @param pptrZ A pointer to a pointer to a BINT where the result is to be stored.
+ * @pre pptrX and pptrY must point to valid BINT objects. pptrZ must be initialized to store the result.
+ * @post *pptrZ contains the difference of *pptrX and *pptrY.
+ * @note Assumes proper BINT structure and memory management.
+ */
+void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+
+/**
+ * @brief Subtracts two binary integers.
+ * @details Wrapper function that calls the core subtract function to compute the difference between two BINTs pointed to by pptrX and pptrY, storing the result at pptrZ.
+ * @param pptrX A pointer to a pointer to a BINT representing the first operand.
+ * @param pptrY A pointer to a pointer to a BINT representing the second operand.
+ * @param pptrZ A pointer to a pointer to a BINT where the result should be stored.
+ * @pre pptrX and pptrY must point to valid BINT objects. pptrZ must be properly allocated to store the result.
+ * @post The result of subtraction is stored in the location pointed to by pptrZ.
+ * @note This function may utilize other helper functions for BINT arithmetic and memory management.
+ */
+void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 #endif // _ARITHMETIC_H

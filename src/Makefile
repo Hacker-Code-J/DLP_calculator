@@ -31,3 +31,15 @@ $(EXECUTABLE): $(LIB) $(MAIN)
 # Clean target
 clean:
 	rm -f $(OBJS) $(LIB) $(MAIN) $(EXECUTABLE)
+
+# Check Memory Leak
+leak:
+	valgrind --leak-check=full --show-leak-kinds=all ./app
+
+chart:
+	@echo "Visualizing ..."
+	./app > test.py
+	python3 test.py > test.txt
+	mv test.py test.txt Views/
+	(cd Views && python3 success_chart.py)
+	@echo "Completed."
