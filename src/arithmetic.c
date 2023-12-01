@@ -360,3 +360,161 @@ void MUL_Core_Krtsb_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     delete_bint(&ptrTmpST0); delete_bint(&ptrTmpST1);
     refineBINT(*pptrX); refineBINT(*pptrY); refineBINT(*pptrZ);
 }
+
+void squ_core(WORD valX, BINT** pptrZ) {
+    const int half_w = WORD_BITLEN / 2; // if w=32, half_w = 16 = 2^4
+	const WORD MASK = (WORD_ONE << half_w) - 1;
+
+	BINT* C = NULL;
+    init_bint(&C,2);
+    BINT* T = NULL;
+    init_bint(&T,2);
+    BINT* Temp = NULL;
+    init_bint(&Temp,2);
+    // Split the WORDs into halves
+	WORD X0 = valX & MASK;
+	WORD X1 = valX >> half_w;
+	
+
+    // Cross multiplication
+	WORD C1 = X1 * X1;
+	WORD C0 = X0 * X0;
+    C->val[0] = C0;
+    C->val[1] = C1;
+	T->val[0] = X0 * X1;
+    left_shift_bit(&T,half_w + 1); 
+    ADD(&C,&T,&Temp);
+    
+    copyBINT(pptrZ,&Temp);
+    delete_bint(&C);
+    delete_bint(&T);
+    delete_bint(&Temp);
+}
+
+void SQU_TxtBk_xz(BINT** pptrX, BINT** pptrZ) {
+    BINT* C1 = NULL;
+    init_bint(&C1, 1);
+    BINT* C2 = NULL;
+    init_bint(&C2, 1);
+    BINT* T1 = NULL;
+    BINT* T2=NULL;
+    init_bint(&T2, 2);
+    BINT* Temp = NULL;
+    BINT* Temp2 = NULL;
+    for(int j=0; j < (*pptrX)->wordlen; j++) {
+        squ_core((*pptrX)->val[j],&T1);
+        left_shift_word(&T1,(2*j));
+        add_core_xyz(&T1,&C1,&Temp);
+        copyBINT(&C1,&Temp);
+        for (int i = j+1; i < (*pptrX)->wordlen; i++) {
+            mul_xyz((*pptrX)->val[j],(*pptrX)->val[i],&T2);
+            left_shift_word(&T2,(i+j));
+            add_core_xyz(&C2,&T2,&Temp2);
+            copyBINT(&C2,&Temp2);
+            init_bint(&T2,2);
+        }
+    }
+    left_shift_bit(&C2,1);
+    add_core_xyz(&C1,&C2,pptrZ);
+    delete_bint(&C1);
+    delete_bint(&C2);
+    delete_bint(&T1);
+    delete_bint(&T2);
+    delete_bint(&Temp);
+    delete_bint(&Temp2);
+}
+
+void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ) {
+    CHECK_PTR_AND_DEREF(pptrX, "pptrX", "SQU_Krtsb_xz");
+    int n = (*pptrX)->wordlen;
+    static int lenZ = -1; // Declare lenZ as a static variable
+    if (lenZ == -1) {
+        lenZ = 2 * n;
+        init_bint(pptrZ, lenZ);
+        CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SQU_Krtsb_xz");
+    }
+    if (FLAG >= n) {
+        BINT* tmpTxtBk_X = NULL; copyBINT(&tmpTxtBk_X, pptrX);
+        SQU_TxtBk_xz(&tmpTxtBk_X, pptrZ);
+        delete_bint(&tmpTxtBk_X);
+        return;
+    }
+    init_bint(pptrZ, 2*n);
+    CHECK_PTR_AND_DEREF(pptrZ, "pptrZ", "SQU_Krtsb_xz");
+    int l = (n + 1) >> 1;
+
+    BINT* ptrX0 = NULL; BINT* ptrX1 = NULL;
+    BINT* ptrT0 = NULL; BINT* ptrT1 = NULL;
+    BINT* ptrShiftT1 = NULL;
+    BINT* ptrR = NULL;
+    BINT* ptrS = NULL;
+    init_bint(&ptrS, 2*l);
+
+    copyBINT(&ptrX1, pptrX); right_shift_word(&ptrX1, l);
+    copyBINT(&ptrX0, pptrX); reduction(&ptrX0, l * WORD_BITLEN);
+
+    SQU_Krtsb_xz(&ptrX1, &ptrT1);
+    SQU_Krtsb_xz(&ptrX0, &ptrT0);
+
+    copyBINT(&ptrShiftT1, &ptrT1);
+    left_shift_word(&ptrShiftT1, 2*l);
+    ADD(&ptrShiftT1, &ptrT0, &ptrR);
+
+    MUL_Core_Krtsb_xyz(&ptrX1, &ptrX0, &ptrS);
+    left_shift_word(&ptrS, l);
+    left_shift_bit(&ptrS, 1);
+
+    ADD(&ptrR, &ptrS, pptrZ);
+
+    delete_bint(&ptrX0); delete_bint(&ptrX1);
+    delete_bint(&ptrT0); delete_bint(&ptrT1);
+    delete_bint(&ptrShiftT1);
+    delete_bint(&ptrS);
+    delete_bint(&ptrR);
+}
+
+void DIV_Bianry_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
+    if((*pptrDivisor)->wordlen == 0 || ((*pptrDivisor)->wordlen == 1 && (*pptrDivisor)->val[0] == 0) ) {
+        fprintf(stderr, "Division by zero error.\n");
+        exit(1);
+    }
+    if (!(*pptrDividend)->sign && compare_bint(*pptrDivisor, *pptrDividend)) {
+        init_bint(pptrQ, 1);
+        copyBINT(pptrR, pptrDividend);
+        return;
+    }
+    int n = (*pptrDividend)->wordlen;
+    init_bint(pptrQ, 1);
+    (*pptrQ)-> sign = (*pptrDividend)->sign ^ (*pptrDivisor)->sign;
+    init_bint(pptrR, 1);
+    
+    BINT* ptrTmpSub = NULL;
+    init_bint(&ptrTmpSub, 1);
+    BINT* ptrTmpAdd = NULL;
+    init_bint(&ptrTmpAdd, 1);
+
+    matchSize(*pptrDividend,*pptrDivisor);
+    for(int i = n * WORD_BITLEN - 1; i >= 0 ; i--) {
+        left_shift_bit(pptrR, 1);  // R <- 2R
+        (*pptrR)->val[0] ^= GET_BIT(*pptrDividend, i); // R <- R + x_i
+        
+        matchSize(*pptrR,*pptrDivisor);
+        if(compare_bint(*pptrR, *pptrDivisor)) {   // R >= Y
+            SUB(pptrR,pptrDivisor,&ptrTmpSub);
+            copyBINT(pptrR,&ptrTmpSub);
+
+            init_bint(&ptrTmpAdd, 1);
+            ptrTmpAdd->val[0] = 0x01;
+            left_shift_bit(&ptrTmpAdd, i);
+            matchSize(*pptrQ, ptrTmpAdd);
+            for(int j = 0; j < ptrTmpAdd->wordlen; j++) {
+                (*pptrQ)->val[j] ^= ptrTmpAdd->val[j];
+            }
+        }
+    }
+    refineBINT(*pptrQ);
+    refineBINT(*pptrR);
+
+    delete_bint(&ptrTmpAdd);
+    delete_bint(&ptrTmpSub);
+}

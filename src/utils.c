@@ -334,6 +334,63 @@ void right_shift_word(BINT** pptrBint, int shift_amount) {
     (*pptrBint)->wordlen = new_len;
 }
 
+void left_shift_bit(BINT** pptrBint, int shift_amount) {
+    if (!(*pptrBint) || !pptrBint) {
+        fprintf(stderr, "Parameter is NULL in 'left_shift_bit'\n");
+        return; // Invalid parameters or no shift needed.
+    }
+    if (shift_amount <= 0) {
+        // fprintf(stderr, "No shift needed.\n");
+        return; // Invalid parameters or no shift needed.
+    }
+
+    while (shift_amount > 0) {
+        WORD carry = 0;
+        for (int i = 0; i < (*pptrBint)->wordlen; ++i) {
+            WORD next_carry = ((*pptrBint)->val[i] >> (WORD_BITLEN - 1)) & 1; // Save the bit that will be shifted out.
+            (*pptrBint)->val[i] = ((*pptrBint)->val[i] << 1) | carry;
+            carry = next_carry;
+        }
+        if (carry) {
+            // We need to increase the size of val to accommodate the new bit.
+            WORD* new_val = (*pptrBint)->val;
+            new_val = realloc((*pptrBint)->val, ((*pptrBint)->wordlen + 1) * sizeof(WORD));
+            if (new_val) {
+                (*pptrBint)->val = new_val;
+                (*pptrBint)->val[(*pptrBint)->wordlen] = 0; // Initialize the new WORD to zero before setting the carry bit.
+                (*pptrBint)->val[(*pptrBint)->wordlen] |= carry; // Add the carried bit in the new WORD.
+                (*pptrBint)->wordlen++;
+            } else {
+                fprintf(stderr, "Memory allocation failure during left shift operation.\n");
+                return; // Stop the function upon allocation failure.
+            }
+        }
+        shift_amount--;
+    }
+
+}
+void right_shift_bit(BINT** pptrBint, int shift_amount) {
+    if (!(*pptrBint) || !pptrBint) {
+        fprintf(stderr, "Parameter is NULL in 'left_shift_bit'\n");
+        return; // Invalid parameters or no shift needed.
+    }
+    if (shift_amount <= 0) {
+        // fprintf(stderr, "No shift needed.\n");
+        return; // Invalid parameters or no shift needed.
+    }
+
+    while (shift_amount > 0) {
+        WORD carry = 0;
+        for (int i = (*pptrBint)->wordlen - 1; i >= 0; --i) {
+            WORD next_carry = (*pptrBint)->val[i] & 1; // Save the bit that will be shifted out.
+            (*pptrBint)->val[i] = ((*pptrBint)->val[i] >> 1) | (carry << (WORD_BITLEN - 1));
+            carry = next_carry;
+        }
+        // No need to check for size reduction of val, as we're shifting right.
+        shift_amount--;
+    }
+}
+
 void reduction(BINT** pptrBint, int pwOf2) {
     if (pwOf2 > BIT_LENGTH(*pptrBint) ) return; // Trivial Case
 

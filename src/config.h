@@ -18,10 +18,10 @@ typedef unsigned long long u64; // Define a 64-bit unsigned integer as 'u64'
 #define MINIMUM(x1, x2) (x1 < x2 ? x1 : x2) // Return the minimum of x1 and x2
 
 // Define the size of a word in bits for the BigInteger implementation
-#define WORD_BITLEN 64     // Set the word size for big integers to 32 bits
+#define WORD_BITLEN 32     // Set the word size for big integers to 32 bits
 
 // Conditional compilation based on the word size for data type flexibility
-#if WORD_BITLEN == 8
+#if WORD_BITLEN == 64
 typedef u8 WORD;          // Define WORD as an unsigned 8-bit integer for 8-bit words
 #define WORD_ONE 0x01     // Define WORD_ONE as 1 in 8-bit representation
 #elif WORD_BITLEN == 64

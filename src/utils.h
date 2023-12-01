@@ -263,6 +263,28 @@ void left_shift_word(BINT** pptrBint, int shift_amount);
 void right_shift_word(BINT** pptrBint, int shift_amount);
 
 /**
+ * @brief Performs a left shift operation on a BINT object by a specified number of bits.
+ * @details Shifts the internal representation of the BINT object to the left by a number of bits equal to shift_amount,
+ *          effectively multiplying the BINT by 2^shift_amount.
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of bits by which the BINT object will be shifted left.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted left by the specified number of bits.
+ */
+void left_shift_bit(BINT** pptrBint, int shift_amount);
+
+/**
+ * @brief Performs a right shift operation on a BINT object by a specified number of bits.
+ * @details Shifts the internal representation of the BINT object to the right by a number of bits equal to shift_amount,
+ *          effectively dividing the BINT by 2^shift_amount and truncating towards zero.
+ * @param pptrBint Double pointer to the BINT object to be shifted.
+ * @param shift_amount The number of bits by which the BINT object will be shifted right.
+ * @pre pptrBint must point to a valid BINT object, and shift_amount must be non-negative.
+ * @post The BINT object is shifted right by the specified number of bits.
+ */
+void right_shift_bit(BINT** pptrBint, int shift_amount);
+
+/**
  * @brief Performs a modular reduction of a BINT object by a power of 2.
  * @details Reduces the BINT object modulo 2^pwOf2, effectively keeping the lower pwOf2 bits of the BINT and discarding the rest.
  * @author Your Name
