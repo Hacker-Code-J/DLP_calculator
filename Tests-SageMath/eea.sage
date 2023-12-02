@@ -22,8 +22,8 @@ def EEA_rec(a,b):
     print ("{:4x} = ({:4x}) * {:4x} + ({:4x}) * {:4x}".format(d, T[1], a, T[2], b))
     return T
 
-a = ZZ.random_element(1000)
-b = ZZ.random_element(1000)
+a = 0x5f29af74cf2d4d4b4e16504331943a55650f6e71c5610e2f125e69c8262fe6eb5a822784
+b = 0x5d855895
 
 print ("a =", hex(a))
 print ("b =", hex(b))

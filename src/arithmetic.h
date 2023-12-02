@@ -225,22 +225,29 @@ void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
 void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 
 /**
- * @brief Extended Euclidean Algorithm
- * @details This function implements the Extended Euclidean Algorithm. It calculates the coefficients 
- * of Bézout's identity and the greatest common divisor of two numbers, represented as binary integers (BINT).
- * The algorithm finds integers x and y (coefficients of Bézout's identity) such that ax + by = gcd(a, b),
- * where a and b are the input binary integers.
- * @param ptrX Pointer to the first BINT input.
- * @param ptrY Pointer to the second BINT input.
- * @param ptrS Pointer to store the first coefficient of Bézout's identity.
- * @param ptrT Pointer to store the second coefficient of Bézout's identity.
- * @param ptrR Pointer to store the greatest common divisor (GCD).
- * @pre ptrX and ptrY should be initialized and contain the binary integers. ptrS, ptrT, and ptrR should be pointers to BINT.
- * @post The function updates ptrS, ptrT, and ptrR with the calculated values. ptrS and ptrT contain the coefficients of Bézout's identity,
- *       and ptrR contains the GCD of the input binary integers.
- * @note This function assumes that the binary integers and operations on them (like multiplication, subtraction, etc.) are properly defined.
- * @warning Ensure that all BINT pointers are properly initialized before calling this function to avoid memory access violations.
+ * @brief Performs modular exponentiation using the Montgomery method on three BINT objects and stores the result in a fourth BINT object.
+ * @param ptrX A pointer to the pointer of the base BINT operand.
+ * @param ptrY A pointer to the pointer of the exponent BINT operand.
+ * @param ptrZ A pointer to the pointer where the modular exponentiation result will be stored.
+ * @param ptrMod A pointer to the pointer of the modulus BINT operand.
+ * @note This function is suitable for high-precision arithmetic, such as cryptographic operations involving large numbers.
  */
-void EEA(BINT** pptrX, BINT** pptrY, BINT** pptrS, BINT** pptrT, BINT** ptrR);
+void EXP_MOD_Montgomery(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod);
+
+/**
+ * @brief Executes the Extended Euclidean Algorithm.
+ * @details Implements the Extended Euclidean Algorithm to compute the coefficients of Bézout's identity and the greatest common divisor (GCD) of two numbers.
+ *          This algorithm finds integers x and y (Bézout coefficients) such that ax + by = gcd(a, b), where a and b are the input numbers represented as binary integers (BINTs).
+ * @param ptrX Pointer to the first BINT, representing 'a'.
+ * @param ptrY Pointer to the second BINT, representing 'b'.
+ * @param ptrS Pointer to store the Bézout coefficient corresponding to 'a'.
+ * @param ptrT Pointer to store the Bézout coefficient corresponding to 'b'.
+ * @param ptrGCD Pointer to store the calculated GCD of 'a' and 'b'.
+ * @pre `ptrX` and `ptrY` must be pointers to initialized BINTs containing the input values. `ptrS`, `ptrT`, and `ptrGCD` should be pointers to BINT, ready to store the results.
+ * @post Upon completion, `ptrS` and `ptrT` will hold the Bézout coefficients, and `ptrGCD` will contain the GCD of the inputs. The input BINTs (`ptrX` and `ptrY`) remain unaltered.
+ * @note Assumes the existence of a well-defined BINT structure and correctly implemented binary arithmetic operations (e.g., addition, subtraction, multiplication).
+ * @warning Proper initialization of all BINT pointers is crucial to prevent undefined behavior or memory access violations. Ensure `ptrX`, `ptrY`, `ptrS`, `ptrT`, and `ptrGCD` are correctly allocated and initialized before invocation.
+ */
+void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrGCD);
 
 #endif // _ARITHMETIC_H

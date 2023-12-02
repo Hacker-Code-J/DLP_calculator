@@ -504,7 +504,7 @@ void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
             copyBINT(pptrR,&ptrTmpSub);
 
             init_bint(&ptrTmpAdd, 1);
-            ptrTmpAdd->val[0] = 0x01;
+            ptrTmpAdd->val[0] = WORD_ONE;
             left_shift_bit(&ptrTmpAdd, i);
             matchSize(*pptrQ, ptrTmpAdd);
             for(int j = 0; j < ptrTmpAdd->wordlen; j++) {
@@ -519,37 +519,84 @@ void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
     delete_bint(&ptrTmpSub);
 }
 
-void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrR) {
+void EXP_MOD_Montgomery(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod) {
+    int bit_len = BIT_LENGTH(*pptrY);
+    BINT* t0 = NULL; BINT* t1 = NULL;
+    BINT* temp = NULL; BINT* temp2 = NULL;
+    BINT* Q1 = NULL; BINT* Q2 = NULL;
+   
+    init_bint(&t0,1);
+    t0->val[0] = WORD_ONE;
+    copyBINT(&t1,pptrX);
+    
+    for (int i= bit_len-1 ; i >= 0 ;i--){
+        init_bint(&temp,1);
+        init_bint(&temp2,1);
+        init_bint(&Q1,1);
+        init_bint(&Q2,1);
+
+        if (GET_BIT(*pptrY,i) == 0){
+            MUL_Core_ImpTxtBk_xyz(&t0,&t1,&temp);
+            DIV_Binary_Long(&temp,&ptrMod,&Q1,&t1);
+            SQU_TxtBk_xz(&t0,&temp2);
+            DIV_Binary_Long(&temp2,&ptrMod,&Q2,&t0);
+        }
+        else{
+            MUL_Core_ImpTxtBk_xyz(&t0,&t1,&temp);
+            DIV_Binary_Long(&temp,&ptrMod,&Q1,&t0);
+            SQU_TxtBk_xz(&t1,&temp2);
+            DIV_Binary_Long(&temp2,&ptrMod,&Q2,&t1);
+        }
+
+    }
+    copyBINT(pptrZ,&t0);
+    refineBINT(ptrMod);
+    refineBINT(*pptrZ);
+    delete_bint(&t0); delete_bint(&t1);
+    delete_bint(&temp); delete_bint(&temp2);
+    delete_bint(&Q1); delete_bint(&Q2);
+}
+
+void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrGCD) {
     BINT *r1 = NULL, *r2 = NULL;
     BINT *s1 = NULL, *s2 = NULL;
     BINT *t1 = NULL, *t2 = NULL;   
     BINT *q = NULL;
     
     init_bint(&s1, 1);
-    s1->val[0] = 0x01;
+    s1->val[0] = WORD_ONE;
     init_bint(&t2, 1);
-    s1->val[0] = 0x01;
+    t2->val[0] = WORD_ONE;
     
     init_bint(&s2, 1);
     init_bint(&t1, 1);
+    
     copyBINT(&r1, ptrX);
     copyBINT(&r2, ptrY); 
 
     while ((r2)->wordlen != 1 || (r2)->val[0] != 0) {
         BINT* temp = NULL;
-        DIV_Binary_Long(&r1,&r2,&q, ptrR);
+    
+        DIV_Binary_Long(&r1,&r2,&q, ptrGCD);
 
         copyBINT(&r1, &r2);
-        copyBINT(&r2, ptrR);
+        copyBINT(&r2, ptrGCD);
 
-        MUL_Core_ImpTxtBk_xyz(&q, &s2, &temp);
+        // MUL_Core_ImpTxtBk_xyz(&q, &s2, &temp);
+        // bool sgnQ1 = q->sign; bool sgnS2 = s2->sign;
+        MUL_Core_Krtsb_xyz(&q, &s2, &temp);
+        // temp->sign = sgnQ1 ^ sgnS2;
 
         SUB(&s1, &temp, ptrS);
         
         copyBINT(&s1, &s2);
         copyBINT(&s2, ptrS);
         
-        MUL_Core_ImpTxtBk_xyz(&q, &t2, &temp);
+        // MUL_Core_ImpTxtBk_xyz(&q, &t2, &temp);
+        // bool sgnQ2 = q->sign; bool sgnT2 = t2->sign;
+        MUL_Core_Krtsb_xyz(&q, &t2, &temp);
+        // temp->sign = sgnQ2 ^ sgnS2;
+        
         SUB(&t1, &temp, ptrT);
 
         copyBINT(&t1, &t2);
@@ -560,7 +607,7 @@ void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrR) {
         refineBINT(r2);
     }
     
-    copyBINT(ptrR, &r1);
+    copyBINT(ptrGCD, &r1);
     copyBINT(ptrS, &s1);
     copyBINT(ptrT, &t1);    
     

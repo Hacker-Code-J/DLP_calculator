@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I. -O2
+CFLAGS=-Wall -Wextra -g -I. -O2
 OBJS=utils.o arithmetic.o
 LIB=libarith.a
 MAIN=main.o

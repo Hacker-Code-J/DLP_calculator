@@ -433,10 +433,6 @@ void reduction(BINT** pptrBint, int pwOf2) {
 }
 
 void print_bint_hex_py(const BINT* ptrBint) {
-    if (!(&ptrBint)) {
-        fprintf(stderr, "Invalid BINT** structure in 'print_hex_python'.\n");
-        return;
-    }
     if (!(ptrBint)) {
         fprintf(stderr, "Invalid BINT* structure in 'print_hex_python'.\n");
         return;

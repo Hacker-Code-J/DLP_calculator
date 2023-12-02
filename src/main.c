@@ -109,15 +109,13 @@ void test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op) {
     test_rand_OP(cnt, bit_op, mul_funcs[func_index], "*", sgn_op);
 }
 
-void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
+void test_rand_DIV(int cnt) {
     srand((unsigned int)time(NULL));
     int idx = 0x00;
     while (idx < cnt) {
         BINT *ptrX = NULL, *ptrY = NULL;
         BINT* ptrQ = NULL;
         BINT* ptrR = NULL;
-        int rnd, fix;
-
         int len1 = 0x10;
         int len2 = 0x0f;
         
@@ -140,39 +138,41 @@ void test_rand_DIV(int cnt, int bit_op, int sgn_op) {
     }
 }
 
-void test_rand_EEA(int cnt, int bit_op, int sgn_op) {
-    // srand((unsigned int)time(NULL));
-    // int idx = 0x00;
-    // while (idx < cnt) {
-    //     BINT* ptrX = NULL; BINT* ptrY = NULL;
-    //     BINT* ptrS = NULL; BINT* ptrT = NULL;  
-    //     BINT* ptrR = NULL;
-    //     int rnd, fix;
+void test_rand_EXP_MOD(int cnt) {
+    srand((unsigned int)time(NULL));
+    int idx = 0x00;
+    while (idx < cnt) {
+        BINT* ptrX = NULL;
+        BINT* ptrY = NULL;
+        BINT* ptrZ = NULL;
+        BINT* ptrMod = NULL;
 
-    //     SET_BIT_LENGTHS(bit_op, rnd, fix);
-    //     GENERATE_POSITIVE_BINTS(ptrX, ptrY, rnd, fix);
+        int len1 = (rand() % 0x0f) + 0x01;
+        int len2 = (rand() % 0x0f) + 0x01;
+        int len3 = (rand() % 0x08) + 0x01;
 
-    //     EEA(&ptrX, &ptrY, &ptrS, &ptrT, &ptrR);
-        
-    //     printf("print(");
-    //     print_bint_hex_py(ptrX);
-    //     printf(" * ");
-    //     print_bint_hex_py(ptrS);
-    //     printf("+");
-    //     print_bint_hex_py(ptrY);
-    //     printf(" * ");
-    //     print_bint_hex_py(ptrT);
-    //     printf(" == ");
-    //     print_bint_hex_py(ptrR);
-    //     printf(")\n");
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
+        RANDOM_BINT(&ptrMod, false, len3);
 
-    //     delete_bint(&ptrX);
-    //     delete_bint(&ptrY);
-    //     delete_bint(&ptrT);
-    //     delete_bint(&ptrS);
-    //     delete_bint(&ptrR);
-    //     idx++;
-    // }
+        EXP_MOD_Montgomery(&ptrX,&ptrY,&ptrZ, ptrMod);
+  
+        printf("print(pow(");
+        print_bint_hex_py(ptrX);
+        printf(", ");
+        print_bint_hex_py(ptrY);
+        printf(", ");
+        print_bint_hex_py(ptrMod);
+        printf(") == ");
+        print_bint_hex_py(ptrZ);
+        printf(")\n");
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrZ);
+        delete_bint(&ptrMod);
+        idx++;
+    }
 }
 
 int main() {
@@ -204,44 +204,51 @@ int main() {
 
     // test_rand_DIV(TEST_ITERATIONS, bit_op, sgn_op);
     
-    srand((unsigned int)time(NULL));
-    int t = 10;
+    test_rand_EXP_MOD(100);
 
-    int idx = 0;
-    while(idx < t) {
-        BINT* ptrX = NULL;
-        BINT* ptrY = NULL;
-        BINT* ptrT = NULL;  
-        BINT* ptrS = NULL;
-        BINT* ptrR = NULL;
+    // srand((unsigned int)time(NULL));
+    // int t = 1000;
 
-        int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-        int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
+    // int idx = 0;
+    // while(idx < t) {
+    //     BINT* ptrX = NULL;
+    //     BINT* ptrY = NULL;
+    //     BINT* ptrT = NULL;  
+    //     BINT* ptrS = NULL;
+    //     BINT* ptrR = NULL;
 
-        RANDOM_BINT(&ptrX, false, len1);
-        RANDOM_BINT(&ptrY, false, len2);
+    //     int len1 = (rand() % 0x0f) + 0x01; // 1024 ~ 2048 bits
+    //     int len2 = (rand() % 0x0f) + 0x01; // 1024 ~ 2048 bits
 
-        EEA(&ptrX, &ptrY, &ptrS, &ptrT, &ptrR);
-        printf("print(hex(");
-        print_bint_hex_py(ptrX);
-        printf(" * ");
-        print_bint_hex_py(ptrS);
-        printf("+");
-        print_bint_hex_py(ptrY);
-        printf(" * ");
-        print_bint_hex_py(ptrT);
-        printf(") == hex(");
-        print_bint_hex_py(ptrR);
-        printf("))\n");
+    //     // int sgn1 = rand() % 0x02;
+    //     // int sgn2 = rand() % 0x02;
+    //     // RANDOM_BINT(&ptrX, sgn1, len1);
+    //     // RANDOM_BINT(&ptrY, sgn2, len2);
+    //     RANDOM_BINT(&ptrX, false, len1);
+    //     RANDOM_BINT(&ptrY, false, len2);
 
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrT);
-        delete_bint(&ptrS);
-        delete_bint(&ptrR);
-        idx++;
-    }
+    //     EEA(&ptrX, &ptrY, &ptrS, &ptrT, &ptrR);
 
+    //     printf("print(");
+    //     print_bint_hex_py(ptrX);
+    //     printf(" * ");
+    //     print_bint_hex_py(ptrS);
+    //     printf(" + ");
+    //     print_bint_hex_py(ptrY);
+    //     printf(" * ");
+    //     print_bint_hex_py(ptrT);
+    //     printf(" == ");
+    //     print_bint_hex_py(ptrR);
+    //     printf(")\n");
+
+    //     delete_bint(&ptrX);
+    //     delete_bint(&ptrY);
+    //     delete_bint(&ptrT);
+    //     delete_bint(&ptrS);
+    //     delete_bint(&ptrR);
+        
+    //     idx++;
+    // }
 
 //     srand((unsigned int)time(NULL));
 
