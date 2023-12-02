@@ -13,7 +13,10 @@
     "bint_fifo.h": "c",
     "stdbool.h": "c",
     "typeinfo": "cpp",
-    "utils.h": "c"
+    "utils.h": "c",
+    "arithmetic.h": "c",
+    "math.h": "c",
+    "functional": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "C_Cpp_Runner.cCompilerPath": "gcc",

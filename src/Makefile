@@ -26,7 +26,7 @@ $(MAIN): main.c
 
 # Link everything to create the executable
 $(EXECUTABLE): $(LIB) $(MAIN)
-	$(CC) -o $(EXECUTABLE) $(MAIN) -L. -larith
+	$(CC) -o $(EXECUTABLE) $(MAIN) -L. -larith -lm
 
 # Clean target
 clean:
