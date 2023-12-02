@@ -519,6 +519,147 @@ void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
     delete_bint(&ptrTmpSub);
 }
 
+void DIV_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
+    refineBINT(*pptrDividend);
+    refineBINT(*pptrDivisor);
+    init_bint(pptrQ, 1);  // Assume Q is no longer than 1 word.
+    init_bint(pptrR, (*pptrDividend)->wordlen); // R has the same word length as X for safety.
+
+    // Fetch bit lengths
+    int n = (*pptrDividend)->wordlen;  // Pass the address of the pointer
+    int m = (*pptrDivisor)->wordlen;  // Pass the address of the pointer
+
+    // Calculate W as 2^word size
+    WORD W = WORD_ONE << (WORD_BITLEN - 1); // Use one less bit to avoid overflow
+
+    // Get the most significant word from X and Y
+    WORD x_m = GET_WORD(*pptrDividend, m);     // assuming get_mth_word fetches the m-th WORD from BINT
+    WORD x_m1 = GET_WORD(*pptrDividend, m-1);
+    WORD y_m1 = GET_WORD(*pptrDivisor, m-1);
+
+    // Main algorithm as per the pseudocode
+    if (n == m) {
+        (*pptrQ)->val[0] = x_m1 / y_m1;
+    }
+    if (n == m + 1) {
+        if (x_m == y_m1) {
+            (*pptrQ)->val[0] = W - 1;
+        } else {
+            BINT* tmp = NULL;
+            BINT* b_m = NULL;
+            BINT* tmp2 = NULL;
+            init_bint(&tmp,2);
+            init_bint(&b_m,1);
+            tmp->val[0] = x_m1;
+            tmp->val[1] = x_m;
+            b_m->val[0] = y_m1;
+            DIV_Binary_Long(&tmp,&b_m,pptrQ,&tmp2);
+            delete_bint(&tmp);
+            delete_bint(&tmp2);
+            delete_bint(&b_m);
+        }
+    }
+    // Calculate R = X - Y * Q
+    BINT* YQ = NULL;
+    init_bint(&YQ, (*pptrDivisor)->wordlen);
+    MUL_Core_Krtsb_xyz(pptrDivisor, pptrQ, &YQ);  // Pass the addresses of the pointers
+
+    SUB(pptrDividend, &YQ, pptrR);                 // Pass the addresses of the pointers
+    // Correct R if it is negative
+    while ((*pptrR)->sign) {
+        refineBINT(*pptrQ);
+        refineBINT(*pptrR);
+        BINT* ONE = NULL;
+        BINT* tmpQ = NULL;
+        BINT* tmpR = NULL;
+        BINT* tmpY = NULL;
+        copyBINT(&tmpY,pptrDivisor);
+        
+        init_bint(&ONE, (*pptrQ)->wordlen);
+        ONE->val[0] = WORD_ONE;
+
+        SUB(pptrQ, &ONE, &tmpQ);            // Q = Q - 1
+        copyBINT(pptrQ, &tmpQ);
+
+        ADD(pptrR, &tmpY, &tmpR);              // R = R + Y
+
+        copyBINT(pptrR, &tmpR);
+
+        delete_bint(&ONE);          // Clean up ONE
+        delete_bint(&tmpQ);
+        delete_bint(&tmpR);
+    }
+
+    // Clean up
+    delete_bint(&YQ);
+}
+
+void EXP_MOD_L2R(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod) {
+    int bit_len = BIT_LENGTH(*pptrY);
+    BINT* t0 = NULL;
+    BINT* temp = NULL;
+    BINT* Q = NULL;
+    init_bint(&t0, 1);
+    t0->val[0] = WORD_ONE;
+
+    for (int i= bit_len-1 ; i >= 0 ;i--){
+        init_bint(&temp,1);
+        if (GET_BIT(*pptrY,i) == 1){
+            SQU_TxtBk_xz(&t0,&temp);
+            DIV_Binary_Long(&temp , &ptrMod, &Q, &t0);
+            MUL_Core_ImpTxtBk_xyz(&t0,pptrX,&temp);
+            DIV_Binary_Long(&temp , &ptrMod, &Q, &t0);
+        }
+        else{
+            SQU_TxtBk_xz(&t0,&temp);
+            DIV_Binary_Long(&temp, &ptrMod, &Q, &t0);
+        }
+    }
+    DIV_Binary_Long(&t0, &ptrMod, &Q, &temp);
+    refineBINT(temp);
+    copyBINT(pptrZ,&temp);
+
+    delete_bint(&Q);
+    delete_bint(&t0);
+    delete_bint(&temp);
+    refineBINT(ptrMod);
+}
+
+void EXP_MOD_R2L(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod) {
+    int bit_len = BIT_LENGTH(*pptrY);
+
+    BINT* t0 = NULL;
+    BINT* t1 = NULL;
+    BINT* temp = NULL;
+    BINT* Q = NULL;
+    init_bint(&t0, 1);
+    t0->val[0] = WORD_ONE;
+    copyBINT(&t1, pptrX);
+
+    for (int i = 0; i < bit_len; i++) {
+        init_bint(&temp, 1);
+        if (GET_BIT(*pptrY, i)) {
+            MUL_Core_ImpTxtBk_xyz(&t0, &t1, &temp);
+            DIV_Binary_Long(&temp, &ptrMod, &Q, &t0);
+            SQU_TxtBk_xz(&t1, &temp);
+            DIV_Binary_Long(&temp, &ptrMod, &Q, &t1);
+        } else {
+            SQU_TxtBk_xz(&t1, &temp);
+            DIV_Binary_Long(&temp, &ptrMod, &Q, &t1);
+        }
+    }
+
+    DIV_Binary_Long(&t0, &ptrMod, &Q, &temp);
+    refineBINT(temp);
+
+    copyBINT(pptrZ, &temp);
+    delete_bint(&Q);
+    delete_bint(&t0);
+    delete_bint(&t1);
+    delete_bint(&temp);
+    refineBINT(ptrMod);
+}
+
 void EXP_MOD_Montgomery(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod) {
     int bit_len = BIT_LENGTH(*pptrY);
     BINT* t0 = NULL; BINT* t1 = NULL;

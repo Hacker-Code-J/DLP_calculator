@@ -114,14 +114,15 @@ void test_rand_DIV(int cnt) {
         BINT *ptrX = NULL, *ptrY = NULL;
         BINT* ptrQ = NULL;
         BINT* ptrR = NULL;
-        int len1 = 0x10;
-        int len2 = 0x0f;
+        int len1 = (rand() % 0x10) + 0x10;
+        int len2 = len1-1;
         
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
 
-        DIV_Binary_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
-        
+        // DIV_Binary_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
+        DIV_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
+
         printf("print("); print_bint_hex_py(ptrQ);
         printf(" * "); print_bint_hex_py(ptrY);
         printf(" + "); print_bint_hex_py(ptrR);
@@ -145,15 +146,17 @@ void test_rand_EXP_MOD(int cnt) {
         BINT* ptrZ = NULL;
         BINT* ptrMod = NULL;
 
-        int len1 = (rand() % 0x0f) + 0x01;
-        int len2 = (rand() % 0x0f) + 0x01;
+        int len1 = (rand() % 0x04) + 0x01;
+        int len2 = (rand() % 0x04) + 0x01;
         int len3 = (rand() % 0x08) + 0x01;
 
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
         RANDOM_BINT(&ptrMod, false, len3);
 
-        EXP_MOD_Montgomery(&ptrX,&ptrY,&ptrZ, ptrMod);
+        // EXP_MOD_Montgomery(&ptrX,&ptrY,&ptrZ, ptrMod);
+        // EXP_MOD_L2R(&ptrX,&ptrY,&ptrZ, ptrMod);
+        EXP_MOD_R2L(&ptrX,&ptrY,&ptrZ, ptrMod);
   
         printf("print(pow(");
         print_bint_hex_py(ptrX);
@@ -200,9 +203,9 @@ int main() {
     // test_rand_MUL(TEST_ITERATIONS, bit_op, sgn_op, 1); // Improved TextBook
     // test_rand_MUL(TEST_ITERATIONS, bit_op, sgn_op, 2); // Karatsuba
 
-    // test_rand_DIV(TEST_ITERATIONS, bit_op, sgn_op);
+    // test_rand_DIV(1000);
     
-    test_rand_EXP_MOD(200);
+    test_rand_EXP_MOD(1000);
 
     // srand((unsigned int)time(NULL));
     // int t = 1000;
@@ -276,21 +279,22 @@ int main() {
 //         int len1 = 0x20;
 //         int len2 = 0x20;
 
-//         int sgn1 = rand() % 0x02;
-//         int sgn2 = rand() % 0x02;
-//         RANDOM_BINT(&ptrX, sgn1, len1);
-//         RANDOM_BINT(&ptrY, sgn2, len2);
-//         // RANDOM_BINT(&ptrX, false, len1);
-//         // RANDOM_BINT(&ptrY, false, len2);
+//         // int sgn1 = rand() % 0x02;
+//         // int sgn2 = rand() % 0x02;
+//         // RANDOM_BINT(&ptrX, sgn1, len1);
+//         // RANDOM_BINT(&ptrY, sgn2, len2);
+//         RANDOM_BINT(&ptrX, false, len1);
+//         RANDOM_BINT(&ptrY, false, len2);
      
-//         // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+//         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
+//         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
 //         // SQU_TxtBk_xz(&ptrX,&ptrZ);
-//         SQU_Krtsb_xz(&ptrX,&ptrZ);
+//         // SQU_Krtsb_xz(&ptrX,&ptrZ);
 
 //         printf("print(");
 //         print_bint_hex_py(ptrX);
 //         printf(" * ");
-//         print_bint_hex_py(ptrX);
+//         print_bint_hex_py(ptrY);
 //         printf(" == ");
 //         print_bint_hex_py(ptrZ);
 //         printf(")\n");

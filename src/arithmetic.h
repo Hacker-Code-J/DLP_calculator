@@ -225,6 +225,46 @@ void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
 void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 
 /**
+ * @brief Performs long division.
+ * @details Divides the BINT objects pointed to by pptrDividend and pptrDivisor and stores the quotient and remainder in pptrQ and pptrR, respectively, using the binary long division algorithm.
+ * @param pptrDividend Double pointer to the BINT dividend.
+ * @param pptrDivisor Double pointer to the BINT divisor.
+ * @param pptrQ Double pointer to the BINT object to store the quotient.
+ * @param pptrR Double pointer to the BINT object to store the remainder.
+ * @pre pptrDividend and pptrDivisor must point to valid BINT objects; pptrQ and pptrR must be initialized.
+ * @post *pptrQ and *pptrR contain the quotient and remainder of the division, respectively.
+ */
+void DIV_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
+
+/**
+ * @brief Performs left-to-right modular exponentiation on three BINT objects and stores the result in a fourth BINT object.
+ * @details This function implements the left-to-right binary method for modular exponentiation. It iteratively computes the result 
+ *          of raising the base (pointed to by pptrX) to the power of the exponent (pointed to by pptrY), modulo the modulus 
+ *          (pointed to by ptrMod). The result is stored in the BINT object pointed to by pptrZ. This method iterates through the 
+ *          bits of the exponent starting from the most significant bit towards the least significant bit.
+ * @param pptrX A pointer to the pointer of the base BINT operand.
+ * @param pptrY A pointer to the pointer of the exponent BINT operand.
+ * @param pptrZ A pointer to the pointer where the modular exponentiation result will be stored.
+ * @param ptrMod A pointer to the pointer of the modulus BINT operand.
+ * @note This function is suitable for high-precision arithmetic and is often used in cryptographic applications involving large numbers.
+ */
+void EXP_MOD_L2R(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod);
+
+/**
+ * @brief Performs right-to-left modular exponentiation on three BINT objects and stores the result in a fourth BINT object.
+ * @details This function implements the right-to-left binary method for modular exponentiation. It computes the result of raising 
+ *          the base (pointed to by pptrX) to the power of the exponent (pointed to by pptrY), modulo the modulus (pointed to by 
+ *          ptrMod), and stores the result in the BINT object pointed to by pptrZ. This method processes the bits of the exponent 
+ *          starting from the least significant bit towards the most significant bit, which can be more efficient in certain scenarios.
+ * @param pptrX A pointer to the pointer of the base BINT operand.
+ * @param pptrY A pointer to the pointer of the exponent BINT operand.
+ * @param pptrZ A pointer to the pointer where the modular exponentiation result will be stored.
+ * @param ptrMod A pointer to the pointer of the modulus BINT operand.
+ * @note This function is also suitable for high-precision arithmetic, including cryptographic applications that require large number operations.
+ */
+void EXP_MOD_R2L(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod);
+
+/**
  * @brief Performs modular exponentiation using the Montgomery method on three BINT objects and stores the result in a fourth BINT object.
  * @param ptrX A pointer to the pointer of the base BINT operand.
  * @param ptrY A pointer to the pointer of the exponent BINT operand.

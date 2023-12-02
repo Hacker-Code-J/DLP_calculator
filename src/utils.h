@@ -180,6 +180,26 @@ bool isOne(BINT* ptrBint);
 bool GET_BIT(BINT* ptrBint, int i_th);
 
 /**
+ * @brief Retrieves the value of a specified word in a BINT object.
+ * @details This function returns the value of the m-th word of a BINT (Big Integer) object.
+ *          A "word" in this context refers to a segment of the BINT object, typically
+ *          representing a fixed number of bits, as defined in the BINT structure.
+ *          The function ensures safe access by checking the boundaries of the requested word index.
+ * @param ptrBint Pointer to the BINT object.
+ * @param m_th The index of the word to retrieve.
+ * @pre ptrBint must point to a valid BINT object, and m_th must be a non-negative integer
+ *      within the range of the BINT's word length (wordlen).
+ * @post The BINT object remains unchanged. The function performs a read-only operation
+ *       on the BINT object.
+ * @return WORD The value of the specified word in the BINT object. If the index m_th is out
+ *         of bounds (either negative or exceeding the word length), the function returns 0.
+ * @note Words in a BINT object are indexed starting at 0. The word size and structure are
+ *       dependent on the implementation of the BINT type, which represents a large integer 
+ *       typically broken into smaller, fixed-size segments or "words" for efficient storage and manipulation.
+ */
+WORD GET_WORD(BINT* ptrBint, int m_th);
+
+/**
  * @brief Generates a random array of WORDs.
  * @details Populates an array with random WORD values, with the array length specified by wordlen.
  * @param dst Pointer to the destination array where the random WORDs will be stored.

@@ -199,6 +199,13 @@ bool GET_BIT(BINT* ptrBint, int i_th)  {
    return (((ptrBint)->val[0] >> i_th) & WORD_ONE);
 }
 
+WORD GET_WORD(BINT* ptrBint, int m_th) {
+    if (m_th < 0 || m_th >= ptrBint->wordlen) {
+        return 0;
+    }
+    return ptrBint->val[m_th];
+}
+
 void RANDOM_ARRARY(WORD* dst, int wordlen) {
     u8* p = (u8*) dst;
     int cnt = wordlen * sizeof(WORD);
