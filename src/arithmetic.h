@@ -224,6 +224,8 @@ void SQU_Krtsb_xz(BINT** pptrX, BINT** pptrZ);
  */
 void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR);
 
+WORD quotient(WORD dividend1, WORD dividend0, WORD divisor);
+
 /**
  * @brief Performs long division.
  * @details Divides the BINT objects pointed to by pptrDividend and pptrDivisor and stores the quotient and remainder in pptrQ and pptrR, respectively, using the binary long division algorithm.

@@ -43,3 +43,10 @@ chart:
 	mv test.py test.txt Views/
 	(cd Views && python3 success_chart.py)
 	@echo "Completed."
+
+speed:
+	@echo "Visualizing ..."
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 compare_chart.py)
+	@echo "Completed."

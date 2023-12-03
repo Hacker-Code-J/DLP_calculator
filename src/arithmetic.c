@@ -519,9 +519,36 @@ void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
     delete_bint(&ptrTmpSub);
 }
 
+WORD quotient(WORD dividend1, WORD dividend0, WORD divisor) {
+    WORD Q = 0;
+    WORD R = dividend1;
+
+    int w1 = WORD_BITLEN;
+    for(int i = WORD_BITLEN-1; i>=0; i--) {
+        if((divisor >> i) == 0)
+            w1 -= 1;
+        else
+            break;
+    }
+
+    for(int j = w1; j>=0; j--) {
+        if(R >= (WORD_ONE << w1)) {
+            Q += (WORD_ONE << j);
+            R += (dividend0 >> j);
+            R += (R-divisor);
+        } else {
+            R += (dividend0 >> j);
+            R += R;
+            if(R >= divisor) {
+                Q += (WORD_ONE << j);
+                R -= divisor;
+            }
+        }
+    }
+    return Q;
+}
+
 void DIV_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptrR) {
-    refineBINT(*pptrDividend);
-    refineBINT(*pptrDivisor);
     init_bint(pptrQ, 1);  // Assume Q is no longer than 1 word.
     init_bint(pptrR, (*pptrDividend)->wordlen); // R has the same word length as X for safety.
 
@@ -542,41 +569,29 @@ void DIV_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptr
         (*pptrQ)->val[0] = x_m1 / y_m1;
     }
     if (n == m + 1) {
-        if (x_m == y_m1) {
+        if (x_m == y_m1)
             (*pptrQ)->val[0] = W - 1;
-        } else {
-            BINT* tmp = NULL;
-            BINT* b_m = NULL;
-            BINT* tmp2 = NULL;
-            init_bint(&tmp,2);
-            init_bint(&b_m,1);
-            tmp->val[0] = x_m1;
-            tmp->val[1] = x_m;
-            b_m->val[0] = y_m1;
-            DIV_Binary_Long(&tmp,&b_m,pptrQ,&tmp2);
-            delete_bint(&tmp);
-            delete_bint(&tmp2);
-            delete_bint(&b_m);
-        }
+        else
+            (*pptrQ)->val[0] = quotient(x_m,x_m1,y_m1);
     }
     // Calculate R = X - Y * Q
     BINT* YQ = NULL;
     init_bint(&YQ, (*pptrDivisor)->wordlen);
     MUL_Core_Krtsb_xyz(pptrDivisor, pptrQ, &YQ);  // Pass the addresses of the pointers
+    // refineBINT(YQ);
 
     SUB(pptrDividend, &YQ, pptrR);                 // Pass the addresses of the pointers
+    
+    BINT* ONE = NULL;
+    BINT* tmpQ = NULL;
+    BINT* tmpR = NULL;
+    BINT* tmpY = NULL;
+    init_bint(&ONE, (*pptrQ)->wordlen);
+    ONE->val[0] = WORD_ONE;
+
     // Correct R if it is negative
     while ((*pptrR)->sign) {
-        refineBINT(*pptrQ);
-        refineBINT(*pptrR);
-        BINT* ONE = NULL;
-        BINT* tmpQ = NULL;
-        BINT* tmpR = NULL;
-        BINT* tmpY = NULL;
         copyBINT(&tmpY,pptrDivisor);
-        
-        init_bint(&ONE, (*pptrQ)->wordlen);
-        ONE->val[0] = WORD_ONE;
 
         SUB(pptrQ, &ONE, &tmpQ);            // Q = Q - 1
         copyBINT(pptrQ, &tmpQ);
@@ -585,13 +600,16 @@ void DIV_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptr
 
         copyBINT(pptrR, &tmpR);
 
-        delete_bint(&ONE);          // Clean up ONE
-        delete_bint(&tmpQ);
-        delete_bint(&tmpR);
+        refineBINT(*pptrQ);
+        refineBINT(*pptrR);    
     }
 
     // Clean up
     delete_bint(&YQ);
+    delete_bint(&ONE);
+    delete_bint(&tmpQ);
+    delete_bint(&tmpR);
+    delete_bint(&tmpY);
 }
 
 void EXP_MOD_L2R(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod) {
