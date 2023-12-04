@@ -44,7 +44,7 @@ clean:
 leak:
 	valgrind --leak-check=full --show-leak-kinds=all ./app
 
-chart:
+success:
 	@echo "Visualizing ..."
 	./app > test.py
 	python3 test.py > test.txt
@@ -57,4 +57,11 @@ speed:
 	./app > speed.txt
 	mv speed.txt Views/
 	(cd Views && python3 compare_chart.py)
+	@echo "Completed."
+
+speed-mul:
+	@echo "Visualizing ..."
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 MUL_compare_chart.py)
 	@echo "Completed."

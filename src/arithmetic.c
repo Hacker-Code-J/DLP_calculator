@@ -721,6 +721,94 @@ void EXP_MOD_Montgomery(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod) 
     delete_bint(&Q1); delete_bint(&Q2);
 }
 
+void Barrett_Reduction_TEST(BINT** pptrX, BINT** pptrN, BINT** pptrR) {
+    BINT* Q = NULL;
+    BINT* R = NULL;
+    copyBINT(&Q, pptrX);
+
+    BINT* T = NULL;
+    BINT* W = NULL;
+    BINT* temp = NULL;
+    BINT* Y = NULL;
+    copyBINT(&Y,pptrN);
+
+    int n = (*pptrN)->wordlen;
+    init_bint(&W,(*pptrX)->wordlen+1);
+    W->val[(*pptrX)->wordlen] = WORD_ONE;
+
+    DIV_Binary_Long(&W,&Y,&T,&temp);
+    right_shift_word(&Q, n-1);
+    MUL_Core_ImpTxtBk_xyz(&Q,&T,&temp);
+    copyBINT(&Q,&temp);
+    right_shift_word(&Q, n+1);
+    copyBINT(&Y,pptrN);
+    MUL_Core_ImpTxtBk_xyz(&Q,&Y,&R);
+
+    SUB(pptrX,&R,&temp);
+
+    copyBINT(&R,&temp);
+    refineBINT(R);
+
+    int cnt = 0;
+    while (compare_bint(R,*pptrN)) {
+        copyBINT(&Y,pptrN);
+        SUB(&R,&Y,&temp);
+        copyBINT(&R,&temp);
+        refineBINT(R);
+        cnt++;
+        if (cnt == 4)
+            break;
+    }
+
+    copyBINT(pptrR,&R);
+    delete_bint(&Y);
+    delete_bint(&Q);
+    delete_bint(&R);
+    delete_bint(&T);
+    delete_bint(&W);
+    delete_bint(&temp);
+}
+
+void Barrett_Reduction(BINT** pptrX, BINT** pptrN, BINT** pptrR, BINT** pptrPreT) {
+    BINT* Q = NULL;
+    BINT* R = NULL;
+    copyBINT(&Q, pptrX);
+
+    BINT* temp = NULL;
+    BINT* Y = NULL;
+
+    int n = (*pptrN)->wordlen;
+
+    right_shift_word(&Q, n-1);
+    MUL_Core_ImpTxtBk_xyz(&Q,pptrPreT,&temp);
+    copyBINT(&Q,&temp);
+    right_shift_word(&Q, n+1);
+    copyBINT(&Y,pptrN);
+    MUL_Core_ImpTxtBk_xyz(&Q,&Y,&R);
+
+    SUB(pptrX,&R,&temp);
+
+    copyBINT(&R,&temp);
+    refineBINT(R);
+
+    int cnt = 0;
+    while (compare_bint(R,*pptrN)) {
+        copyBINT(&Y,pptrN);
+        SUB(&R,&Y,&temp);
+        copyBINT(&R,&temp);
+        refineBINT(R);
+        cnt++;
+        if (cnt == 4)
+            break;
+    }
+
+    copyBINT(pptrR,&R);
+    delete_bint(&Y);
+    delete_bint(&Q);
+    delete_bint(&R);
+    delete_bint(&temp);
+}
+
 void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrGCD) {
     BINT *r1 = NULL, *r2 = NULL;
     BINT *s1 = NULL, *s2 = NULL;

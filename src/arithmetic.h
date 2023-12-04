@@ -276,6 +276,10 @@ void EXP_MOD_R2L(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod);
  */
 void EXP_MOD_Montgomery(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod);
 
+void Barrett_Reduction_TEST(BINT** pptrX, BINT** pptrN, BINT** pptrR);
+
+void Barrett_Reduction(BINT** pptrX, BINT** pptrN, BINT** pptrR, BINT** pptrPreT);
+
 /**
  * @brief Executes the Extended Euclidean Algorithm.
  * @details Implements the Extended Euclidean Algorithm to compute the coefficients of Bézout's identity and the greatest common divisor (GCD) of two numbers.

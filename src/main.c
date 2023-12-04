@@ -236,11 +236,15 @@ int main() {
     // test_rand_MUL(TEST_ITERATIONS, bit_op, sgn_op, 2); // Karatsuba
 
     // test_rand_DIV(1000);
-    // performTEST_2Arg(SQU_TxtBk_xz, SQU_Krtsb_xz);
+    // performTEST_2ArgFn(SQU_TxtBk_xz, SQU_Krtsb_xz);
     // performTEST_3ArgFn(MUL_Core_ImpTxtBk_xyz, mul_core_TxtBk_xyz);
-    
-    test_rand_EXP_MOD(1000);
+    // performTEST_MUL();
+
+    // test_rand_EXP_MOD(1000);
     // performBINT(DIV_Binary_Long, DIV_Long);
+
+    // test_rand_BarrettRed();
+    performFastRed();
 
     // srand((unsigned int)time(NULL));
     // int t = 1000;
