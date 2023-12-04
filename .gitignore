@@ -9,6 +9,7 @@ test.py
 
 src/html/
 src/latex/
+src/app
 
 # Prerequisites
 *.d
