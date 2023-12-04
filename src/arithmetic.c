@@ -512,6 +512,8 @@ void DIV_Binary_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT
             }
         }
     }
+    refineBINT(*pptrDividend);
+    refineBINT(*pptrDivisor);
     refineBINT(*pptrQ);
     refineBINT(*pptrR);
 
@@ -616,30 +618,33 @@ void EXP_MOD_L2R(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod) {
     int bit_len = BIT_LENGTH(*pptrY);
     BINT* t0 = NULL;
     BINT* temp = NULL;
-    BINT* Q = NULL;
+    BINT* temp2 = NULL;
+    BINT* Q1 = NULL;
     init_bint(&t0, 1);
     t0->val[0] = WORD_ONE;
 
-    for (int i= bit_len-1 ; i >= 0 ;i--){
+    for (int i = bit_len-1; i >= 0; i--){
         init_bint(&temp,1);
-        if (GET_BIT(*pptrY,i) == 1){
+        init_bint(&temp2,1);
+        init_bint(&Q1,1);
+        if (GET_BIT(*pptrY,i)){
             SQU_TxtBk_xz(&t0,&temp);
-            DIV_Binary_Long(&temp , &ptrMod, &Q, &t0);
-            MUL_Core_ImpTxtBk_xyz(&t0,pptrX,&temp);
-            DIV_Binary_Long(&temp , &ptrMod, &Q, &t0);
+            DIV_Binary_Long(&temp,&ptrMod,&Q1,&temp2);
+            MUL_Core_ImpTxtBk_xyz(&temp2,pptrX,&temp);
+            DIV_Binary_Long(&temp,&ptrMod,&Q1,&t0);
         }
         else{
             SQU_TxtBk_xz(&t0,&temp);
-            DIV_Binary_Long(&temp, &ptrMod, &Q, &t0);
+            DIV_Binary_Long(&temp, &ptrMod, &Q1, &t0);
         }
     }
-    DIV_Binary_Long(&t0, &ptrMod, &Q, &temp);
-    refineBINT(temp);
-    copyBINT(pptrZ,&temp);
+    refineBINT(t0);
+    copyBINT(pptrZ,&t0);
 
-    delete_bint(&Q);
+    delete_bint(&Q1);
     delete_bint(&t0);
     delete_bint(&temp);
+    delete_bint(&temp2);
     refineBINT(ptrMod);
 }
 

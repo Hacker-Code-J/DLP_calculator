@@ -138,9 +138,9 @@ void test_rand_EXP_MOD(int cnt) {
         BINT* ptrZ = NULL;
         BINT* ptrMod = NULL;
 
-        int len1 = (rand() % 0x02) + 0x01;
-        int len2 = (rand() % 0x02) + 0x01;
-        int len3 = (rand() % 0x04) + 0x01;
+        int len1 = (rand() % 0x04) + 0x01;
+        int len2 = (rand() % 0x04) + 0x01;
+        int len3 = (rand() % 0x08) + 0x01;
 
         RANDOM_BINT(&ptrX, false, len1);
         RANDOM_BINT(&ptrY, false, len2);
@@ -237,9 +237,9 @@ int main() {
 
     // test_rand_DIV(1000);
     // performTEST_2Arg(SQU_TxtBk_xz, SQU_Krtsb_xz);
-    performTEST_3ArgFn(MUL_Core_ImpTxtBk_xyz, mul_core_TxtBk_xyz);
+    // performTEST_3ArgFn(MUL_Core_ImpTxtBk_xyz, mul_core_TxtBk_xyz);
     
-    // test_rand_EXP_MOD(1000);
+    test_rand_EXP_MOD(1000);
     // performBINT(DIV_Binary_Long, DIV_Long);
 
     // srand((unsigned int)time(NULL));
