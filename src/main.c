@@ -3,28 +3,18 @@
 #include <time.h>
 
 #include "arithmetic.h"
-
-// Define Macros for Bit Lengths based on 32-bit word units
-#define BIT_1024 0x20  // 32 * 32 = 1024 bits
-#define BIT_2048 0x40  // 64 * 32 = 2048 bits
-#define BIT_3072 0x60  // 96 * 32 = 3072 bits
-#define BIT_7680 0xF0  // 240 * 32 = 7680 bits
-
-// Configuration Macros
-#define TEST_ITERATIONS 10000
-#define MAX_BIT_LENGTH 64
-#define MIN_BIT_LENGTH 32
+#include "measure.h"
 
 #define SET_BIT_LENGTHS(bit_op, rnd, fix) \
     do { \
         switch (bit_op) { \
-            case 1: fix = BIT_2048; rnd = 0; break;       /* Fixed 2048 bits */ \
-            case 2: fix = BIT_3072; rnd = 0; break;       /* Fixed 3072 bits */ \
-            case 3: fix = BIT_7680; rnd = 0; break;       /* Fixed 7680 bits */ \
-            case 4: rnd = BIT_1024; fix = BIT_1024; break; /* Range: 1024 ~ 2048 bits */ \
-            case 5: rnd = BIT_2048; fix = BIT_2048; break; /* Range: 2048 ~ 4096 bits */ \
-            case 6: rnd = BIT_2048; fix = BIT_3072; break; /* Range: 3072 ~ 5120 bits */ \
-            default: fix = BIT_1024; rnd = 0;              /* Default to fixed 1024 bits */ \
+            case 1: fix = u32_BIT_2048; rnd = 0; break;       /* Fixed 2048 bits */ \
+            case 2: fix = u32_BIT_3072; rnd = 0; break;       /* Fixed 3072 bits */ \
+            case 3: fix = u32_BIT_7680; rnd = 0; break;       /* Fixed 7680 bits */ \
+            case 4: rnd = u32_BIT_1024; fix = u32_BIT_1024; break; /* Range: 1024 ~ 2048 bits */ \
+            case 5: rnd = u32_BIT_2048; fix = u32_BIT_2048; break; /* Range: 2048 ~ 4096 bits */ \
+            case 6: rnd = u32_BIT_2048; fix = u32_BIT_3072; break; /* Range: 3072 ~ 5120 bits */ \
+            default: fix = u32_BIT_1024; rnd = 0;              /* Default to fixed 1024 bits */ \
         } \
     } while(0)
 
@@ -180,14 +170,14 @@ void test_rand_EXP_MOD(int cnt) {
 
 #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
 
-void performTest(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
+void performBINT(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
     clock_t start = clock();
     testFunc(pptrX, pptrY, pptrQ, pptrR);
     clock_t end = clock();
     printf("%.6f\n", MEASURE_TIME(start, end));
 }
 
-void performBINT(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
+void performTEST(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
     srand((unsigned int)time(NULL));
 
     for (int idx = 0; idx < 500; idx++) {
@@ -204,8 +194,8 @@ void performBINT(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testF
         copyBINT(&ptrTmpX, &ptrX);      
         copyBINT(&ptrTmpY, &ptrY);
 
-        performTest(testFunc1, &ptrX, &ptrY, &ptrQ, &ptrR);
-        performTest(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpQ, &ptrTmpR);
+        performBINT(testFunc1, &ptrX, &ptrY, &ptrQ, &ptrR);
+        performBINT(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpQ, &ptrTmpR);
 
         delete_bint(&ptrX);
         delete_bint(&ptrY);
@@ -245,7 +235,8 @@ int main() {
     // test_rand_MUL(100, bit_op, sgn_op, 1); // Improved TextBook
     // test_rand_MUL(TEST_ITERATIONS, bit_op, sgn_op, 2); // Karatsuba
 
-    test_rand_DIV(1000);
+    // test_rand_DIV(1000);
+    performTEST_2Arg(SQU_TxtBk_xz, SQU_Krtsb_xz);
     
     // test_rand_EXP_MOD(1000);
     // performBINT(DIV_Binary_Long, DIV_Long);

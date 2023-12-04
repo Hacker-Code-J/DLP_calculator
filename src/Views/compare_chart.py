@@ -16,8 +16,8 @@ function2_smooth = np.convolve(function2_speeds, np.ones(window_size)/window_siz
 fig, ax = plt.subplots(figsize=(14, 7), dpi=100)
 
 # Plot the smoothed data with a prettier design
-ax.plot(function1_smooth, color='dodgerblue', label='Binary Long DIV', alpha=0.8, linewidth=2)
-ax.plot(function2_smooth, color='crimson', label='General Long DIV', alpha=0.8, linewidth=2)
+ax.plot(function1_smooth, color='dodgerblue', label='TextBook Squaring', alpha=0.8, linewidth=2)
+ax.plot(function2_smooth, color='crimson', label='Karatsuba Squaring', alpha=0.8, linewidth=2)
 
 # Setting labels, title, and legend with a prettier font and style
 ax.set_ylabel('Speed (ms)', fontsize=14, fontweight='bold')

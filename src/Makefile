@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -g -I. -O2
-OBJS=utils.o arithmetic.o
+CFLAGS=-Wall -Wextra -g -I. -ITests -O2
+OBJS=utils.o arithmetic.o measure.o
 LIB=libarith.a
 MAIN=main.o
 EXECUTABLE=app
@@ -16,6 +16,9 @@ utils.o: utils.c utils.h config.h
 arithmetic.o: arithmetic.c arithmetic.h utils.h config.h
 	$(CC) -c -o arithmetic.o arithmetic.c $(CFLAGS)
 
+measure.o: Tests/measure.c Tests/measure.h
+	$(CC) -c -o measure.o Tests/measure.c $(CFLAGS)
+
 # Create static library
 $(LIB): $(OBJS)
 	ar rcs $(LIB) $(OBJS)
@@ -29,8 +32,13 @@ $(EXECUTABLE): $(LIB) $(MAIN)
 	$(CC) -o $(EXECUTABLE) $(MAIN) -L. -larith -lm
 
 # Clean target
+DIR=Views
+FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt
 clean:
+	@echo "Cleaning up..."
 	rm -f $(OBJS) $(LIB) $(MAIN) $(EXECUTABLE)
+	rm -f $(FILES_TO_CLEAN)
+	@echo "Cleaned."
 
 # Check Memory Leak
 leak:
