@@ -3,11 +3,6 @@
 #ifndef _MEASURE_H
 #define _MEASURE_H
 
-// Configuration Macros
-#define TEST_ITERATIONS 10000
-#define MAX_BIT_LENGTH 64
-#define MIN_BIT_LENGTH 32
-
 // Define Macros for Bit Lengths based on 8-bit word units
 #define u8_BIT_1024 0x080  // 128 * 8 = 1024 bits
 #define u8_BIT_2048 0x100  // 256 * 8 = 2048 bits
@@ -26,11 +21,16 @@
 #define u64_BIT_3072 0x30  // 048 * 64 = 3072 bits
 #define u64_BIT_7680 0x78  // 120 * 64 = 7680 bits
 
-void performBINT_2Arg(void (*testFunc)(BINT**, BINT**), BINT** pptrX, BINT** pptrZ);
-void performTEST_2Arg(void (*testFunc1)(BINT**, BINT**), void (*testFunc2)(BINT**, BINT**));
-void performBINT_3Arg(void (*testFunc)(BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrZ);
-void performTEST_3Arg(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**));
-void performBINT_4Arg(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR);
-void performTEST_4Arg(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**));
+// Configuration Macros
+#define TEST_ITERATIONS 10000
+#define MAX_BIT_LENGTH u32_BIT_2048
+#define MIN_BIT_LENGTH u32_BIT_1024
+
+void performBINT_2ArgFn(void (*testFunc)(BINT**, BINT**), BINT** pptrX, BINT** pptrZ);
+void performTEST_2ArgFn(void (*testFunc1)(BINT**, BINT**), void (*testFunc2)(BINT**, BINT**));
+void performBINT_3ArgFn(void (*testFunc)(BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrZ);
+void performTEST_3ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**));
+void performBINT_4ArgFn(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrM, BINT** pptrN);
+void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**));
 
 #endif // _MEASURE_H

@@ -532,7 +532,7 @@ WORD quotient(WORD dividend1, WORD dividend0, WORD divisor) {
     }
 
     for(int j = w1; j>=0; j--) {
-        if(R >= (WORD_ONE << w1)) {
+        if(R >= (WORD)(WORD_ONE << w1)) {
             Q += (WORD_ONE << j);
             R += (dividend0 >> j);
             R += (R-divisor);

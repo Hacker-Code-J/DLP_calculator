@@ -16,7 +16,11 @@
     "utils.h": "c",
     "arithmetic.h": "c",
     "math.h": "c",
-    "functional": "c"
+    "functional": "c",
+    "deque": "c",
+    "unordered_map": "c",
+    "vector": "c",
+    "initializer_list": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "C_Cpp_Runner.cCompilerPath": "gcc",

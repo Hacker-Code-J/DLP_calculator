@@ -8,7 +8,7 @@ function1_speeds = [float(data[i].strip()) for i in range(0, len(data), 2)]
 function2_speeds = [float(data[i].strip()) for i in range(1, len(data), 2)]
 
 # Rolling mean for smoothing
-window_size = 1
+window_size = 50
 function1_smooth = np.convolve(function1_speeds, np.ones(window_size)/window_size, mode='valid')
 function2_smooth = np.convolve(function2_speeds, np.ones(window_size)/window_size, mode='valid')
 

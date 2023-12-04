@@ -6,32 +6,69 @@
 
 #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
 
-void performBINT_2Arg(void (*testFunc)(BINT**, BINT**), BINT** pptrX, BINT** pptrZ) {
+void performBINT_2ArgFn(void (*testFunc)(BINT**, BINT**), BINT** pptrX, BINT** pptrZ) {
     clock_t start = clock();
     testFunc(pptrX, pptrZ);
     clock_t end = clock();
     printf("%.3f\n", MEASURE_TIME(start, end)*1000);
 }
-void performTEST_2Arg(void (*testFunc1)(BINT**, BINT**), void (*testFunc2)(BINT**, BINT**)) {
+void performTEST_2ArgFn(void (*testFunc1)(BINT**, BINT**), void (*testFunc2)(BINT**, BINT**)) {
     srand((unsigned int)time(NULL));
 
     for (int idx = 0; idx < TEST_ITERATIONS; idx++) {
         int len = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
 
-        BINT *ptrX = NULL;
-        BINT *ptrZ = NULL;
-        BINT *ptrTmpX = NULL;
-        BINT *ptrTmpZ = NULL;
+        BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
+        BINT *ptrZ = NULL; BINT *ptrTmpZ = NULL;
+
         bool sgnX = rand() % 2;
         RANDOM_BINT(&ptrX, sgnX, len);
         copyBINT(&ptrTmpX, &ptrX);
 
-        performBINT_2Arg(testFunc1, &ptrX, &ptrZ);
-        performBINT_2Arg(testFunc2, &ptrTmpX, &ptrTmpZ);
+        performBINT_2ArgFn(testFunc1, &ptrX, &ptrZ);
+        performBINT_2ArgFn(testFunc2, &ptrTmpX, &ptrTmpZ);
 
         delete_bint(&ptrX);
         delete_bint(&ptrZ);
         delete_bint(&ptrTmpX);
+        delete_bint(&ptrTmpZ);
+    }
+}
+
+void performBINT_3ArgFn(void (*testFunc)(BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    clock_t start = clock();
+    testFunc(pptrX, pptrY, pptrZ);
+    clock_t end = clock();
+    printf("%.3f\n", MEASURE_TIME(start, end)*1000);
+}
+void performTEST_3ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**)) {
+    srand((unsigned int)time(NULL));
+
+    for (int idx = 0; idx < TEST_ITERATIONS; idx++) {
+        int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+
+        BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
+        BINT *ptrY = NULL; BINT *ptrTmpY = NULL;
+        BINT *ptrZ = NULL; BINT *ptrTmpZ = NULL;
+        
+        // bool sgnX = rand() % 2;
+        // bool sgnY = rand() % 2;
+        bool sgnX = false;
+        bool sgnY = false;
+        RANDOM_BINT(&ptrX, sgnX, len1);
+        RANDOM_BINT(&ptrY, sgnY, len2);
+        copyBINT(&ptrTmpX, &ptrX);
+        copyBINT(&ptrTmpY, &ptrY);
+
+        performBINT_3ArgFn(testFunc1, &ptrX, &ptrY, &ptrZ);
+        performBINT_3ArgFn(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpZ);
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrZ);
+        delete_bint(&ptrTmpX);
+        delete_bint(&ptrTmpY);
         delete_bint(&ptrTmpZ);
     }
 }
