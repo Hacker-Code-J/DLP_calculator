@@ -441,11 +441,11 @@ void reduction(BINT** pptrBint, int pwOf2) {
 
 void print_bint_hex_py(const BINT* ptrBint) {
     if (!(ptrBint)) {
-        fprintf(stderr, "Invalid BINT* structure in 'print_hex_python'.\n");
+        fprintf(stderr, "Invalid BINT* structure in 'print_hex_py'.\n");
         return;
     }
     if (!(ptrBint)->val) {
-        fprintf(stderr, "Invalid BINT->val in 'print_hex_python'.\n");
+        fprintf(stderr, "Invalid BINT->val in 'print_hex_py'.\n");
         return;
     }
     if ((ptrBint)->sign) { printf("-"); }

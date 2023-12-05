@@ -73,3 +73,10 @@ speed-div:
 	mv speed.txt Views/
 	(cd Views && python3 DIV_compare_chart.py)
 	@echo "Completed."
+
+speed-red:
+	@echo "Visualizing ..."
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 FastRed_compare_chart.py)
+	@echo "Completed."

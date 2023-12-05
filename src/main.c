@@ -50,7 +50,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "arithmetic.h"
 #include "measure.h"
 
 #define SET_BIT_LENGTHS(bit_op, rnd, fix) \
@@ -271,8 +270,8 @@ int main() {
      * 0: random sign
      * 1: positive
     */
-    int bit_op = 4;
-    int sgn_op = 1;
+    // int bit_op = 4;
+    // int sgn_op = 1;
 
     // Addition and Subtraction
     // test_rand_ADD(TEST_ITERATIONS, bit_op, sgn_op);
@@ -291,9 +290,9 @@ int main() {
     // test_rand_EXP_MOD(1000);
     // performBINT(DIV_Binary_Long, DIV_Long);
     // performTEST_4ArgFn(DIV_Binary_Long, DIV_Long);
-    performTEST_DIV(1000);
+    // performTEST_DIV(10000);
     // test_rand_BarrettRed();
-    // performFastRed();
+    performFastRed();
 
     // srand((unsigned int)time(NULL));
     // int t = 1000;

@@ -81,30 +81,40 @@ void performBINT_4ArgFn(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT**
 }
 void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
     srand((u32)time(NULL));
+    clock_t start1, start2, end1, end2;
 
+    BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
+    BINT *ptrY = NULL; BINT *ptrTmpY = NULL;
+    BINT *ptrM = NULL; BINT *ptrTmpM = NULL;
+    BINT *ptrN = NULL; BINT *ptrTmpN = NULL;
+    bool sgnX = false;
+    bool sgnY = false;
     // int cnt = TEST_ITERATIONS;
-    int cnt = 1000;
+    int cnt = 10000;
     for (int idx = 0; idx < cnt; idx++) {
         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
         int len2 = len1 - 1;
         // int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-
-        BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
-        BINT *ptrY = NULL; BINT *ptrTmpY = NULL;
-        BINT *ptrM = NULL; BINT *ptrTmpM = NULL;
-        BINT *ptrN = NULL; BINT *ptrTmpN = NULL;
         
         // bool sgnX = rand() % 2;
         // bool sgnY = rand() % 2;
-        bool sgnX = false;
-        bool sgnY = false;
         RANDOM_BINT(&ptrX, sgnX, len1);
         RANDOM_BINT(&ptrY, sgnY, len2);
         copyBINT(&ptrTmpX, &ptrX);
         copyBINT(&ptrTmpY, &ptrY);
 
-        performBINT_4ArgFn(testFunc1, &ptrX, &ptrY, &ptrM, &ptrN);
-        performBINT_4ArgFn(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
+        // performBINT_4ArgFn(testFunc1, &ptrX, &ptrY, &ptrM, &ptrN);
+        // performBINT_4ArgFn(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
+
+        start1 = clock();
+        testFunc1(&ptrX, &ptrY, &ptrM, &ptrN);
+        end1 = clock();
+
+        start2 = clock();
+        testFunc2(&ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
+        end2 = clock();
+        printf("%.3f\n", MEASURE_TIME(start1, end1)*1000);
+        printf("%.3f\n", MEASURE_TIME(start2, end2)*1000);
 
         delete_bint(&ptrX);
         delete_bint(&ptrY);
@@ -155,39 +165,38 @@ void performTEST_MUL() {
 
 void performTEST_DIV(int cnt) {
     srand((u32)time(NULL));
-
-    for (int idx = 0; idx < cnt; idx++) {
-        int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        int len2 = len1 - 1;
+    int i = cnt;
+    performTEST_4ArgFn(DIV_Binary_Long, DIV_Long);
+    // for (int idx = 0; idx < cnt; idx++) {
+    //     // int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+    //     // int len2 = len1 - 1;
         
-        BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
-        BINT *ptrY = NULL; BINT *ptrTmpY = NULL;
-        BINT *ptrM = NULL; BINT *ptrTmpM = NULL;
-        BINT *ptrN = NULL; BINT *ptrTmpN = NULL;
+    //     // BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
+    //     // BINT *ptrY = NULL; BINT *ptrTmpY = NULL;
+    //     // BINT *ptrM = NULL; BINT *ptrTmpM = NULL;
+    //     // BINT *ptrN = NULL; BINT *ptrTmpN = NULL;
         
-        // bool sgnX = rand() % 2;
-        // bool sgnY = rand() % 2;
-        bool sgnX = false;
-        bool sgnY = false;
-        RANDOM_BINT(&ptrX, sgnX, len1);
-        RANDOM_BINT(&ptrY, sgnY, len2);
-        copyBINT(&ptrTmpX, &ptrX);
-        copyBINT(&ptrTmpY, &ptrY);
+    //     // // bool sgnX = rand() % 2;
+    //     // // bool sgnY = rand() % 2;
+    //     // bool sgnX = false;
+    //     // bool sgnY = false;
+    //     // RANDOM_BINT(&ptrX, sgnX, len1);
+    //     // RANDOM_BINT(&ptrY, sgnY, len2);
+    //     // copyBINT(&ptrTmpX, &ptrX);
+    //     // copyBINT(&ptrTmpY, &ptrY);
 
-        performBINT_4ArgFn(DIV_Binary_Long, &ptrX, &ptrY, &ptrM, &ptrN);
-        performBINT_4ArgFn(DIV_Long, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
-        // performBINT_4ArgFn(DIV_Binary_Long, &ptrX, &ptrY, &ptrM, &ptrN);
-        // performBINT_4ArgFn(DIV_Long, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
+    //     // performBINT_4ArgFn(DIV_Binary_Long, &ptrX, &ptrY, &ptrM, &ptrN);
+    //     // performBINT_4ArgFn(DIV_Long, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
 
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrM);
-        delete_bint(&ptrN);
-        delete_bint(&ptrTmpX);
-        delete_bint(&ptrTmpY);
-        delete_bint(&ptrTmpM);
-        delete_bint(&ptrTmpN);
-    }
+    //     // delete_bint(&ptrX);
+    //     // delete_bint(&ptrY);
+    //     // delete_bint(&ptrM);
+    //     // delete_bint(&ptrN);
+    //     // delete_bint(&ptrTmpX);
+    //     // delete_bint(&ptrTmpY);
+    //     // delete_bint(&ptrTmpM);
+    //     // delete_bint(&ptrTmpN);
+    // }
 }
 
 void test_rand_BarrettRed() {
@@ -226,9 +235,10 @@ void test_rand_BarrettRed() {
 
 void performFastRed() {
     srand((u32)time(NULL));
-
+    clock_t start1, start2, end1, end2;
+    
     // int cnt = TEST_ITERATIONS;
-    int cnt = 100;
+    int cnt = 1000;
     for (int idx = 0; idx < cnt; idx++) {
         int len = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
 
@@ -256,8 +266,15 @@ void performFastRed() {
         W->val[(ptrX)->wordlen] = WORD_ONE;
         DIV_Binary_Long(&W,&Y,&preT,&temp);
 
-        performBINT_4ArgFn(DIV_Binary_Long, &ptrX, &ptrY, &ptrZ, &ptrN);
-        performBINT_4ArgFn(Barrett_Reduction, &ptrTmpX, &ptrTmpY, &ptrTmpZ, &preT);
+        start1 = clock();
+        DIV_Binary_Long(&ptrX, &ptrY, &ptrZ, &ptrN);
+        end1 = clock();
+        start2 = clock();
+        Barrett_Reduction(&ptrTmpX, &ptrTmpY, &ptrTmpZ, &preT);
+        end2 = clock();
+
+        printf("%.3f\n", MEASURE_TIME(start1, end1)*1000);
+        printf("%.3f\n", MEASURE_TIME(start2, end2)*1000);
 
         delete_bint(&ptrX);
         delete_bint(&ptrY);
