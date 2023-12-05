@@ -79,6 +79,43 @@ void performBINT_4ArgFn(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT**
     clock_t end = clock();
     printf("%.3f\n", MEASURE_TIME(start, end)*1000);
 }
+void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
+    srand((u32)time(NULL));
+
+    // int cnt = TEST_ITERATIONS;
+    int cnt = 1000;
+    for (int idx = 0; idx < cnt; idx++) {
+        int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int len2 = len1 - 1;
+        // int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+
+        BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
+        BINT *ptrY = NULL; BINT *ptrTmpY = NULL;
+        BINT *ptrM = NULL; BINT *ptrTmpM = NULL;
+        BINT *ptrN = NULL; BINT *ptrTmpN = NULL;
+        
+        // bool sgnX = rand() % 2;
+        // bool sgnY = rand() % 2;
+        bool sgnX = false;
+        bool sgnY = false;
+        RANDOM_BINT(&ptrX, sgnX, len1);
+        RANDOM_BINT(&ptrY, sgnY, len2);
+        copyBINT(&ptrTmpX, &ptrX);
+        copyBINT(&ptrTmpY, &ptrY);
+
+        performBINT_4ArgFn(testFunc1, &ptrX, &ptrY, &ptrM, &ptrN);
+        performBINT_4ArgFn(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrM);
+        delete_bint(&ptrN);
+        delete_bint(&ptrTmpX);
+        delete_bint(&ptrTmpY);
+        delete_bint(&ptrTmpM);
+        delete_bint(&ptrTmpN);
+    }
+}
 
 void performTEST_MUL() {
     srand((u32)time(NULL));
