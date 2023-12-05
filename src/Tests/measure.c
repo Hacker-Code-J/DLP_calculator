@@ -129,8 +129,9 @@ void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void 
 
 void performTEST_MUL() {
     srand((u32)time(NULL));
-
-    for (int idx = 0; idx < TEST_ITERATIONS; idx++) {
+    // int cnt = TEST_ITERATIONS;
+    int cnt = 1000;
+    for (int idx = 0; idx < cnt; idx++) {
         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
         int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
 

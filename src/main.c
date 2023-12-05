@@ -285,12 +285,12 @@ int main() {
     // test_rand_DIV(1000);
     // performTEST_2ArgFn(SQU_TxtBk_xz, SQU_Krtsb_xz);
     // performTEST_3ArgFn(MUL_Core_ImpTxtBk_xyz, mul_core_TxtBk_xyz);
-    // performTEST_MUL();
+    performTEST_MUL();
 
     // test_rand_EXP_MOD(1000);
     // performBINT(DIV_Binary_Long, DIV_Long);
     // performTEST_4ArgFn(DIV_Binary_Long, DIV_Long);
-    performTEST_DIV(10);
+    // performTEST_DIV(10);
     // test_rand_BarrettRed();
     // performFastRed();
 
