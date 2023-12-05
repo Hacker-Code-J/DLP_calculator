@@ -290,9 +290,9 @@ int main() {
     // test_rand_EXP_MOD(1000);
     // performBINT(DIV_Binary_Long, DIV_Long);
     // performTEST_4ArgFn(DIV_Binary_Long, DIV_Long);
-    // performTEST_DIV(10000);
+    performTEST_DIV(10);
     // test_rand_BarrettRed();
-    performFastRed();
+    // performFastRed();
 
     // srand((unsigned int)time(NULL));
     // int t = 1000;

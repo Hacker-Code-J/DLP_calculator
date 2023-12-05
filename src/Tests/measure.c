@@ -90,7 +90,7 @@ void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void 
     bool sgnX = false;
     bool sgnY = false;
     // int cnt = TEST_ITERATIONS;
-    int cnt = 10000;
+    int cnt = 100;
     for (int idx = 0; idx < cnt; idx++) {
         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
         int len2 = len1 - 1;
@@ -204,7 +204,7 @@ void test_rand_BarrettRed() {
     int idx = 0x00;
 
     // int cnt = TEST_INTERATOINS;
-    int cnt = 1000;
+    int cnt = 100;
     while(idx < cnt) {
         int len = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
 
