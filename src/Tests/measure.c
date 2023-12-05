@@ -127,6 +127,34 @@ void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void 
     }
 }
 
+void correctTEST_ADD(int test_cnt) {
+    srand((unsigned int)time(NULL));
+
+    int idx = 0x00;
+    while (idx < test_cnt) {
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        
+        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
+        bool sgnX = rand() % 2;
+        bool sgnY = rand() % 2;
+        RANDOM_BINT(&ptrX, sgnX, lenX);
+        RANDOM_BINT(&ptrY, sgnY, lenY);
+
+        ADD(&ptrX,&ptrY,&ptrZ);
+        
+        printf("print("); print_bint_hex_py(ptrX);
+        printf(" + "); print_bint_hex_py(ptrY);
+        printf(" == "); print_bint_hex_py(ptrZ);
+        printf(")\n"); 
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrZ);
+        idx++;
+    }
+}
+
 void performTEST_MUL() {
     srand((u32)time(NULL));
     // int cnt = TEST_ITERATIONS;
@@ -291,42 +319,3 @@ void performFastRed() {
         delete_bint(&Y);
     }
 }
-
-
-// void performBINT_4Arg(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
-//     clock_t start = clock();
-//     testFunc(pptrX, pptrY, pptrQ, pptrR);
-//     clock_t end = clock();
-//     printf("%.3f\n", MEASURE_TIME(start, end)*1000);
-// }
-
-// void performTEST_4Arg(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
-//     srand((unsigned int)time(NULL));
-
-//     for (int idx = 0; idx < 500; idx++) {
-//         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-//         int len2 = len1 - 1;
-//         // int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-
-//         BINT *ptrX = NULL, *ptrY = NULL;
-//         BINT *ptrQ = NULL, *ptrR = NULL;
-//         BINT *ptrTmpX = NULL, *ptrTmpY = NULL;
-//         BINT *ptrTmpQ = NULL, *ptrTmpR = NULL;
-//         RANDOM_BINT(&ptrX, 0, len1);
-//         RANDOM_BINT(&ptrY, 0, len2);
-//         copyBINT(&ptrTmpX, &ptrX);      
-//         copyBINT(&ptrTmpY, &ptrY);
-
-//         performBINT(testFunc1, &ptrX, &ptrY, &ptrQ, &ptrR);
-//         performBINT(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpQ, &ptrTmpR);
-
-//         delete_bint(&ptrX);
-//         delete_bint(&ptrY);
-//         delete_bint(&ptrQ);
-//         delete_bint(&ptrR);
-//         delete_bint(&ptrTmpX);
-//         delete_bint(&ptrTmpY);
-//         delete_bint(&ptrTmpQ);
-//         delete_bint(&ptrTmpR);
-//     }
-// }

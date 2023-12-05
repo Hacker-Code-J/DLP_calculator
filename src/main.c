@@ -256,6 +256,8 @@ void test_rand_EXP_MOD(int cnt) {
 // }
 
 int main() {
+    correctTEST_ADD(TEST_ITERATIONS);
+
     /**
      * bit_op
      * default(0): Fixed 1024 bits
@@ -285,7 +287,7 @@ int main() {
     // test_rand_DIV(1000);
     // performTEST_2ArgFn(SQU_TxtBk_xz, SQU_Krtsb_xz);
     // performTEST_3ArgFn(MUL_Core_ImpTxtBk_xyz, mul_core_TxtBk_xyz);
-    performTEST_MUL();
+    // performTEST_MUL();
 
     // test_rand_EXP_MOD(1000);
     // performBINT(DIV_Binary_Long, DIV_Long);

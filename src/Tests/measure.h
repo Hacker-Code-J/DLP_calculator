@@ -24,7 +24,7 @@
 // Configuration Macros
 #define TEST_ITERATIONS 10000
 #define MAX_BIT_LENGTH u32_BIT_3072
-#define MIN_BIT_LENGTH u32_BIT_3072
+#define MIN_BIT_LENGTH u32_BIT_2048
 
 void performBINT_2ArgFn(void (*testFunc)(BINT**, BINT**), BINT** pptrX, BINT** pptrZ);
 void performTEST_2ArgFn(void (*testFunc1)(BINT**, BINT**), void (*testFunc2)(BINT**, BINT**));
@@ -32,6 +32,12 @@ void performBINT_3ArgFn(void (*testFunc)(BINT**, BINT**, BINT**), BINT** pptrX, 
 void performTEST_3ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**));
 void performBINT_4ArgFn(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrM, BINT** pptrN);
 void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**));
+
+void correctTEST_ADD(int test_cnt);
+void performTEST_ADD(int test_cnt);
+
+void correctTEST_SUB(int test_cnt);
+void performTEST_SUB(int test_cnt);
 
 void performTEST_MUL();
 void performTEST_DIV(int cnt);

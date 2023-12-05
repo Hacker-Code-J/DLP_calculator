@@ -126,7 +126,7 @@ void sub_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
         sub_borrow((*pptrX)->val[i], (WORD)0, &borrow, &res);
         (*pptrZ)->val[i] = res;
     }
-    refineBINT(*pptrX); refineBINT(*pptrY);
+    refineBINT(*pptrX); refineBINT(*pptrY); refineBINT(*pptrZ);
     if(!xGeqy) swapBINT(pptrX,pptrY);
 }
 void SUB(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
