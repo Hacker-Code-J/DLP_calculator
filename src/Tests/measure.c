@@ -153,6 +153,43 @@ void performTEST_MUL() {
     }
 }
 
+void performTEST_DIV(int cnt) {
+    srand((u32)time(NULL));
+
+    for (int idx = 0; idx < cnt; idx++) {
+        int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int len2 = len1 - 1;
+        
+        BINT *ptrX = NULL; BINT *ptrTmpX = NULL;
+        BINT *ptrY = NULL; BINT *ptrTmpY = NULL;
+        BINT *ptrM = NULL; BINT *ptrTmpM = NULL;
+        BINT *ptrN = NULL; BINT *ptrTmpN = NULL;
+        
+        // bool sgnX = rand() % 2;
+        // bool sgnY = rand() % 2;
+        bool sgnX = false;
+        bool sgnY = false;
+        RANDOM_BINT(&ptrX, sgnX, len1);
+        RANDOM_BINT(&ptrY, sgnY, len2);
+        copyBINT(&ptrTmpX, &ptrX);
+        copyBINT(&ptrTmpY, &ptrY);
+
+        performBINT_4ArgFn(DIV_Binary_Long, &ptrX, &ptrY, &ptrM, &ptrN);
+        performBINT_4ArgFn(DIV_Long, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
+        // performBINT_4ArgFn(DIV_Binary_Long, &ptrX, &ptrY, &ptrM, &ptrN);
+        // performBINT_4ArgFn(DIV_Long, &ptrTmpX, &ptrTmpY, &ptrTmpM, &ptrTmpN);
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrM);
+        delete_bint(&ptrN);
+        delete_bint(&ptrTmpX);
+        delete_bint(&ptrTmpY);
+        delete_bint(&ptrTmpM);
+        delete_bint(&ptrTmpN);
+    }
+}
+
 void test_rand_BarrettRed() {
     srand((u32)time(NULL));
     int idx = 0x00;

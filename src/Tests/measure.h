@@ -34,6 +34,7 @@ void performBINT_4ArgFn(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT**
 void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**));
 
 void performTEST_MUL();
+void performTEST_DIV(int cnt);
 void test_rand_BarrettRed();
 void performFastRed();
 

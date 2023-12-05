@@ -37,6 +37,7 @@ FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt
 clean:
 	@echo "Cleaning up..."
 	rm -f $(OBJS) $(LIB) $(MAIN) $(EXECUTABLE)
+	rm -f test.py test.txt speed.txt
 	rm -f $(FILES_TO_CLEAN)
 	@echo "Cleaned."
 
@@ -64,4 +65,11 @@ speed-mul:
 	./app > speed.txt
 	mv speed.txt Views/
 	(cd Views && python3 MUL_compare_chart.py)
+	@echo "Completed."
+
+speed-div:
+	@echo "Visualizing ..."
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 DIV_compare_chart.py)
 	@echo "Completed."

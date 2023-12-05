@@ -579,7 +579,7 @@ void DIV_Long(BINT** pptrDividend, BINT** pptrDivisor, BINT** pptrQ, BINT** pptr
     // Calculate R = X - Y * Q
     BINT* YQ = NULL;
     init_bint(&YQ, (*pptrDivisor)->wordlen);
-    MUL_Core_Krtsb_xyz(pptrDivisor, pptrQ, &YQ);  // Pass the addresses of the pointers
+    mul_core_TxtBk_xyz(pptrDivisor, pptrQ, &YQ);  // Pass the addresses of the pointers
     // refineBINT(YQ);
 
     SUB(pptrDividend, &YQ, pptrR);                 // Pass the addresses of the pointers
