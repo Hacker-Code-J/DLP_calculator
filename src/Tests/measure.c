@@ -165,8 +165,39 @@ CORRECT_TEST_OPERATION(correctTEST_SUB, SUB, "-")
 CORRECT_TEST_OPERATION(correctTEST_TxtBk, mul_core_TxtBk_xyz, "*")
 // Use the macro to define correctTEST_ImpTxtBk
 CORRECT_TEST_OPERATION(correctTEST_ImpTxtBk, MUL_Core_ImpTxtBk_xyz, "*")
-// Use the macro to define correctTEST_Krtsb
-CORRECT_TEST_OPERATION(correctTEST_Krtsb, MUL_Core_Krtsb_xyz, "*")
+// // Use the macro to define correctTEST_Krtsb
+// CORRECT_TEST_OPERATION(correctTEST_Krtsb, MUL_Core_Krtsb_xyz, "*")
+
+void correctTEST_Krtsb(int test_cnt) {
+    srand((unsigned int)time(NULL));
+
+    BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
+        
+    int idx = 0x00;
+    while (idx < test_cnt) {
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        
+        // bool sgnX = rand() % 2;
+        // bool sgnY = rand() % 2;
+        bool sgnX = false;
+        bool sgnY = false;
+        RANDOM_BINT(&ptrX, sgnX, lenX);
+        RANDOM_BINT(&ptrY, sgnY, lenY);
+
+        MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+        
+        printf("print("); print_bint_hex_py(ptrX);
+        printf(" * "); print_bint_hex_py(ptrY);
+        printf(" == "); print_bint_hex_py(ptrZ);
+        printf(")\n"); 
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrZ);
+        idx++;
+    }
+}
 
 void performTEST_MUL() {
     srand((u32)time(NULL));

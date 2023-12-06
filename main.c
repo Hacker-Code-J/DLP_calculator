@@ -302,7 +302,7 @@ int main() {
     // performBINT(MUL_Core_ImpTxtBk_xyz, MUL_Core_Krtsb_xyz);
 
     int t = 10000;
-    int bit_op = 1;
+    int bit_op = 2;
     int sgn_op = 1;
 
     // Addition and Subtraction
@@ -312,14 +312,14 @@ int main() {
     // Multiplication
     // test_rand_MUL(t, bit_op, sgn_op, 0); // TextBook
     // test_rand_MUL(t, bit_op, sgn_op, 1); // Improved TextBook
-    // test_rand_MUL(t, bit_op, sgn_op, 2); // Karatsuba
+    test_rand_MUL(t, bit_op, sgn_op, 2); // Karatsuba
 
     // Squaring
     // test_rand_SQU(t, bit_op, sgn_op, 0);
     // test_rand_SQU(t, bit_op, sgn_op, 1);
 
     // Division
-    test_rand_DIV(t, bit_op, sgn_op, 0); // Binary Long
+    // test_rand_DIV(t, bit_op, sgn_op, 0); // Binary Long
     // test_rand_DIV(t, bit_op, sgn_op, 1); // General Long
 
 

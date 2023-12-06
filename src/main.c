@@ -260,7 +260,7 @@ int main() {
     // correctTEST_SUB(TEST_ITERATIONS);
     // correctTEST_TxtBk(1000);
     // correctTEST_ImpTxtBk(1000);
-    // correctTEST_Krtsb(TEST_ITERATIONS);
+    correctTEST_Krtsb(1);
     
     /**
      * bit_op
