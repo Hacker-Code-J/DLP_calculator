@@ -1,6 +1,9 @@
-import numpy as np
+import sys
+print(sys.executable)
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
+import numpy as np
 
 # First, let's modify the 'read_success_rate_from_file' function to return the styled label
 def read_success_rate_from_file(file_path):
