@@ -256,7 +256,8 @@ void test_rand_EXP_MOD(int cnt) {
 // }
 
 int main() {
-    correctTEST_ADD(TEST_ITERATIONS);
+    // correctTEST_ADD(TEST_ITERATIONS);
+    correctTEST_SUB(TEST_ITERATIONS);
 
     /**
      * bit_op

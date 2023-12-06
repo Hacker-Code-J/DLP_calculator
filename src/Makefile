@@ -41,6 +41,8 @@ clean:
 	rm -f $(FILES_TO_CLEAN)
 	@echo "Cleaned."
 
+rebuild: clean all
+
 # Check Memory Leak
 leak:
 	valgrind --leak-check=full --show-leak-kinds=all ./app
