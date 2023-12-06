@@ -260,8 +260,11 @@ int main() {
     // correctTEST_SUB(TEST_ITERATIONS);
     // correctTEST_TxtBk(1000);
     // correctTEST_ImpTxtBk(1000);
-    correctTEST_Krtsb(1);
+    // correctTEST_Krtsb(1);
     
+    corretTEST_BinDIV(TEST_ITERATIONS);
+    // corretTEST_GenDIV(int test_cnt);
+
     /**
      * bit_op
      * default(0): Fixed 1024 bits

@@ -184,7 +184,8 @@ void correctTEST_Krtsb(int test_cnt) {
         bool sgnY = false;
         RANDOM_BINT(&ptrX, sgnX, lenX);
         RANDOM_BINT(&ptrY, sgnY, lenY);
-
+        print_bint_hex_py(ptrX);printf("\n");
+        print_bint_hex_py(ptrY);printf("\n");
         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
         
         printf("print("); print_bint_hex_py(ptrX);
@@ -198,6 +199,41 @@ void correctTEST_Krtsb(int test_cnt) {
         idx++;
     }
 }
+
+void corretTEST_BinDIV(int test_cnt) {
+    srand((unsigned int)time(NULL));
+    int idx = 0x00;
+    while (idx < test_cnt) {
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        
+        BINT *ptrX = NULL, *ptrY = NULL;
+        BINT* ptrQ = NULL;
+        BINT* ptrR = NULL;
+        
+        // bool sgnX = rand() % 2;
+        // bool sgnY = rand() % 2;
+        bool sgnX = false;
+        bool sgnY = false;
+        RANDOM_BINT(&ptrX, sgnX, lenX);
+        RANDOM_BINT(&ptrY, sgnY, lenY);
+        
+        DIV_Binary_Long(&ptrX,&ptrY,&ptrQ,&ptrR);
+
+        printf("print(hex("); print_bint_hex_py(ptrQ);
+        printf(" * "); print_bint_hex_py(ptrY);
+        printf(" + "); print_bint_hex_py(ptrR);
+        printf(") == hex("); print_bint_hex_py(ptrX);
+        printf("))\n");
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrQ);
+        delete_bint(&ptrR);
+        idx++;
+    }
+}
+
 
 void performTEST_MUL() {
     srand((u32)time(NULL));
