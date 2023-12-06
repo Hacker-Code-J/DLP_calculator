@@ -257,8 +257,11 @@ void test_rand_EXP_MOD(int cnt) {
 
 int main() {
     // correctTEST_ADD(TEST_ITERATIONS);
-    correctTEST_SUB(TEST_ITERATIONS);
-
+    // correctTEST_SUB(TEST_ITERATIONS);
+    // correctTEST_TxtBk(1000);
+    // correctTEST_ImpTxtBk(1000);
+    // correctTEST_Krtsb(TEST_ITERATIONS);
+    
     /**
      * bit_op
      * default(0): Fixed 1024 bits

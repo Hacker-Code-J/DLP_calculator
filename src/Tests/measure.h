@@ -39,6 +39,10 @@ void performTEST_ADD(int test_cnt);
 void correctTEST_SUB(int test_cnt);
 void performTEST_SUB(int test_cnt);
 
+void correctTEST_TxtBk(int test_cnt);
+void correctTEST_ImpTxtBk(int test_cnt);
+void correctTEST_Krtsb(int test_cnt);
+
 void performTEST_MUL();
 void performTEST_DIV(int cnt);
 void test_rand_BarrettRed();

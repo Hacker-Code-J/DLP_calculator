@@ -127,60 +127,46 @@ void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void 
     }
 }
 
-void correctTEST_ADD(int test_cnt) {
-    srand((unsigned int)time(NULL));
-
-    int idx = 0x00;
-    while (idx < test_cnt) {
-        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        
-        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
-        bool sgnX = rand() % 2;
-        bool sgnY = rand() % 2;
-        RANDOM_BINT(&ptrX, sgnX, lenX);
-        RANDOM_BINT(&ptrY, sgnY, lenY);
-
-        ADD(&ptrX,&ptrY,&ptrZ);
-        
-        printf("print("); print_bint_hex_py(ptrX);
-        printf(" + "); print_bint_hex_py(ptrY);
-        printf(" == "); print_bint_hex_py(ptrZ);
-        printf(")\n"); 
-
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrZ);
-        idx++;
-    }
+// Define a macro for the common functionality
+#define CORRECT_TEST_OPERATION(TEST_NAME, OPERATION, SYMBOL)               \
+void TEST_NAME(int test_cnt) {                                             \
+    srand((unsigned int)time(NULL));                                       \
+                                                                           \
+    int idx = 0x00;                                                        \
+    while (idx < test_cnt) {                                               \
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH; \
+        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH; \
+                                                                               \
+        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;                        \
+        bool sgnX = rand() % 2;                                               \
+        bool sgnY = rand() % 2;                                               \
+        RANDOM_BINT(&ptrX, sgnX, lenX);                                       \
+        RANDOM_BINT(&ptrY, sgnY, lenY);                                       \
+                                                                               \
+        OPERATION(&ptrX,&ptrY,&ptrZ);                                         \
+                                                                               \
+        printf("print("); print_bint_hex_py(ptrX);                            \
+        printf(" " SYMBOL " "); print_bint_hex_py(ptrY);                      \
+        printf(" == "); print_bint_hex_py(ptrZ);                              \
+        printf(")\n");                                                        \
+                                                                               \
+        delete_bint(&ptrX);                                                   \
+        delete_bint(&ptrY);                                                   \
+        delete_bint(&ptrZ);                                                   \
+        idx++;                                                                \
+    }                                                                         \
 }
-void correctTEST_SUB(int test_cnt) {
-    srand((unsigned int)time(NULL));
 
-    int idx = 0x00;
-    while (idx < test_cnt) {
-        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        
-        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
-        bool sgnX = rand() % 2;
-        bool sgnY = rand() % 2;
-        RANDOM_BINT(&ptrX, sgnX, lenX);
-        RANDOM_BINT(&ptrY, sgnY, lenY);
-
-        ADD(&ptrX,&ptrY,&ptrZ);
-        
-        printf("print("); print_bint_hex_py(ptrX);
-        printf(" - "); print_bint_hex_py(ptrY);
-        printf(" == "); print_bint_hex_py(ptrZ);
-        printf(")\n"); 
-
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrZ);
-        idx++;
-    }
-}
+// Use the macro to define correctTEST_ADD
+CORRECT_TEST_OPERATION(correctTEST_ADD, ADD, "+")
+// Use the macro to define correctTEST_SUB
+CORRECT_TEST_OPERATION(correctTEST_SUB, SUB, "-")
+// Use the macro to define correctTEST_TxtBk
+CORRECT_TEST_OPERATION(correctTEST_TxtBk, mul_core_TxtBk_xyz, "*")
+// Use the macro to define correctTEST_ImpTxtBk
+CORRECT_TEST_OPERATION(correctTEST_ImpTxtBk, MUL_Core_ImpTxtBk_xyz, "*")
+// Use the macro to define correctTEST_Krtsb
+CORRECT_TEST_OPERATION(correctTEST_Krtsb, MUL_Core_Krtsb_xyz, "*")
 
 void performTEST_MUL() {
     srand((u32)time(NULL));
