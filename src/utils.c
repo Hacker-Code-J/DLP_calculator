@@ -228,7 +228,7 @@ bool GET_BIT(BINT* ptrBint, int i_th)  {
 WORD GET_WORD(BINT* ptrBint, int m_th) {
     // Check if the requested word index is out of bounds
     if (m_th < 0 || m_th >= ptrBint->wordlen) {
-        fprintf(stderr, "Error: Requested word index %d is out of bounds.\n", m_th);
+        // fprintf(stderr, "Error: Requested word index %d is out of bounds.\n", m_th);
         return 0;
     }
 

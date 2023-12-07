@@ -70,14 +70,14 @@ int main() {
     // correctTEST_Krtsb(10);
     
     // corretTEST_BinDIV(TEST_ITERATIONS);
-    // corretTEST_GenDIV(TEST_ITERATIONS);
+    corretTEST_GenDIV(TEST_ITERATIONS);
 
     // corretTEST_EXP_MOD_L2R(TEST_ITERATIONS);
     // corretTEST_EXP_MOD_R2L(TEST_ITERATIONS);
     // corretTEST_EXP_MOD_Montgomery(TEST_ITERATIONS);
 
     // corretTEST_BarrettRed(TEST_ITERATIONS);
-    corretTEST_EEA(TEST_ITERATIONS);
+    // corretTEST_EEA(TEST_ITERATIONS);
 
     /**
      * bit_op

@@ -64,7 +64,7 @@ typedef unsigned long long u64;
  * @def WORD_BITLEN
  * @brief Define the size of a word in bits for BigInteger implementation.
  */
-#define WORD_BITLEN 32
+#define WORD_BITLEN 8
 
 // Conditional compilation based on the word size for data type flexibility
 #if WORD_BITLEN == 8
