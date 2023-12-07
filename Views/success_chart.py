@@ -2,43 +2,77 @@ import sys
 print(sys.executable)
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Arc
 import numpy as np
 
-# 1. Read the file
-with open('test.txt', 'r') as f:
-    lines = f.readlines()
+# First, let's modify the 'read_success_rate_from_file' function to return the styled label
+def read_success_rate_from_file(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+        # Count 'True' as success
+        success_count = sum(1 for line in lines if line.strip().lower() == 'true')
+        total_count = len(lines)
+        success_rate = (success_count / total_count) * 100 if total_count > 0 else 0
+        return success_rate, f'{success_rate:.0f}% ({success_count}/{total_count})'
+    except FileNotFoundError:
+        print(f"No such file: {file_path}")
+        return 0, '0/0'
 
-# 2. Calculate the success rate
-total_lines = len(lines)
-success_lines = sum(1 for line in lines if line.strip() == 'True')
-failure_lines = total_lines - success_lines
-success_rate = (success_lines / total_lines) * 100
+# Adjust the 'draw_gauge_chart' function to move the success rate label lower on the chart
+def draw_gauge_chart(success_rate, title='Success Rate', label='', ax=None):
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(10, 7))
 
-# 3. Plot the success rate
-labels = ['Success', 'Failure']
-values = [success_rate, 100 - success_rate]
+    # Create the arc
+    theta1, theta2 = 0, 180  # Arc from 0 to 180 degrees
+    radius = 0.9
+    arc = Arc([0.5, 0.5], radius, radius, theta1=theta1, theta2=theta2,
+              edgecolor='DeepSkyBlue', lw=2, zorder=3)
 
-# Use a visually pleasing style and adjust figure size
-plt.figure(figsize=(10, 7))
-plt.style.use('ggplot')
+    # Add the arc to the axes
+    ax.add_patch(arc)
 
-# Using a softer color palette and setting the bar width
-colors = ['#88CCEE', '#FF6F61']
-bar_width = 0.6
+    # Create the needle
+    max_val = 100
+    min_val = 0
+    range_val = max_val - min_val
+    value = (success_rate / range_val) * 180
+    # Create the needle with a higher zorder to bring it to the front
+    ax.arrow(0.5, 0.5, 0.4 * np.cos(np.radians(180 - value)), 0.4 * np.sin(np.radians(180 - value)),
+            width=0.02, head_width=0.05, head_length=0.1, fc='red', ec='red', zorder=5)
 
-bars = plt.bar(labels, values, color=colors, width=bar_width, edgecolor='black')
 
-# Annotate the bars with their respective percentage values and actual counts
-for bar in bars:
-    yval = bar.get_height()
-    count = success_lines if bar.get_x() < 0.5 else failure_lines  # Assuming the success bar is the first one
-    plt.text(bar.get_x() + bar.get_width()/2, yval + 1,
-             f'{yval:.0f}% ({count}/{total_lines})',  # Adjusted formatting to remove decimal places and add counts
-             ha='center', va='bottom', fontsize=12)
+    # Set the limits of the axes
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
 
-plt.ylabel('Percentage (%)')
-plt.title('Success Rate')
-plt.ylim(0, 110)  # Added a little more room at the top for the annotations
+    # Remove the axes
+    ax.set_xticks([])
+    ax.set_yticks([])
 
-# Display the graph
+    # Add labels - moving the success rate label lower
+    ax.text(0.5, 0.45, label, horizontalalignment='center', verticalalignment='center',
+            fontsize=20, fontweight='bold', color='magenta')  # Adjusted vertical position to 0.45
+    ax.text(0.5, 0.3, title, horizontalalignment='center', verticalalignment='center',
+            fontsize=24, fontweight='bold')
+
+    # Add scale
+    for i in range(min_val, max_val + 1, 10):
+        angle = (i / range_val) * 180
+        x = 0.5 + 0.45 * np.cos(np.radians(180 - angle))
+        y = 0.5 + 0.45 * np.sin(np.radians(180 - angle))
+        ax.text(x, y, str(i), horizontalalignment='center', verticalalignment='center',
+                fontsize=12, fontweight='bold', color='DeepSkyBlue')
+
+    return ax
+
+# The file path should point to the actual file location
+file_path = 'test.txt'  # This is an example path
+
+# Read the success rate and label from the file
+success_rate, label = read_success_rate_from_file(file_path)
+
+# Draw the gauge chart with the actual label positioned lower
+draw_gauge_chart(success_rate, label=label)
 plt.show()

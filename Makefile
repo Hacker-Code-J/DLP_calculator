@@ -1,104 +1,84 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -g -O2
-LIBS = -lflint -lgmp
-OBJS = setup.o BigInteger.o operation.o main.o
+CC=gcc
+CFLAGS=-Wall -Wextra -g -I. -ITests -O2
+OBJS=utils.o arithmetic.o measure.o
+LIB=libpubao.a
+MAIN=main.o
+EXECUTABLE=app
 
-# # Name of the shared library
-# LIBNAME = libpubao.so
+# Default target
+all: $(EXECUTABLE)
 
-# # Targets
-# $(LIBNAME): $(OBJS)
-# 	$(CC) -shared -o $@ $^ $(LIBS)
+# Compile utils.c to utils.o
+utils.o: utils.c utils.h config.h
+	$(CC) -c -o utils.o utils.c $(CFLAGS)
 
-# Targets
-a.out: $(OBJS)
-	$(CC) -o $@ $^ $(LIBS)
+# Compile arithmetic.c to arithmetic.o
+arithmetic.o: arithmetic.c arithmetic.h utils.h config.h
+	$(CC) -c -o arithmetic.o arithmetic.c $(CFLAGS)
 
-setup.o: setup.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+measure.o: Tests/measure.c Tests/measure.h
+	$(CC) -c -o measure.o Tests/measure.c $(CFLAGS)
 
-BigInteger.o: BigInteger.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+# Create static library
+$(LIB): $(OBJS)
+	ar rcs $(LIB) $(OBJS)
 
-operation.o: operation.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+# Compile main.c to main.o
+$(MAIN): main.c
+	$(CC) -c -o $(MAIN) main.c $(CFLAGS)
 
-main.o: main.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+# Link everything to create the executable
+$(EXECUTABLE): $(LIB) $(MAIN)
+	$(CC) -o $(EXECUTABLE) $(MAIN) -L. -lpubao -lm
 
-run:
-	./a.out
-
-leak:
-	valgrind --leak-check=full --show-leak-kinds=all ./a.out
-
+# Clean target
 DIR=Views
-FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt $(DIR)/lib_test.txt
+FILES_TO_CLEAN=$(DIR)/test.py $(DIR)/test.txt $(DIR)/speed.txt
 clean:
 	@echo "Cleaning up..."
-	rm -f *.o a.out *.bin *.txt
-	-rm -f test.py test.txt speed.txt
-	-rm -f $(FILES_TO_CLEAN)
+	rm -f $(OBJS) $(LIB) $(MAIN) $(EXECUTABLE)
+	rm -f test.py test.txt speed.txt
+	rm -f $(FILES_TO_CLEAN)
 	@echo "Cleaned."
 
-convert:
-	@echo "Connecting converter..."
-	(cd Tools && python3 converter.py)
-	@echo "Disconnect Converter."
+rebuild: clean all
 
-sage:
-	@echo "Loading SageMath..."
-	(cd Tests-SageMath && sage)
-	@echo "Quit SageMath."
+# Check Memory Leak
+leak:
+	valgrind --leak-check=full --show-leak-kinds=all ./app
 
-test:
-	@echo "Creating text.txt ..."
-	./a.out > test.py
-	python3 test.py > test.txt
-	mv test.py test.txt Views/
-	@echo "Created."
-
-chart:
+success:
 	@echo "Visualizing ..."
-	./a.out > test.py
+	./app > test.py
 	python3 test.py > test.txt
 	mv test.py test.txt Views/
-	(cd Views && python3 success_chart2.py)
+	(cd Views && python3 success_chart.py)
 	@echo "Completed."
 
 speed:
-	@echo "Converting to Text File ..."
-	./a.out > speed.txt
+	@echo "Visualizing ..."
+	./app > speed.txt
 	mv speed.txt Views/
-	(cd Views && python3 time_compare_chart.py)
+	(cd Views && python3 compare_chart.py)
 	@echo "Completed."
 
 speed-mul:
-	@echo "Converting to Text File ..."
-	./a.out > speed.txt
-	@echo "Converting to Text File ..."
-	mv speed.txt Views/
-	(cd Views && python3 time_compare_mul.py)
-	@echo "Completed."
-
-speed-len:
-	@echo "Converting to Text File ..."
-	./a.out > speed.txt
-	@echo "Converting to Text File ..."
-	mv speed.txt Views/
-	(cd Views && python3 time_compare_mul.py)
-	@echo "Completed."
-
-flag:
 	@echo "Visualizing ..."
-	(cd Views && python3 Krtsb_FLAG.py)
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 MUL_compare_chart.py)
 	@echo "Completed."
 
-lib:
-	@echo "Converting to Text File ..."
-	./a.out > lib_test.txt
-	mv lib_test.txt Views/
-	(cd Views && python3 lib_test.py)
+speed-div:
+	@echo "Visualizing ..."
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 DIV_compare_chart.py)
 	@echo "Completed."
 
-.PHONY: clean
+speed-red:
+	@echo "Visualizing ..."
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 FastRed_compare_chart.py)
+	@echo "Completed."

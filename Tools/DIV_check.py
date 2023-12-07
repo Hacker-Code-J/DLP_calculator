@@ -1,3 +1,0 @@
-print(hex(0xbaeaccde * 0xfefff123 + 0xedfdfe))
-print(hex(0xba2fd736ef06fe58 // 0xfefff123))
-print(hex(0xba2fd736ef06fe58 % 0xfefff123))

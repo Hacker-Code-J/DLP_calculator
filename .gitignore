@@ -1,15 +1,9 @@
 *.txt
-!flag1.txt
-!flag2.txt
-!flag3.txt
-!flag4.txt
-!flag5.txt
-
 test.py
 
-src/html/
-src/latex/
-src/app
+html/
+latex/
+app
 
 # Prerequisites
 *.d
@@ -34,6 +28,7 @@ src/app
 *.a
 *.la
 *.lo
+!libpubao.a
 
 # Shared objects (inc. Windows DLLs)
 *.dll
