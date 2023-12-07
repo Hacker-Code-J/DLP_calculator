@@ -295,12 +295,14 @@ bool compare_bint(BINT* ptrBint1, BINT* ptrBint2) {
 
 int BIT_LENGTH(BINT* ptrBint) {
     int bit_len = (ptrBint)->wordlen * WORD_BITLEN;
-    for (int i=bit_len-1 ; i>=0;i--){
-        if (GET_BIT(ptrBint,i)==0){
+    
+    // Iterate over the bits from the most significant bit to the least significant bit
+    for (int i=bit_len-1 ; i>=0;i--) {
+        if (GET_BIT(ptrBint,i)==0)
             bit_len = bit_len -1;
-        }
         else break;
     }
+    
     return bit_len;
 }
 
@@ -321,18 +323,19 @@ void left_shift_word(BINT** pptrBint, int shift_amount) {
         fprintf(stderr, "Error: Memory reallocation failed in 'left_shift_word'\n");
         exit(1);
     }
-    (*pptrBint)->val = new_val; // Assign the possibly new address to ptrX->val
+    (*pptrBint)->val = new_val; // Update the val pointer
 
-    // Shift the existing values
+    // Shift the existing words to the left by the shift amount
     for (int i = new_len - 1; i >= shift_amount; i--) {
         (*pptrBint)->val[i] = (*pptrBint)->val[i - shift_amount];
     }
 
-    // Set the newly shifted-in part to zero
+    // Initialize the newly created space with zeros
     for (int i = 0; i < shift_amount; i++) {
         (*pptrBint)->val[i] = 0x00;
     }
 
+    // Update the word length
     (*pptrBint)->wordlen = new_len;
 }
 
@@ -351,7 +354,7 @@ void right_shift_word(BINT** pptrBint, int shift_amount) {
 
     int new_len = (*pptrBint)->wordlen - shift_amount;
 
-    // Shift the existing values
+    // Shift the words to the right by the shift amount
     for (int i = 0; i < new_len; i++) {
         (*pptrBint)->val[i] = (*pptrBint)->val[i + shift_amount];
     }
@@ -366,8 +369,9 @@ void right_shift_word(BINT** pptrBint, int shift_amount) {
         fprintf(stderr, "Error: Memory reallocation failed in 'right_shift_word'\n");
         exit(1);
     }
-    (*pptrBint)->val = new_val; // Assign the new address to ptrX->val
+    (*pptrBint)->val = new_val; // Update the val pointer
 
+    // Update the word length
     (*pptrBint)->wordlen = new_len;
 }
 
@@ -377,16 +381,18 @@ void left_shift_bit(BINT** pptrBint, int shift_amount) {
         return; // Invalid parameters or no shift needed.
     }
     if (shift_amount <= 0) {
-        // fprintf(stderr, "No shift needed.\n");
-        return; // Invalid parameters or no shift needed.
+        return; // No shift is needed for non-positive shift amounts
     }
 
+    // Shift loop
     while (shift_amount > 0) {
-        WORD carry = 0;
+        WORD carry = 0;  // Carry bit for the shift
         for (int i = 0; i < (*pptrBint)->wordlen; ++i) {
-            WORD next_carry = ((*pptrBint)->val[i] >> (WORD_BITLEN - 1)) & 1; // Save the bit that will be shifted out.
+            // Extract the bit that will be shifted out
+            WORD next_carry = ((*pptrBint)->val[i] >> (WORD_BITLEN - 1)) & WORD_ONE;
+            // Perform the shift left operation
             (*pptrBint)->val[i] = ((*pptrBint)->val[i] << 1) | carry;
-            carry = next_carry;
+            carry = next_carry; // Update carry for the next iteration
         }
         if (carry) {
             // We need to increase the size of val to accommodate the new bit.
@@ -394,9 +400,12 @@ void left_shift_bit(BINT** pptrBint, int shift_amount) {
             new_val = realloc((*pptrBint)->val, ((*pptrBint)->wordlen + 1) * sizeof(WORD));
             if (new_val) {
                 (*pptrBint)->val = new_val;
-                (*pptrBint)->val[(*pptrBint)->wordlen] = 0; // Initialize the new WORD to zero before setting the carry bit.
-                (*pptrBint)->val[(*pptrBint)->wordlen] |= carry; // Add the carried bit in the new WORD.
-                (*pptrBint)->wordlen++;
+                (*pptrBint)->val[(*pptrBint)->wordlen] = carry; // Add the carried bit in the new WORD
+                (*pptrBint)->wordlen++; // Increment word length
+                // (*pptrBint)->val = new_val;
+                // (*pptrBint)->val[(*pptrBint)->wordlen] = 0; // Initialize the new WORD to zero before setting the carry bit.
+                // (*pptrBint)->val[(*pptrBint)->wordlen] |= carry; // Add the carried bit in the new WORD.
+                // (*pptrBint)->wordlen++;
             } else {
                 fprintf(stderr, "Memory allocation failure during left shift operation.\n");
                 return; // Stop the function upon allocation failure.
@@ -416,12 +425,18 @@ void right_shift_bit(BINT** pptrBint, int shift_amount) {
         return; // Invalid parameters or no shift needed.
     }
 
+    // Shift loop
     while (shift_amount > 0) {
         WORD carry = 0;
         for (int i = (*pptrBint)->wordlen - 1; i >= 0; --i) {
-            WORD next_carry = (*pptrBint)->val[i] & 1; // Save the bit that will be shifted out.
+            // Extract the bit that will be shifted out
+            WORD next_carry = (*pptrBint)->val[i] & 1;
+            // Perform the shift right operation
             (*pptrBint)->val[i] = ((*pptrBint)->val[i] >> 1) | (carry << (WORD_BITLEN - 1));
-            carry = next_carry;
+            carry = next_carry; // Update carry for the next iteration
+            // WORD next_carry = (*pptrBint)->val[i] & 1; // Save the bit that will be shifted out.
+            // (*pptrBint)->val[i] = ((*pptrBint)->val[i] >> 1) | (carry << (WORD_BITLEN - 1));
+            // carry = next_carry;
         }
         // No need to check for size reduction of val, as we're shifting right.
         shift_amount--;
@@ -429,26 +444,33 @@ void right_shift_bit(BINT** pptrBint, int shift_amount) {
 }
 
 void reduction(BINT** pptrBint, int pwOf2) {
+    // If the desired bit length is greater than the current bit length, no reduction is needed
     if (pwOf2 > BIT_LENGTH(*pptrBint) ) return; // Trivial Case
 
+    // Check if the power of 2 is a multiple of WORD_BITLEN and less than current bit length
     if (pwOf2 % WORD_BITLEN == 0 && pwOf2 < BIT_LENGTH(*pptrBint)) {
 #if WORD_BITLEN == 8
-    WORD* tmp = (*pptrBint)->val;
-    tmp = (WORD*)realloc(tmp, pwOf2 / WORD_BITLEN);
-    (*pptrBint)->val = tmp;
+        // For 8-bit words, allocate memory for pwOf2/8 words
+        WORD* tmp = (*pptrBint)->val;
+        tmp = (WORD*)realloc(tmp, pwOf2 / WORD_BITLEN);
+        (*pptrBint)->val = tmp;
 #elif WORD_BITLEN == 64
-    WORD* tmp = (*pptrBint)->val;
-    tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN));
-    (*pptrBint)->val = tmp;
+        // For 64-bit words, allocate memory for 8 times (pwOf2/64) words
+        WORD* tmp = (*pptrBint)->val;
+        tmp = (WORD*)realloc(tmp, 8 * (pwOf2 / WORD_BITLEN));
+        (*pptrBint)->val = tmp;
 #else
-    WORD* tmp = (*pptrBint)->val;
-    tmp = (WORD*)realloc((*pptrBint)->val, 4 * (pwOf2 / WORD_BITLEN));
-    (*pptrBint)->val = tmp;
+        // For other word sizes (typically 32-bit), allocate memory for 4 times (pwOf2/WORD_BITLEN) words
+        WORD* tmp = (*pptrBint)->val;
+        tmp = (WORD*)realloc((*pptrBint)->val, 4 * (pwOf2 / WORD_BITLEN));
+        (*pptrBint)->val = tmp;
 #endif
-    (*pptrBint)->wordlen = pwOf2 / WORD_BITLEN;
-    return;
+        // Update the word length of the BINT structure
+        (*pptrBint)->wordlen = pwOf2 / WORD_BITLEN;
+        return;
     }
 
+    // Adjust the most significant word to fit the reduction
     (*pptrBint)->val[pwOf2 / WORD_BITLEN] = (*pptrBint)->val[pwOf2 / WORD_BITLEN] && (0xFF >> (pwOf2 % WORD_BITLEN));
 
 #if WORD_BITLEN == 8
@@ -465,6 +487,7 @@ void reduction(BINT** pptrBint, int pwOf2) {
     (*pptrBint)->val = tmp;
 #endif
 
+    // Update the word length to reflect the new size
     (*pptrBint)->wordlen = (pwOf2 / WORD_BITLEN) + 1;
     return;
 }
@@ -478,16 +501,19 @@ void print_bint_hex_py(const BINT* ptrBint) {
         fprintf(stderr, "Invalid BINT->val in 'print_hex_py'.\n");
         return;
     }
-    if ((ptrBint)->sign) { printf("-"); }
-    printf("0x");
+    if ((ptrBint)->sign) { printf("-"); }   // Print minus sign for negative numbers
+    printf("0x");                           // Print the hexadecimal prefix
     
     for (int i = (ptrBint)->wordlen - 1; i >= 0; i--) {
 #if WORD_BITLEN == 8
-    printf("%02x", (ptrBint)->val[i]);
+        // For 8-bit words, use %02x format specifier for printing
+        printf("%02x", (ptrBint)->val[i]);
 #elif WORD_BITLEN == 64
-    printf("%016llx", (ptrBint)->val[i]);
+        // For 64-bit words, use %016llx format specifier for printing
+        printf("%016llx", (ptrBint)->val[i]);
 #else
-    printf("%08x", (ptrBint)->val[i]);
+        // For other word sizes (typically 32-bit), use %08x format specifier for printing
+        printf("%08x", (ptrBint)->val[i]);
 #endif
     }
 }
