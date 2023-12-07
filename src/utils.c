@@ -34,7 +34,7 @@ void init_bint(BINT** pptrBint, int wordlen) {
     // Allocate memory for val (array of WORD)
     (*pptrBint)->val = (WORD*)calloc(wordlen,sizeof(WORD));
     if (!(*pptrBint)->val) {
-        free(*pptrBint); // freeing the already allocated BINT memory before exiting
+        free(*pptrBint); // Free the already allocated BINT memory
         fprintf(stderr, "Error: Unable to allocate memory for BINT val.\n");
         exit(1);
     }
@@ -46,24 +46,31 @@ void init_bint(BINT** pptrBint, int wordlen) {
 void copyBINT(BINT** pptrBint_dst, BINT** pptrBint_src) {
     CHECK_PTR_AND_DEREF(pptrBint_src, "pptrBint_src", "copyBINT");
     
+    // Initialize destination BINT structure with the same word length as the source
     init_bint(pptrBint_dst, (*pptrBint_src)->wordlen);
+    
+    // Copy each element of the val array from source to destination
     for(int i = 0; i < (*pptrBint_src)->wordlen; i++)
         (*pptrBint_dst)->val[i] = (*pptrBint_src)->val[i];
     
+    // Copy the word length and sign from source to destination
     (*pptrBint_dst)->wordlen = (*pptrBint_src)->wordlen;
     (*pptrBint_dst)->sign = (*pptrBint_src)->sign;
 }
 
 void swapBINT(BINT** pptrBint1, BINT** pptrBint2) {
     if((*pptrBint1) != (*pptrBint2)) { // If they aren't the same pointer
+        // Swap the sign field of both BINTs using XOR swap algorithm
         (*pptrBint1)->sign ^= (*pptrBint2)->sign;
         (*pptrBint2)->sign ^= (*pptrBint1)->sign;
         (*pptrBint1)->sign ^= (*pptrBint2)->sign;
 
+        // Swap the wordlen field of both BINTs using XOR swap algorithm
         (*pptrBint1)->wordlen ^= (*pptrBint2)->wordlen;
         (*pptrBint2)->wordlen ^= (*pptrBint1)->wordlen;
         (*pptrBint1)->wordlen ^= (*pptrBint2)->wordlen;
 
+        // Swap the val pointers of both BINTs
         WORD* tmpVal = (*pptrBint1)->val;
         (*pptrBint1)->val = (*pptrBint2)->val;
         (*pptrBint2)->val = tmpVal;
@@ -83,7 +90,7 @@ void makeEven(BINT* ptrBint) {
         }
 
         // Fill the new WORD with 0
-        (ptrBint)->val[(ptrBint)->wordlen - 1] = 0;
+        (ptrBint)->val[(ptrBint)->wordlen - 1] = (WORD)0;
     }
 }
 
@@ -102,9 +109,8 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
         ptrBint1->val = tmp;
 
         // Initialize the newly allocated WORDs with 0
-        for(int i = ptrBint1->wordlen; i < max_wordlen; i++) {
-            ptrBint1->val[i] = 0;
-        }
+        for(int i = ptrBint1->wordlen; i < max_wordlen; i++)
+            ptrBint1->val[i] = (WORD)0;
 
         ptrBint1->wordlen = max_wordlen;
     }
@@ -121,9 +127,8 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
         ptrBint2->val = tmp;
 
         // Initialize the newly allocated WORDs with 0
-        for(int i = ptrBint2->wordlen; i < max_wordlen; i++) {
-            ptrBint2->val[i] = 0;
-        }
+        for(int i = ptrBint2->wordlen; i < max_wordlen; i++)
+            ptrBint2->val[i] = (WORD)0;
 
         ptrBint2->wordlen = max_wordlen;
     }
@@ -131,26 +136,30 @@ void matchSize(BINT* ptrBint1, BINT* ptrBint2) {
 
 void resetBINT(BINT* ptrBint) {
     for (int i = 0; i < ptrBint->wordlen; i++)
-        ptrBint->val[i] = 0;
+        ptrBint->val[i] = (WORD)0;
 }
 
 void refineBINT(BINT* ptrBint) {
     if(ptrBint == NULL) return;
 
     int new_wordlen = ptrBint->wordlen;
+    
+    // Loop to find the new word length by trimming trailing zeros
     while (new_wordlen > 1) { // at least one word needed
         if(ptrBint->val[new_wordlen-1] != 0)
             break;
         new_wordlen--;
     }
+
+    // Update the word length and reallocate memory if necessary
     if(ptrBint->wordlen != new_wordlen) {
         ptrBint->wordlen = new_wordlen;
         WORD* tmp = ptrBint->val;
         tmp = (WORD*)realloc(ptrBint->val, sizeof(WORD)*new_wordlen);
         ptrBint->val = tmp;
-        // ptrBint->val = (WORD*)realloc(X->val, sizeof(WORD)*new_wordlen);
     }
 
+    // Reset the sign to false if the BINT represents zero
     if((ptrBint->wordlen == 1) && (ptrBint->val[0] == 0))
         ptrBint->sign = false;
 }
@@ -159,6 +168,8 @@ void refine_BINT_word(BINT* ptrBint, int num_words) {
     if(ptrBint == NULL) return;
 
     int new_wordlen = ptrBint->wordlen - num_words;
+    
+    // Update the word length and reallocate memory if necessary
     if(ptrBint->wordlen != new_wordlen) {
         ptrBint->wordlen = new_wordlen;
         WORD* tmp = ptrBint->val;
@@ -166,25 +177,28 @@ void refine_BINT_word(BINT* ptrBint, int num_words) {
         ptrBint->val = tmp;
     }
 
+    // Reset the sign to false if the BINT represents zero
     if((ptrBint->wordlen == 1) && (ptrBint->val[0] == 0))
         ptrBint->sign = false;
 }
 
-
 bool isZero(BINT* ptrbint) {
     if (ptrbint->wordlen == 0) return true;
 
+    // Loop through each word in the val array of ptrbint
     for (int i = 0; i < ptrbint->wordlen; ++i) {
         if (ptrbint->val[i] != 0) return false;
     }
     
     return true;
 }
+
 bool isOne(BINT* ptrbint) {
-    if (ptrbint->wordlen < 1) return false; // Can't be 1 if there are no words.
-    if (ptrbint->val[0] != 1) return false; // First word must be 1.
+    if (ptrbint->wordlen < WORD_ONE) return false; // Can't be 1 if there are no words.
+    if (ptrbint->val[0] != WORD_ONE) return false; // First word must be 1.
     if (ptrbint->sign) return false; // Sign must be positive.
 
+    // Loop through each word after the first one in the val array
     for (int i = 1; i < ptrbint->wordlen; ++i) {
         if (ptrbint->val[i] != 0) return false; // Every other word must be 0.
     }
@@ -193,25 +207,38 @@ bool isOne(BINT* ptrbint) {
 }
 
 bool GET_BIT(BINT* ptrBint, int i_th)  {
-   if (i_th >= WORD_BITLEN)
-      return (((ptrBint)->val[i_th / WORD_BITLEN] >> (i_th % WORD_BITLEN)) & WORD_ONE);
+   // If it is, calculate which WORD it belongs to and which bit within that WORD
+    // Then, extract that bit and return its value
+    if (i_th >= WORD_BITLEN)
+        return (((ptrBint)->val[i_th / WORD_BITLEN] >> (i_th % WORD_BITLEN)) & WORD_ONE);
 
-   return (((ptrBint)->val[0] >> i_th) & WORD_ONE);
+    // If the i_th bit is within the first WORD
+    // Shift the bits of the first WORD right by i_th positions and isolate the bit
+    return (((ptrBint)->val[0] >> i_th) & WORD_ONE);
 }
 
 WORD GET_WORD(BINT* ptrBint, int m_th) {
+    // Check if the requested word index is out of bounds
     if (m_th < 0 || m_th >= ptrBint->wordlen) {
+        fprintf(stderr, "Error: Requested word index %d is out of bounds.\n", m_th);
         return 0;
     }
+
+    // Return the m_th word from the val array
     return ptrBint->val[m_th];
 }
 
 void RANDOM_ARRARY(WORD* dst, int wordlen) {
+    // Cast the destination pointer to a pointer to u8 (unsigned 8-bit integer)
     u8* p = (u8*) dst;
+    
+    // Calculate the total number of bytes to be filled
     int cnt = wordlen * sizeof(WORD);
+
+    // Loop until all bytes are filled
     while (cnt > 0) {
-        *p = rand() & 0xff;
-        p++;
+        *p = rand() & 0xff; // Assign a random byte (0 to 255) to the current location pointed by p
+        p++;                // Move to the next byte
         cnt--;
     }
 }
@@ -221,24 +248,6 @@ void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen) {
     (*pptrBint)->sign = sign;
     RANDOM_ARRARY((*pptrBint)->val, wordlen);
     refineBINT(*pptrBint);
-}
-
-bool compare_bint(BINT* ptrBint1, BINT* ptrBint2) {
-    // Ensure the provided pointers are valid
-    CHECK_PTR_AND_DEREF(&ptrBint1, "pptrBint1", "compare_bint");
-    CHECK_PTR_AND_DEREF(&ptrBint2, "pptrBint2", "compare_bint");
-
-    // If one is negative and the other positive, the positive one is greater
-    if ((ptrBint1)->sign ^ (ptrBint2)->sign) {
-        return (ptrBint1)->sign < (ptrBint2)->sign;
-    }
-
-    // If both have the same sign, compare their absolute values
-    bool abs_val = compare_abs_bint(ptrBint1, ptrBint2);
-
-    // If both are positive, the one with the greater absolute value is greater
-    // If both are negative, the one with the smaller absolute value is greater
-    return (ptrBint1)->sign ? !abs_val : abs_val;
 }
 
 bool compare_abs_bint(BINT* ptrBint1, BINT* ptrBint2) {
@@ -253,14 +262,35 @@ bool compare_abs_bint(BINT* ptrBint1, BINT* ptrBint2) {
     if(n > m) return 1;
     if(n < m) return 0;
     
-    // Perform a word-by-word comparison starting from the most significant word
+    // Make both BINTs the same size for comparison
     matchSize(ptrBint1, ptrBint2);
+
+    // Compare word by word from the most significant word
     for(int i = (ptrBint2)->wordlen - 1; i >= 0; i--) {
         if((ptrBint1)->val[i] > (ptrBint2)->val[i]) return 1;
         if((ptrBint1)->val[i] < (ptrBint2)->val[i]) return 0;
     }
+    
     // Numbers are equal in value
     return 1;
+}
+
+bool compare_bint(BINT* ptrBint1, BINT* ptrBint2) {
+    // Ensure the provided pointers are valid
+    CHECK_PTR_AND_DEREF(&ptrBint1, "pptrBint1", "compare_bint");
+    CHECK_PTR_AND_DEREF(&ptrBint2, "pptrBint2", "compare_bint");
+
+    // Check if the signs of the two BINTs are different
+    if ((ptrBint1)->sign ^ (ptrBint2)->sign) {
+        return (ptrBint1)->sign < (ptrBint2)->sign;
+    }
+
+    // If signs are the same, compare their absolute values
+    bool abs_val = compare_abs_bint(ptrBint1, ptrBint2);
+
+    // If both are positive, the one with the greater absolute value is greater
+    // If both are negative, the one with the smaller absolute value is greater
+    return (ptrBint1)->sign ? !abs_val : abs_val;
 }
 
 int BIT_LENGTH(BINT* ptrBint) {

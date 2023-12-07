@@ -223,19 +223,6 @@ void RANDOM_ARRAY(WORD* dst, int wordlen);
 void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen);
 
 /**
- * @brief Compares two BINT objects for equality.
- * @details Returns true if both BINT objects represent the same value, including their sign.
- * @author Your Name
- * @date Today's Date
- * @param ptrBint1 Pointer to the first BINT object.
- * @param ptrBint2 Pointer to the second BINT object.
- * @pre Both ptrBint1 and ptrBint2 must point to valid BINT objects.
- * @post The BINT objects remain unchanged.
- * @return bool True if both BINT objects are equal, false otherwise.
- */
-bool compare_bint(BINT* pptrBint1, BINT* pptrBint2);
-
-/**
  * @brief Compares the absolute values of two BINT objects.
  * @details Returns true if the absolute values of both BINT objects are equal, ignoring their sign.
  * @author Your Name
@@ -247,6 +234,19 @@ bool compare_bint(BINT* pptrBint1, BINT* pptrBint2);
  * @return bool True if the absolute values of both BINT objects are equal, false otherwise.
  */
 bool compare_abs_bint(BINT* ptrBint1, BINT* ptrBint2);
+
+/**
+ * @brief Compares two BINT objects for equality.
+ * @details Returns true if both BINT objects represent the same value, including their sign.
+ * @author Your Name
+ * @date Today's Date
+ * @param ptrBint1 Pointer to the first BINT object.
+ * @param ptrBint2 Pointer to the second BINT object.
+ * @pre Both ptrBint1 and ptrBint2 must point to valid BINT objects.
+ * @post The BINT objects remain unchanged.
+ * @return bool True if both BINT objects are equal, false otherwise.
+ */
+bool compare_bint(BINT* pptrBint1, BINT* pptrBint2);
 
 /**
  * @brief Calculates the bit length of a BINT object.
