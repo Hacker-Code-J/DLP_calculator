@@ -63,13 +63,13 @@ int main() {
     // corretTEST_BinDIV(TEST_ITERATIONS);
     // corretTEST_GenDIV(TEST_ITERATIONS);
 
-    // corretTEST_MOD_L2R(TEST_ITERATIONS);
-    // corretTEST_MOD_R2L(TEST_ITERATIONS);
-    // corretTEST_MOD_Montgomery(TEST_ITERATIONS);
+    // corretTEST_EXP_MOD_L2R(TEST_ITERATIONS);
+    // corretTEST_EXP_MOD_R2L(TEST_ITERATIONS);
+    // corretTEST_EXP_MOD_Montgomery(TEST_ITERATIONS);
 
     // corretTEST_BarrettRed(1000);
     corretTEST_EEA(1000);
-    
+
     /**
      * bit_op
      * default(0): Fixed 1024 bits

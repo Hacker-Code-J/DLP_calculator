@@ -261,15 +261,15 @@ void corretTEST_GenDIV(int test_cnt) {
         idx++; \
     }
 
-void corretTEST_MOD_L2R(int test_cnt) {
+void corretTEST_EXP_MOD_L2R(int test_cnt) {
     TEST_EXP_MOD_TEMPLATE(EXP_MOD_L2R, test_cnt);
 }
 
-void corretTEST_MOD_R2L(int test_cnt) {
+void corretTEST_EXP_MOD_R2L(int test_cnt) {
     TEST_EXP_MOD_TEMPLATE(EXP_MOD_R2L, test_cnt);
 }
 
-void corretTEST_MOD_Montgomery(int test_cnt) {
+void corretTEST_EXP_MOD_Montgomery(int test_cnt) {
     TEST_EXP_MOD_TEMPLATE(EXP_MOD_Montgomery, test_cnt);
 }
 
@@ -397,9 +397,8 @@ void performTEST_MUL() {
     }
 }
 
-void performTEST_DIV(int cnt) {
+void performTEST_DIV() {
     srand((u32)time(NULL));
-    int i = cnt;
     performTEST_4ArgFn(DIV_Binary_Long, DIV_Long);
     // for (int idx = 0; idx < cnt; idx++) {
     //     // int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
