@@ -66,7 +66,15 @@ speed-mul:
 	@echo "Visualizing ..."
 	./app > speed.txt
 	mv speed.txt Views/
-	(cd Views && python3 MUL_compare_chart.py)
+#	(cd Views && python3 MUL_compare_chart.py)
+	(cd Views && python3 compare_chart.py)
+	@echo "Completed."
+
+speed-squ:
+	@echo "Visualizing ..."
+	./app > speed.txt
+	mv speed.txt Views/
+	(cd Views && python3 SQU_compare_chart.py)
 	@echo "Completed."
 
 speed-div:

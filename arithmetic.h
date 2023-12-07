@@ -132,6 +132,7 @@ void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  */
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
+void Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 /**
  * @brief Core multiplication function using the Karatsuba algorithm.
  * @details Multiplies BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using the Karatsuba multiplication algorithm for efficiency.

@@ -126,6 +126,9 @@ void correctTEST_ImpTxtBk(int test_cnt);
  */
 void correctTEST_Krtsb(int test_cnt);
 
+void correctTEST_SQU_TxtBk(int test_cnt);
+void correctTEST_SQU_Krtsb(int test_cnt);
+
 /**
  * @brief Correctness Test for Binary Division
  * @details This function conducts a series of tests to verify the correctness of the binary division algorithm. 
@@ -216,7 +219,8 @@ void corretTEST_BarrettRed(int test_cnt);
  */
 void corretTEST_EEA(int test_cnt);
 
-void performTEST_MUL(int test_cnt);
+void performTEST_MUL();
+void performTEST_SQU();
 // void performTEST_DIV(int test_cnt);
 // void performFastRed(int test_cnt);
 

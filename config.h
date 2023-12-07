@@ -40,7 +40,7 @@ typedef unsigned long long u64;
  * @def FLAG
  * @brief Application-specific flag for algorithm optimization, e.g., threshold for the Karatsuba algorithm.
  */
-#define FLAG 8
+#define FLAG 16
 
 /**
  * @def MAXIMUM(x1, x2)
@@ -64,7 +64,7 @@ typedef unsigned long long u64;
  * @def WORD_BITLEN
  * @brief Define the size of a word in bits for BigInteger implementation.
  */
-#define WORD_BITLEN 8
+#define WORD_BITLEN 32
 
 // Conditional compilation based on the word size for data type flexibility
 #if WORD_BITLEN == 8

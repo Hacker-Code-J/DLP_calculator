@@ -20,12 +20,12 @@ function2_smooth = np.convolve(function2_speeds, np.ones(window_size)/window_siz
 fig, ax = plt.subplots(figsize=(14, 7), dpi=100)
 
 # Plot the smoothed data with a prettier design
-ax.plot(function1_smooth, color='dodgerblue', label='TextBook Mul.', alpha=0.8, linewidth=2)
-ax.plot(function2_smooth, color='crimson', label='Improved TextBook Mul.', alpha=0.8, linewidth=2)
+ax.plot(function1_smooth, color='dodgerblue', label='TextBook Squaring.', alpha=0.8, linewidth=2)
+ax.plot(function2_smooth, color='crimson', label='Karatsuba Squaring.', alpha=0.8, linewidth=2)
 
 # Add horizontal lines to indicate the average values
-ax.hlines(average_function1, xmin=0, xmax=len(function1_smooth), colors='dodgerblue', linestyles='dotted', label=f'Avg TxtBk: {average_function1:.2f} ms')
-ax.hlines(average_function2, xmin=0, xmax=len(function2_smooth), colors='crimson', linestyles='dotted', label=f'Avg ImpTxtBk: {average_function2:.2f} ms')
+ax.hlines(average_function1, xmin=0, xmax=len(function1_smooth), colors='dodgerblue', linestyles='dotted', label=f'Avg TxtBk SQU: {average_function1:.2f} ms')
+ax.hlines(average_function2, xmin=0, xmax=len(function2_smooth), colors='crimson', linestyles='dotted', label=f'Avg Krtsb SQU: {average_function2:.2f} ms')
 
 # Setting labels, title, and legend with a prettier font and style
 ax.set_ylabel('Speed (ms)', fontsize=14, fontweight='bold')

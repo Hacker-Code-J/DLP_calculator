@@ -525,3 +525,21 @@ void print_bint_hex_py(const BINT* ptrBint) {
 #endif
     }
 }
+
+void print_bint_hex_split(const BINT* ptrBint) {
+    if (ptrBint->sign) { printf("-"); }
+    printf("0x ");
+    for (int i = ptrBint->wordlen - 1; i >= 0; --i) {
+#if WORD_BITLEN == 8
+        // For 8-bit words, use %02x format specifier for printing
+        printf("%02x ", (ptrBint)->val[i]);
+#elif WORD_BITLEN == 64
+        // For 64-bit words, use %016llx format specifier for printing
+        printf("%016llx ", (ptrBint)->val[i]);
+#else
+        // For other word sizes (typically 32-bit), use %08x format specifier for printing
+        printf("%08x ", (ptrBint)->val[i]);
+#endif
+    }
+    printf("\n");
+}

@@ -178,24 +178,24 @@ CORRECT_TEST_OPERATION(correctTEST_ImpTxtBk, MUL_Core_ImpTxtBk_xyz, "*")
 
 void correctTEST_Krtsb(int test_cnt) {
     srand((unsigned int)time(NULL));
-
-    BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
         
     int idx = 0x00;
     while (idx < test_cnt) {
-        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH ;
+        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH ;
         
+        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
         // bool sgnX = rand() % 2;
         // bool sgnY = rand() % 2;
         bool sgnX = false;
         bool sgnY = false;
         RANDOM_BINT(&ptrX, sgnX, lenX);
         RANDOM_BINT(&ptrY, sgnY, lenY);
-        print_bint_hex_py(ptrX);printf("\n");
-        print_bint_hex_py(ptrY);printf("\n");
+        // print_bint_hex_py(ptrX);printf("\n");
+        // print_bint_hex_py(ptrY);printf("\n");
         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
-        
+        // Krtsb_test(&ptrX,&ptrY,&ptrZ);
+
         printf("print("); print_bint_hex_py(ptrX);
         printf(" * "); print_bint_hex_py(ptrY);
         printf(" == "); print_bint_hex_py(ptrZ);
@@ -203,6 +203,57 @@ void correctTEST_Krtsb(int test_cnt) {
 
         delete_bint(&ptrX);
         delete_bint(&ptrY);
+        delete_bint(&ptrZ);
+        idx++;
+    }
+}
+
+void correctTEST_SQU_TxtBk(int test_cnt) {
+    srand((unsigned int)time(NULL));
+        
+    int idx = 0x00;
+    while (idx < test_cnt) {
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH ;
+        
+        BINT *ptrX = NULL, *ptrZ = NULL;
+        bool sgnX = rand() % 2;
+        // bool sgnX = false;
+        // bool sgnY = false;
+        RANDOM_BINT(&ptrX, sgnX, lenX);
+        
+        SQU_TxtBk_xz(&ptrX,&ptrZ);
+
+        printf("print("); print_bint_hex_py(ptrX);
+        printf(" * "); print_bint_hex_py(ptrX);
+        printf(" == "); print_bint_hex_py(ptrZ);
+        printf(")\n"); 
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrZ);
+        idx++;
+    }
+}
+void correctTEST_SQU_Krtsb(int test_cnt) {
+    srand((unsigned int)time(NULL));
+        
+    int idx = 0x00;
+    while (idx < test_cnt) {
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH ;
+        
+        BINT *ptrX = NULL, *ptrZ = NULL;
+        bool sgnX = rand() % 2;
+        // bool sgnX = false;
+        // bool sgnY = false;
+        RANDOM_BINT(&ptrX, sgnX, lenX);
+        
+        SQU_Krtsb_xz(&ptrX,&ptrZ);
+
+        printf("print("); print_bint_hex_py(ptrX);
+        printf(" * "); print_bint_hex_py(ptrX);
+        printf(" == "); print_bint_hex_py(ptrZ);
+        printf(")\n"); 
+
+        delete_bint(&ptrX);
         delete_bint(&ptrZ);
         idx++;
     }
@@ -368,39 +419,12 @@ void corretTEST_EEA(int test_cnt) {
     }
 }
 
-void performTEST_MUL(int test_cnt) {
-    srand((unsigned int)time(NULL));
-    for (int idx = 0; idx < test_cnt; idx++) {
-        int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+void performTEST_MUL() {
+    performTEST_3ArgFn(mul_core_TxtBk_xyz,MUL_Core_ImpTxtBk_xyz);
+}
 
-        BINT *ptrX = NULL; BINT *ptrTmpX = NULL; BINT *ptrTTmpX = NULL;
-        BINT *ptrY = NULL; BINT *ptrTmpY = NULL; BINT *ptrTTmpY = NULL;
-        BINT *ptrZ = NULL; BINT *ptrTmpZ = NULL; BINT *ptrTTmpZ = NULL;
-        
-        // bool sgnX = rand() % 2;
-        // bool sgnY = rand() % 2;
-        bool sgnX = false;
-        bool sgnY = false;
-        RANDOM_BINT(&ptrX, sgnX, len1);
-        RANDOM_BINT(&ptrY, sgnY, len2);
-        copyBINT(&ptrTmpX, &ptrX); copyBINT(&ptrTTmpX, &ptrX);
-        copyBINT(&ptrTmpY, &ptrY); copyBINT(&ptrTTmpY, &ptrY);
-
-        performBINT_3ArgFn(mul_core_TxtBk_xyz, &ptrX, &ptrY, &ptrZ);
-        performBINT_3ArgFn(MUL_Core_ImpTxtBk_xyz, &ptrTmpX, &ptrTmpY, &ptrTmpZ);
-        performBINT_3ArgFn(MUL_Core_Krtsb_xyz, &ptrTTmpX, &ptrTTmpY, &ptrTTmpZ);
-
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrZ);
-        delete_bint(&ptrTmpX);
-        delete_bint(&ptrTmpY);
-        delete_bint(&ptrTmpZ);
-        delete_bint(&ptrTTmpX);
-        delete_bint(&ptrTTmpY);
-        delete_bint(&ptrTTmpZ);
-    }
+void performTEST_SQU() {
+    performTEST_2ArgFn(SQU_TxtBk_xz,SQU_Krtsb_xz);
 }
 
 // void performTEST_DIV(int test_cnt) {

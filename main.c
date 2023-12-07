@@ -44,6 +44,7 @@
  * 2. Choose and run a performance test target:
 //  *    - `make speed` - Runs the application to gather speed data and visualizes it using a Python script.
  *    - `make speed-mul` - Tests the performance of multiplication operations.
+ *    - `make speed-squ` - Tests the performance of squaring operations.
 //  *    - `make speed-div` - Tests the performance of division operations.
 //  *    - `make speed-red` - Tests the performance of reduction operations.
  *    All results are stored and visualized in the 'Views' directory.
@@ -91,8 +92,11 @@ int main() {
 
     // correctTEST_TxtBk(TEST_ITERATIONS);
     // correctTEST_ImpTxtBk(TEST_ITERATIONS);
-    // correctTEST_Krtsb(TEST_ITERATIONS);
+    // correctTEST_Krtsb(1);
     
+    // correctTEST_SQU_TxtBk(TEST_ITERATIONS);
+    // correctTEST_SQU_Krtsb(TEST_ITERATIONS);
+
     // corretTEST_BinDIV(TEST_ITERATIONS);
     // corretTEST_GenDIV(TEST_ITERATIONS);
 
@@ -105,8 +109,10 @@ int main() {
 
 
 /********************** Use 'make speed-mul' **********************/
-    // performTEST_MUL(TEST_ITERATIONS);
+    // performTEST_MUL(); // TextBook vs Improved TextBook
 
+/********************** Use 'make speed-squ' **********************/
+    performTEST_SQU(); // TextBook vs Karatsuba
 
     return 0;
 }

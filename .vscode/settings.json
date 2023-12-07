@@ -20,7 +20,8 @@
     "deque": "c",
     "unordered_map": "c",
     "vector": "c",
-    "initializer_list": "c"
+    "initializer_list": "c",
+    "measure.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "C_Cpp_Runner.cCompilerPath": "gcc",

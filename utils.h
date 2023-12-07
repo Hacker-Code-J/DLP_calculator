@@ -332,4 +332,6 @@ void reduction(BINT** pptrBint, int pwOf2);
  */
 void print_bint_hex_py(const BINT* ptrBint);
 
+void print_bint_hex_split(const BINT* ptrBint);
+
 #endif // _UTILS_H
