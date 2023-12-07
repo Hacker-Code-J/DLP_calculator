@@ -258,12 +258,17 @@ void test_rand_EXP_MOD(int cnt) {
 int main() {
     // correctTEST_ADD(TEST_ITERATIONS);
     // correctTEST_SUB(TEST_ITERATIONS);
+
     // correctTEST_TxtBk(1000);
     // correctTEST_ImpTxtBk(1000);
     // correctTEST_Krtsb(1);
     
-    corretTEST_BinDIV(TEST_ITERATIONS);
-    // corretTEST_GenDIV(int test_cnt);
+    // corretTEST_BinDIV(TEST_ITERATIONS);
+    corretTEST_GenDIV(TEST_ITERATIONS);
+
+    // corretTEST_MOD_L2R(TEST_ITERATIONS);
+    // corretTEST_MOD_R2L(TEST_ITERATIONS);
+    // corretTEST_MOD_Montgomery(TEST_ITERATIONS);
 
     /**
      * bit_op

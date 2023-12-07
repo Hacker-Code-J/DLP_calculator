@@ -46,6 +46,10 @@ void correctTEST_Krtsb(int test_cnt);
 void corretTEST_BinDIV(int test_cnt);
 void corretTEST_GenDIV(int test_cnt);
 
+void corretTEST_MOD_L2R(int test_cnt);
+void corretTEST_MOD_R2L(int test_cnt);
+void corretTEST_MOD_Montgomery(int test_cnt);
+
 void performTEST_MUL();
 void performTEST_DIV(int cnt);
 void test_rand_BarrettRed();

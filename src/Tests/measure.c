@@ -200,39 +200,79 @@ void correctTEST_Krtsb(int test_cnt) {
     }
 }
 
-void corretTEST_BinDIV(int test_cnt) {
-    srand((unsigned int)time(NULL));
-    int idx = 0x00;
-    while (idx < test_cnt) {
-        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-        
-        BINT *ptrX = NULL, *ptrY = NULL;
-        BINT* ptrQ = NULL;
-        BINT* ptrR = NULL;
-        
-        // bool sgnX = rand() % 2;
-        // bool sgnY = rand() % 2;
-        bool sgnX = false;
-        bool sgnY = false;
-        RANDOM_BINT(&ptrX, sgnX, lenX);
-        RANDOM_BINT(&ptrY, sgnY, lenY);
-        
-        DIV_Binary_Long(&ptrX,&ptrY,&ptrQ,&ptrR);
-
-        printf("print(hex("); print_bint_hex_py(ptrQ);
-        printf(" * "); print_bint_hex_py(ptrY);
-        printf(" + "); print_bint_hex_py(ptrR);
-        printf(") == hex("); print_bint_hex_py(ptrX);
-        printf("))\n");
-
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrQ);
-        delete_bint(&ptrR);
-        idx++;
+#define TEST_DIV_TEMPLATE(FUNC, test_cnt, lenY_expression) \
+    srand((unsigned int)time(NULL)); \
+    int idx = 0; \
+    while (idx < (test_cnt)) { \
+        int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH; \
+        int lenY = (lenY_expression); \
+        BINT *ptrX = NULL, *ptrY = NULL, *ptrQ = NULL, *ptrR = NULL; \
+        bool sgnX = false, sgnY = false; \
+        RANDOM_BINT(&ptrX, sgnX, lenX); \
+        RANDOM_BINT(&ptrY, sgnY, lenY); \
+        FUNC(&ptrX, &ptrY, &ptrQ, &ptrR); \
+        printf("print(hex("); print_bint_hex_py(ptrQ); \
+        printf(" * "); print_bint_hex_py(ptrY); \
+        printf(" + "); print_bint_hex_py(ptrR); \
+        printf(") == hex("); print_bint_hex_py(ptrX); \
+        printf("))\n"); \
+        delete_bint(&ptrX); \
+        delete_bint(&ptrY); \
+        delete_bint(&ptrQ); \
+        delete_bint(&ptrR); \
+        idx++; \
     }
+
+void corretTEST_BinDIV(int test_cnt) {
+    TEST_DIV_TEMPLATE(DIV_Binary_Long, test_cnt, rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH);
 }
+
+void corretTEST_GenDIV(int test_cnt) {
+    TEST_DIV_TEMPLATE(DIV_Long, test_cnt, lenX - 1);
+}
+
+#define TEST_EXP_MOD_TEMPLATE(FUNC, test_cnt) \
+    srand((unsigned int)time(NULL)); \
+    int idx = 0; \
+    while (idx < (test_cnt)) { \
+        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL, *ptrMod = NULL; \
+        int redMax = MAX_BIT_LENGTH / WORD_BITLEN; \
+        int redMin = MIN_BIT_LENGTH / WORD_BITLEN; \
+        int len1 = rand() % (redMax - redMin + 1) + redMin; \
+        int len2 = 1; \
+        int len3 = rand() % (redMax - redMin + 1) + 1; \
+        RANDOM_BINT(&ptrX, false, len1); \
+        RANDOM_BINT(&ptrY, false, len2); \
+        RANDOM_BINT(&ptrMod, false, len3); \
+        FUNC(&ptrX, &ptrY, &ptrZ, ptrMod); \
+        printf("print(pow("); \
+        print_bint_hex_py(ptrX); \
+        printf(", "); \
+        print_bint_hex_py(ptrY); \
+        printf(", "); \
+        print_bint_hex_py(ptrMod); \
+        printf(") == "); \
+        print_bint_hex_py(ptrZ); \
+        printf(")\n"); \
+        delete_bint(&ptrX); \
+        delete_bint(&ptrY); \
+        delete_bint(&ptrZ); \
+        delete_bint(&ptrMod); \
+        idx++; \
+    }
+
+void corretTEST_MOD_L2R(int test_cnt) {
+    TEST_EXP_MOD_TEMPLATE(EXP_MOD_L2R, test_cnt);
+}
+
+void corretTEST_MOD_R2L(int test_cnt) {
+    TEST_EXP_MOD_TEMPLATE(EXP_MOD_R2L, test_cnt);
+}
+
+void corretTEST_MOD_Montgomery(int test_cnt) {
+    TEST_EXP_MOD_TEMPLATE(EXP_MOD_Montgomery, test_cnt);
+}
+
 
 
 void performTEST_MUL() {
