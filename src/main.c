@@ -40,25 +40,34 @@
  *
  * @section development Development
  * The source code and development resources for the Big Integer Library can be found on GitHub:
- * [Big Integer Library on GitHub](https://github.com/yourusername/bigintlibrary)
+ * [Big Integer Library on GitHub](https://github.com/Hacker-Code-J/DLP_calculator)
  *
  * @author Your Name
  * @date 2023-12-08
  */
 
+/**
+ * @file main.c
+ * @brief Main entry point for testing arithmetic operations.
+ *
+ * This file contains the main function which is used to test the accuracy and performance
+ * of the large integer arithmetic operations. It leverages the functionality provided by
+ * measure.h to conduct these tests.
+ */
+
+#include "measure.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-#include "measure.h"
 
 int main() {
     // correctTEST_ADD(TEST_ITERATIONS);
     // correctTEST_SUB(TEST_ITERATIONS);
 
-    // correctTEST_TxtBk(1000);
-    // correctTEST_ImpTxtBk(1000);
-    // correctTEST_Krtsb(1);
+    // correctTEST_TxtBk(TEST_ITERATIONS);
+    // correctTEST_ImpTxtBk(TEST_ITERATIONS);
+    // correctTEST_Krtsb(10);
     
     // corretTEST_BinDIV(TEST_ITERATIONS);
     // corretTEST_GenDIV(TEST_ITERATIONS);
@@ -67,8 +76,8 @@ int main() {
     // corretTEST_EXP_MOD_R2L(TEST_ITERATIONS);
     // corretTEST_EXP_MOD_Montgomery(TEST_ITERATIONS);
 
-    // corretTEST_BarrettRed(1000);
-    corretTEST_EEA(1000);
+    // corretTEST_BarrettRed(TEST_ITERATIONS);
+    corretTEST_EEA(TEST_ITERATIONS);
 
     /**
      * bit_op

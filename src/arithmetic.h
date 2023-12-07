@@ -1,7 +1,16 @@
-#include "utils.h"
+/**
+ * @file arithmetic.h
+ * @brief Header file for large integer arithmetic operations.
+ *
+ * This file declares the functions for large integer arithmetic operations,
+ * leveraging the basic functionality provided by utils.h and utils.c. It
+ * includes more complex operations such as multiplication, division, etc.
+ */
 
 #ifndef _ARITHMETIC_H
 #define _ARITHMETIC_H
+
+#include "utils.h"
 
 /**
  * @brief Computes the bitwise OR of two binary integers.

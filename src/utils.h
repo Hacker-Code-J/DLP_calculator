@@ -1,13 +1,18 @@
-#include "config.h"
-
-#include <stdbool.h>
+/**
+ * @file utils.h
+ * @brief Header file that defines the BINT structure and provides basic operations for manipulating BINT structures.
+ */
 
 #ifndef _UTILS_H
 #define _UTILS_H
 
+#include "config.h"
+
+#include <stdbool.h>
+
 /**
  * @struct BINT
- * @brief Structure for representing large integers (big integers).
+ * @brief Structure for representing large integers.
  *
  * This structure is used to represent integers that are too large to be
  * handled by standard integer types in C. It provides a way to work with

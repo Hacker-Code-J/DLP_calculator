@@ -1,7 +1,16 @@
-#include "../arithmetic.h"
+/**
+ * @file measure.h
+ * @brief Header file for measuring accuracy and performance of arithmetic operations.
+ *
+ * This file declares functions for measuring the accuracy and performance (speed)
+ * of the large integer arithmetic operations implemented in arithmetic.h and arithmetic.c.
+ * It includes functions for benchmarking and validation of results.
+ */
 
 #ifndef _MEASURE_H
 #define _MEASURE_H
+
+#include "../arithmetic.h"
 
 // Define Macros for Bit Lengths based on 8-bit word units
 #define u8_BIT_1024 0x080  // 128 * 8 = 1024 bits

@@ -1,3 +1,12 @@
+/**
+ * @file arithmetic.c
+ * @brief Implementation of large integer arithmetic operations.
+ *
+ * This file contains the implementation of more complex arithmetic operations
+ * for large integers (BINT), such as multiplication and division, building upon
+ * the basic operations provided in utils.h and utils.c.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

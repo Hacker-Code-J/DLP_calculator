@@ -1,3 +1,11 @@
+/**
+ * @file utils.c
+ * @brief Implementation of basic operations for the BINT structure.
+ *
+ * This file contains the implementation of basic operations like addition,
+ * subtraction, etc., for handling BigInteger (BINT) structures.
+ */
+
 #include "utils.h"
 
 #include <stdio.h>

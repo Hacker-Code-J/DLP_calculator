@@ -1,3 +1,12 @@
+/**
+ * @file measure.c
+ * @brief Implementation for measuring accuracy and performance of arithmetic operations.
+ *
+ * This file contains the implementation of functions that measure the accuracy and
+ * performance (speed) of the large integer arithmetic operations defined in arithmetic.h.
+ * It includes benchmarking and validation routines.
+ */
+
 #include "measure.h"
 
 #include <stdio.h>
