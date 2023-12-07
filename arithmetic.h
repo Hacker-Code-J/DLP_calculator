@@ -13,16 +13,16 @@
 #include "utils.h"
 
 /**
- * @brief Computes the bitwise OR of two binary integers.
+ * @brief Computes the bitwise OR of two big integers.
  * @details This function takes pointers to two BINTs and computes the bitwise OR, storing the result in the location pointed to by pptrZ.
- * @param ptrX A pointer to a BINT representing the first operand.
- * @param ptrY A pointer to a BINT representing the second operand.
+ * @param pptrX A pointer to a BINT representing the first operand.
+ * @param pptrY A pointer to a BINT representing the second operand.
  * @param pptrZ A double pointer to a BINT where the result should be stored.
  * @pre ptrX and ptrY must point to valid BINT objects. pptrZ must be initialized and able to store the result.
  * @post The result of the bitwise OR operation is stored in the location pointed to by pptrZ.
  * @note Ensure that the BINT data structure supports the operation and that memory for the result is allocated beforehand.
  */
-void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ);
+void OR_BINT(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
 /**
  * @brief Adds two WORD-sized integers with a carry.

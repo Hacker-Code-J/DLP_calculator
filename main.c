@@ -1,5 +1,5 @@
 /**
- * @mainpage Big Integer Library Documentation
+ * @mainpage PUBAO Big Integer Library Documentation
  *
  * @section intro Introduction
  * The Big Integer Library provides an implementation for handling very large integers 
@@ -12,24 +12,44 @@
  * integer operations into their applications.
  *
  * @section usage Usage
- * To use this library, include 'bigint.h' in your C source files. The library 
- * provides a struct `BINT` to represent large integers and a set of functions 
- * for operations on these integers.
+ * To measure the accuracy and speed of this library, include 'measure.h' in your C source files. 
+ * This header provides necessary functions and utilities for conducting performance tests and 
+ * accuracy assessments. It allows you to benchmark the library functions and verify their 
+ * precision under various conditions. While 'arithmetic.h' focuses on large integer operations, 
+ * 'measure.h' is dedicated to evaluating these operations from a performance and accuracy standpoint.
  *
- * Example of initializing a big integer:
- * @code
- * BINT myBigInt;
- * bigIntInit(&myBigInt, 0); // Initialize the big integer to zero
- * @endcode
+ * Note: In the current library version, direct modification of the source code in 'main.c' is 
+ * required for testing purposes. This involves integrating the 'measure.h' functionalities 
+ * into the 'main.c' file to enable comprehensive testing and assessment of the library's capabilities.
+ * 
+ * @section PerformanceTest Performance Testing
+ * This section details how to perform performance and accuracy tests for the library.
+ * 
+ * The Makefile provided with the library includes several targets to facilitate these tests, 
+ * compiling the necessary source files and executing tests to generate visualizations of the results.
+ * 
+ * Before performing any tests, it is recommended to run `make rebuild`. 
+ * This ensures that all components of the library are freshly compiled with the latest changes, 
+ * providing a clean state for accurate performance and accuracy measurement.
+ * 
+ * Accuracy Testing:
+ * 1. `make rebuild` - This will clean any previous builds and recompile the library.
+ * 2. `make success` - This target runs the application, captures its output for accuracy assessment, 
+ *    and then visualizes these results using a Python script. The script generates a chart that 
+ *    illustrates the accuracy of the library functions. The output and visualization are moved to 
+ *    the 'Views' directory for easy access and review.
  *
- * Example of arithmetic operation:
- * @code
- * BINT a, b, sum;
- * bigIntInit(&a, 123456789);
- * bigIntInit(&b, 987654321);
- * bigIntAdd(&a, &b, &sum); // Perform addition: sum = a + b
- * @endcode
+ * Performance Testing:
+ * 1. Run `make rebuild` - This will clean any previous builds and recompile the library.
+ * 2. Choose and run a performance test target:
+//  *    - `make speed` - Runs the application to gather speed data and visualizes it using a Python script.
+ *    - `make speed-mul` - Tests the performance of multiplication operations.
+//  *    - `make speed-div` - Tests the performance of division operations.
+//  *    - `make speed-red` - Tests the performance of reduction operations.
+ *    All results are stored and visualized in the 'Views' directory.
  *
+ * Note: Ensure Python3 is installed and accessible in your environment to run the scripts and visualize the results properly.
+ * 
  * @section notes Implementation Notes
  * - The library uses dynamic memory allocation for managing the array of words in `BINT`.
  * - Care should be taken to free the allocated memory using the appropriate function 
@@ -42,7 +62,7 @@
  * The source code and development resources for the Big Integer Library can be found on GitHub:
  * [Big Integer Library on GitHub](https://github.com/Hacker-Code-J/DLP_calculator)
  *
- * @author Your Name
+ * @author Ji Yong-Hyeon, Kim Ye-chan, Moon Ye-chan, Yoo Geun-oh
  * @date 2023-12-08
  */
 
@@ -62,15 +82,19 @@
 #include <time.h>
 
 int main() {
+    // Enter as many integer values as you want.
+    // TEST_ITERATIONS is an integer 10000
+
+/********************** Use 'make success' **********************/
     // correctTEST_ADD(TEST_ITERATIONS);
     // correctTEST_SUB(TEST_ITERATIONS);
 
     // correctTEST_TxtBk(TEST_ITERATIONS);
     // correctTEST_ImpTxtBk(TEST_ITERATIONS);
-    // correctTEST_Krtsb(10);
+    // correctTEST_Krtsb(TEST_ITERATIONS);
     
     // corretTEST_BinDIV(TEST_ITERATIONS);
-    corretTEST_GenDIV(TEST_ITERATIONS);
+    // corretTEST_GenDIV(TEST_ITERATIONS);
 
     // corretTEST_EXP_MOD_L2R(TEST_ITERATIONS);
     // corretTEST_EXP_MOD_R2L(TEST_ITERATIONS);
@@ -79,219 +103,10 @@ int main() {
     // corretTEST_BarrettRed(TEST_ITERATIONS);
     // corretTEST_EEA(TEST_ITERATIONS);
 
-    /**
-     * bit_op
-     * default(0): Fixed 1024 bits
-     * 1: Fixed 2048 bits
-     * 2: Fixed 3072 bits
-     * 3: Fixed 7680 bits
-     * 4: 1024 ~ 2048 bits
-     * 5: 2048 ~ 4096 bits
-     * 6: 3072 ~ 5120 bits
-     * ===============================================================
-     * sgn_op
-     * 0: random sign
-     * 1: positive
-    */
-    // int bit_op = 4;
-    // int sgn_op = 1;
 
-    // Addition and Subtraction
-    // test_rand_ADD(TEST_ITERATIONS, bit_op, sgn_op);
-    // test_rand_SUB(TEST_ITERATIONS, bit_op, sgn_op);
+/********************** Use 'make speed-mul' **********************/
+    // performTEST_MUL(TEST_ITERATIONS);
 
-    // Multiplication
-    // test_rand_MUL(TEST_ITERATIONS, bit_op, sgn_op, 0); // TextBook
-    // test_rand_MUL(100, bit_op, sgn_op, 1); // Improved TextBook
-    // test_rand_MUL(TEST_ITERATIONS, bit_op, sgn_op, 2); // Karatsuba
-
-    // test_rand_DIV(1000);
-    // performTEST_2ArgFn(SQU_TxtBk_xz, SQU_Krtsb_xz);
-    // performTEST_3ArgFn(MUL_Core_ImpTxtBk_xyz, mul_core_TxtBk_xyz);
-    // performTEST_MUL();
-
-    // test_rand_EXP_MOD(1000);
-    // performBINT(DIV_Binary_Long, DIV_Long);
-    // performTEST_4ArgFn(DIV_Binary_Long, DIV_Long);
-    // performTEST_DIV(10);
-    // test_rand_BarrettRed();
-    // performFastRed();
-
-    // srand((unsigned int)time(NULL));
-    // int t = 1000;
-
-    // int idx = 0;
-    // while(idx < t) {
-    //     BINT* ptrX = NULL;
-    //     BINT* ptrY = NULL;
-    //     BINT* ptrT = NULL;  
-    //     BINT* ptrS = NULL;
-    //     BINT* ptrR = NULL;
-
-    //     int len1 = (rand() % 0x0f) + 0x01; // 1024 ~ 2048 bits
-    //     int len2 = (rand() % 0x0f) + 0x01; // 1024 ~ 2048 bits
-
-    //     // int sgn1 = rand() % 0x02;
-    //     // int sgn2 = rand() % 0x02;
-    //     // RANDOM_BINT(&ptrX, sgn1, len1);
-    //     // RANDOM_BINT(&ptrY, sgn2, len2);
-    //     RANDOM_BINT(&ptrX, false, len1);
-    //     RANDOM_BINT(&ptrY, false, len2);
-
-    //     EEA(&ptrX, &ptrY, &ptrS, &ptrT, &ptrR);
-
-    //     printf("print(");
-    //     print_bint_hex_py(ptrX);
-    //     printf(" * ");
-    //     print_bint_hex_py(ptrS);
-    //     printf(" + ");
-    //     print_bint_hex_py(ptrY);
-    //     printf(" * ");
-    //     print_bint_hex_py(ptrT);
-    //     printf(" == ");
-    //     print_bint_hex_py(ptrR);
-    //     printf(")\n");
-
-    //     delete_bint(&ptrX);
-    //     delete_bint(&ptrY);
-    //     delete_bint(&ptrT);
-    //     delete_bint(&ptrS);
-    //     delete_bint(&ptrR);
-        
-    //     idx++;
-    // }
-
-//     srand((unsigned int)time(NULL));
-
-//     int idx = 0;
-//     while(idx < TEST_ITERATIONS) {
-//         BINT* ptrX = NULL;
-//         BINT* ptrY = NULL;
-//         BINT* ptrZ = NULL;
-
-//         // BINT* ptrQ = NULL;
-//         // BINT* ptrR = NULL;
-// /*************************** Random Input **************************************/
-//         // int len1 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-//         // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-//         // int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-//         // int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-//         // int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-//         // int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-//         // int len1 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-//         // int len2 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-//         // int len1 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
-//         // int len2 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
-        
-//         // int len1 = (rand() % 0x05) + 0x05;
-//         // int len2 = (rand() % 0x05) + 0x05;        
-
-//         int len1 = 0x20;
-//         int len2 = 0x20;
-
-//         // int sgn1 = rand() % 0x02;
-//         // int sgn2 = rand() % 0x02;
-//         // RANDOM_BINT(&ptrX, sgn1, len1);
-//         // RANDOM_BINT(&ptrY, sgn2, len2);
-//         RANDOM_BINT(&ptrX, false, len1);
-//         RANDOM_BINT(&ptrY, false, len2);
-     
-//         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrY,&ptrZ);
-//         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
-//         // SQU_TxtBk_xz(&ptrX,&ptrZ);
-//         // SQU_Krtsb_xz(&ptrX,&ptrZ);
-
-//         printf("print(");
-//         print_bint_hex_py(ptrX);
-//         printf(" * ");
-//         print_bint_hex_py(ptrY);
-//         printf(" == ");
-//         print_bint_hex_py(ptrZ);
-//         printf(")\n");
-
-//         delete_bint(&ptrX);
-//         delete_bint(&ptrY);
-//         delete_bint(&ptrZ);
-//         idx++;
-//     }
 
     return 0;
 }
-
-// #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
-
-// void performBINT(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
-//     clock_t start = clock();
-//     testFunc(pptrX, pptrY, pptrQ, pptrR);
-//     clock_t end = clock();
-//     printf("%.6f\n", MEASURE_TIME(start, end));
-// }
-
-// void performTEST(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
-//     srand((unsigned int)time(NULL));
-
-//     for (int idx = 0; idx < 500; idx++) {
-//         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-//         int len2 = len1 - 1;
-//         // int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-
-//         BINT *ptrX = NULL, *ptrY = NULL;
-//         BINT *ptrQ = NULL, *ptrR = NULL;
-//         BINT *ptrTmpX = NULL, *ptrTmpY = NULL;
-//         BINT *ptrTmpQ = NULL, *ptrTmpR = NULL;
-//         RANDOM_BINT(&ptrX, 0, len1);
-//         RANDOM_BINT(&ptrY, 0, len2);
-//         copyBINT(&ptrTmpX, &ptrX);      
-//         copyBINT(&ptrTmpY, &ptrY);
-
-//         performBINT(testFunc1, &ptrX, &ptrY, &ptrQ, &ptrR);
-//         performBINT(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpQ, &ptrTmpR);
-
-//         delete_bint(&ptrX);
-//         delete_bint(&ptrY);
-//         delete_bint(&ptrQ);
-//         delete_bint(&ptrR);
-//         delete_bint(&ptrTmpX);
-//         delete_bint(&ptrTmpY);
-//         delete_bint(&ptrTmpQ);
-//         delete_bint(&ptrTmpR);
-//     }
-// }
-
-// Timing Macro
-// #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
-
-// void performTest(void (*testFunc)(BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
-//     clock_t start = clock();
-//     testFunc(pptrX, pptrY, pptrZ);
-//     clock_t end = clock();
-//     printf("%.6f\n", MEASURE_TIME(start, end));
-// }
-
-// void performBINT(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**)) {
-//     srand((unsigned int)time(NULL));
-
-//     for (int idx = 0; idx < TEST_ITERATIONS; idx++) {
-//         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-//         int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-
-//         BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
-//         BINT* ptrTmpX = NULL;
-//         BINT* ptrTmpY = NULL;
-//         BINT* ptrTmpZ = NULL;
-//         RANDOM_BINT(&ptrX, 0, len1);
-//         RANDOM_BINT(&ptrY, 0, len2);
-//         copyBINT(&ptrTmpX, &ptrX);      
-//         copyBINT(&ptrTmpY, &ptrY);
-
-//         performTest(testFunc1, &ptrX, &ptrY, &ptrZ);
-//         performTest(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpZ);
-
-//         delete_bint(&ptrX);
-//         delete_bint(&ptrY);
-//         delete_bint(&ptrZ);
-//         delete_bint(&ptrTmpX);
-//         delete_bint(&ptrTmpY);
-//         delete_bint(&ptrTmpZ);
-//     }
-// }

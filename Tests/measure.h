@@ -40,7 +40,7 @@ void performTEST_2ArgFn(void (*testFunc1)(BINT**, BINT**), void (*testFunc2)(BIN
 void performBINT_3ArgFn(void (*testFunc)(BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 void performTEST_3ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**));
 void performBINT_4ArgFn(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrM, BINT** pptrN);
-void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**));
+void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**), int test_cnt);
 
 /**
  * @brief Correctness Test for Addition
@@ -54,17 +54,17 @@ void performTEST_4ArgFn(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void 
  */
 void correctTEST_ADD(int test_cnt);
 
-/**
- * @brief Performance Test for Addition
- * @details Evaluates the performance of the addition operation under various conditions and loads, using the specified number of test cases.
- *          This function measures execution time, resource usage, and scalability of the addition operation.
- * @param test_cnt The number of test cases to be executed for performance evaluation.
- * @pre Requires an operational and correctly functioning addition module to test.
- * @post Outputs performance metrics such as execution time, memory usage, and throughput.
- * @note Aimed at identifying performance bottlenecks and optimizing the efficiency of the addition operation.
- * @warning Performance results may vary based on the system's hardware and current load; ensure a controlled test environment for accurate measurements.
- */
-void performTEST_ADD(int test_cnt);
+// /**
+//  * @brief Performance Test for Addition
+//  * @details Evaluates the performance of the addition operation under various conditions and loads, using the specified number of test cases.
+//  *          This function measures execution time, resource usage, and scalability of the addition operation.
+//  * @param test_cnt The number of test cases to be executed for performance evaluation.
+//  * @pre Requires an operational and correctly functioning addition module to test.
+//  * @post Outputs performance metrics such as execution time, memory usage, and throughput.
+//  * @note Aimed at identifying performance bottlenecks and optimizing the efficiency of the addition operation.
+//  * @warning Performance results may vary based on the system's hardware and current load; ensure a controlled test environment for accurate measurements.
+//  */
+// void performTEST_ADD(int test_cnt);
 
 /**
  * @brief Correctness Test for Subtraction
@@ -78,17 +78,17 @@ void performTEST_ADD(int test_cnt);
  */
 void correctTEST_SUB(int test_cnt);
 
-/**
- * @brief Performance Test for Subtraction
- * @details Assesses the performance characteristics of the subtraction operation, such as speed and resource efficiency, across a range of test cases.
- *          Focuses on measuring aspects like response time and computational load.
- * @param test_cnt Number of test cases to execute for assessing performance.
- * @pre A functional subtraction operation is required for effective performance evaluation.
- * @post Outputs detailed performance data, offering insights into the efficiency of the subtraction process.
- * @note Useful for identifying potential improvements in the subtraction operation's implementation.
- * @warning Performance results are influenced by the system configuration and workload; ensure consistent test conditions for reliable data.
- */
-void performTEST_SUB(int test_cnt);
+// /**
+//  * @brief Performance Test for Subtraction
+//  * @details Assesses the performance characteristics of the subtraction operation, such as speed and resource efficiency, across a range of test cases.
+//  *          Focuses on measuring aspects like response time and computational load.
+//  * @param test_cnt Number of test cases to execute for assessing performance.
+//  * @pre A functional subtraction operation is required for effective performance evaluation.
+//  * @post Outputs detailed performance data, offering insights into the efficiency of the subtraction process.
+//  * @note Useful for identifying potential improvements in the subtraction operation's implementation.
+//  * @warning Performance results are influenced by the system configuration and workload; ensure consistent test conditions for reliable data.
+//  */
+// void performTEST_SUB(int test_cnt);
 
 /**
  * @brief Correctness Test for Textbook Algorithm
@@ -216,9 +216,8 @@ void corretTEST_BarrettRed(int test_cnt);
  */
 void corretTEST_EEA(int test_cnt);
 
-void performTEST_MUL();
-void performTEST_DIV();
-void test_rand_BarrettRed();
-void performFastRed();
+void performTEST_MUL(int test_cnt);
+// void performTEST_DIV(int test_cnt);
+// void performFastRed(int test_cnt);
 
 #endif // _MEASURE_H

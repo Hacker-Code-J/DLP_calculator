@@ -1,6 +1,3 @@
-import sys
-print(sys.executable)
-
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 import numpy as np

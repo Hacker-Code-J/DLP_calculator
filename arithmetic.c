@@ -13,20 +13,20 @@
 
 #include "arithmetic.h"
 
-void OR_BINT(BINT* ptrX, BINT* ptrY, BINT** pptrZ) {
-    int min_len = MINIMUM(ptrX->wordlen, ptrY->wordlen);
-    int max_len = MAXIMUM(ptrX->wordlen, ptrY->wordlen);
+void OR_BINT(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
+    int min_len = MINIMUM((*pptrX)->wordlen, (*pptrY)->wordlen);
+    int max_len = MAXIMUM((*pptrX)->wordlen, (*pptrY)->wordlen);
     for (int i = 0; i < min_len; i++) {
-        (*pptrZ)->val[i] = ptrX->val[i] | ptrY->val[i];
+        (*pptrZ)->val[i] = (*pptrX)->val[i] | (*pptrY)->val[i];
     }
     for (int i = min_len; i < max_len; i++) {
-        if(ptrX->wordlen > ptrY->wordlen)
-            (*pptrZ)->val[i] = ptrX->val[i];
+        if((*pptrX)->wordlen > (*pptrY)->wordlen)
+            (*pptrZ)->val[i] = (*pptrX)->val[i];
         else
-            (*pptrZ)->val[i] = ptrY->val[i];
+            (*pptrZ)->val[i] = (*pptrY)->val[i];
     }
     (*pptrZ)->wordlen = max_len; // The result size will be size of the smaller operand
-    (*pptrZ)->sign = ptrX->sign && ptrY->sign; // Negative if both operands are negative
+    (*pptrZ)->sign = (*pptrX)->sign && (*pptrY)->sign; // Negative if both operands are negative
 }
 
 void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
@@ -273,10 +273,10 @@ void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
             } else {
                 left_shift_word(&ptrTmp0, 2*k);
                 refine_BINT_word(ptrTmp0, 2*k);
-                OR_BINT(ptrTmp0, ptrT0, &ptrT0);
+                OR_BINT(&ptrTmp0, &ptrT0, &ptrT0);
                 left_shift_word(&ptrTmp1, 2*k);
                 refine_BINT_word(ptrTmp1, 2*k);
-                OR_BINT(ptrTmp1, ptrT1, &ptrT1);
+                OR_BINT(&ptrTmp1, &ptrT1, &ptrT1);
             }
         }
         left_shift_word(&ptrT1, 1);
