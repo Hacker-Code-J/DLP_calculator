@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -g -I. -ITests -O2
 OBJS=utils.o arithmetic.o measure.o
-LIB=libarith.a
+LIB=libpubao.a
 MAIN=main.o
 EXECUTABLE=app
 
