@@ -132,7 +132,6 @@ void mul_core_TxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
  */
 void MUL_Core_ImpTxtBk_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 
-void Krtsb_test(BINT** pptrX, BINT** pptrY, BINT** pptrZ);
 /**
  * @brief Core multiplication function using the Karatsuba algorithm.
  * @details Multiplies BINT objects pointed to by pptrX and pptrY, stores the result in pptrZ using the Karatsuba multiplication algorithm for efficiency.
@@ -238,9 +237,36 @@ void EXP_MOD_R2L(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod);
  */
 void EXP_MOD_Montgomery(BINT** pptrX, BINT** pptrY, BINT** pptrZ, BINT* ptrMod);
 
+/**
+ * @brief Test Function for Barrett Reduction
+ * @details This function is designed to test the correctness and functionality of the Barrett Reduction algorithm. 
+ *          It takes pointers to BINT (Binary Integer) objects and verifies the accuracy of the Barrett Reduction process 
+ *          by comparing the algorithm's output against expected results.
+ * @param pptrX Pointer to the BINT object representing the dividend.
+ * @param pptrN Pointer to the BINT object representing the modulus.
+ * @param pptrR Pointer to the BINT object where the result of the Barrett Reduction will be stored.
+ * @pre pptrX, pptrN, and pptrR must point to initialized and valid BINT objects. The Barrett Reduction algorithm must be implemented correctly.
+ * @post The function will validate the correctness of the Barrett Reduction algorithm by storing the result in pptrR and comparing it against expected outcomes.
+ * @note This test function is crucial for ensuring the reliability of the Barrett Reduction algorithm, especially in cryptographic applications where accuracy is paramount.
+ * @warning Incorrect initialization of BINT objects or errors in the Barrett Reduction implementation can lead to misleading test results.
+ */
 void Barrett_Reduction_TEST(BINT** pptrX, BINT** pptrN, BINT** pptrR);
 
+/**
+ * @brief Implements Barrett Reduction
+ * @details This function performs the Barrett Reduction algorithm, an efficient method for modular reduction of large numbers. 
+ *          It takes pointers to BINT objects representing the dividend, modulus, and a precomputed value, and calculates the result of the reduction.
+ * @param pptrX Pointer to the BINT object representing the dividend.
+ * @param pptrN Pointer to the BINT object representing the modulus.
+ * @param pptrR Pointer to the BINT object where the result will be stored.
+ * @param pptrPreT Pointer to the BINT object representing the precomputed value used in Barrett Reduction.
+ * @pre pptrX, pptrN, pptrR, and pptrPreT must point to initialized and valid BINT objects. The precomputed value in pptrPreT should be correctly calculated for the given modulus.
+ * @post The result of the Barrett Reduction will be stored in pptrR.
+ * @note Barrett Reduction is particularly useful in contexts requiring frequent modular reductions, such as in cryptographic algorithms.
+ * @warning The accuracy of the result is highly dependent on the correct initialization and computation of the precomputed value in pptrPreT.
+ */
 void Barrett_Reduction(BINT** pptrX, BINT** pptrN, BINT** pptrR, BINT** pptrPreT);
+
 
 /**
  * @brief Executes the Extended Euclidean Algorithm.

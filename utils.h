@@ -230,8 +230,6 @@ void RANDOM_BINT(BINT** pptrBint, bool sign, int wordlen);
 /**
  * @brief Compares the absolute values of two BINT objects.
  * @details Returns true if the absolute values of both BINT objects are equal, ignoring their sign.
- * @author Your Name
- * @date Today's Date
  * @param ptrBint1 Pointer to the first BINT object.
  * @param ptrBint2 Pointer to the second BINT object.
  * @pre Both ptrBint1 and ptrBint2 must point to valid BINT objects.
@@ -243,8 +241,6 @@ bool compare_abs_bint(BINT* ptrBint1, BINT* ptrBint2);
 /**
  * @brief Compares two BINT objects for equality.
  * @details Returns true if both BINT objects represent the same value, including their sign.
- * @author Your Name
- * @date Today's Date
  * @param ptrBint1 Pointer to the first BINT object.
  * @param ptrBint2 Pointer to the second BINT object.
  * @pre Both ptrBint1 and ptrBint2 must point to valid BINT objects.
@@ -312,8 +308,6 @@ void right_shift_bit(BINT** pptrBint, int shift_amount);
 /**
  * @brief Performs a modular reduction of a BINT object by a power of 2.
  * @details Reduces the BINT object modulo 2^pwOf2, effectively keeping the lower pwOf2 bits of the BINT and discarding the rest.
- * @author Your Name
- * @date Today's Date
  * @param pptrBint Double pointer to the BINT object to be reduced.
  * @param pwOf2 The power of 2 that will be used for the modular reduction.
  * @pre pptrBint must point to a valid BINT object, and pwOf2 must be a non-negative integer.

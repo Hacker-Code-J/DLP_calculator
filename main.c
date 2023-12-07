@@ -42,11 +42,11 @@
  * Performance Testing:
  * 1. Run `make rebuild` - This will clean any previous builds and recompile the library.
  * 2. Choose and run a performance test target:
-//  *    - `make speed` - Runs the application to gather speed data and visualizes it using a Python script.
+ * //    - `make speed` - Runs the application to gather speed data and visualizes it using a Python script.
  *    - `make speed-mul` - Tests the performance of multiplication operations.
  *    - `make speed-squ` - Tests the performance of squaring operations.
-//  *    - `make speed-div` - Tests the performance of division operations.
-//  *    - `make speed-red` - Tests the performance of reduction operations.
+ * //    - `make speed-div` - Tests the performance of division operations.
+ * //      - `make speed-red` - Tests the performance of reduction operations.
  *    All results are stored and visualized in the 'Views' directory.
  *
  * Note: Ensure Python3 is installed and accessible in your environment to run the scripts and visualize the results properly.
