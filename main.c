@@ -235,38 +235,6 @@ void performBINT(void (*testFunc1)(BINT**, BINT**, BINT**), void (*testFunc2)(BI
     }
 }
 
-void test_flint_mul(int count) {
-    struct timespec start, end;
-    double elapsed_time;
-
-    fmpz_t a, b, c;
-    fmpz_init(a);
-    fmpz_init(b);
-    fmpz_init(c);
-
-    flint_rand_t state;
-    flint_randinit(state);
-
-    // Testing multiplication 'count' times
-    for (int i = 0; i < count; i++) {
-        fmpz_randbits(a, state, 1024); // Generate a random 2048-bit number
-        fmpz_randbits(b, state, 1024); // Generate another random 2048-bit number
-
-        clock_gettime(CLOCK_MONOTONIC, &start);
-        fmpz_mul(c, a, b); // Multiply a and b
-        clock_gettime(CLOCK_MONOTONIC, &end);
-
-        elapsed_time = (end.tv_sec - start.tv_sec) * 1e9;
-        elapsed_time = (elapsed_time + (end.tv_nsec - start.tv_nsec)) * 1e-9; // Convert to seconds
-        printf("%.6f\n", elapsed_time*1000);
-    }
-
-    fmpz_clear(a);
-    fmpz_clear(b);
-    fmpz_clear(c);
-    flint_randclear(state);
-}
-
 int main() {
     /*
      * bit_op
@@ -301,8 +269,8 @@ int main() {
 
     // performBINT(MUL_Core_ImpTxtBk_xyz, MUL_Core_Krtsb_xyz);
 
-    int t = 10000;
-    int bit_op = 2;
+    int t = 1000;
+    int bit_op = 3;
     int sgn_op = 1;
 
     // Addition and Subtraction
@@ -681,19 +649,49 @@ int main() {
 //     }
 // }
 
-/*
- *  Library Performance
-*/
+// void test_flint_mul(int count) {
+//     struct timespec start, end;
+//     double elapsed_time;
+
+//     fmpz_t a, b, c;
+//     fmpz_init(a);
+//     fmpz_init(b);
+//     fmpz_init(c);
+
+//     flint_rand_t state;
+//     flint_randinit(state);
+
+//     // Testing multiplication 'count' times
+//     for (int i = 0; i < count; i++) {
+//         fmpz_randbits(a, state, 3072); // Generate a random 3072-bit number
+//         fmpz_randbits(b, state, 3072); // Generate another random 3072-bit number
+
+//         clock_gettime(CLOCK_MONOTONIC, &start);
+        
+//         // fmpz_sub(c, a, b);
+//         fmpz_add(c, a, b); // Multiply a and b
+//         clock_gettime(CLOCK_MONOTONIC, &end);
+
+//         elapsed_time = (end.tv_sec - start.tv_sec) * 1e9;
+//         elapsed_time = (elapsed_time + (end.tv_nsec - start.tv_nsec)) * 1e-9; // Convert to seconds
+//         printf("%.3f\n", elapsed_time*1000000);
+//     }
+
+//     fmpz_clear(a);
+//     fmpz_clear(b);
+//     fmpz_clear(c);
+//     flint_randclear(state);
+// }
+
+// /*
+//  *  Compare Performance with FLINT Library
+// */
 // int main() {
 //     srand((unsigned int)time(NULL));
     
 //     struct timespec start, end;
 //     double elapsed_time;
     
-//     // clock_t start2, end2;
-//     // double cpu_time_used2;
-//     // clock_t start3, end3;
-//     // double cpu_time_used3;
 //     int t = 10000;
 
 //     test_flint_mul(t);
@@ -703,77 +701,25 @@ int main() {
 //         BINT* ptrX = NULL;
 //         BINT* ptrY = NULL;
 //         BINT* ptrZ = NULL;
-//         // BINT* ptrTmpX = NULL;
-//         // BINT* ptrTmpY = NULL;
-//         // BINT* ptrTmpZ = NULL;
-//         // BINT* ptrTTmpX = NULL;
-//         // BINT* ptrTTmpY = NULL;
-//         // BINT* ptrTTmpZ = NULL;
-// /*************************** Random Input **************************************/
-//         // int len1 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-//         // int len2 = (rand() % 0x010) + 0x010; //  512 ~ 1024 bits
-//         // int len1 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-//         // int len2 = (rand() % 0x020) + 0x020; // 1024 ~ 2048 bits
-//         // int len1 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-//         // int len2 = (rand() % 0x020) + 0x040; // 2048 ~ 3072 bits
-//         // int len1 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-//         // int len2 = (rand() % 0x090) + 0x060; // 3072 ~ 7680 bits
-//         // int len1 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
-//         // int len2 = (rand() % 0xf0) + 0x0f0; // 7680 ~ 15360 bits
 
-//         int len1 = 0x20;
-//         int len2 = 0x20;
+//         int len1 = 0x60;
+//         int len2 = 0x60;
         
 //         RANDOM_BINT(&ptrX, false, len1);
 //         RANDOM_BINT(&ptrY, false, len2);
-        
-//         // int sgn1 = rand() % 0x02;
-//         // int sgn2 = rand() % 0x02;
-//         // RANDOM_BINT(&ptrX, false, len1);
-//         // RANDOM_BINT(&ptrY, false, len2);
-     
-//         // copyBINT(&ptrTmpX, &ptrX);      
-//         // copyBINT(&ptrTmpY, &ptrY);
-//         // copyBINT(&ptrTTmpX, &ptrX);      
-//         // copyBINT(&ptrTTmpY, &ptrY);
 
 //         clock_gettime(CLOCK_MONOTONIC, &start);
-//         // MUL_Core_Krtsb_xyz(&ptrX, &ptrY, &ptrZ);
-//         // MUL_Core_ImpTxtBk_xyz(&ptrX,&ptrX2,&ptrZ);
-//         // SQU_Txtbk_xz(&ptrX, &ptrZ);
-//         // mul_core_TxtBk_xyz(&ptrX,&ptrY,&ptrZ);
-//         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+//         add_core_xyz(&ptrX,&ptrY,&ptrZ);
+//         // MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
+//         // SUB(&ptrX,&ptrY,&ptrZ);
 //         clock_gettime(CLOCK_MONOTONIC, &end);  
 //         elapsed_time = (end.tv_sec - start.tv_sec) * 1e9;
 //         elapsed_time = (elapsed_time + (end.tv_nsec - start.tv_nsec)) * 1e-9; // Convert to seconds
 
-
-//         // start2 = clock();
-//         // // SQU_Txtbk_xz(&ptrTmpX,&ptrTmpZ);
-//         // // SQU_Krtsb_xz(&ptrTmpX,&ptrTmpZ);
-//         // MUL_Core_ImpTxtBk_xyz(&ptrTmpX,&ptrTmpY,&ptrTmpZ);
-//         // end2 = clock();
-//         // cpu_time_used2 = ((double) (end2 - start2));// / CLOCKS_PER_SEC;
-        
-//         // start3 = clock();
-//         // // Krtsb_FLAG_Test(&ptrX,&ptrY,&ptrZ, 0x08);
-//         // MUL_Core_Krtsb_xyz(&ptrTTmpX,&ptrTTmpY,&ptrTTmpZ);
-//         // end3 = clock();
-//         // cpu_time_used3 = ((double) (end3 - start3));// / CLOCKS_PER_SEC;
-
 //         delete_bint(&ptrX);
 //         delete_bint(&ptrY);
 //         delete_bint(&ptrZ);
-//         // delete_bint(&ptrTmpX);
-//         // delete_bint(&ptrTmpY);
-//         // delete_bint(&ptrTmpZ);
-//         // delete_bint(&ptrTTmpX);
-//         // delete_bint(&ptrTTmpY);
-//         // delete_bint(&ptrTTmpZ);
-//         printf("%.6f\n", elapsed_time*1000);
-//         // printf("%.0f\n", cpu_time_used2);
-//         // printf("%.0f\n", cpu_time_used3);
-//         // printf("%.6f\n", cpu_time_used1-cpu_time_used2);
+//         printf("%.3f\n", elapsed_time*1000000);
 //         idx++;
 //     }
 // }
