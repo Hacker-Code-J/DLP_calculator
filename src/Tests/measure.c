@@ -273,7 +273,92 @@ void corretTEST_MOD_Montgomery(int test_cnt) {
     TEST_EXP_MOD_TEMPLATE(EXP_MOD_Montgomery, test_cnt);
 }
 
+void corretTEST_BarrettRed(int test_cnt) {
+    srand((unsigned int)time(NULL));
+    
+    int idx = 0x00;
+    while(idx < test_cnt) {
+        int len = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + (MIN_BIT_LENGTH / 2);
 
+        BINT* ptrX = NULL;
+        BINT* ptrN = NULL;
+        BINT* ptrR = NULL;
+
+        bool sgnX = false;
+        bool sgnN = false;
+        RANDOM_BINT(&ptrX, sgnX, 2*len);
+        RANDOM_BINT(&ptrN, sgnN, len);
+
+        // Pre-computation
+        BINT* W = NULL;
+        BINT* temp = NULL;
+        BINT* preT = NULL;
+        BINT* Y = NULL;
+        copyBINT(&Y,&ptrN);
+        init_bint(&W,(ptrX)->wordlen+1);
+        W->val[(ptrX)->wordlen] = WORD_ONE;
+        DIV_Binary_Long(&W,&Y,&preT,&temp);
+
+        Barrett_Reduction(&ptrX,&ptrN,&ptrR,&preT);
+
+        delete_bint(&W);
+        delete_bint(&temp);
+        delete_bint(&preT);
+        delete_bint(&Y);
+
+        printf("print(("); print_bint_hex_py(ptrX);
+        printf(" %% "); print_bint_hex_py(ptrN);
+        printf(") == "); print_bint_hex_py(ptrR);
+        printf(")\n");
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrN);
+        delete_bint(&ptrR);
+
+        idx++;
+    }
+}
+
+void corretTEST_EEA(int test_cnt) {
+    srand((unsigned int)time(NULL));
+
+    int idx = 0x00;
+    while(idx < test_cnt) {
+        BINT* ptrX = NULL; BINT* ptrY = NULL;
+        BINT* ptrS = NULL; BINT* ptrT = NULL;
+        BINT* ptrR = NULL;
+
+        int redMax = MAX_BIT_LENGTH / WORD_BITLEN;
+        int redMin = MIN_BIT_LENGTH / WORD_BITLEN;
+        int len1 = rand() % (redMax - redMin + 1) + redMin;
+        int len2 = rand() % (redMax - redMin + 1) + redMin;
+        
+        RANDOM_BINT(&ptrX, false, len1);
+        RANDOM_BINT(&ptrY, false, len2);
+
+        EEA(&ptrX, &ptrY, &ptrS, &ptrT, &ptrR);
+
+        printf("print(");
+        print_bint_hex_py(ptrX);
+        printf(" * ");
+        print_bint_hex_py(ptrS);
+        printf(" + ");
+        print_bint_hex_py(ptrY);
+        printf(" * ");
+        print_bint_hex_py(ptrT);
+        printf(" == ");
+        print_bint_hex_py(ptrR);
+        printf(")\n");
+
+        delete_bint(&ptrX);
+        delete_bint(&ptrY);
+        delete_bint(&ptrT);
+        delete_bint(&ptrS);
+        delete_bint(&ptrR);
+        
+        idx++;
+    }
+}
 
 void performTEST_MUL() {
     srand((u32)time(NULL));

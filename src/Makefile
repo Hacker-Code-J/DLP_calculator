@@ -29,7 +29,7 @@ $(MAIN): main.c
 
 # Link everything to create the executable
 $(EXECUTABLE): $(LIB) $(MAIN)
-	$(CC) -o $(EXECUTABLE) $(MAIN) -L. -larith -lm
+	$(CC) -o $(EXECUTABLE) $(MAIN) -L. -lpubao -lm
 
 # Clean target
 DIR=Views

@@ -52,209 +52,6 @@
 
 #include "measure.h"
 
-#define SET_BIT_LENGTHS(bit_op, rnd, fix) \
-    do { \
-        switch (bit_op) { \
-            case 1: fix = u32_BIT_2048; rnd = 0; break;       /* Fixed 2048 bits */ \
-            case 2: fix = u32_BIT_3072; rnd = 0; break;       /* Fixed 3072 bits */ \
-            case 3: fix = u32_BIT_7680; rnd = 0; break;       /* Fixed 7680 bits */ \
-            case 4: rnd = u32_BIT_1024; fix = u32_BIT_1024; break; /* Range: 1024 ~ 2048 bits */ \
-            case 5: rnd = u32_BIT_2048; fix = u32_BIT_2048; break; /* Range: 2048 ~ 4096 bits */ \
-            case 6: rnd = u32_BIT_2048; fix = u32_BIT_3072; break; /* Range: 3072 ~ 5120 bits */ \
-            default: fix = u32_BIT_1024; rnd = 0;              /* Default to fixed 1024 bits */ \
-        } \
-    } while(0)
-
-// Macro for BINT generation
-#define GENERATE_BINTS(ptrX, ptrY, rnd, fix) \
-    do { \
-        int lenX, lenY; \
-        if (rnd) { \
-            lenX = (rand() % rnd) + fix; \
-            lenY = (rand() % rnd) + fix; \
-        } else { \
-            lenX = lenY = fix; \
-        } \
-        int sgnX = rand() % 2; \
-        int sgnY = rand() % 2; \
-        RANDOM_BINT(&ptrX, sgnX, lenX); \
-        RANDOM_BINT(&ptrY, sgnY, lenY); \
-    } while(0)
-
-// Macro for positive BINT generation
-#define GENERATE_POSITIVE_BINTS(ptrX, ptrY, rnd, fix) \
-    do { \
-        int lenX, lenY; \
-        if (rnd) { \
-            lenX = (rand() % rnd) + fix; \
-            lenY = (rand() % rnd) + fix; \
-        } else { \
-            lenX = lenY = fix; \
-        } \
-        RANDOM_BINT(&ptrX, false, lenX); \
-        RANDOM_BINT(&ptrY, false, lenY); \
-    } while(0)
-
-#define PERFORM_OPERATION_AND_PRINT(OP, OP_SYMBOL, ptrX, ptrY, ptrZ) \
-    do { \
-        OP(&ptrX, &ptrY, &ptrZ); \
-        printf("print("); \
-        print_bint_hex_py(ptrX); \
-        printf("%s", OP_SYMBOL); \
-        print_bint_hex_py(ptrY); \
-        printf(" == "); \
-        print_bint_hex_py(ptrZ); \
-        printf(")\n"); \
-        delete_bint(&ptrX); \
-        delete_bint(&ptrY); \
-        delete_bint(&ptrZ); \
-    } while(0)
-
-void test_rand_OP(int cnt, int bit_op, void (*op_func)(BINT**, BINT**, BINT**), const char* op_symbol, int positive) {
-    int idx = 0x00;
-    while (idx < cnt) {
-        BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
-        int rnd, fix;
-
-        SET_BIT_LENGTHS(bit_op, rnd, fix);
-        if (positive) {
-            GENERATE_POSITIVE_BINTS(ptrX, ptrY, rnd, fix);
-        } else {
-            GENERATE_BINTS(ptrX, ptrY, rnd, fix);
-        }
-        PERFORM_OPERATION_AND_PRINT(op_func, op_symbol, ptrX, ptrY, ptrZ);
-        idx++;
-    }
-}
-void test_rand_ADD(int cnt, int bit_op, int sgn_op) {
-    test_rand_OP(cnt, bit_op, ADD, "+", sgn_op);
-}
-void test_rand_SUB(int cnt, int bit_op, int sgn_op) {
-    test_rand_OP(cnt, bit_op, SUB, "-", sgn_op);
-}
-void test_rand_MUL(int cnt, int bit_op, int sgn_op, int mul_op) {
-    void (*mul_funcs[])(BINT**, BINT**, BINT**) = {
-        mul_core_TxtBk_xyz,           // Default multiplication function
-        MUL_Core_ImpTxtBk_xyz,        // Multiplication function for mul_op == 1
-        MUL_Core_Krtsb_xyz            // Multiplication function for mul_op == 2
-    };
-
-    // Ensure mul_op is within the valid range of the array
-    int func_index = (mul_op >= 1 && mul_op <= 2) ? mul_op : 0;
-
-    // Call the test function with the selected multiplication operation
-    test_rand_OP(cnt, bit_op, mul_funcs[func_index], "*", sgn_op);
-}
-
-void test_rand_DIV(int cnt) {
-    srand((unsigned int)time(NULL));
-    int idx = 0x00;
-    while (idx < cnt) {
-        BINT *ptrX = NULL, *ptrY = NULL;
-        BINT* ptrQ = NULL;
-        BINT* ptrR = NULL;
-        int len1 = (rand() % 0x10) + 0x10;
-        int len2 = len1-1;
-        
-        RANDOM_BINT(&ptrX, false, len1);
-        RANDOM_BINT(&ptrY, false, len2);
-
-        // DIV_Binary_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
-        DIV_Long(&ptrX, &ptrY, &ptrQ, &ptrR);
-
-        printf("print("); print_bint_hex_py(ptrQ);
-        printf(" * "); print_bint_hex_py(ptrY);
-        printf(" + "); print_bint_hex_py(ptrR);
-        printf(" == "); print_bint_hex_py(ptrX);
-        printf(")\n");
-
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrQ);
-        delete_bint(&ptrR);
-        idx++;
-    }
-}
-
-void test_rand_EXP_MOD(int cnt) {
-    srand((unsigned int)time(NULL));
-    int idx = 0x00;
-    while (idx < cnt) {
-        BINT* ptrX = NULL;
-        BINT* ptrY = NULL;
-        BINT* ptrZ = NULL;
-        BINT* ptrMod = NULL;
-
-        int len1 = (rand() % 0x04) + 0x01;
-        int len2 = (rand() % 0x04) + 0x01;
-        int len3 = (rand() % 0x08) + 0x01;
-
-        RANDOM_BINT(&ptrX, false, len1);
-        RANDOM_BINT(&ptrY, false, len2);
-        RANDOM_BINT(&ptrMod, false, len3);
-
-        EXP_MOD_Montgomery(&ptrX,&ptrY,&ptrZ, ptrMod);
-        // EXP_MOD_L2R(&ptrX,&ptrY,&ptrZ, ptrMod);
-        // EXP_MOD_R2L(&ptrX,&ptrY,&ptrZ, ptrMod);
-  
-        printf("print(pow(");
-        print_bint_hex_py(ptrX);
-        printf(", ");
-        print_bint_hex_py(ptrY);
-        printf(", ");
-        print_bint_hex_py(ptrMod);
-        printf(") == ");
-        print_bint_hex_py(ptrZ);
-        printf(")\n");
-
-        delete_bint(&ptrX);
-        delete_bint(&ptrY);
-        delete_bint(&ptrZ);
-        delete_bint(&ptrMod);
-        idx++;
-    }
-}
-
-// #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
-
-// void performBINT(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
-//     clock_t start = clock();
-//     testFunc(pptrX, pptrY, pptrQ, pptrR);
-//     clock_t end = clock();
-//     printf("%.6f\n", MEASURE_TIME(start, end));
-// }
-
-// void performTEST(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
-//     srand((unsigned int)time(NULL));
-
-//     for (int idx = 0; idx < 500; idx++) {
-//         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-//         int len2 = len1 - 1;
-//         // int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
-
-//         BINT *ptrX = NULL, *ptrY = NULL;
-//         BINT *ptrQ = NULL, *ptrR = NULL;
-//         BINT *ptrTmpX = NULL, *ptrTmpY = NULL;
-//         BINT *ptrTmpQ = NULL, *ptrTmpR = NULL;
-//         RANDOM_BINT(&ptrX, 0, len1);
-//         RANDOM_BINT(&ptrY, 0, len2);
-//         copyBINT(&ptrTmpX, &ptrX);      
-//         copyBINT(&ptrTmpY, &ptrY);
-
-//         performBINT(testFunc1, &ptrX, &ptrY, &ptrQ, &ptrR);
-//         performBINT(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpQ, &ptrTmpR);
-
-//         delete_bint(&ptrX);
-//         delete_bint(&ptrY);
-//         delete_bint(&ptrQ);
-//         delete_bint(&ptrR);
-//         delete_bint(&ptrTmpX);
-//         delete_bint(&ptrTmpY);
-//         delete_bint(&ptrTmpQ);
-//         delete_bint(&ptrTmpR);
-//     }
-// }
-
 int main() {
     // correctTEST_ADD(TEST_ITERATIONS);
     // correctTEST_SUB(TEST_ITERATIONS);
@@ -264,12 +61,15 @@ int main() {
     // correctTEST_Krtsb(1);
     
     // corretTEST_BinDIV(TEST_ITERATIONS);
-    corretTEST_GenDIV(TEST_ITERATIONS);
+    // corretTEST_GenDIV(TEST_ITERATIONS);
 
     // corretTEST_MOD_L2R(TEST_ITERATIONS);
     // corretTEST_MOD_R2L(TEST_ITERATIONS);
     // corretTEST_MOD_Montgomery(TEST_ITERATIONS);
 
+    // corretTEST_BarrettRed(1000);
+    corretTEST_EEA(1000);
+    
     /**
      * bit_op
      * default(0): Fixed 1024 bits
@@ -408,6 +208,46 @@ int main() {
 
     return 0;
 }
+
+// #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
+
+// void performBINT(void (*testFunc)(BINT**, BINT**, BINT**, BINT**), BINT** pptrX, BINT** pptrY, BINT** pptrQ, BINT** pptrR) {
+//     clock_t start = clock();
+//     testFunc(pptrX, pptrY, pptrQ, pptrR);
+//     clock_t end = clock();
+//     printf("%.6f\n", MEASURE_TIME(start, end));
+// }
+
+// void performTEST(void (*testFunc1)(BINT**, BINT**, BINT**, BINT**), void (*testFunc2)(BINT**, BINT**, BINT**, BINT**)) {
+//     srand((unsigned int)time(NULL));
+
+//     for (int idx = 0; idx < 500; idx++) {
+//         int len1 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+//         int len2 = len1 - 1;
+//         // int len2 = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH;
+
+//         BINT *ptrX = NULL, *ptrY = NULL;
+//         BINT *ptrQ = NULL, *ptrR = NULL;
+//         BINT *ptrTmpX = NULL, *ptrTmpY = NULL;
+//         BINT *ptrTmpQ = NULL, *ptrTmpR = NULL;
+//         RANDOM_BINT(&ptrX, 0, len1);
+//         RANDOM_BINT(&ptrY, 0, len2);
+//         copyBINT(&ptrTmpX, &ptrX);      
+//         copyBINT(&ptrTmpY, &ptrY);
+
+//         performBINT(testFunc1, &ptrX, &ptrY, &ptrQ, &ptrR);
+//         performBINT(testFunc2, &ptrTmpX, &ptrTmpY, &ptrTmpQ, &ptrTmpR);
+
+//         delete_bint(&ptrX);
+//         delete_bint(&ptrY);
+//         delete_bint(&ptrQ);
+//         delete_bint(&ptrR);
+//         delete_bint(&ptrTmpX);
+//         delete_bint(&ptrTmpY);
+//         delete_bint(&ptrTmpQ);
+//         delete_bint(&ptrTmpR);
+//     }
+// }
 
 // Timing Macro
 // #define MEASURE_TIME(start, end) ((double)(end - start) / CLOCKS_PER_SEC)
