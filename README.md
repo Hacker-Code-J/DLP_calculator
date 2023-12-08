@@ -6,7 +6,7 @@
 
 This repository provides implementations of **Big Integer operations** and **Discrete Logarithm Problem** calculators.
 
-DLP_calculator/
+- DLP_calculator/
     - hash/
       - hash.c
       - hash.h
