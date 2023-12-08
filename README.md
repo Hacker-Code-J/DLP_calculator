@@ -4,9 +4,41 @@
 **_Visit [P.A.N.D.A.'s PUBAO Homepage](https://hacker-code-j.notion.site/2023-Fall-AAP-Team-3-P-A-N-D-A-FUBAO-8a09720a080c4ad5859913331f832d55?pvs=4)_**
 
 
-This repository provides implementations of **Big Integer** operations and **Discrete Logarithm Problem** calculators.
+This repository provides implementations of **Big Integer operations** and **Discrete Logarithm Problem** calculators.
 
-- big_int_dlp_library/
+DLP_calculator/
+    - hash/
+      - hash.c
+      - hash.h
+      - main.c
+      - Makefile
+    - images/
+      - PANDA_logo.png
+    - Tests/
+      - measure.c
+      - measure.h
+    - Views/
+      - compare_chart.py
+      - DIV_compare_chart.py
+      - FastRed_compare_chart.py
+      - MUL_compare_chart.py
+      - SQU_compare_chart.py
+      - success_chart.py
+    - .gitignore
+    - arithmetic.h
+    - arithmetic.c
+    - config.h
+    - Doxyfile
+    - Doxyfile.bak
+    - libpubao.a
+    - LICENSE.md
+    - main.c
+    - Makefile
+    - README.md
+    - utils.c
+    - utils.h
+
+<!-- - big_int_dlp_library/
     - docs/
         - installation.md
         - usage.md
@@ -51,16 +83,20 @@ This repository provides implementations of **Big Integer** operations and **Dis
     - LICENSE
     - .gitignore
     - setup.py (for the Python package)
-    - Makefile (for the C code compilation)
+    - Makefile (for the C code compilation) -->
 
 
 ## 📌 Table of Contents
 
-- [🛠 Installation](#installation)
-- [💡 Usage](#usage)
-- [📖 Docs](#docs)
-- [🤝 Contributing](#contributing)
-- [📜 License](#license)
+- [🌐 Big Integer Arithmetic Library \& Discrete Logarithm Calculator](#-big-integer-arithmetic-library--discrete-logarithm-calculator)
+  - [📌 Table of Contents](#-table-of-contents)
+  - [🛠 Installation](#-installation)
+    - [C](#c)
+    - [💡 Usage](#-usage)
+  - [C](#c-1)
+  - [📖 Docs](#-docs)
+  - [🤝 Contributing](#-contributing)
+  - [📜 License](#-license)
 
 ## 🛠 Installation
 
@@ -70,14 +106,15 @@ This repository provides implementations of **Big Integer** operations and **Dis
 ```bash
 git clone https://github.com/Hacker-Code-J/DLP_calculator.git
 cd DLP_calculator
-make test
-make chart
+make rebuild
+make success
 ```
-### Python
+<!-- ### Python
 - **Install via pip**:
 ```python
 pip install ./path/to/repo
-```
+``` -->
+
 ### 💡 Usage
 ## C
 - **Big Integer**:
@@ -89,11 +126,11 @@ pip install ./path/to/repo
 ./dlp
 ```
 
-### Python
+<!-- ### Python
 1. **Install via pip**:
 ```python
 from big_int_dlp_library.python import bigint, dlp
-```
+``` -->
 
 ## 📖 Docs
 📁 Dive deeper with the [docs/](docs/) directory.
