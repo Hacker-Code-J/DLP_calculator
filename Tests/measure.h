@@ -126,7 +126,28 @@ void correctTEST_ImpTxtBk(int test_cnt);
  */
 void correctTEST_Krtsb(int test_cnt);
 
+/**
+ * @brief Correctness Test for Square Textbook Algorithm
+ * @details Implements test cases to validate the correctness of the square textbook multiplication algorithm. 
+ *          This function tests the algorithm against a series of scenarios to ensure its accurate and reliable operation.
+ * @param test_cnt The number of test cases to be run for validation.
+ * @pre The square textbook multiplication algorithm must be implemented and ready for testing.
+ * @post Outputs comprehensive results of the testing process, highlighting the algorithm's correctness and identifying any areas of concern.
+ * @note An essential step for verifying the square textbook algorithm's correctness, particularly important in precision-driven numerical computations.
+ * @warning Incorrect test data or flaws in the algorithm's implementation could result in misleading validation outcomes.
+ */
 void correctTEST_SQU_TxtBk(int test_cnt);
+
+/**
+ * @brief Correctness Test for Square Karatsuba Algorithm
+ * @details Implements test cases to validate the correctness of the square Karatsuba multiplication algorithm. 
+ *          This function aims to rigorously test the algorithm across various scenarios, confirming its accuracy and efficiency.
+ * @param test_cnt The number of test cases to be executed for thorough validation.
+ * @pre The square Karatsuba multiplication algorithm must be implemented and ready for testing.
+ * @post Provides detailed results from the testing process, assessing the algorithm's accuracy and pinpointing any potential weaknesses.
+ * @note A crucial step in ensuring the reliability of the square Karatsuba algorithm, especially significant in complex computational tasks.
+ * @warning Inaccuracies in test data or implementation errors in the algorithm may lead to false conclusions about its validity.
+ */
 void correctTEST_SQU_Krtsb(int test_cnt);
 
 /**

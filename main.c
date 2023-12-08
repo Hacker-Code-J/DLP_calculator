@@ -63,7 +63,7 @@
  * The source code and development resources for the Big Integer Library can be found on GitHub:
  * [Big Integer Library on GitHub](https://github.com/Hacker-Code-J/DLP_calculator)
  *
- * @author Ji Yong-Hyeon, Kim Ye-chan, Moon Ye-chan, Yoo Geun-oh
+ * @author Ji Yong-Hyeon, Moon Ye-chan, Kim Ye-chan, Yoo Geun-oh
  * @date 2023-12-08
  */
 
@@ -83,16 +83,21 @@
 #include <time.h>
 
 int main() {
-    // Enter as many integer values as you want.
-    // TEST_ITERATIONS is an integer 10000
-
-/********************** Use 'make success' **********************/
+    /*
+    * It's crucial to uncomment and check your test functions one by one.
+    * Enter as many integer values as you want.
+    * TEST_ITERATIONS is an integer 10000
+    */ 
+    
+    /*
+    * ******************** Use 'make success' **********************
+    */
     // correctTEST_ADD(TEST_ITERATIONS);
     // correctTEST_SUB(TEST_ITERATIONS);
 
     // correctTEST_TxtBk(TEST_ITERATIONS);
     // correctTEST_ImpTxtBk(TEST_ITERATIONS);
-    // correctTEST_Krtsb(1);
+    correctTEST_Krtsb(TEST_ITERATIONS);
     
     // correctTEST_SQU_TxtBk(TEST_ITERATIONS);
     // correctTEST_SQU_Krtsb(TEST_ITERATIONS);
@@ -105,13 +110,16 @@ int main() {
     // corretTEST_EXP_MOD_Montgomery(TEST_ITERATIONS);
 
     // corretTEST_BarrettRed(TEST_ITERATIONS);
-    corretTEST_EEA(TEST_ITERATIONS);
+    // corretTEST_EEA(TEST_ITERATIONS);
 
-
-/********************** Use 'make speed-mul' **********************/
+    /*
+    * ********************** Use 'make speed-mul' **********************
+    */
     // performTEST_MUL(); // TextBook vs Improved TextBook
 
-/********************** Use 'make speed-squ' **********************/
+    /*
+    * ********************** Use 'make speed-squ' **********************
+    */
     // performTEST_SQU(); // TextBook vs Karatsuba
 
     return 0;

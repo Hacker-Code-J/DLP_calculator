@@ -182,7 +182,7 @@ void correctTEST_Krtsb(int test_cnt) {
     int idx = 0x00;
     while (idx < test_cnt) {
         int lenX = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH ;
-        int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH ;
+        // int lenY = rand() % (MAX_BIT_LENGTH - MIN_BIT_LENGTH + 1) + MIN_BIT_LENGTH ;
         
         BINT *ptrX = NULL, *ptrY = NULL, *ptrZ = NULL;
         // bool sgnX = rand() % 2;
@@ -190,7 +190,7 @@ void correctTEST_Krtsb(int test_cnt) {
         bool sgnX = false;
         bool sgnY = false;
         RANDOM_BINT(&ptrX, sgnX, lenX);
-        RANDOM_BINT(&ptrY, sgnY, lenY);
+        RANDOM_BINT(&ptrY, sgnY, lenX);
         // print_bint_hex_py(ptrX);printf("\n");
         // print_bint_hex_py(ptrY);printf("\n");
         MUL_Core_Krtsb_xyz(&ptrX,&ptrY,&ptrZ);
