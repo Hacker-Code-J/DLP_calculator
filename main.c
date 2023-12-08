@@ -92,12 +92,12 @@ int main() {
     /*
     * ******************** Use 'make success' **********************
     */
-    // correctTEST_ADD(TEST_ITERATIONS);
+    correctTEST_ADD(TEST_ITERATIONS);
     // correctTEST_SUB(TEST_ITERATIONS);
 
     // correctTEST_TxtBk(TEST_ITERATIONS);
     // correctTEST_ImpTxtBk(TEST_ITERATIONS);
-    correctTEST_Krtsb(TEST_ITERATIONS);
+    // correctTEST_Krtsb(TEST_ITERATIONS);
     
     // correctTEST_SQU_TxtBk(TEST_ITERATIONS);
     // correctTEST_SQU_Krtsb(TEST_ITERATIONS);
