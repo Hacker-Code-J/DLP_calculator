@@ -4,6 +4,7 @@ test.py
 html/
 latex/
 app
+hashtb
 
 # Prerequisites
 *.d

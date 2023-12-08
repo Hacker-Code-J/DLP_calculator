@@ -92,7 +92,7 @@ int main() {
     /*
     * ******************** Use 'make success' **********************
     */
-    correctTEST_ADD(TEST_ITERATIONS);
+    // correctTEST_ADD(TEST_ITERATIONS);
     // correctTEST_SUB(TEST_ITERATIONS);
 
     // correctTEST_TxtBk(TEST_ITERATIONS);
@@ -115,7 +115,7 @@ int main() {
     /*
     * ********************** Use 'make speed-mul' **********************
     */
-    // performTEST_MUL(); // TextBook vs Improved TextBook
+    performTEST_MUL(); // TextBook vs Improved TextBook
 
     /*
     * ********************** Use 'make speed-squ' **********************
