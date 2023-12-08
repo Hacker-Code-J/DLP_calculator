@@ -33,12 +33,13 @@ void add_carry(WORD x, WORD y, WORD k, WORD* ptrQ, WORD* ptrR) {
     WORD sum = x + y;
 	*ptrQ = 0x00;
 	if(sum < x)
-		*ptrQ = 0x01;
+		*ptrQ = WORD_ONE;
 	sum += k;
 	*ptrR = sum;
 	if(sum < k)
-		*ptrQ += 0x01;
+		*ptrQ += WORD_ONE;
 }
+
 void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     CHECK_PTR_AND_DEREF(pptrX, "pptrX", "add_core_xyz");
     CHECK_PTR_AND_DEREF(pptrY, "pptrY", "add_core_xyz");
@@ -57,7 +58,6 @@ void add_core_xyz(BINT** pptrX, BINT** pptrY, BINT** pptrZ) {
     for(int i = 0; i < (*pptrY)->wordlen; i++) {
         add_carry((*pptrX)->val[i], (*pptrY)->val[i], k, &carry, &res);
         (*pptrZ)->val[i] = res;
-        // printf("-After: X[%d] + Y[%d] + k = %x  + %x + %x = %x * W + %x, Z[%d]: %x\n",i, i,ptrX->val[i], ptrY->val[i], k, carry, res,i,ptrZ->val[i]);
         k = carry;
     }
     for (int i = (*pptrY)->wordlen; i < (*pptrX)->wordlen; i++) {
@@ -391,7 +391,6 @@ void squ_core(WORD valX, BINT** pptrZ) {
 	WORD X0 = valX & MASK;
 	WORD X1 = valX >> half_w;
 	
-
     // Cross multiplication
 	WORD C1 = X1 * X1;
 	WORD C0 = X0 * X0;
@@ -825,7 +824,7 @@ void Barrett_Reduction(BINT** pptrX, BINT** pptrN, BINT** pptrR, BINT** pptrPreT
     delete_bint(&temp);
 }
 
-void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrGCD) {
+void EEA(BINT** pptrX, BINT** pptrY, BINT** pptrS, BINT** pptrT, BINT** pptrGCD) {
     BINT *r1 = NULL, *r2 = NULL;
     BINT *s1 = NULL, *s2 = NULL;
     BINT *t1 = NULL, *t2 = NULL;   
@@ -839,45 +838,45 @@ void EEA(BINT** ptrX, BINT** ptrY, BINT** ptrS, BINT** ptrT, BINT** ptrGCD) {
     init_bint(&s2, 1);
     init_bint(&t1, 1);
     
-    copyBINT(&r1, ptrX);
-    copyBINT(&r2, ptrY); 
+    copyBINT(&r1, pptrX);
+    copyBINT(&r2, pptrY); 
 
     while ((r2)->wordlen != 1 || (r2)->val[0] != 0) {
         BINT* temp = NULL;
     
-        DIV_Binary_Long(&r1,&r2,&q, ptrGCD);
+        DIV_Binary_Long(&r1,&r2,&q, pptrGCD);
 
         copyBINT(&r1, &r2);
-        copyBINT(&r2, ptrGCD);
+        copyBINT(&r2, pptrGCD);
 
-        // MUL_Core_ImpTxtBk_xyz(&q, &s2, &temp);
+        MUL_Core_ImpTxtBk_xyz(&q, &s2, &temp);
         // bool sgnQ1 = q->sign; bool sgnS2 = s2->sign;
-        MUL_Core_Krtsb_xyz(&q, &s2, &temp);
+        // MUL_Core_Krtsb_xyz(&q, &s2, &temp);
         // temp->sign = sgnQ1 ^ sgnS2;
 
-        SUB(&s1, &temp, ptrS);
+        SUB(&s1, &temp, pptrS);
         
         copyBINT(&s1, &s2);
-        copyBINT(&s2, ptrS);
+        copyBINT(&s2, pptrS);
         
-        // MUL_Core_ImpTxtBk_xyz(&q, &t2, &temp);
+        MUL_Core_ImpTxtBk_xyz(&q, &t2, &temp);
         // bool sgnQ2 = q->sign; bool sgnT2 = t2->sign;
-        MUL_Core_Krtsb_xyz(&q, &t2, &temp);
+        // MUL_Core_Krtsb_xyz(&q, &t2, &temp);
         // temp->sign = sgnQ2 ^ sgnS2;
         
-        SUB(&t1, &temp, ptrT);
+        SUB(&t1, &temp, pptrT);
 
         copyBINT(&t1, &t2);
-        copyBINT(&t2, ptrT);
+        copyBINT(&t2, pptrT);
         
         delete_bint(&temp);
         
         refineBINT(r2);
     }
     
-    copyBINT(ptrGCD, &r1);
-    copyBINT(ptrS, &s1);
-    copyBINT(ptrT, &t1);    
+    copyBINT(pptrGCD, &r1);
+    copyBINT(pptrS, &s1);
+    copyBINT(pptrT, &t1);    
     
     delete_bint(&q);
     delete_bint(&r1);

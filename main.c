@@ -105,14 +105,14 @@ int main() {
     // corretTEST_EXP_MOD_Montgomery(TEST_ITERATIONS);
 
     // corretTEST_BarrettRed(TEST_ITERATIONS);
-    // corretTEST_EEA(TEST_ITERATIONS);
+    corretTEST_EEA(TEST_ITERATIONS);
 
 
 /********************** Use 'make speed-mul' **********************/
     // performTEST_MUL(); // TextBook vs Improved TextBook
 
 /********************** Use 'make speed-squ' **********************/
-    performTEST_SQU(); // TextBook vs Karatsuba
+    // performTEST_SQU(); // TextBook vs Karatsuba
 
     return 0;
 }
