@@ -2,7 +2,7 @@
  * @mainpage PUBAO Big Integer Library Documentation
  *
  * @section intro Introduction
- * The Big Integer Library provides an implementation for handling very large integers 
+ * The PUBAO Big Integer Library provides an implementation for handling very large integers 
  * that are beyond the capacity of standard C integer types. This library is useful in 
  * scenarios such as cryptographic computations, high precision calculations, and 
  * anywhere standard integer types are insufficient due to their size limitations.

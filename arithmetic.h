@@ -279,7 +279,7 @@ void Barrett_Reduction(BINT** pptrX, BINT** pptrN, BINT** pptrR, BINT** pptrPreT
  * @param pptrT A double pointer to store the Bézout coefficient corresponding to 'b'.
  * @param pptrGCD A double pointer to store the calculated GCD of 'a' and 'b'.
  * @pre `pptrX` and `pptrY` must be pointers to pointer to initialized BINTs containing the input values. `pptrS`, `pptrT`, and `pptrGCD` should be pointers to point to BINT, ready to store the results.
- * @post Upon completion, `ptrS` and `ptrT` will hold the Bézout coefficients, and `ptrGCD` will contain the GCD of the inputs. The input BINTs (`ptrX` and `ptrY`) remain unaltered.
+ * @post Upon completion, `pptrS` and `pptrT` will hold the Bézout coefficients, and `pptrGCD` will contain the GCD of the inputs. The input BINTs (`pptrX` and `pptrY`) remain unaltered.
  * @note Assumes the existence of a well-defined BINT structure and correctly implemented binary arithmetic operations (e.g., addition, subtraction, multiplication).
  * @warning Proper initialization of all BINT pointers is crucial to prevent undefined behavior or memory access violations. Ensure `pptrX`, `pptrY`, `pptrS`, `pptrT`, and `pptrGCD` are correctly allocated and initialized before invocation.
  */
