@@ -33,7 +33,7 @@
 // Configuration Macros
 #define TEST_ITERATIONS 10000
 #define MAX_BIT_LENGTH u32_BIT_3072
-#define MIN_BIT_LENGTH u32_BIT_2048
+#define MIN_BIT_LENGTH u32_BIT_3072
 
 void performBINT_2ArgFn(void (*testFunc)(BINT**, BINT**), BINT** pptrX, BINT** pptrZ);
 void performTEST_2ArgFn(void (*testFunc1)(BINT**, BINT**), void (*testFunc2)(BINT**, BINT**));
@@ -242,7 +242,7 @@ void corretTEST_EEA(int test_cnt);
 
 void performTEST_MUL();
 void performTEST_SQU();
-// void performTEST_DIV(int test_cnt);
+void performTEST_DIV(int test_cnt);
 // void performFastRed(int test_cnt);
 
 #endif // _MEASURE_H

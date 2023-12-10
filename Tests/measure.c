@@ -427,10 +427,10 @@ void performTEST_SQU() {
     performTEST_2ArgFn(SQU_TxtBk_xz,SQU_Krtsb_xz);
 }
 
-// void performTEST_DIV(int test_cnt) {
-//     srand((u32)time(NULL));
-//     performTEST_4ArgFn(DIV_Binary_Long, DIV_Long, test_cnt);
-// }
+void performTEST_DIV(int test_cnt) {
+    srand((unsigned int)time(NULL));
+    performTEST_4ArgFn(DIV_Binary_Long, DIV_Long, test_cnt);
+}
 
 // void performFastRed(int test_cnt) {
 //     srand((u32)time(NULL));

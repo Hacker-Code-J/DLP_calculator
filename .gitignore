@@ -29,7 +29,6 @@ hashtb
 *.a
 *.la
 *.lo
-!libpubao.a
 
 # Shared objects (inc. Windows DLLs)
 *.dll

@@ -115,12 +115,17 @@ int main() {
     /*
     * ********************** Use 'make speed-mul' **********************
     */
-    performTEST_MUL(); // TextBook vs Improved TextBook
+    // performTEST_MUL(); // TextBook vs Improved TextBook
 
     /*
     * ********************** Use 'make speed-squ' **********************
     */
     // performTEST_SQU(); // TextBook vs Karatsuba
+    
+    /*
+    * ********************** Use 'make speed-div' **********************
+    */
+    performTEST_DIV(TEST_ITERATIONS);
 
     return 0;
 }
